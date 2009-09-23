@@ -20,9 +20,9 @@ Un Toolkit es un conjunto coherente de herramientas que, bajo una misma interfaz
 
 Administración del Proyecto:
 
-Se desarrollara en tres etapas, cuyas entregas estarán indicadas en el anexo del enunciado.
-Grupos de Datos: 4 integrantes    
-Lenguajes C/C++ (no JAVA)
++Se desarrollara en tres etapas, cuyas entregas estarán indicadas en el anexo del +enunciado.
++Grupos de Datos: 4 integrantes    
++Lenguajes C/C++ (no JAVA)
 SO: Linux.
 
  
