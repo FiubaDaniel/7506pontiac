@@ -1,4 +1,4 @@
-#include "EstragiaRecursos.h"
+#include "EstrategiaRecursos.h"
 
 //  
 // Methods

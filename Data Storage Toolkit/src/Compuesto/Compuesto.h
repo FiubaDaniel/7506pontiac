@@ -2,7 +2,7 @@
 #ifndef COMPUESTO_H
 #define COMPUESTO_H
 
-#include <string>
+#include "Componente.h"
 #include <vector>
 
 
@@ -12,8 +12,8 @@
   * 
   */
 
-class Compuesto
-{
+class Compuesto{
+	unsigned int cantidadComponenetes;
 public:
 
   // Constructors/Destructors
@@ -29,72 +29,6 @@ public:
    * Empty Destructor
    */
   virtual ~Compuesto ( );
-
-  // Static Public attributes
-  //  
-
-  // Public attributes
-  //  
-
-
-  // Public attribute accessor methods
-  //  
-
-
-  // Public attribute accessor methods
-  //  
-
-
-protected:
-
-  // Static Protected attributes
-  //  
-
-  // Protected attributes
-  //  
-
-public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
-
-public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
-
-
-private:
-
-  // Static Private attributes
-  //  
-
-  // Private attributes
-  //  
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
-
 
 };
 

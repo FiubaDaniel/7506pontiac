@@ -1,7 +1,7 @@
 
 #ifndef ESTRATEGIARECURSOSESCRITURADIFERIDA_H
 #define ESTRATEGIARECURSOSESCRITURADIFERIDA_H
-#include "EstragiaRecursos.h"
+#include "EstrategiaRecursos.h"
 
 #include <string>
 
@@ -10,8 +10,7 @@
   * 
   */
 
-class EstrategiaRecursosEscrituraDiferida : virtual public EstragiaRecursos
-{
+class EstrategiaRecursosEscrituraDiferida : public EstrategiaRecursos{
 public:
 
   // Constructors/Destructors
