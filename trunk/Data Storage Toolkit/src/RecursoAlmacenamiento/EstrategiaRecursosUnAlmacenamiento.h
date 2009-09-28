@@ -1,7 +1,7 @@
 
 #ifndef ESTRATEGIARECURSOSUNALMACENAMIENTO_H
 #define ESTRATEGIARECURSOSUNALMACENAMIENTO_H
-#include "EstragiaRecursos.h"
+#include "EstrategiaRecursos.h"
 
 #include <string>
 
@@ -10,7 +10,7 @@
   * 
   */
 
-class EstrategiaRecursosUnAlmacenamiento : virtual public EstragiaRecursos
+class EstrategiaRecursosUnAlmacenamiento : public EstrategiaRecursos
 {
 public:
 

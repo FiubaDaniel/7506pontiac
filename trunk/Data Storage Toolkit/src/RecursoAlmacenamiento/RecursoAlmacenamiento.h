@@ -1,19 +1,15 @@
 
 #ifndef RECURSOALMACENAMIENTO_H
 #define RECURSOALMACENAMIENTO_H
-
-#include <string>
-#include <vector>
-
-
-
+#include "EstrategiaRecursos.h"
+class EstrategiaRecursos;
 /**
   * class RecursoAlmacenamiento
   * 
   */
 
-class RecursoAlmacenamiento
-{
+class RecursoAlmacenamiento{
+	EstrategiaRecursos* estrategiaUsada;
 public:
 
   // Constructors/Destructors
