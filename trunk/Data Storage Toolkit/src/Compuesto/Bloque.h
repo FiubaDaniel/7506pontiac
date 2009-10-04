@@ -1,100 +1,39 @@
+/*
+ * Bloque.h
+ *
+ *  Created on: 02/10/2009
+ *      Author: paulo
+ */
 
-#ifndef BLOQUE_H
-#define BLOQUE_H
+#ifndef BLOQUE_H_
+#define BLOQUE_H_
+#include <vector>
 #include "Componente.h"
-#include "Compuesto.h"
 
-#include <string>
+typedef unsigned int Ttamanio;
 
-/**
-  * class Bloque
-  * 
-  */
-
-class Bloque : public Componente, public Compuesto
-{
+class Bloque: public Componente {
 public:
-
-  // Constructors/Destructors
-  //  
-
-
-  /**
-   * Empty Constructor
-   */
-  Bloque ( );
-
-  /**
-   * Empty Destructor
-   */
-  virtual ~Bloque ( );
-
-  // Static Public attributes
-  //  
-
-  // Public attributes
-  //  
-
-
-  // Public attribute accessor methods
-  //  
-
-
-  // Public attribute accessor methods
-  //  
-
-
-protected:
-
-  // Static Protected attributes
-  //  
-
-  // Protected attributes
-  //  
-
+	Bloque(Ttamanio tamanio,Componente*compenente);
+	virtual ~Bloque();
+	//TODO ver si sirve o no
+	Componente* clonar();
+	void setbytes(std::streambuf& pbuffer);
+	void getbytes(std::streambuf& pbuffer);
+	Ttamanio cantidadBytes();
 public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
-
-public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
-
-
+	Componente* get();
+	bool apuntar(Ttamanio nroComponente);
+	void eliminar();
+	Componente* modificar(Componente* nuevo);
+	bool insertar(Componente* nuevo);//intenta insertar detras del registro actual si puede
+	bool append(Componente* nuevo);//intenta insdertar detras del ultimo registro
+	Ttamanio cantidadComponente();
 private:
-
-  // Static Private attributes
-  //  
-
-  // Private attributes
-  //  
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
-
-
+	std::vector<Componente*> componentes;
+	Ttamanio corriente;
+	Ttamanio tamanioBloque;
+	Ttamanio espacioLibre;
 };
 
-#endif // BLOQUE_H
+#endif /* BLOQUE_H_ */
