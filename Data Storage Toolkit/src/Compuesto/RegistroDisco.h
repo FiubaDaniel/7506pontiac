@@ -14,6 +14,7 @@ public:
 	virtual ~RegistroDisco();
 	virtual bool     borrado();
 	virtual void setBorrado(bool flag);
+public:/*MetodosHeredados*/
 	virtual Ttamanio deserializar(void*entrada);
 	virtual Ttamanio serializar(void*salida);
 	virtual Ttamanio tamanioSerializado();

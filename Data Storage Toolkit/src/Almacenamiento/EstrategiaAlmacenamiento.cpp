@@ -1,15 +1,17 @@
+/*
+ * EstrategiaAlmacenamiento.cpp
+ *
+ *  Created on: 07/10/2009
+ *      Author: paulo
+ */
+
 #include "EstrategiaAlmacenamiento.h"
 
-//  
-// Methods
-//  
+EstrategiaAlmacenamiento::EstrategiaAlmacenamiento() {
+	// TODO Auto-generated constructor stub
 
+}
 
-// Accessor methods
-//  
-
-
-// Other methods
-//  
-
-
+EstrategiaAlmacenamiento::~EstrategiaAlmacenamiento() {
+	// TODO Auto-generated destructor stub
+}
