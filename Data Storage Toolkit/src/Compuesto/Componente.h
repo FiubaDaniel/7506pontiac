@@ -16,10 +16,11 @@ class Componente {
 public:
 	Componente(){};
 	virtual ~Componente(){};
-	virtual Ttamanio deserializar(void*entrada)=0;
-	virtual Ttamanio serializar(void*salida)=0;
+	virtual Ttamanio deserializar(std::istream&entrada)=0;
+	virtual Ttamanio serializar(std::ostream&salida)=0;
 	virtual Ttamanio tamanioSerializado()=0;
 	virtual Componente* clonar()=0;
+	//virtual bool esfijo()=0;
 };
 
 #endif /* REGISTRO_H_ */

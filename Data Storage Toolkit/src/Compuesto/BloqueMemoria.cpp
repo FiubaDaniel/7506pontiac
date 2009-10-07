@@ -19,22 +19,22 @@ bool BloqueMemoria::estaEscrito(){return escrito;};
 bool BloqueMemoria::estaSucio(){return sucio;};
 void BloqueMemoria::setSucio(bool valor){sucio=valor;};
 void BloqueMemoria::setEscrito(bool valor){escrito=valor;};
-Ttamanio BloqueMemoria::deserializar(void*entrada){
-	char*p=(char*)entrada;
-	Ttamanio offset=Bloque::deserializar(entrada);
-	sucio=*(bool*)(p+offset);
-	offset+=sizeof(bool);
-	escrito=*(bool*)(p+offset);
-	offset+=sizeof(bool);
+Ttamanio BloqueMemoria::deserializar(std::istream&entrada){
+	Ttamanio offset=sizeof(bool);
+	entrada.read((char*)&sucio,offset);
+	if(!sucio){
+		entrada.read((char*)&escrito,offset);
+		offset*=2;
+		offset+=Bloque::deserializar(entrada);
+	}
 	return offset;
 };
-Ttamanio BloqueMemoria::serializar(void*salida){
-	char*p=(char*)salida;
-	Ttamanio offset=Bloque::serializar(salida);
-	*(bool*)(p+offset)=sucio;
-	offset+=sizeof(bool);
-	*(bool*)(p+offset)=escrito;
-	offset+=sizeof(bool);
+Ttamanio BloqueMemoria::serializar(std::ostream&salida){
+	Ttamanio offset=sizeof(bool);
+	salida.write((char*)&sucio,offset);
+	salida.write((char*)&escrito,offset);
+	offset*=2;
+	offset+=Bloque::serializar(salida);
 	return offset;
 };
 Ttamanio BloqueMemoria::tamanioSerializado(){

@@ -18,19 +18,18 @@ void BloqueDisco::setBorrado(bool valor){borrado=valor;};
 bool BloqueDisco::estaBorrado(){
 	return borrado;
 };
-Ttamanio BloqueDisco::deserializar(void*entrada){
-	char*p=(char*)entrada;
-	Ttamanio offset=Bloque::deserializar(entrada);
-	borrado=*(bool*)(p+offset);
-	offset+=sizeof(bool);
+Ttamanio BloqueDisco::deserializar(std::istream&entrada){
+	Ttamanio offset=sizeof(bool);
+	entrada.read((char*)&borrado,offset);
+	if(!borrado){
+		offset=Bloque::deserializar(entrada);
+	}
 	return offset;
 };
-Ttamanio BloqueDisco::serializar(void*salida){
-	char*p=(char*)salida;
+Ttamanio BloqueDisco::serializar(std::ostream&salida){
+	salida.write((char*)&borrado,sizeof(bool));
 	Ttamanio offset=Bloque::serializar(salida);
-	*(bool*)(p+offset)=borrado;
-	offset+=sizeof(bool);
-	return offset;
+	return offset+sizeof(bool);
 };
 Ttamanio BloqueDisco::tamanioSerializado(){
 	return Bloque::tamanioSerializado()+sizeof(bool);

@@ -19,8 +19,8 @@ public:
 	void setSucio(bool valor);
 	void setEscrito(bool valor);
 public:/*MetodoHeredados*/
-	virtual Ttamanio deserializar(void*entrada);
-	virtual Ttamanio serializar(void*salida);
+	virtual Ttamanio deserializar(std::istream&entrada);
+	virtual Ttamanio serializar(std::ostream&salida);
 	virtual Ttamanio tamanioSerializado();
 	virtual Componente* clonar();
 private:

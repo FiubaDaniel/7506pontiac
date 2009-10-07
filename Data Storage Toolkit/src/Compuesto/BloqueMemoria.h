@@ -18,8 +18,8 @@ public:
 	void setSucio(bool valor);
 	void setEscrito(bool valor);
 public:/*Heredado de componente*/
-	Ttamanio deserializar(void*entrada);
-	Ttamanio serializar(void*salida);
+	Ttamanio deserializar(std::istream&entrada);
+	Ttamanio serializar(std::ostream&salida);
 	Ttamanio tamanioSerializado();
 	Componente* clonar();
 private:

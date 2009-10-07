@@ -44,11 +44,11 @@ public:
 	/*
 	 *
 	 */
-	virtual Ttamanio serializar(void* salida)=0;
+	virtual Ttamanio serializar(std::ostream&salida)=0;
 	/*
 	 *
 	 */
-	virtual Ttamanio deserializar(void* entrada)=0;
+	virtual Ttamanio deserializar(std::istream &entrada)=0;
 	/*
 	 *
 	 */
