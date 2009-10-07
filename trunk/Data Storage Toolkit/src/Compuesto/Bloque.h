@@ -9,31 +9,27 @@
 #define BLOQUE_H_
 #include <vector>
 #include "Componente.h"
+#include "Compuesto.h"
 
-typedef unsigned int Ttamanio;
-
-class Bloque: public Componente {
+class Bloque :public Componente, Compuesto {
 public:
 	Bloque(Ttamanio tamanio,Componente*compenente);
 	virtual ~Bloque();
-	//TODO ver si sirve o no
-	Componente* clonar();
-	void setbytes(std::streambuf& pbuffer);
-	void getbytes(std::streambuf& pbuffer);
-	Ttamanio cantidadBytes();
+	virtual Ttamanio deserializar(void*entrada);
+	virtual Ttamanio serializar(void*salida);
+	virtual Ttamanio tamanioSerializado();
+	virtual Componente* clonar();
 public:
-	Componente* get();
-	bool apuntar(Ttamanio nroComponente);
-	void eliminar();
-	Componente* modificar(Componente* nuevo);
-	bool insertar(Componente* nuevo);//intenta insertar detras del registro actual si puede
-	bool append(Componente* nuevo);//intenta insdertar detras del ultimo registro
-	Ttamanio cantidadComponente();
-private:
+	virtual Componente* get(Ttamanio nroComponente);
+	virtual Ttamanio cantidadComponentes();
+	virtual bool insertar(Componente*componente,Ttamanio posicion);
+	virtual bool eliminar(Ttamanio posicion);
+	virtual bool agregar(Componente*componente);
+	virtual Componente* reemplazar(Componente*componente,Ttamanio posicion);
+protected:
+	Bloque();
 	std::vector<Componente*> componentes;
-	Ttamanio corriente;
 	Ttamanio tamanioBloque;
 	Ttamanio espacioLibre;
 };
-
 #endif /* BLOQUE_H_ */

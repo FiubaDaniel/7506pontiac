@@ -2,98 +2,35 @@
 #ifndef REGISTRO_H
 #define REGISTRO_H
 #include "Componente.h"
-
+#include "Atributo.h"
+#include <vector>
 #include <string>
+#include <cstdarg>
 
 /**
   * class Registro
   * 
   */
 
-class Registro : public Componente
-{
+class Registro : public Componente{
 public:
-
-  // Constructors/Destructors
-  //  
-
-
-  /**
-   * Empty Constructor
-   */
-  Registro ( );
-
-  /**
-   * Empty Destructor
-   */
-  virtual ~Registro ( );
-
-  // Static Public attributes
-  //  
-
-  // Public attributes
-  //  
-
-
-  // Public attribute accessor methods
-  //  
-
-
-  // Public attribute accessor methods
-  //  
-
-
+	Registro(unsigned int cantidadAtributos, ... );
+	virtual ~Registro();
+	virtual Ttamanio deserializar(void*entrada);
+	virtual Ttamanio serializar(void*salida);
+	virtual Ttamanio tamanioSerializado();
+	virtual Componente* clonar();
+public:
+	virtual Atributo* get(Ttamanio posicion);
+	virtual Atributo* get(std::string nombre);
+	virtual Ttamanio cantidadAtributos();
+	virtual Atributo* getId();
+	bool esfijo();
 protected:
-
-  // Static Protected attributes
-  //  
-
-  // Protected attributes
-  //  
-
-public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
-
-public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
-
-
-private:
-
-  // Static Private attributes
-  //  
-
-  // Private attributes
-  //  
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
-
-
+	Registro();
+	std::vector<Atributo*> atributos;
+	Ttamanio tamanioBuffer;
+	bool fijo;
 };
 
 #endif // REGISTRO_H

@@ -1,19 +1,21 @@
 /*
- * RegistroDisco.h
+ * RegistroMemoria.h
  *
  *  Created on: 06/10/2009
  *      Author: paulo
  */
 
-#ifndef REGISTRODISCO_H_
-#define REGISTRODISCO_H_
+#ifndef REGISTROMEMORIA_H_
+#define REGISTROMEMORIA_H_
 #include "Registro.h"
-class RegistroDisco : public Registro {
+class RegistroMemoria :public Registro {
 public:
-	RegistroDisco(Registro*registro);
-	virtual ~RegistroDisco();
-	virtual bool     borrado();
-	virtual void setBorrado(bool flag);
+	RegistroMemoria(Registro*registro,Ttamanio nroCompuesto,Ttamanio nroRegistro,bool escrito);
+	virtual ~RegistroMemoria();
+	Ttamanio nroCompuesto;
+	Ttamanio nroRegitro;
+	bool escrito;
+	bool sucio;
 	virtual Ttamanio deserializar(void*entrada);
 	virtual Ttamanio serializar(void*salida);
 	virtual Ttamanio tamanioSerializado();
@@ -22,8 +24,7 @@ public:
 	virtual Atributo* get(std::string nombre);
 	virtual Ttamanio cantidadAtributos();
 	virtual Atributo* getId();
-protected:
-	bool estaBorrado;
+	virtual bool esfijo();
 };
 
-#endif /* REGISTRODISCO_H_ */
+#endif /* REGISTROMEMORIA_H_ */

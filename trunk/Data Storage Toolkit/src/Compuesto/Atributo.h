@@ -7,29 +7,59 @@
 
 #ifndef ATRIBUTO_H_
 #define ATRIBUTO_H_
-#include <string>
-#include <sstream>
 #include <iostream>
 typedef unsigned int Ttamanio;
 class Atributo {
 public:
-	Ttamanio nrobytes;/*indica cuantos bytes usar en las operaciones*/
-	Atributo(){};
-	Atributo(std::string nombreAtributo){
-		_nombre=nombreAtributo;
-	};
+	Atributo(std::string nombreAtributo){nombre=nombreAtributo;};
 	virtual ~Atributo(){};
-	std::string nombre(){return _nombre;};
-	virtual void imprimir(std::ostream salida)=0;
-	virtual void leer(std::istream entrada)=0;
-	virtual void setbytes(char* value)=0;
-	virtual void getbytes(char* value)=0;
-	virtual void setbytes(std::streambuf& pbuffer)=0;
-	virtual void getbytes(std::streambuf& pbuffer)=0;
+	/*
+	 *Devuelve un string con el nombre del atributo.
+	 */
+	std::string getNombre(){return nombre;};
+	/*
+	 * Setea el atributo con el valor pasado.
+	 * Dicho valor debe tener tamanio() char's de longitud.
+	 */
+	virtual void set(void* valor)=0;
+	/*
+	 * Copia en char*valor el valor del atributo.
+	 * Dicho valor debe tener tamanio() char's de longitud.
+	 */
+	virtual void get(void* valor)=0;
+	/*
+	 * Devuelve el tamanio en bytes del atributo.
+	 */
+	virtual Ttamanio tamanio()=0;
+	/*
+	 * Devuelve una copia instanciada mediante new del atributo.
+	 * Debe aplicarsele delete al finalizar el uso del clon.
+	 * Ej:
+	 * Atributo* clon=atributo.clonar();
+	 * ...
+	 * delete clon;
+	 *
+	 */
 	virtual Atributo* clonar()=0;
-	virtual Ttamanio cantidadbytes()=0;
+	/*
+	 *
+	 */
+	virtual Ttamanio serializar(void* salida)=0;
+	/*
+	 *
+	 */
+	virtual Ttamanio deserializar(void* entrada)=0;
+	/*
+	 *
+	 */
+	virtual Ttamanio tamanioSerializado()=0;
+	/*
+	 *
+	 *
+	 */
+	virtual bool esfijo()=0;
 protected:
-	std::string _nombre;
+	std::string nombre;
 	void cpy(char*dest,const char*origen,Ttamanio n){
 		while(n>0){
 			*dest=*origen;
