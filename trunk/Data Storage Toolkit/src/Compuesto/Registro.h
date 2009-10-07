@@ -21,10 +21,10 @@ public:
 	virtual Ttamanio tamanioSerializado();
 	virtual Componente* clonar();
 public:
-	virtual Atributo* get(Ttamanio posicion);
-	virtual Atributo* get(std::string nombre);
-	virtual Ttamanio cantidadAtributos();
-	virtual Atributo* getId();
+	Atributo* get(Ttamanio posicion);
+	Atributo* get(std::string nombre);
+	Ttamanio  cantidadAtributos();
+	Atributo* getId();
 	bool esfijo();
 protected:
 	Registro();
