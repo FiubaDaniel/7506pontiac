@@ -7,78 +7,102 @@
 
 #include "Bloque.h"
 /*------------------------------------------------------------------------------------*/
+Bloque::Bloque(){};
 Bloque::Bloque(Ttamanio tamanio,Componente*componente) : Bloque::Componente(){
 	componentes.push_back(componente->clonar());
 	espacioLibre=tamanioBloque=tamanio;
-	espacioLibre-=componente->cantidadBytes();
-	corriente=0;
+	espacioLibre-=componente->tamanioSerializado();
 };
 Bloque::~Bloque() {
 	for(Ttamanio i= componentes.size()-1;i>=0;i--){
 				delete componentes.at(i);
 	}
 };
-void Bloque::setbytes(std::streambuf& pbuffer){
-	//TODO serializador
-};
-void Bloque::getbytes(std::streambuf& pbuffer){
-	//TODO serializador
-};
-
 Componente* Bloque::clonar(){
 	//TODO ver si sirve o no
 	Bloque* clon=new Bloque(tamanioBloque,componentes.at(0)->clonar());
 	return clon;
 };
-Ttamanio Bloque::cantidadBytes(){return tamanioBloque;};
-/*------------------------------------------------------------------------------------*/
-Componente* Bloque::get(){
-	return componentes.at(corriente)->clonar();
+Ttamanio Bloque::deserializar(void*entrada){
+	char*p=(char*)entrada;
+	Ttamanio nrocomponetes;
+	nrocomponetes=*(Ttamanio*)p;
+	Ttamanio i=0;
+	Ttamanio offset=sizeof(Ttamanio);
+	while(i<nrocomponetes and i<componentes.size()){
+		offset+=componentes.at(i)->serializar(p+offset);
+		i++;
+	}
+	/*le sobran componentes*/
+	while(i<componentes.size()){
+		componentes.erase(componentes.begin()+i);
+	}
+	/*le faltan componentes*/
+	while(i<nrocomponetes){
+		Componente* auxiliar=componentes.at(i-1)->clonar();
+		offset+=componentes.at(i)->serializar(p+offset);
+		componentes.push_back(auxiliar);
+		i++;
+	}
+	return offset;
 };
-bool Bloque::apuntar(Ttamanio nroComponente){
-	if(nroComponente>=componentes.size())return false;
-	corriente=nroComponente;
+Ttamanio Bloque::serializar(void *salida){
+	char*p=(char*)salida;
+	Ttamanio nrocomponetes=componentes.size();
+	*(Ttamanio*)p=nrocomponetes;
+	Ttamanio offset=sizeof(Ttamanio);
+	for(Ttamanio i=0;i<nrocomponetes;i++){
+		offset+=componentes.at(i)->serializar(p+offset);
+	}
+	return offset;
+};
+Ttamanio Bloque::tamanioSerializado(){return tamanioBloque;};
+/*------------------------------------------------------------------------------------*/
+Componente* Bloque::get(Ttamanio nroComponente){
+	return componentes.at(nroComponente);
+};
+bool Bloque::eliminar(Ttamanio posicion){
+	if(posicion>=componentes.size())return false;
+	espacioLibre+=componentes.at(posicion)->tamanioSerializado();
+	componentes.erase(componentes.begin()+posicion);
 	return true;
 };
-void Bloque::eliminar(){
-	espacioLibre+=componentes.at(corriente)->cantidadBytes();
-	componentes.erase(componentes.begin()+corriente);
-};
-Componente* Bloque::modificar(Componente* nuevo){
-	Componente* anterior=NULL;
+bool Bloque::insertar(Componente* nuevo,Ttamanio posicion){
 	Ttamanio nuevoTamanio=espacioLibre;
-	nuevoTamanio-=componentes.at(corriente)->cantidadBytes();
-	nuevoTamanio+=nuevo->cantidadBytes();
+	nuevoTamanio-=nuevo->tamanioSerializado();
 	if(nuevoTamanio>0){
 		espacioLibre=nuevoTamanio;
-		anterior=componentes.at(corriente);
-		componentes.at(corriente)=nuevo;
-	}
-	return anterior;
-};
-bool Bloque::insertar(Componente* nuevo){
-	Ttamanio nuevoTamanio=espacioLibre;
-	nuevoTamanio-=componentes.at(corriente)->cantidadBytes();
-	nuevoTamanio+=nuevo->cantidadBytes();
-	if(nuevoTamanio>0){
-		espacioLibre=nuevoTamanio;
-		componentes.insert(componentes.begin()+corriente-1,nuevo);
+		componentes.insert(componentes.begin()+posicion,nuevo);
 		return true;
 	}
 	return false;
 };
 //intenta insertar detras del registro actual si puede
-bool Bloque::append(Componente* nuevo){
+bool Bloque::agregar(Componente* nuevo){
 	Ttamanio nuevoTamanio=espacioLibre;
-	nuevoTamanio-=componentes.at(corriente)->cantidadBytes();
-	nuevoTamanio+=nuevo->cantidadBytes();
+	nuevoTamanio-=nuevo->tamanioSerializado();
 	if(nuevoTamanio>0){
 		espacioLibre=nuevoTamanio;
-		componentes.push_back(nuevo->clonar());
+		componentes.push_back(nuevo);
 		return true;
 	}
 	return false;
 };//intenta insdertar detras del ultimo registro
-Ttamanio Bloque::cantidadComponente(){
+Componente* Bloque::reemplazar(Componente*nuevo,Ttamanio posicion){
+	Componente *anterior=componentes.at(posicion);
+	Ttamanio nuevoTamanio=espacioLibre;
+	nuevoTamanio-=nuevo->tamanioSerializado();
+	nuevoTamanio+=anterior->tamanioSerializado();
+	if(nuevoTamanio>0){
+		espacioLibre=nuevoTamanio;
+		std::vector<Componente*>::iterator iterador=componentes.begin();
+		iterador+=posicion;
+		componentes.erase(iterador);
+		componentes.insert(iterador,nuevo);
+		return anterior;
+	}
+	return NULL;
+};
+Ttamanio Bloque::cantidadComponentes(){
 	return componentes.size();
 };

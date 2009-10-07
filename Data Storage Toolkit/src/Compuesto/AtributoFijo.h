@@ -4,153 +4,115 @@
  *  Created on: 02/10/2009
  *      Author: paulo
  */
-
 #ifndef ATRIBUTOFIJO_H_
 #define ATRIBUTOFIJO_H_
-#include <cassert>
 #include "Atributo.h"
-
-
 template<typename T_tipo>
-class AtributoFijo: public Atributo {
+class AtributoFijo : public Atributo{
 private:
-	char*datos;
-	void init(std::string nombreAtributo);
+	T_tipo dato;
 public:
 	AtributoFijo(std::string nombreAtributo);
-	void imprimir(std::ostream salida);
-	void leer(std::istream entrada);
-	void setbytes(char* value);
-	void getbytes(char* value);
-	void setbytes(std::streambuf& pbuffer);
-	void getbytes(std::streambuf& pbuffer);
-	Ttamanio cantidadbytes();
-	Atributo* clonar();
 	virtual ~AtributoFijo();
+	void set(void* valor);
+	void get(void* valor);
+	Ttamanio tamanio();
+	Atributo* clonar();
+	Ttamanio serializar(void*salida);
+	Ttamanio deserializar(void* entrada);
+	Ttamanio tamanioSerializado();
+	bool esfijo();
 };
 /*----------------------------------------------------------------------------*/
 /*Template Control de tipo*/
 template<typename T_tipo>
-AtributoFijo<T_tipo>::AtributoFijo(std::string nombreAtributo){
-	assert(false);
-	//TODO evitar compilacion
-};
+AtributoFijo<T_tipo>::AtributoFijo(std::string nombreAtributo): AtributoFijo::Atributo(nombreAtributo)
+{};
+template<typename T_tipo>
+AtributoFijo<T_tipo>::~AtributoFijo(){};
 /*----------------------------------------------------------------------------*/
 /*Templates sin especializacion*/
 template<typename T_tipo>
-AtributoFijo<T_tipo>::~AtributoFijo(){
-	delete[] datos;
+void AtributoFijo<T_tipo>::set(void* valor){dato=*(T_tipo*)valor;};
+template<typename T_tipo>
+void AtributoFijo<T_tipo>::get(void* valor){*(T_tipo*)valor=dato;};
+template<typename T_tipo>
+Ttamanio AtributoFijo<T_tipo>::tamanio(){ return sizeof(T_tipo*);};
+template<typename T_tipo>
+Atributo* AtributoFijo<T_tipo>::clonar(){ return new AtributoFijo<T_tipo>(nombre);};
+template<typename T_tipo>
+Ttamanio AtributoFijo<T_tipo>::serializar(void*salida){
+	char*p=(char*)salida;
+	Ttamanio tamanioDato=sizeof(dato);
+	//cpy(p,(char*)&tamanioDato,sizeof(Ttamanio));
+	//p+=tamanioDato;
+	cpy(p,(char*)&dato,tamanioDato);
+	return tamanioDato;
 };
 template<typename T_tipo>
-void AtributoFijo<T_tipo>::init(std::string nombreAtributo){
-	nrobytes=sizeof(T_tipo);
-	datos=new char[nrobytes];
-	_nombre=nombreAtributo;
-}
-template<typename T_tipo>
-void AtributoFijo<T_tipo>::imprimir(std::ostream salida){
-	salida<< (T_tipo*)datos;
+Ttamanio AtributoFijo<T_tipo>::deserializar(void* entrada){
+	char*p=(char*)entrada;
+	Ttamanio tamanioDato=sizeof(dato);
+	//cpy((char*)&tamanioDato,p,sizeof(Ttamanio));
+	//p+=tamanioDato;
+	cpy((char*)&dato,p,tamanioDato);
+	return tamanioDato;
 };
 template<typename T_tipo>
-void AtributoFijo<T_tipo>::leer(std::istream entrada){
-	//TODO especializacion clases o abortar compilacion
-	T_tipo* aux=(T_tipo*)datos;
-	entrada>>*aux;
+Ttamanio AtributoFijo<T_tipo>::tamanioSerializado(){
+	return sizeof(T_tipo)+sizeof(Ttamanio);
 };
 template<typename T_tipo>
-void AtributoFijo<T_tipo>::setbytes(char* value){
-	cpy(datos,value,nrobytes);
+bool AtributoFijo<T_tipo>::esfijo(){
+	return true;
 };
-template<typename T_tipo>
-void AtributoFijo<T_tipo>::getbytes(char* value){
-	cpy(value,datos,nrobytes);
-};
-template<typename T_tipo>
-void AtributoFijo<T_tipo>::setbytes(std::streambuf& pbuffer){
-	pbuffer.sgetn(datos,nrobytes);
-};
-template<typename T_tipo>
-void AtributoFijo<T_tipo>::getbytes(std::streambuf& pbuffer){
-	pbuffer.sputn(datos,nrobytes);
-}
-template<typename T_tipo>
-Ttamanio AtributoFijo<T_tipo>::cantidadbytes(){return sizeof(T_tipo);};
-template<typename T_tipo>
-Atributo* AtributoFijo<T_tipo>::clonar(){
-	return new AtributoFijo<T_tipo>(_nombre);
-};
-/*----------------------------------------------------------------------------*/
-/*Templates Especializados contructores*/
-template<>AtributoFijo<char>::AtributoFijo(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoFijo<short>::AtributoFijo(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoFijo<int>::AtributoFijo(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoFijo<long>::AtributoFijo(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoFijo<long long>::AtributoFijo(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoFijo<unsigned char>::AtributoFijo(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoFijo<unsigned short>::AtributoFijo(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoFijo<unsigned int>::AtributoFijo(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoFijo<unsigned long>::AtributoFijo(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoFijo<unsigned long long>::AtributoFijo(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoFijo<float>::AtributoFijo(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoFijo<double>::AtributoFijo(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoFijo<long double>::AtributoFijo(std::string nombreAtributo){init(nombreAtributo);}
 /*----------------------------------------------------------------------------------------------------*/
 /*Especializacion de la clase para cadena de chars*/
 template<>
-class AtributoFijo<char*>: public Atributo {
+class AtributoFijo<char*> : public Atributo{
 private:
 	char*datos;
 	Ttamanio longitud;
 public:
-	Ttamanio nrobytes;
-	AtributoFijo(std::string nombreAtributo,Ttamanio n):Atributo(nombreAtributo){
-		nrobytes=longitud=n;
+	AtributoFijo(std::string nombreAtributo,Ttamanio nroCaracteres): Atributo(nombreAtributo)
+	{
+		longitud=nroCaracteres;
 		datos=new char[longitud];
 	};
-	void imprimir(std::ostream salida){
-		salida.write(datos,nrobytes);
+	virtual ~AtributoFijo(){delete[]datos;};
+	void imprimir(std::ostream &salida){
+		salida<<datos;
 	};
-	void leer(std::istream entrada){
-		entrada.read(datos,nrobytes);
+	void leer(std::istream &entrada){
+		entrada>>datos;
 	};
-	virtual void setbytes(char* value){
-		cpy(datos,value,nrobytes);
+	void set(void* valor){
+		cpy(datos,(char*)valor,longitud);
 	};
-	virtual void getbytes(char* value){
-		cpy(value,datos,nrobytes);
+	void get(void* valor){
+		cpy((char*)valor,datos,longitud);
 	};
-	void setbytes(std::streambuf& pbuffer){
-		pbuffer.sgetn(datos,nrobytes);
-	};
-	void getbytes(std::streambuf& pbuffer){
-		pbuffer.sputn(datos,nrobytes);
-	};
-	Ttamanio cantidadbytes(){return nrobytes;};
-	virtual ~AtributoFijo(){
-		delete[] datos;
-	};
+	Ttamanio tamanio(){return longitud;};
 	Atributo* clonar(){
-		return new AtributoFijo<char*>(this->_nombre,nrobytes);
+		AtributoFijo<char*>* clon=new AtributoFijo<char*>(nombre,longitud);
+		cpy(clon->datos,datos,longitud);
+		return clon;
+	};
+	Ttamanio serializar(void* salida){
+		cpy((char*)salida,datos,longitud);
+		return longitud;
+
+	};
+	Ttamanio deserializar( void*entrada){
+		cpy(datos,(char*)entrada,longitud);
+		return longitud;
+	};
+	Ttamanio tamanioSerializado(){return longitud+sizeof(Ttamanio);};
+	bool esfijo(){
+		return true;
 	};
 };
-/*----------------------------------------------------------------------------------------------------*/
-/*Especializacion punteros*/
-template<typename T_tipo>
-class AtributoFijo<T_tipo*>: public Atributo {
-public:
-	AtributoFijo(std::string nombreAtributo):Atributo(nombreAtributo){
-		//TODO throw exception
-		assert(false);
-	};
-	void imprimir(std::ostream salida){assert(false);};
-	void leer(std::istream entrada){assert(false);};
-	virtual void setbytes(char* value){assert(false);};
-	virtual void getbytes(char* value){assert(false);};
-	void setbytes(std::streambuf& pbuffer){assert(false);};
-	void getbytes(std::streambuf& pbuffer){assert(false);};
-	Ttamanio cantidadbytes(){assert(false);return 0;};
-	virtual ~AtributoFijo(){assert(false);};
-};
+
 /*----------------------------------------------------------------------------*/
 #endif /* ATRIBUTOFIJO_H_ */
 
