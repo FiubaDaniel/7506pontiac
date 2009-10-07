@@ -16,17 +16,18 @@ RegistroDisco::RegistroDisco(Registro*registro): RegistroDisco::Registro(){
 RegistroDisco::~RegistroDisco(){
 	//this->~Registro();
 };
-Ttamanio RegistroDisco::deserializar(void*entrada){
-	Ttamanio offset=Registro::deserializar(entrada);
-	char* p=(char*)entrada;
-	estaBorrado=*(bool*)(p+offset);
-	return offset+sizeof(bool);
+Ttamanio RegistroDisco::deserializar(std::istream&entrada){
+	Ttamanio offset=sizeof(bool);
+	entrada.read((char*)&estaBorrado,offset);
+	if(!estaBorrado)
+		offset+=Registro::deserializar(entrada);
+	return offset;
 };
-Ttamanio RegistroDisco::serializar(void*salida){
-	char* p=(char*)salida;
-	Ttamanio offset=Registro::serializar(salida);
-	*(bool*)(p+offset)=estaBorrado;
-	return offset+sizeof(bool);
+Ttamanio RegistroDisco::serializar(std::ostream&salida){
+	Ttamanio offset=sizeof(bool);
+	salida.write((char*)&estaBorrado,offset);
+	offset+=Registro::serializar(salida);
+	return offset;
 };
 Ttamanio RegistroDisco::tamanioSerializado(){
 	return Registro::tamanioSerializado()+sizeof(bool);

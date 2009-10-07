@@ -15,8 +15,8 @@ public:
 	virtual bool     borrado();
 	virtual void setBorrado(bool flag);
 public:/*MetodosHeredados*/
-	virtual Ttamanio deserializar(void*entrada);
-	virtual Ttamanio serializar(void*salida);
+	virtual Ttamanio deserializar(std::istream&entrada);
+	virtual Ttamanio serializar(std::ostream&salida);
 	virtual Ttamanio tamanioSerializado();
 	virtual Componente* clonar();
 protected:

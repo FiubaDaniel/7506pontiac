@@ -18,8 +18,8 @@ public:
 	void get(void* valor);
 	Ttamanio tamanio();
 	Atributo* clonar();
-	Ttamanio serializar(void*salida);
-	Ttamanio deserializar(void* entrada);
+	Ttamanio serializar(std::ostream&salida);
+	Ttamanio deserializar(std::istream&entrada);
 	Ttamanio tamanioSerializado();
 	bool esfijo();
 };
@@ -41,21 +41,15 @@ Ttamanio AtributoFijo<T_tipo>::tamanio(){ return sizeof(T_tipo*);};
 template<typename T_tipo>
 Atributo* AtributoFijo<T_tipo>::clonar(){ return new AtributoFijo<T_tipo>(nombre);};
 template<typename T_tipo>
-Ttamanio AtributoFijo<T_tipo>::serializar(void*salida){
-	char*p=(char*)salida;
+Ttamanio AtributoFijo<T_tipo>::serializar(std::ostream&salida){
 	Ttamanio tamanioDato=sizeof(dato);
-	//cpy(p,(char*)&tamanioDato,sizeof(Ttamanio));
-	//p+=tamanioDato;
-	cpy(p,(char*)&dato,tamanioDato);
+	salida.write((char*)&dato,tamanioDato);
 	return tamanioDato;
 };
 template<typename T_tipo>
-Ttamanio AtributoFijo<T_tipo>::deserializar(void* entrada){
-	char*p=(char*)entrada;
+Ttamanio AtributoFijo<T_tipo>::deserializar(std::istream&entrada){
 	Ttamanio tamanioDato=sizeof(dato);
-	//cpy((char*)&tamanioDato,p,sizeof(Ttamanio));
-	//p+=tamanioDato;
-	cpy((char*)&dato,p,tamanioDato);
+	entrada.read((char*)&dato,tamanioDato);
 	return tamanioDato;
 };
 template<typename T_tipo>
@@ -98,13 +92,13 @@ public:
 		cpy(clon->datos,datos,longitud);
 		return clon;
 	};
-	Ttamanio serializar(void* salida){
-		cpy((char*)salida,datos,longitud);
+	Ttamanio serializar(std::ostream&salida){
+		salida.write(datos,longitud);
 		return longitud;
 
 	};
-	Ttamanio deserializar( void*entrada){
-		cpy(datos,(char*)entrada,longitud);
+	Ttamanio deserializar(std::istream&entrada){
+		entrada.read(datos,longitud);
 		return longitud;
 	};
 	Ttamanio tamanioSerializado(){return longitud+sizeof(Ttamanio);};

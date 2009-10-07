@@ -13,7 +13,7 @@ Registro::Registro(unsigned int cantidadAtributos, ...):Registro::Componente() {
 		if(atributo->esfijo()) fijo=false;
 		cantidadAtributos--;
 	}
-	if(! cantidadAtributos>0);//TODO else trow error
+	if(!cantidadAtributos>0);//TODO else trow error
 	va_end(ap);
 }
 Registro::~Registro() {
@@ -21,19 +21,17 @@ Registro::~Registro() {
 			delete atributos.at(i);
 	}
 }
-Ttamanio Registro::deserializar(void*entrada){
-	char*p=(char*)entrada;
+Ttamanio Registro::deserializar(std::istream&entrada){
 	Ttamanio offset=0;
 	for(Ttamanio i=0;i<atributos.size();i++){
-		offset+=atributos.at(i)->serializar(p+offset);
+		offset+=atributos.at(i)->deserializar(entrada);
 	}
 	return offset;
 };
-Ttamanio Registro::serializar(void*salida){
-	char*p=(char*)salida;
+Ttamanio Registro::serializar(std::ostream&salida){
 	Ttamanio offset=0;
 	for(Ttamanio i=0;i<atributos.size();i++){
-		offset+=atributos.at(i)->deserializar(p+offset);
+		offset+=atributos.at(i)->serializar(salida);
 	}
 	return offset;
 };

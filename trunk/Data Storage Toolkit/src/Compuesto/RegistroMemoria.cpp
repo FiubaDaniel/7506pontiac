@@ -22,20 +22,19 @@ void RegistroMemoria::setEscrito(bool valor){
 		else
 			flagSucioEscrito=flagSucioEscrito and (not ESCRITO);
 };
-Ttamanio RegistroMemoria::deserializar(void*entrada){
-	Ttamanio offset=Registro::deserializar(entrada);
-	char*p=(char*)entrada;
-	flagSucioEscrito=*(bool*)(p+offset);
-	offset+=sizeof(char);
-	nroCompuesto=*(Ttamanio*)(p+offset);
+Ttamanio RegistroMemoria::deserializar(std::istream&entrada){
+	Ttamanio offset=sizeof(char);
+	entrada.read(&flagSucioEscrito,offset);
+	//TODO nro compuesto vs nro registro, q hacer si sucio
+	offset+=Registro::deserializar(entrada);
 	return offset;
 };
-Ttamanio RegistroMemoria::serializar(void*salida){
-	Ttamanio offset=Registro::serializar(salida);
-	char*p=(char*)salida;
-	*(bool*)(p+offset)=flagSucioEscrito;
-	offset+=sizeof(char);
-	*(Ttamanio*)(p+offset)=nroCompuesto;
+Ttamanio RegistroMemoria::serializar(std::ostream&salida){
+	Ttamanio offset=sizeof(flagSucioEscrito);
+	salida.write(&flagSucioEscrito,offset);
+	//salida.write((char*)&nroCompuesto,sizeof(Ttamanio));
+	//Todo nroCompuesto vs nroRegistro
+	offset+=Registro::serializar(salida);
 	return offset;
 };
 Ttamanio RegistroMemoria::tamanioSerializado(){
