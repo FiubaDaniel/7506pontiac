@@ -16,8 +16,8 @@ public:
 	Ttamanio nroRegitro;
 	bool estaEscrito();
 	bool estaSucio();
-	bool setSucio();
-	bool setEscrito();
+	void setSucio(bool valor);
+	void setEscrito(bool valor);
 	Ttamanio deserializar(void*entrada);
 	Ttamanio serializar(void*salida);
 	Ttamanio tamanioSerializado();

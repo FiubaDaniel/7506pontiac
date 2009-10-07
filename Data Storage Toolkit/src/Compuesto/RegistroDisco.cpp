@@ -14,7 +14,7 @@ RegistroDisco::RegistroDisco(Registro*registro): RegistroDisco::Registro(){
 	}
 };
 RegistroDisco::~RegistroDisco(){
-	this->~Registro();
+	//this->~Registro();
 };
 Ttamanio RegistroDisco::deserializar(void*entrada){
 	Ttamanio offset=Registro::deserializar(entrada);
@@ -35,19 +35,6 @@ Componente* RegistroDisco::clonar(){
 	RegistroDisco* registro=new RegistroDisco(this);
 	registro->estaBorrado=estaBorrado;
 	return registro;
-};
-Atributo* RegistroDisco::get(Ttamanio posicion){
-	return Registro::get(posicion);
-};
-Atributo* RegistroDisco::get(std::string nombre){
-	return Registro::get(nombre);
-};
-Ttamanio RegistroDisco::cantidadAtributos(){
-	return Registro::cantidadAtributos();
-};
-Atributo* RegistroDisco::getId(){
-	return Registro::getId();
-
 };
 bool RegistroDisco::borrado(){return estaBorrado;};
 void RegistroDisco::setBorrado(bool flag){ estaBorrado=flag;};

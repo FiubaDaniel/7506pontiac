@@ -18,10 +18,6 @@ public:
 	virtual Ttamanio serializar(void*salida);
 	virtual Ttamanio tamanioSerializado();
 	virtual Componente* clonar();
-	virtual Atributo* get(Ttamanio posicion);
-	virtual Atributo* get(std::string nombre);
-	virtual Ttamanio cantidadAtributos();
-	virtual Atributo* getId();
 protected:
 	bool estaBorrado;
 };
