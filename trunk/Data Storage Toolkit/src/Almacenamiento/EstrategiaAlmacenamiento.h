@@ -1,72 +1,17 @@
+/*
+ * EstrategiaAlmacenamiento.h
+ *
+ *  Created on: 07/10/2009
+ *      Author: paulo
+ */
 
-#ifndef ESTRATEGIAALMACENAMIENTO_H
-#define ESTRATEGIAALMACENAMIENTO_H
+#ifndef ESTRATEGIAALMACENAMIENTO_H_
+#define ESTRATEGIAALMACENAMIENTO_H_
 
-#include <string>
-
-/**
-  * class EstrategiaAlmacenamiento
-  * 
-  */
-
-/******************************* Abstract Class ****************************
-EstrategiaAlmacenamiento does not have any pure virtual methods, but its author
-  defined it as an abstract class, so you should not use it directly.
-  Inherit from it instead and create only objects from the derived classes
-*****************************************************************************/
-
-class EstrategiaAlmacenamiento
-{
+class EstrategiaAlmacenamiento {
 public:
-
-
-  // Public attribute accessor methods
-  //  
-
-
-  // Public attribute accessor methods
-  //  
-
-
-protected:
-
-public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
-
-public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
-
-
-private:
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
-
-
+	EstrategiaAlmacenamiento();
+	virtual ~EstrategiaAlmacenamiento();
 };
 
-#endif // ESTRATEGIAALMACENAMIENTO_H
+#endif /* ESTRATEGIAALMACENAMIENTO_H_ */

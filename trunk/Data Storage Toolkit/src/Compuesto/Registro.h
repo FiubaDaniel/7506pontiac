@@ -16,16 +16,16 @@ class Registro : public Componente{
 public:
 	Registro(unsigned int cantidadAtributos, ... );
 	virtual ~Registro();
-	virtual Ttamanio deserializar(void*entrada);
-	virtual Ttamanio serializar(void*salida);
-	virtual Ttamanio tamanioSerializado();
-	virtual Componente* clonar();
-public:
 	Atributo* get(Ttamanio posicion);
 	Atributo* get(std::string nombre);
 	Ttamanio  cantidadAtributos();
 	Atributo* getId();
 	bool esfijo();
+public:/*Metodos Heredados*/
+	virtual Ttamanio deserializar(void*entrada);
+	virtual Ttamanio serializar(void*salida);
+	virtual Ttamanio tamanioSerializado();
+	virtual Componente* clonar();
 protected:
 	Registro();
 	std::vector<Atributo*> atributos;

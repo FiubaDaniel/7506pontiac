@@ -18,6 +18,7 @@ public:
 	bool estaSucio();
 	void setSucio(bool valor);
 	void setEscrito(bool valor);
+public:/*MetodoHeredados*/
 	virtual Ttamanio deserializar(void*entrada);
 	virtual Ttamanio serializar(void*salida);
 	virtual Ttamanio tamanioSerializado();

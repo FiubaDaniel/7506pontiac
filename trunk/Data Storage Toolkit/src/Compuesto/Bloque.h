@@ -15,11 +15,12 @@ class Bloque :public Componente, Compuesto {
 public:
 	Bloque(Ttamanio tamanio,Componente*compenente);
 	virtual ~Bloque();
+public:/*Heredados de Componente*/
 	virtual Ttamanio deserializar(void*entrada);
 	virtual Ttamanio serializar(void*salida);
 	virtual Ttamanio tamanioSerializado();
 	virtual Componente* clonar();
-public:
+public:/*Heredados de compuesto*/
 	virtual Componente* get(Ttamanio nroComponente);
 	virtual Ttamanio cantidadComponentes();
 	virtual bool insertar(Componente*componente,Ttamanio posicion);

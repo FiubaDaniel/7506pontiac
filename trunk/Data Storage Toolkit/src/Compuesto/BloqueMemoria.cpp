@@ -46,21 +46,3 @@ Componente* BloqueMemoria::clonar(){
 	clon->escrito=escrito;
 	return clon;
 };
-Componente* BloqueMemoria::get(Ttamanio nroComponente){
-	return Bloque::get(nroComponente);
-};
-Ttamanio BloqueMemoria::cantidadComponentes(){
-	return Bloque::cantidadComponentes();
-};
-bool BloqueMemoria::insertar(Componente*componente,Ttamanio posicion){
-	return Bloque::insertar(componente,posicion);
-};
-bool BloqueMemoria::eliminar(Ttamanio posicion){
-	return Bloque::eliminar(posicion);
-};
-bool BloqueMemoria::agregar(Componente*componente){
-	return Bloque::agregar(componente);
-};
-Componente* BloqueMemoria::reemplazar(Componente*componente,Ttamanio posicion){
-	return Bloque::reemplazar(componente,posicion);
-};
