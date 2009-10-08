@@ -37,7 +37,7 @@ void AtributoFijo<T_tipo>::set(void* valor){dato=*(T_tipo*)valor;};
 template<typename T_tipo>
 void AtributoFijo<T_tipo>::get(void* valor){*(T_tipo*)valor=dato;};
 template<typename T_tipo>
-Ttamanio AtributoFijo<T_tipo>::tamanio(){ return sizeof(T_tipo*);};
+Ttamanio AtributoFijo<T_tipo>::tamanio(){ return sizeof(T_tipo);};
 template<typename T_tipo>
 Atributo* AtributoFijo<T_tipo>::clonar(){ return new AtributoFijo<T_tipo>(nombre);};
 template<typename T_tipo>
@@ -54,12 +54,10 @@ Ttamanio AtributoFijo<T_tipo>::deserializar(std::istream&entrada){
 };
 template<typename T_tipo>
 Ttamanio AtributoFijo<T_tipo>::tamanioSerializado(){
-	return sizeof(T_tipo)+sizeof(Ttamanio);
+	return sizeof(T_tipo);
 };
 template<typename T_tipo>
-bool AtributoFijo<T_tipo>::esfijo(){
-	return true;
-};
+bool AtributoFijo<T_tipo>::esfijo(){ return true;};
 /*----------------------------------------------------------------------------------------------------*/
 /*Especializacion de la clase para cadena de chars*/
 template<>
@@ -101,7 +99,7 @@ public:
 		entrada.read(datos,longitud);
 		return longitud;
 	};
-	Ttamanio tamanioSerializado(){return longitud+sizeof(Ttamanio);};
+	Ttamanio tamanioSerializado(){return longitud;};
 	bool esfijo(){
 		return true;
 	};

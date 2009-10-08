@@ -1,23 +1,37 @@
 #include "Buffer.h"
 
-// Constructors/Destructors
-//  
+Buffer::Buffer(){
+	archivo =new std::stringstream(std::ios_base::out|std::ios_base::binary|std::ios_base::in);
+};
+Buffer::~Buffer (){
+	delete archivo;
+};
+void Buffer::escribir(const void* bytes,size_t cantidad){
+	archivo->write((char*)&bytes,cantidad);
+};
+void Buffer::escribir(const void* unByte){
+	archivo->put(*(char*)unByte);
 
-Buffer::Buffer ( ) {
-}
+};
+void Buffer::leer(void* bytes,size_t cantidad){
+	archivo->read((char*)&bytes,cantidad);
+};
+void Buffer::leer(void* unBytes){
+	*(char*)unBytes=archivo->get();
+};
+void Buffer::posicionarByte(size_t posicion){
+	archivo->seekg(posicion);
+	archivo->seekp(posicion);
+};
+bool Buffer::bienByte(){return archivo->good();};
+void Buffer::posicionarComponente(size_t nroCompuesto){
 
-Buffer::~Buffer ( ) { }
+};
+void Buffer::escribir(Compuesto*compuesto){
 
-//  
-// Methods
-//  
+};
+void Buffer::leer(Compuesto*compuesto){
 
-
-// Accessor methods
-//  
-
-
-// Other methods
-//  
-
-
+};
+bool Buffer::fin(){return false;};
+bool Buffer::bien(){return false;};

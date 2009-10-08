@@ -2,7 +2,7 @@
 #ifndef BUFFER_H
 #define BUFFER_H
 #include "Almacenamiento.h"
-
+#include <sstream>
 #include <string>
 
 /**
@@ -10,90 +10,26 @@
   * 
   */
 
-class Buffer : public Almacenamiento
-{
+class Buffer : public Almacenamiento{
+	std::stringstream *archivo;
 public:
-
-  // Constructors/Destructors
-  //  
-
-
-  /**
-   * Empty Constructor
-   */
-  Buffer ( );
-
-  /**
-   * Empty Destructor
-   */
-  virtual ~Buffer ( );
-
-  // Static Public attributes
-  //  
-
-  // Public attributes
-  //  
-
-
-  // Public attribute accessor methods
-  //  
-
-
-  // Public attribute accessor methods
-  //  
-
-
-protected:
-
-  // Static Protected attributes
-  //  
-
-  // Protected attributes
-  //  
-
-public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
-
-public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
-
-
-private:
-
-  // Static Private attributes
-  //  
-
-  // Private attributes
-  //  
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
-
-
+	Buffer();
+	~Buffer();
+	/*-------------------------------------------------------------------------*/
+	/*utilizado por la estrategiaAlmacenamiento*/
+	virtual void escribir(const void* bytes,size_t cantidad);
+	virtual void escribir(const void* unByte);
+	virtual void leer(void* bytes,size_t cantidad);
+	virtual void leer(void* unBytes);
+	virtual void posicionarByte(size_t posicion);
+	virtual bool bienByte();
+	/*------------------------------------------------------------------------*/
+	//TODO usar un unico posicionamiento o usar uno para lectura y otro para escritura?
+	virtual void posicionarComponente(size_t nroCompuesto);
+	virtual void escribir(Compuesto*compuesto);
+	virtual void leer(Compuesto*compuesto);
+	virtual bool fin();
+	virtual bool bien();
 };
 
 #endif // BUFFER_H
