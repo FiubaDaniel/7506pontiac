@@ -13,22 +13,22 @@
 template<typename T_tipo>
 class AtributoVariable: public Atributo {
 private:
-	std::vector<T_tipo*> valores;
+	std::vector<T_tipo> valores;
 	Ttamanio valorActual;
-	void init(std::string nombreAtributo);
 public:
 	AtributoVariable(std::string nombreAtributo);//crea espacio para almenos un valor
 	virtual ~AtributoVariable();
-	void set(char* value);//modifican el valor apuntado
-	void get(char* value);
+	void set(void* value);//modifican el valor apuntado
+	void get(void* value);
 	Ttamanio tamanio();
 	Atributo* clonar();
-	void serializar(std::ostream salida);
-	void deserializar(std::istream entrada);
+	Ttamanio serializar(std::ostream &salida);
+	Ttamanio deserializar(std::istream &entrada);
 	Ttamanio tamanioSerializado();
+	bool esfijo();
 public:
 	/* metodo propios de la clase permiten iteracion sobre los valores guardados*/
-	void appbytes(void*valor);// se agregan tantos bytes como indica nrobytes
+	void append(void*valor);// se agregan tantos bytes como indica nrobytes
 	void apuntar(Ttamanio nroValor);
 	void eliminarApuntado();
 	void cantidadValores();
@@ -36,62 +36,89 @@ public:
 /*----------------------------------------------------------------------------*/
 /*Template Control de tipo*/
 template<typename T_tipo>
-AtributoVariable<T_tipo>::AtributoVariable(std::string nombreAtributo){
-	//TODO trow exception  o abortar compilacion
-
+AtributoVariable<T_tipo>::AtributoVariable(std::string nombreAtributo):AtributoVariable<T_tipo>::Atributo(nombreAtributo){
+	T_tipo aux;
+	valores.push_back(aux);
+	valorActual=0;
 };
 /*----------------------------------------------------------------------------*/
 /*Templates sin especializacion*/
 template<typename T_tipo>
-AtributoVariable<T_tipo>::~AtributoVariable(){
-		for(Ttamanio i= valores.size()-1;i>=0;i--){
-			delete valores.at(i);
-		}
+AtributoVariable<T_tipo>::~AtributoVariable(){};
+template<typename T_tipo>
+void AtributoVariable<T_tipo>::set(void* value){
+	valores.at(valorActual)=*(T_tipo*)value;
 };
 template<typename T_tipo>
-void AtributoVariable<T_tipo>::init(std::string nombreAtributo){
-	nrobytes=sizeof(T_tipo);
-	nombre=nombreAtributo;
-	valores.push_back(new T_tipo);
-	valorActual=0;
-}
-template<typename T_tipo>
-void AtributoVariable<T_tipo>::set(char* value){
-	cpy((char*)valores.at(valorActual),value,nrobytes);
+void AtributoVariable<T_tipo>::get(void* value){
+	*(T_tipo*)value=valores.at(valorActual);
 };
 template<typename T_tipo>
-void AtributoVariable<T_tipo>::get(char* value){
-	cpy(value,(char*)valores.at(valorActual),nrobytes);
+Ttamanio AtributoVariable<T_tipo>::tamanio(){return sizeof(T_tipo)*valores.size();};
+template<typename T_tipo>
+Atributo* AtributoVariable<T_tipo>::clonar(){
+	AtributoVariable<T_tipo> *clon=new AtributoVariable<T_tipo>(nombre);
+	for(Ttamanio i= valores.size()-1;i>=0;i--){
+		clon->valores.push_back(valores.at(i));
+	}
+	return clon;
 };
 template<typename T_tipo>
-void AtributoVariable<T_tipo>::set(std::streambuf& pbuffer){
-	pbuffer.sgetn((char*)valores.at(valorActual),nrobytes);
+Ttamanio AtributoVariable<T_tipo>::serializar(std::ostream &salida){
+	Ttamanio offset=sizeof(Ttamanio);
+	Ttamanio aux=valores.size();
+	salida.write((char*)&aux,offset);
+	for(Ttamanio i=0;i<valores.size();i++){
+		salida.write((char*)&valores.at(i),sizeof(T_tipo));
+		offset+=sizeof(T_tipo);
+	}
+	return offset;
 };
 template<typename T_tipo>
-void AtributoVariable<T_tipo>::get(std::streambuf& pbuffer){
-	pbuffer.sputn((char*)valores.at(valorActual),nrobytes);
-}
+Ttamanio AtributoVariable<T_tipo>::deserializar(std::istream &entrada){
+	Ttamanio offset=sizeof(Ttamanio);
+	Ttamanio nroValores=valores.size();
+	entrada.read((char*)&nroValores,offset);
+	Ttamanio i=0;
+	T_tipo aux;
+	while(i< nroValores and i<valores.size() ){
+		entrada.read((char*)&aux,sizeof(T_tipo));
+		valores.at(i)=aux;
+		offset+=sizeof(T_tipo);
+		i++;
+	}
+	while(i < valores.size()){
+		valores.erase(valores.begin()+i);
+	}
+	while(i<nroValores){
+		entrada.read((char*)&aux,sizeof(T_tipo));
+		valores.at(i)=aux;
+		offset+=sizeof(T_tipo);
+		i++;
+	}
+	return offset;
+};
 template<typename T_tipo>
-Ttamanio AtributoVariable<T_tipo>::tamanio(){return sizeof(T_tipo);};
+Ttamanio AtributoVariable<T_tipo>::tamanioSerializado(){
+	return valores.size()*sizeof(T_tipo)+sizeof(Ttamanio);
+};
 template<typename T_tipo>
-bool AtributoFijo<T_tipo>::esfijo(){
+bool AtributoVariable<T_tipo>::esfijo(){
 	return false;
 };
+template<typename T_tipo>
+void AtributoVariable<T_tipo>::append(void*valor){
+	T_tipo aux=*(T_tipo*)valor;
+	valores.push_back(aux);
+};
+template<typename T_tipo>
+void AtributoVariable<T_tipo>::apuntar(Ttamanio nroValor){valorActual=nroValor;};
+template<typename T_tipo>
+void AtributoVariable<T_tipo>::eliminarApuntado(){valores.erase(valores.begin()+valorActual);};
+template<typename T_tipo>
+void AtributoVariable<T_tipo>::cantidadValores(){return valores.size();};
 /*----------------------------------------------------------------------------*/
 /*Templates Especializados contructores*/
-template<>AtributoVariable<char>::AtributoVariable(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoVariable<short>::AtributoVariable(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoVariable<int>::AtributoVariable(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoVariable<long>::AtributoVariable(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoVariable<long long>::AtributoVariable(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoVariable<unsigned char>::AtributoVariable(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoVariable<unsigned short>::AtributoVariable(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoVariable<unsigned int>::AtributoVariable(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoVariable<unsigned long>::AtributoVariable(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoVariable<unsigned long long>::AtributoVariable(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoVariable<float>::AtributoVariable(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoVariable<double>::AtributoVariable(std::string nombreAtributo){init(nombreAtributo);}
-template<>AtributoVariable<long double>::AtributoVariable(std::string nombreAtributo){init(nombreAtributo);}
 /**/
 /*Especializacion de la clase para cadena de chars*/
 template<>
@@ -105,10 +132,10 @@ public:
 	};
 	virtual void set(void* value){
 		str="";
-		str.insert(0,value,nrobytes);
+		str.insert(0,(char*)value,nrobytes);
 	};
 	virtual void get(void* value){
-		str.copy(value,nrobytes);
+		str.copy((char*)value,nrobytes);
 	};
 	Ttamanio cantidadbytes(){return str.size();};
 	bool esfijo(){

@@ -17,7 +17,7 @@ Registro::Registro(unsigned int cantidadAtributos, ...):Registro::Componente() {
 	va_end(ap);
 }
 Registro::~Registro() {
-	for(Ttamanio i= atributos.size()-1;i>=0;i--){
+	for(Ttamanio i=0;i<atributos.size();i++){
 			delete atributos.at(i);
 	}
 }
