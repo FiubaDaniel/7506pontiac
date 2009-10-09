@@ -16,8 +16,8 @@ public:
 	Bloque(Ttamanio tamanio,Componente*compenente);
 	virtual ~Bloque();
 public:/*Heredados de Componente*/
-	virtual Ttamanio deserializar(std::istream&entrada);
-	virtual Ttamanio serializar(std::ostream&salida);
+	virtual Ttamanio deserializar(std::streambuf&entrada);
+	virtual Ttamanio serializar(std::streambuf&salida);
 	virtual Ttamanio tamanioSerializado();
 	virtual Componente* clonar();
 public:/*Heredados de compuesto*/

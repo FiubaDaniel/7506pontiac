@@ -19,14 +19,13 @@ Bloque::~Bloque() {
 	}
 };
 Componente* Bloque::clonar(){
-	//TODO ver si sirve o no
 	Bloque* clon=new Bloque(tamanioBloque,componentes.at(0)->clonar());
 	return clon;
 };
-Ttamanio Bloque::deserializar(std::istream&entrada){
+Ttamanio Bloque::deserializar(std::streambuf&entrada){
 	Ttamanio nrocomponetes;
 	Ttamanio offset=sizeof(Ttamanio);
-	entrada.read((char*)&nrocomponetes,offset);
+	entrada.sgetn((char*)&nrocomponetes,offset);
 	Ttamanio i=0;
 	while(i<nrocomponetes and i<componentes.size()){
 		offset+=componentes.at(i)->deserializar(entrada);
@@ -46,10 +45,10 @@ Ttamanio Bloque::deserializar(std::istream&entrada){
 	delete auxiliar;
 	return offset;
 };
-Ttamanio Bloque::serializar(std::ostream&salida){
+Ttamanio Bloque::serializar(std::streambuf&salida){
 	Ttamanio nrocomponetes=componentes.size();
 	Ttamanio offset=sizeof(Ttamanio);
-	salida.write((char*)&nrocomponetes,offset);
+	salida.sputn((char*)&nrocomponetes,offset);
 	for(Ttamanio i=0;i<nrocomponetes;i++){
 		offset+=componentes.at(i)->serializar(salida);
 	}

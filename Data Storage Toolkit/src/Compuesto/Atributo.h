@@ -7,7 +7,7 @@
 
 #ifndef ATRIBUTO_H_
 #define ATRIBUTO_H_
-#include <iostream>
+#include <streambuf>
 typedef unsigned int Ttamanio;
 class Atributo {
 public:
@@ -44,11 +44,11 @@ public:
 	/*
 	 *
 	 */
-	virtual Ttamanio serializar(std::ostream&salida)=0;
+	virtual Ttamanio serializar(std::streambuf&salida)=0;
 	/*
 	 *
 	 */
-	virtual Ttamanio deserializar(std::istream &entrada)=0;
+	virtual Ttamanio deserializar(std::streambuf&entrada)=0;
 	/*
 	 *
 	 */

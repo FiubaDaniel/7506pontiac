@@ -1,11 +1,9 @@
 #include "Archivo.h"
 
 Archivo::Archivo (const char*ruta){
+	archivo.open(ruta,std::fstream::out|std::fstream::app);
+	archivo.close();
 	archivo.open(ruta,std::fstream::out|std::fstream::binary|std::fstream::in);
-	//TODO is_open
-	if(!archivo.is_open()){
-
-	}
 };
 Archivo::~Archivo (){
 	archivo.close();

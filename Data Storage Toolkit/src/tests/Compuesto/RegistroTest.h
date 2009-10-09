@@ -22,7 +22,7 @@ public:
 		nombre.set(array);
 		Registro reg(1,&nombre);
 		//std::cout<<reg.cantidadAtributos();
-		reg.serializar(std::cout);
+
 	};
 	void verificar(bool test,std::string mensaje){
 		//nroprueba++;

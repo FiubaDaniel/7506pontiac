@@ -43,7 +43,7 @@ public:
 		verificar(atributo.tamanioSerializado()==sizeof(T),"Tamanio Serializacion incorrecto");
 		verificar(atributo.tamanio()==sizeof(T),"Tamanio incorrecto");
 		verificar(atributo.esfijo(),"No es fijo");
-		stringstream ostrm;
+		stringbuf ostrm;
 		atributo.serializar(ostrm);
 		aux*=aux;
 		atributo.set(&aux);
@@ -60,7 +60,7 @@ public:
 		verificar(atributo.tamanioSerializado()==n,"Tamanio Serializacion incorrecto");
 		verificar(atributo.tamanio()==n,"Tamanio Serializacion incorrecto");
 		verificar(!atributo.esfijo(),"No es fijo");
-		stringstream ostrm;
+		stringbuf ostrm;
 		atributo.serializar(ostrm);
 		strcpy(aux,"hola");
 		atributo.set(aux);
@@ -78,7 +78,7 @@ public:
 		verificar(atributo.tamanioSerializado()==(sizeof(T)+sizeof(Ttamanio)),"Tamanio Serializacion incorrecto");
 		verificar(atributo.tamanio()==sizeof(T),"Tamanio incorrecto");
 		verificar(atributo.esfijo(),"No es fijo");
-		stringstream ostrm;
+		stringbuf ostrm;
 		atributo.serializar(ostrm);
 		aux*=aux;
 		atributo.set(&aux);
@@ -95,7 +95,7 @@ public:
 		verificar(atributo.tamanioSerializado()==n,"Tamanio Serializacion incorrecto");
 		verificar(atributo.tamanio()==n,"Tamanio Serializacion incorrecto");
 		verificar(!atributo.esfijo(),"No es fijo");
-		stringstream ostrm;
+		stringbuf ostrm;
 		atributo.serializar(ostrm);
 		strcpy(aux,"hola");
 		atributo.set(aux);

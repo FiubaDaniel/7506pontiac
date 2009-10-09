@@ -6,7 +6,6 @@
  */
 
 #include "BloqueDisco.h"
-//TODO Implementar
 BloqueDisco::BloqueDisco(Bloque* bloque):BloqueDisco::Bloque(){
 	for(Ttamanio i=0;i<bloque->cantidadComponentes();i++){
 			Componente* aux=bloque->get(i);
@@ -18,17 +17,20 @@ void BloqueDisco::setBorrado(bool valor){borrado=valor;};
 bool BloqueDisco::estaBorrado(){
 	return borrado;
 };
-Ttamanio BloqueDisco::deserializar(std::istream&entrada){
+Ttamanio BloqueDisco::deserializar(std::streambuf&entrada){
 	Ttamanio offset=sizeof(bool);
-	entrada.read((char*)&borrado,offset);
+	entrada.sgetn((char*)&borrado,offset);
 	if(!borrado){
 		offset=Bloque::deserializar(entrada);
 	}
 	return offset;
 };
-Ttamanio BloqueDisco::serializar(std::ostream&salida){
-	salida.write((char*)&borrado,sizeof(bool));
-	Ttamanio offset=Bloque::serializar(salida);
+Ttamanio BloqueDisco::serializar(std::streambuf&salida){
+	Ttamanio offset=sizeof(bool);
+	salida.sputn((char*)&borrado,offset);
+	if(!borrado){
+		offset=Bloque::serializar(salida);
+	};
 	return offset+sizeof(bool);
 };
 Ttamanio BloqueDisco::tamanioSerializado(){

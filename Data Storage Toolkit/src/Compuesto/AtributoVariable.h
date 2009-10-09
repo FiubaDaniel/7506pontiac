@@ -22,8 +22,8 @@ public:
 	void get(void* value);
 	Ttamanio tamanio();
 	Atributo* clonar();
-	Ttamanio serializar(std::ostream &salida);
-	Ttamanio deserializar(std::istream &entrada);
+	Ttamanio serializar(std::streambuf &salida);
+	Ttamanio deserializar(std::streambuf &entrada);
 	Ttamanio tamanioSerializado();
 	bool esfijo();
 public:
@@ -64,25 +64,25 @@ Atributo* AtributoVariable<T_tipo>::clonar(){
 	return clon;
 };
 template<typename T_tipo>
-Ttamanio AtributoVariable<T_tipo>::serializar(std::ostream &salida){
+Ttamanio AtributoVariable<T_tipo>::serializar(std::streambuf &salida){
 	Ttamanio offset=sizeof(Ttamanio);
 	Ttamanio aux=valores.size();
-	salida.write((char*)&aux,offset);
+	salida.sputn((char*)&aux,offset);
 	for(Ttamanio i=0;i<valores.size();i++){
-		salida.write((char*)&valores.at(i),sizeof(T_tipo));
+		salida.sputn((char*)&valores.at(i),sizeof(T_tipo));
 		offset+=sizeof(T_tipo);
 	}
 	return offset;
 };
 template<typename T_tipo>
-Ttamanio AtributoVariable<T_tipo>::deserializar(std::istream &entrada){
+Ttamanio AtributoVariable<T_tipo>::deserializar(std::streambuf &entrada){
 	Ttamanio offset=sizeof(Ttamanio);
 	Ttamanio nroValores=valores.size();
-	entrada.read((char*)&nroValores,offset);
+	entrada.sgetn((char*)&nroValores,offset);
 	Ttamanio i=0;
 	T_tipo aux;
 	while(i< nroValores and i<valores.size() ){
-		entrada.read((char*)&aux,sizeof(T_tipo));
+		entrada.sgetn((char*)&aux,sizeof(T_tipo));
 		valores.at(i)=aux;
 		offset+=sizeof(T_tipo);
 		i++;
@@ -91,7 +91,7 @@ Ttamanio AtributoVariable<T_tipo>::deserializar(std::istream &entrada){
 		valores.erase(valores.begin()+i);
 	}
 	while(i<nroValores){
-		entrada.read((char*)&aux,sizeof(T_tipo));
+		entrada.sgetn((char*)&aux,sizeof(T_tipo));
 		valores.at(i)=aux;
 		offset+=sizeof(T_tipo);
 		i++;

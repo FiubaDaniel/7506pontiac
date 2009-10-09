@@ -11,16 +11,19 @@
 #include <vector>
 #include "tests/Compuesto/AtributoTest.h"
 #include "tests/Compuesto/RegistroTest.h"
+#include "tests/Compuesto/compuestolib.h"
 using namespace std;
-template<typename T>
-void print(T){
-
-}
+struct A{
+	int a;
+	char b;
+};
 int main() {
 	//AtributoTest a;
 	//a.runTest();
 	//foo(cout);
-	RegistroTest b;
-	b.runTest();
+	//RegistroTest b;
+	//b.runTest();
+	A a;
+	A b=a;
 	return 0;
 }

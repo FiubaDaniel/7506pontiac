@@ -15,34 +15,36 @@ BloqueMemoria::BloqueMemoria(Bloque* bloque):BloqueMemoria::Bloque(){
 BloqueMemoria::~BloqueMemoria(){
 	//this->~Bloque();
 };
-bool BloqueMemoria::estaEscrito(){return escrito;};
-bool BloqueMemoria::estaSucio(){return sucio;};
-void BloqueMemoria::setSucio(bool valor){sucio=valor;};
-void BloqueMemoria::setEscrito(bool valor){escrito=valor;};
-Ttamanio BloqueMemoria::deserializar(std::istream&entrada){
-	Ttamanio offset=sizeof(bool);
-	entrada.read((char*)&sucio,offset);
-	if(!sucio){
-		entrada.read((char*)&escrito,offset);
-		offset*=2;
+bool BloqueMemoria::estaEscrito(){return estado&escrito;};
+bool BloqueMemoria::estaSucio(){return estado&sucio;};
+void BloqueMemoria::setSucio(bool valor){
+	if(valor) estado =flags(estado|sucio);
+	else estado=flags(estado|(!sucio));
+};
+void BloqueMemoria::setEscrito(bool valor){
+	if(valor) estado =flags(estado|escrito);
+	else estado=flags(estado|(!escrito));
+};
+Ttamanio BloqueMemoria::deserializar(std::streambuf&entrada){
+	Ttamanio offset=sizeof(flags);
+	entrada.sgetn((char*)&estado,offset);
+	if(!estaSucio()){
 		offset+=Bloque::deserializar(entrada);
 	}
 	return offset;
 };
-Ttamanio BloqueMemoria::serializar(std::ostream&salida){
-	Ttamanio offset=sizeof(bool);
-	salida.write((char*)&sucio,offset);
-	salida.write((char*)&escrito,offset);
-	offset*=2;
-	offset+=Bloque::serializar(salida);
+Ttamanio BloqueMemoria::serializar(std::streambuf&salida){
+	Ttamanio offset=sizeof(flags);
+	salida.sputn((char*)&estado,offset);
+	if(!estaSucio())
+		offset+=Bloque::serializar(salida);
 	return offset;
 };
 Ttamanio BloqueMemoria::tamanioSerializado(){
-	return Bloque::tamanioSerializado()+2*sizeof(bool);
+	return Bloque::tamanioSerializado()+sizeof(flags);
 };
 Componente* BloqueMemoria::clonar(){
 	BloqueMemoria* clon=new BloqueMemoria(this);
-	clon->sucio=sucio;
-	clon->escrito=escrito;
+	clon->estado=estado;//TODO
 	return clon;
 };

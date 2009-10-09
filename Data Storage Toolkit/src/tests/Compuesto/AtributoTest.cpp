@@ -10,5 +10,4 @@
 
 
 AtributoTest::~AtributoTest() {
-	// TODO Auto-generated destructor stub
 }

@@ -8,10 +8,10 @@
 #include "RegistroTest.h"
 
 RegistroTest::RegistroTest() {
-	// TODO Auto-generated constructor stub
+
 
 }
 
 RegistroTest::~RegistroTest() {
-	// TODO Auto-generated destructor stub
+
 }

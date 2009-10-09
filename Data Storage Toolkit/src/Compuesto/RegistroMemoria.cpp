@@ -8,31 +8,28 @@
 #include "RegistroMemoria.h"
 RegistroMemoria::RegistroMemoria(Registro*registro,Ttamanio nroCompuesto,Ttamanio nroRegistro):RegistroMemoria::Registro(){};
 RegistroMemoria::~RegistroMemoria(){};
-bool RegistroMemoria::estaEscrito(){return flagSucioEscrito and ESCRITO;};
-bool RegistroMemoria::estaSucio(){return flagSucioEscrito and SUCIO;};
+bool RegistroMemoria::estaEscrito(){return estado&escrito;};
+bool RegistroMemoria::estaSucio(){return estado&sucio;};
 void RegistroMemoria::setSucio(bool valor){
-	if(valor)
-		flagSucioEscrito=flagSucioEscrito or SUCIO;
-	else
-		flagSucioEscrito=flagSucioEscrito and (not SUCIO);
+	if(valor)estado=flags(estado|sucio);
+	else estado=flags(estado|!sucio);
 };
 void RegistroMemoria::setEscrito(bool valor){
-	if(valor)
-			flagSucioEscrito=flagSucioEscrito or ESCRITO;
-		else
-			flagSucioEscrito=flagSucioEscrito and (not ESCRITO);
+	if(valor)estado=flags(estado|escrito);
+	else estado=flags(estado|!escrito);
 };
-Ttamanio RegistroMemoria::deserializar(std::istream&entrada){
-	Ttamanio offset=sizeof(char);
-	entrada.read(&flagSucioEscrito,offset);
+Ttamanio RegistroMemoria::deserializar(std::streambuf&entrada){
+	Ttamanio offset=sizeof(flags);
+	entrada.sgetn((char*)&estado,offset);
 	//TODO nro compuesto vs nro registro, q hacer si sucio
-	offset+=Registro::deserializar(entrada);
+	if(!estaSucio())
+		offset+=Registro::deserializar(entrada);
 	return offset;
 };
-Ttamanio RegistroMemoria::serializar(std::ostream&salida){
-	Ttamanio offset=sizeof(flagSucioEscrito);
-	salida.write(&flagSucioEscrito,offset);
-	//salida.write((char*)&nroCompuesto,sizeof(Ttamanio));
+Ttamanio RegistroMemoria::serializar(std::streambuf&salida){
+	Ttamanio offset=sizeof(flags);
+	salida.sputn((char*)&estado,offset);
+	//salida.sputn((char*)&nroCompuesto,sizeof(Ttamanio));
 	//Todo nroCompuesto vs nroRegistro
 	offset+=Registro::serializar(salida);
 	return offset;

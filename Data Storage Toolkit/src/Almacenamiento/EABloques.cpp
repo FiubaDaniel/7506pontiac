@@ -19,18 +19,18 @@ void EABloques::posicionarCompuesto(size_t nroCompuesto){
 	corriente=nroCompuesto;
 };
 void EABloques::escribir(Almacenamiento* almacen,Compuesto*compuesto){
-	Bloque* bloque=(Bloque*)compuesto;
-	std::stringstream stream;
+//	Bloque* bloque=(Bloque*)compuesto;
+/*	std::stringstream stream;
 	stream.rdbuf()->pubsetbuf(buffertransferencia,tamanio);
 	bloque->serializar(stream);
 	almacen->posicionarByte(corriente*bloque->tamanioSerializado());
-	almacen->escribir(stream.rdbuf(),bloque->tamanioSerializado());
+	almacen->escribir(stream.rdbuf(),bloque->tamanioSerializado());*/
 };
 void EABloques::leer(Almacenamiento* almacen,Compuesto*compuesto){
-	Bloque* bloque=(Bloque*)compuesto;
-	std::stringstream stream;
+	//Bloque* bloque=(Bloque*)compuesto;
+/*	std::stringstream stream;
 	almacen->posicionarByte(corriente*bloque->tamanioSerializado());
 	almacen->leer(buffertransferencia,tamanio);
 	stream.rdbuf()->pubsetbuf(buffertransferencia,tamanio);
-	bloque->serializar(stream);
+	bloque->serializar(stream);*/
 };
