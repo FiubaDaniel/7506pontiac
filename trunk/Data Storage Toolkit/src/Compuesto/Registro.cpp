@@ -21,14 +21,14 @@ Registro::~Registro() {
 			delete atributos.at(i);
 	}
 }
-Ttamanio Registro::deserializar(std::istream&entrada){
+Ttamanio Registro::deserializar(std::streambuf&entrada){
 	Ttamanio offset=0;
 	for(Ttamanio i=0;i<atributos.size();i++){
 		offset+=atributos.at(i)->deserializar(entrada);
 	}
 	return offset;
 };
-Ttamanio Registro::serializar(std::ostream&salida){
+Ttamanio Registro::serializar(std::streambuf&salida){
 	Ttamanio offset=0;
 	for(Ttamanio i=0;i<atributos.size();i++){
 		offset+=atributos.at(i)->serializar(salida);

@@ -15,8 +15,8 @@ public:
 	bool estaBorrado();
 	void setBorrado(bool valor);
 public:/*Heredados de Componente*/
-	Ttamanio deserializar(std::istream&entrada);
-	Ttamanio serializar(std::ostream&salida);
+	Ttamanio deserializar(std::streambuf&entrada);
+	Ttamanio serializar(std::streambuf&salida);
 	Ttamanio tamanioSerializado();
 	Componente* clonar();
 protected:

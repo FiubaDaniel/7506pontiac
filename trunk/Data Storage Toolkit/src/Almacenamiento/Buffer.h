@@ -24,7 +24,6 @@ public:
 	virtual void posicionarByte(size_t posicion);
 	virtual bool bienByte();
 	/*------------------------------------------------------------------------*/
-	//TODO usar un unico posicionamiento o usar uno para lectura y otro para escritura?
 	virtual void posicionarComponente(size_t nroCompuesto);
 	virtual void escribir(Compuesto*compuesto);
 	virtual void leer(Compuesto*compuesto);

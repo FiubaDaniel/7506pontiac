@@ -11,8 +11,8 @@
 class Almacenamiento;
 class EstrategiaAlmacenamiento {
 public:
-	EstrategiaAlmacenamiento();
-	virtual ~EstrategiaAlmacenamiento();
+	EstrategiaAlmacenamiento(){};
+	virtual ~EstrategiaAlmacenamiento(){};
 	virtual void posicionarCompuesto(size_t nroCompuesto)=0;
 	virtual void escribir(Almacenamiento* almacen,Compuesto*compuesto)=0;
 	virtual void leer(Almacenamiento* almacen,Compuesto*compuesto)=0;

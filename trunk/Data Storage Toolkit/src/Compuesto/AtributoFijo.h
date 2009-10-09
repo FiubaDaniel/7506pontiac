@@ -18,8 +18,8 @@ public:
 	void get(void* valor);
 	Ttamanio tamanio();
 	Atributo* clonar();
-	Ttamanio serializar(std::ostream&salida);
-	Ttamanio deserializar(std::istream&entrada);
+	Ttamanio serializar(std::streambuf&salida);
+	Ttamanio deserializar(std::streambuf&entrada);
 	Ttamanio tamanioSerializado();
 	bool esfijo();
 };
@@ -41,15 +41,15 @@ Ttamanio AtributoFijo<T_tipo>::tamanio(){ return sizeof(T_tipo);};
 template<typename T_tipo>
 Atributo* AtributoFijo<T_tipo>::clonar(){ return new AtributoFijo<T_tipo>(nombre);};
 template<typename T_tipo>
-Ttamanio AtributoFijo<T_tipo>::serializar(std::ostream&salida){
+Ttamanio AtributoFijo<T_tipo>::serializar(std::streambuf&salida){
 	Ttamanio tamanioDato=sizeof(dato);
-	salida.write((char*)&dato,tamanioDato);
+	salida.sputn((char*)&dato,tamanioDato);
 	return tamanioDato;
 };
 template<typename T_tipo>
-Ttamanio AtributoFijo<T_tipo>::deserializar(std::istream&entrada){
+Ttamanio AtributoFijo<T_tipo>::deserializar(std::streambuf&entrada){
 	Ttamanio tamanioDato=sizeof(dato);
-	entrada.read((char*)&dato,tamanioDato);
+	entrada.sgetn((char*)&dato,tamanioDato);
 	return tamanioDato;
 };
 template<typename T_tipo>
@@ -72,12 +72,6 @@ public:
 		datos=new char[longitud];
 	};
 	virtual ~AtributoFijo(){delete[]datos;};
-	void imprimir(std::ostream &salida){
-		salida<<datos;
-	};
-	void leer(std::istream &entrada){
-		entrada>>datos;
-	};
 	void set(void* valor){
 		cpy(datos,(char*)valor,longitud);
 	};
@@ -90,13 +84,13 @@ public:
 		cpy(clon->datos,datos,longitud);
 		return clon;
 	};
-	Ttamanio serializar(std::ostream&salida){
-		salida.write(datos,longitud);
+	Ttamanio serializar(std::streambuf&salida){
+		salida.sputn(datos,longitud);
 		return longitud;
 
 	};
-	Ttamanio deserializar(std::istream&entrada){
-		entrada.read(datos,longitud);
+	Ttamanio deserializar(std::streambuf&entrada){
+		entrada.sgetn(datos,longitud);
 		return longitud;
 	};
 	Ttamanio tamanioSerializado(){return longitud;};
