@@ -12,9 +12,7 @@ BloqueMemoria::BloqueMemoria(Bloque* bloque):BloqueMemoria::Bloque(){
 			this->componentes.push_back( aux->clonar());
 	}
 };
-BloqueMemoria::~BloqueMemoria(){
-	//this->~Bloque();
-};
+BloqueMemoria::~BloqueMemoria(){};
 bool BloqueMemoria::estaEscrito(){return estado&escrito;};
 bool BloqueMemoria::estaSucio(){return estado&sucio;};
 void BloqueMemoria::setSucio(bool valor){
@@ -45,6 +43,6 @@ Ttamanio BloqueMemoria::tamanioSerializado(){
 };
 Componente* BloqueMemoria::clonar(){
 	BloqueMemoria* clon=new BloqueMemoria(this);
-	clon->estado=estado;//TODO
+	//clon->estado=estado; TODO
 	return clon;
 };

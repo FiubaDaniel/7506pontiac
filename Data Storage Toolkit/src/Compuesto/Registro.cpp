@@ -13,7 +13,6 @@ Registro::Registro(unsigned int cantidadAtributos, ...):Registro::Componente() {
 		if(atributo->esfijo()) fijo=false;
 		cantidadAtributos--;
 	}
-	if(!cantidadAtributos>0);//TODO else trow error
 	va_end(ap);
 }
 Registro::~Registro() {

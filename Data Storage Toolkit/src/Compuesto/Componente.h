@@ -20,7 +20,7 @@ public:
 	virtual Ttamanio serializar(std::streambuf&salida)=0;
 	virtual Ttamanio tamanioSerializado()=0;
 	virtual Componente* clonar()=0;
-	//virtual bool esfijo()=0;
+	virtual bool esfijo()=0;
 };
 
 #endif /* REGISTRO_H_ */
