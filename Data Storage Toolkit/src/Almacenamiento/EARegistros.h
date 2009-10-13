@@ -15,7 +15,7 @@ class EARegistros: public EstrategiaAlmacenamiento {
 public:
 	EARegistros();
 	virtual ~EARegistros();
-	virtual void posicionarCompuesto(size_t nroCompuesto);
+	virtual void posicionarComponente(size_t nroCompuesto);
 	virtual void escribir(Almacenamiento* almacen,Compuesto*compuesto);
 	virtual void leer(Almacenamiento* almacen,Compuesto*compuesto);
 };

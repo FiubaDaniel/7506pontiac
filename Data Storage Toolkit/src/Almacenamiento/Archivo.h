@@ -18,12 +18,6 @@ public:
   virtual void leer(void* unBytes);
   virtual void posicionarByte(size_t posicion);
   virtual bool bienByte();
-  /*------------------------------------------------------------------------*/
-  virtual void posicionarCompuesto(size_t nroCompuesto);
-  virtual void escribir(Compuesto*compuesto);
-  virtual void leer(Compuesto*compuesto);
-  virtual bool fin();
-  virtual bool bien();
 };
 
 #endif // ARCHIVO_H

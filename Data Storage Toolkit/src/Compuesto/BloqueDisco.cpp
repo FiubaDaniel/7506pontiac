@@ -34,6 +34,7 @@ Ttamanio BloqueDisco::serializar(std::streambuf&salida){
 	return offset+sizeof(bool);
 };
 Ttamanio BloqueDisco::tamanioSerializado(){
+	if(estaBorrado()) return 0;
 	return Bloque::tamanioSerializado()+sizeof(bool);
 };
 Componente* BloqueDisco::clonar(){

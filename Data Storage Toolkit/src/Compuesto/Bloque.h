@@ -13,14 +13,15 @@
 
 class Bloque :public Componente, public Compuesto {
 public:
-	Bloque(Ttamanio tamanio,Componente*compenente);
+	Bloque(Componente*compenente);
 	virtual ~Bloque();
+	void inicializar(Componente*componente);
 public:/*Heredados de Componente*/
 	virtual Ttamanio deserializar(std::streambuf&entrada);
 	virtual Ttamanio serializar(std::streambuf&salida);
 	virtual Ttamanio tamanioSerializado();
 	virtual Componente* clonar();
-	virtual bool esfijo(){return 0;};//TODO
+	virtual bool esfijo();//TODO
 public:/*Heredados de compuesto*/
 	virtual Componente* get(Ttamanio nroComponente);
 	virtual Ttamanio cantidadComponentes();
@@ -31,7 +32,5 @@ public:/*Heredados de compuesto*/
 protected:
 	Bloque();
 	std::vector<Componente*> componentes;
-	Ttamanio tamanioBloque;
-	Ttamanio espacioLibre;
 };
 #endif /* BLOQUE_H_ */

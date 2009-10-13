@@ -24,14 +24,3 @@ void Buffer::posicionarByte(size_t posicion){
 	archivo->seekp(posicion);
 };
 bool Buffer::bienByte(){return archivo->good();};
-void Buffer::posicionarComponente(size_t nroCompuesto){
-
-};
-void Buffer::escribir(Compuesto*compuesto){
-
-};
-void Buffer::leer(Compuesto*compuesto){
-
-};
-bool Buffer::fin(){return false;};
-bool Buffer::bien(){return false;};
