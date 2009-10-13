@@ -89,7 +89,7 @@ bool EABloques::modificar(Almacenamiento*almacen,Componente*componente){
 	archivoEspacioLibre.read((char*)&nuevoTamanio,sizeof(Ttamanio));
 	almacen->leer(bloque);
 	Ttamanio nroComponente=0;
-	//TODO busqueda del componente
+	//TODO busqueda del componente nroComponente= componente a reemplazar
 	nuevoTamanio+=bloque->get(nroComponente)->tamanioSerializado()-componente->tamanioSerializado();
 	if(nuevoTamanio< capacBloque){
 		Componente* eliminado=bloque->reemplazar(componente,nroComponente);
@@ -107,7 +107,7 @@ bool EABloques::modificar(Almacenamiento*almacen,Componente*componente){
 void EABloques::eliminar(Almacenamiento*almacen,Componente*componente){
 	leer(almacen,bloque);
 	Ttamanio nroComponente=0;
-	//TODO busqueda
+	//TODO busqueda nroComponente= componente a eliminar
 	bloque->eliminar(nroComponente);
 	Ttamanio nuevoTamanio;
 	archivoEspacioLibre.seekg(corrienteBloque*sizeof(Ttamanio));
