@@ -16,8 +16,12 @@ public:
 	EARegistros();
 	virtual ~EARegistros();
 	virtual void posicionarComponente(size_t nroCompuesto);
-	virtual void escribir(Almacenamiento* almacen,Compuesto*compuesto);
-	virtual void leer(Almacenamiento* almacen,Compuesto*compuesto);
+	virtual void escribir(Almacenamiento* almacen,Componente*componente);
+	virtual void leer(Almacenamiento* almacen,Componente*componente);
+	virtual size_t insertar(Almacenamiento* almacen,Componente*componente);
+	virtual bool modificar(Almacenamiento*almacen,Componente*componente);
+	virtual void eliminar(Almacenamiento*almacen,Componente*componente);
+	virtual bool buscar(Almacenamiento*almacen,Componente*componente);
 };
 
 #endif /* EAREGISTROS_H_ */

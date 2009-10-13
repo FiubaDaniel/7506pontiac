@@ -12,12 +12,46 @@ EARegistros::EARegistros() {
 }
 EARegistros::~EARegistros() {
 }
-void EARegistros::posicionarComponente(size_t nroCompuesto){
 
-};
-void EARegistros::escribir(Almacenamiento* almacen,Compuesto*compuesto){
+void EARegistros::escribir(Almacenamiento *almacen, Componente *componente){
 
-};
-void EARegistros::leer(Almacenamiento* almacen,Compuesto*compuesto){
+}
 
-};
+
+
+bool EARegistros::buscar(Almacenamiento *almacen, Componente *componente)
+{ return false;
+}
+
+
+
+size_t EARegistros::insertar(Almacenamiento *almacen, Componente *componente)
+{return 0;
+}
+
+
+
+bool EARegistros::modificar(Almacenamiento *almacen, Componente *componente)
+{ return false;
+}
+
+
+
+void EARegistros::eliminar(Almacenamiento *almacen, Componente *componente)
+{
+}
+
+
+
+void EARegistros::posicionarComponente(size_t nroCompuesto)
+{
+}
+
+
+
+void EARegistros::leer(Almacenamiento *almacen, Componente *componente)
+{
+}
+
+
+
