@@ -58,6 +58,7 @@ public:
 	 *
 	 */
 	virtual bool esfijo()=0;
+	virtual int comparar(Atributo*otroAtributo)=0;
 protected:
 	std::string nombre;
 	void cpy(char*dest,const char*origen,Ttamanio n){

@@ -26,6 +26,7 @@ public:
 	Ttamanio deserializar(std::streambuf &entrada);
 	Ttamanio tamanioSerializado();
 	bool esfijo();
+	int comparar(Atributo*otroAtributo);
 public:
 	/* metodo propios de la clase permiten iteracion sobre los valores guardados*/
 	void append(void*valor);// se agregan tantos bytes como indica nrobytes
@@ -117,6 +118,14 @@ template<typename T_tipo>
 void AtributoVariable<T_tipo>::eliminarApuntado(){valores.erase(valores.begin()+valorActual);};
 template<typename T_tipo>
 void AtributoVariable<T_tipo>::cantidadValores(){return valores.size();};
+template<typename T_tipo>
+int AtributoVariable<T_tipo>::comparar(Atributo*otroAtributo){
+	AtributoVariable<T_tipo>* otro=dynamic_cast<AtributoVariable<T_tipo>*>(otroAtributo);
+	if(otro!=NULL){
+		return this->valores.at(valorActual)-otro->valores.at(otro->valorActual);
+	}//TODO exception
+	return 0;
+};
 /*----------------------------------------------------------------------------*/
 /*Templates Especializados contructores*/
 /**/
@@ -140,6 +149,13 @@ public:
 	Ttamanio cantidadbytes(){return str.size();};
 	bool esfijo(){
 		return false;
+	};
+	int comparar(Atributo*otroAtributo){
+		AtributoVariable<char*>* otro=dynamic_cast<AtributoVariable<char*>*>(otroAtributo);
+		if(otro!=NULL){
+			return str.compare(otro->str);
+		}//TODO exception
+		return 0;
 	};
 	virtual ~AtributoVariable(){};
 

@@ -10,16 +10,27 @@
 #include "EstrategiaAlmacenamiento.h"
 #include "../Compuesto/Bloque.h"
 #include <sstream>
+#include <fstream>
 class EABloques : public EstrategiaAlmacenamiento{
-	size_t corriente;
-	char* buffertransferencia;
-	Ttamanio tamanio;
+private:
+	size_t corrienteBloque;
+	Ttamanio libres;
+	Ttamanio capacBloque;
+	char* bloqueSerializado;
+	double porcCarga;
+	Bloque* bloque;
+	std::fstream archivoEspacioLibre;
+	bool buscarEspacioLibre(Ttamanio espacio,size_t & nroBloque);
 public:
-	EABloques(Ttamanio tamanioBloque);
+	EABloques(const char*rutaArchivoEspacios,Bloque* tipoBloque,Ttamanio tamanioBloque);
 	virtual ~EABloques();
-	void posicionarCompuesto(size_t nroCompuesto);
-	void escribir(Almacenamiento* almacen,Compuesto*compuesto);
-	void leer(Almacenamiento* almacen,Compuesto*compuesto);
+	void posicionarComponente(Almacenamiento* almacen,size_t nroCompuesto);
+	void escribir(Almacenamiento* almacen,Componente*componente);
+	void leer(Almacenamiento* almacen,Componente*componente);
+	size_t insertar(Almacenamiento* almacen,Componente*componente);
+	bool modificar(Almacenamiento*almacen,Componente*componente);
+	void eliminar(Almacenamiento*almacen,Componente*componente);
+	bool buscar(Almacenamiento*almacen,Componente*componente);
 };
 
 #endif /* EABLOQUES_H_ */

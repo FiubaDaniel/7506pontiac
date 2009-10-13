@@ -6,6 +6,7 @@
  */
 #ifndef ATRIBUTOFIJO_H_
 #define ATRIBUTOFIJO_H_
+#include <cstring>
 #include "Atributo.h"
 template<typename T_tipo>
 class AtributoFijo : public Atributo{
@@ -22,6 +23,7 @@ public:
 	Ttamanio deserializar(std::streambuf&entrada);
 	Ttamanio tamanioSerializado();
 	bool esfijo();
+	int comparar(Atributo*otroAtributo);
 };
 /*----------------------------------------------------------------------------*/
 /*Template Control de tipo*/
@@ -58,6 +60,14 @@ Ttamanio AtributoFijo<T_tipo>::tamanioSerializado(){
 };
 template<typename T_tipo>
 bool AtributoFijo<T_tipo>::esfijo(){ return true;};
+template<typename T_tipo>
+int AtributoFijo<T_tipo>::comparar(Atributo*otroAtributo){
+	AtributoFijo<T_tipo>* otro=dynamic_cast<AtributoFijo<T_tipo>*>(otroAtributo);
+	if(otro!=NULL){
+		return (this->dato)-(otro->dato);
+	}//TODO exception
+	return 0;
+};
 /*----------------------------------------------------------------------------------------------------*/
 /*Especializacion de la clase para cadena de chars*/
 template<>
@@ -97,6 +107,13 @@ public:
 	bool esfijo(){
 		return true;
 	};
+	int comparar(Atributo*otroAtributo){
+		AtributoFijo<char*>* otro=dynamic_cast<AtributoFijo<char*>*>(otroAtributo);
+		if(otro!=NULL){
+			return strncmp(this->datos,otro->datos,longitud);
+		}//TODO exception
+		return 0;
+	}
 };
 
 /*----------------------------------------------------------------------------*/

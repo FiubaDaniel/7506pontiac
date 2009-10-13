@@ -28,18 +28,3 @@ void Archivo::posicionarByte(size_t posicion){
 	archivo.seekp(posicion);
 };
 bool Archivo::bienByte(){return archivo.good();};
-void Archivo::posicionarCompuesto(size_t nroCompuesto){
-
-};
-void Archivo::escribir(Compuesto*compuesto){
-
-};
-void Archivo::leer(Compuesto*compuesto){
-
-};
-bool Archivo::fin(){
-	return false;
-};
-bool Archivo::bien(){
-	return false;
-};

@@ -23,12 +23,5 @@ public:
 	virtual void leer(void* unBytes);
 	virtual void posicionarByte(size_t posicion);
 	virtual bool bienByte();
-	/*------------------------------------------------------------------------*/
-	virtual void posicionarComponente(size_t nroCompuesto);
-	virtual void escribir(Compuesto*compuesto);
-	virtual void leer(Compuesto*compuesto);
-	virtual bool fin();
-	virtual bool bien();
 };
-
 #endif // BUFFER_H
