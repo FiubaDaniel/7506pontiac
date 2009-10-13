@@ -11,7 +11,7 @@
 #include "Componente.h"
 #include "Compuesto.h"
 
-class Bloque :public Componente, Compuesto {
+class Bloque :public Componente, public Compuesto {
 public:
 	Bloque(Ttamanio tamanio,Componente*compenente);
 	virtual ~Bloque();
@@ -20,6 +20,7 @@ public:/*Heredados de Componente*/
 	virtual Ttamanio serializar(std::streambuf&salida);
 	virtual Ttamanio tamanioSerializado();
 	virtual Componente* clonar();
+	virtual bool esfijo(){return 0;};//TODO
 public:/*Heredados de compuesto*/
 	virtual Componente* get(Ttamanio nroComponente);
 	virtual Ttamanio cantidadComponentes();

@@ -12,7 +12,7 @@ class RegistroDisco : public Registro {
 public:
 	RegistroDisco(Registro*registro);
 	virtual ~RegistroDisco();
-	virtual bool     borrado();
+	virtual bool borrado();
 	virtual void setBorrado(bool flag);
 public:/*MetodosHeredados*/
 	virtual Ttamanio deserializar(std::streambuf&entrada);

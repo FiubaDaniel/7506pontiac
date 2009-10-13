@@ -13,7 +13,6 @@ public:
 	BloqueMemoria(Bloque* bloque);
 	virtual ~BloqueMemoria();
 	Ttamanio nroCompuesto;
-
 	bool estaEscrito();
 	bool estaSucio();
 	void setSucio(bool valor);
