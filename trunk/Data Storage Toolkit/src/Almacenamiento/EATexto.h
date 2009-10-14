@@ -14,13 +14,15 @@ class EATexto: public EstrategiaAlmacenamiento {
 public:
 	EATexto();
 	virtual ~EATexto();
-	void posicionarComponente(size_t nroCompuesto)=0;
-	void escribir(Almacenamiento* almacen,Componente*componente)=0;
-	void leer(Almacenamiento* almacen,Componente*componente)=0;
-	size_t insertar(Almacenamiento* almacen,Componente*componente)=0;
-	bool modificar(Almacenamiento*almacen,Componente*componente)=0;
-	void eliminar(Almacenamiento*almacen,Componente*componente)=0;
-	bool buscar(Almacenamiento*almacen,Componente*componente)=0;
+	void abrir(Almacenamiento*almacen);
+	void nuevo(Almacenamiento*almacen);
+	void posicionarComponente(size_t nroCompuesto);
+	void escribir(Componente*componente);
+	void leer(Componente*componente);
+	size_t insertar(Componente*componente);
+	bool modificar(Componente*componente);
+	bool eliminar(Componente*componente);
+	bool buscar(Componente*componente);
 };
 
 #endif /* EATEXTO_H_ */
