@@ -50,7 +50,7 @@ Almacenamiento* EARegistros::nuevo(Almacenamiento*almacen,Ttamanio tamregistro){
 	posicionarComponente(0);
 	return anterior;
 }
-void EARegistros::escribir( Componente *componente){
+bool EARegistros::escribir( Componente *componente){
 	Registro*registro=NULL;
 	if((registro=dynamic_cast<Registro*>(componente))){
 		std::stringbuf buf(std::ios_base::binary | std::ios_base::out );
@@ -58,9 +58,11 @@ void EARegistros::escribir( Componente *componente){
 		registro->serializar(buf);
 		almacen->posicionarByte(nroRegistro);
 		almacen->escribir(registroSerializado,tamanioRegistro);
+		return true;
 	}
+	return false;
 }
-void EARegistros::leer( Componente *componente){
+bool EARegistros::leer( Componente *componente){
 	Registro*registro=NULL;
 	if((registro=dynamic_cast<Registro*>(componente))){
 		almacen->posicionarByte(nroRegistro);
@@ -68,7 +70,9 @@ void EARegistros::leer( Componente *componente){
 		std::stringbuf buf(std::ios_base::binary | std::ios_base::out );
 		buf.pubsetbuf(registroSerializado,tamanioRegistro);
 		registro->deserializar(buf);
+		return true;
 	}
+	return false;
 }
 
 size_t EARegistros::insertar( Componente *componente){

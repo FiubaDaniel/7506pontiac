@@ -30,8 +30,8 @@ public:
 	Almacenamiento* abrir(Almacenamiento*almacen,const char*rutaArchivoEspacios);
 	Almacenamiento* nuevo(Almacenamiento*almacen,const char*rutaArchivoEspacios);
 	void posicionarComponente(size_t nroCompuesto);
-	void escribir(Componente*componente);
-	void leer(Componente*componente);
+	bool escribir(Componente*componente);
+	bool leer(Componente*componente);
 	size_t insertar(Componente*componente);
 	bool modificar(Componente*componente);
 	bool eliminar(Componente*componente);

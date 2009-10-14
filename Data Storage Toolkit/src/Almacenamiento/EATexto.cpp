@@ -28,20 +28,20 @@ bool EATexto::buscar(  Componente *componente){
 
 
 
-void EATexto::leer(  Componente *componente)
-{
+bool EATexto::leer(  Componente *componente){
+	return false;
 }
 
 
 
-bool EATexto::eliminar(  Componente *componente)
-{return true;
+bool EATexto::eliminar(  Componente *componente){
+	return false;
 }
 
 
 
-void EATexto::escribir(  Componente *componente)
-{
+bool EATexto::escribir(  Componente *componente){
+	return false;
 }
 
 
