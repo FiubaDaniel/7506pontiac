@@ -15,32 +15,32 @@ EATexto::EATexto() {
 EATexto::~EATexto() {
 	// TODO Auto-generated destructor stub
 }
-
-bool EATexto::modificar(Almacenamiento *almacen, Componente *componente){
+void EATexto::abrir(Almacenamiento*almacen){}
+bool EATexto::modificar(  Componente *componente){
 return false;
 }
 
 
 
-bool EATexto::buscar(Almacenamiento *almacen, Componente *componente){
+bool EATexto::buscar(  Componente *componente){
 	return false;
 }
 
 
 
-void EATexto::leer(Almacenamiento *almacen, Componente *componente)
+void EATexto::leer(  Componente *componente)
 {
 }
 
 
 
-void EATexto::eliminar(Almacenamiento *almacen, Componente *componente)
-{
+bool EATexto::eliminar(  Componente *componente)
+{return true;
 }
 
 
 
-void EATexto::escribir(Almacenamiento *almacen, Componente *componente)
+void EATexto::escribir(  Componente *componente)
 {
 }
 
@@ -52,7 +52,7 @@ void EATexto::posicionarComponente(size_t nroCompuesto)
 
 
 
-size_t EATexto::insertar(Almacenamiento *almacen, Componente *componente)
+size_t EATexto::insertar(Componente *componente)
 {return false;
 }
 

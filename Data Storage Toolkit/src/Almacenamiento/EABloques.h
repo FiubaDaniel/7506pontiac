@@ -13,6 +13,7 @@
 #include <fstream>
 class EABloques : public EstrategiaAlmacenamiento{
 private:
+	Almacenamiento* almacen;
 	size_t corrienteBloque;
 	Ttamanio libres;
 	Ttamanio capacBloque;
@@ -22,16 +23,19 @@ private:
 	std::fstream archivoEspacioLibre;
 	bool buscarEspacioLibre(Ttamanio espacio,size_t & nroBloque);
 	bool buscarComponente(Componente*comp,Ttamanio&posicion);
+	void finalizarAlamcenamiento();
 public:
-	EABloques(const char*rutaArchivoEspacios,Bloque* tipoBloque,Ttamanio tamanioBloque);
+	EABloques(Bloque* tipoBloque,Ttamanio tamanioBloque);
 	virtual ~EABloques();
-	void posicionarComponente(Almacenamiento* almacen,size_t nroCompuesto);
-	void escribir(Almacenamiento* almacen,Componente*componente);
-	void leer(Almacenamiento* almacen,Componente*componente);
-	size_t insertar(Almacenamiento* almacen,Componente*componente);
-	bool modificar(Almacenamiento*almacen,Componente*componente);
-	void eliminar(Almacenamiento*almacen,Componente*componente);
-	bool buscar(Almacenamiento*almacen,Componente*componente);
+	Almacenamiento* abrir(Almacenamiento*almacen,const char*rutaArchivoEspacios);
+	Almacenamiento* nuevo(Almacenamiento*almacen,const char*rutaArchivoEspacios);
+	void posicionarComponente(size_t nroCompuesto);
+	void escribir(Componente*componente);
+	void leer(Componente*componente);
+	size_t insertar(Componente*componente);
+	bool modificar(Componente*componente);
+	bool eliminar(Componente*componente);
+	bool buscar(Componente*componente);
 };
 
 #endif /* EABLOQUES_H_ */
