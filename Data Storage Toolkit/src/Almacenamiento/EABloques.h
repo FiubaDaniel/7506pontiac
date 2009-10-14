@@ -21,6 +21,7 @@ private:
 	Bloque* bloque;
 	std::fstream archivoEspacioLibre;
 	bool buscarEspacioLibre(Ttamanio espacio,size_t & nroBloque);
+	bool buscarComponente(Componente*comp,Ttamanio&posicion);
 public:
 	EABloques(const char*rutaArchivoEspacios,Bloque* tipoBloque,Ttamanio tamanioBloque);
 	virtual ~EABloques();

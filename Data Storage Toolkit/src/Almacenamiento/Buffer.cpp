@@ -23,4 +23,13 @@ void Buffer::posicionarByte(size_t posicion){
 	archivo->seekg(posicion);
 	archivo->seekp(posicion);
 };
-bool Buffer::bienByte(){return archivo->good();};
+bool Buffer::bienByte(){
+	return archivo->good();
+};
+void Buffer::posicionarAlfinal(){
+	archivo->seekg(std::ios_base::end);
+	archivo->seekp(std::ios_base::end);
+};
+size_t Buffer::posicionActual(){
+	return archivo->tellg();
+};

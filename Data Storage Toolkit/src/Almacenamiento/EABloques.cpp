@@ -104,10 +104,28 @@ bool EABloques::modificar(Almacenamiento*almacen,Componente*componente){
 	}
 	return false;
 };
+bool EABloques::buscarComponente(Componente*comp,Ttamanio & posicion){
+	/*
+	 * clave.set(dynamic_cast<Registro*>(componente));
+	 * Clave aux=clave.clonar();
+	 */
+	for(Ttamanio i=0;i<bloque->cantidadComponentes();i++){
+		//TODO generar clave para el componente i
+		/*
+		 * if(comparar(clave,aux)==0){
+		 *       posicion=i;
+		 *       delete aux;
+		 *       return true;
+		 *  }
+		 */
+	}
+	/*delete aux;*/
+	return false;
+};
 void EABloques::eliminar(Almacenamiento*almacen,Componente*componente){
 	leer(almacen,bloque);
-	Ttamanio nroComponente=0;
-	//TODO busqueda nroComponente= componente a eliminar
+	Ttamanio nroComponente;
+	if(!buscarComponente(componente,nroComponente)) return;
 	bloque->eliminar(nroComponente);
 	Ttamanio nuevoTamanio;
 	archivoEspacioLibre.seekg(corrienteBloque*sizeof(Ttamanio));
@@ -117,4 +135,6 @@ void EABloques::eliminar(Almacenamiento*almacen,Componente*componente){
 	archivoEspacioLibre.seekp(corrienteBloque*sizeof(Ttamanio));
 	archivoEspacioLibre.write((char*)&nuevoTamanio,sizeof(Ttamanio));
 };
-bool EABloques::buscar(Almacenamiento*almacen,Componente*componente){ return false;};
+bool EABloques::buscar(Almacenamiento*almacen,Componente*componente){
+	return false;
+};

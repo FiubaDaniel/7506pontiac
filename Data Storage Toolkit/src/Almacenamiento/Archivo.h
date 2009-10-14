@@ -18,6 +18,8 @@ public:
   virtual void leer(void* unBytes);
   virtual void posicionarByte(size_t posicion);
   virtual bool bienByte();
+  virtual void posicionarAlfinal();
+  virtual size_t posicionActual();
 };
 
 #endif // ARCHIVO_H
