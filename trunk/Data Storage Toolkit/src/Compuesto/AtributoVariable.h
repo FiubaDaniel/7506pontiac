@@ -27,6 +27,8 @@ public:
 	Ttamanio tamanioSerializado();
 	bool esfijo();
 	int comparar(Atributo*otroAtributo);
+	void imprimir(std::ostream&salida);
+	void leer(std::istream&entrada);
 public:
 	/* metodo propios de la clase permiten iteracion sobre los valores guardados*/
 	void append(void*valor);// se agregan tantos bytes como indica nrobytes
@@ -126,6 +128,18 @@ int AtributoVariable<T_tipo>::comparar(Atributo*otroAtributo){
 	}//TODO exception
 	return 0;
 };
+template<typename T_tipo>
+void AtributoVariable<T_tipo>::imprimir(std::ostream&salida){
+	for(Ttamanio i=0;i<valores.size();i++){
+			salida<<valores.at(i)<<" ";
+	}
+};
+template<typename T_tipo>
+void AtributoVariable<T_tipo>::leer(std::istream&entrada){
+	for(Ttamanio i=0;i<valores.size();i++){
+				entrada>>valores.at(i);
+	}
+};
 /*----------------------------------------------------------------------------*/
 /*Templates Especializados contructores*/
 /**/
@@ -156,6 +170,13 @@ public:
 			return str.compare(otro->str);
 		}//TODO exception
 		return 0;
+	};
+	void imprimir(std::ostream&salida){
+		salida<<str;
+
+	};
+	void leer(std::istream&entrada){
+		entrada>>str;
 	};
 	virtual ~AtributoVariable(){};
 

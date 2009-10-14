@@ -39,6 +39,6 @@ Ttamanio BloqueDisco::tamanioSerializado(){
 };
 Componente* BloqueDisco::clonar(){
 	BloqueDisco* clon=new BloqueDisco(this);
-	//TODO poner estado del clon
+	clon->borrado=borrado;
 	return clon;
 };

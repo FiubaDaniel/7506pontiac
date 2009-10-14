@@ -21,7 +21,6 @@ void RegistroMemoria::setEscrito(bool valor){
 Ttamanio RegistroMemoria::deserializar(std::streambuf&entrada){
 	Ttamanio offset=sizeof(flags);
 	entrada.sgetn((char*)&estado,offset);
-	//TODO nro compuesto vs nro registro, q hacer si sucio
 	if(!estaSucio())
 		offset+=Registro::deserializar(entrada);
 	return offset;
@@ -29,8 +28,6 @@ Ttamanio RegistroMemoria::deserializar(std::streambuf&entrada){
 Ttamanio RegistroMemoria::serializar(std::streambuf&salida){
 	Ttamanio offset=sizeof(flags);
 	salida.sputn((char*)&estado,offset);
-	//salida.sputn((char*)&nroCompuesto,sizeof(Ttamanio));
-	//Todo nroCompuesto vs nroRegistro
 	offset+=Registro::serializar(salida);
 	return offset;
 };
@@ -39,6 +36,7 @@ Ttamanio RegistroMemoria::tamanioSerializado(){
 };
 Componente* RegistroMemoria::clonar(){
 	RegistroMemoria* clon=new RegistroMemoria(this,nroCompuesto,nroRegitro);
+	clon->estado=estado;
 	return clon;
 };
 

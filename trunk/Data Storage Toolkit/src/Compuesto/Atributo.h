@@ -8,6 +8,7 @@
 #ifndef ATRIBUTO_H_
 #define ATRIBUTO_H_
 #include <streambuf>
+#include <iostream>
 typedef unsigned int Ttamanio;
 class Atributo {
 public:
@@ -59,16 +60,11 @@ public:
 	 */
 	virtual bool esfijo()=0;
 	virtual int comparar(Atributo*otroAtributo)=0;
+	virtual void imprimir(std::ostream&salida)=0;
+	virtual void leer(std::istream&entrada)=0;
 protected:
 	std::string nombre;
-	void cpy(char*dest,const char*origen,Ttamanio n){
-		while(n>0){
-			*dest=*origen;
-			dest++;
-			origen++;
-			n--;
-		}
-	};
+/*	*/
 };
 
 /*----------------------------------------------------------------------------*/

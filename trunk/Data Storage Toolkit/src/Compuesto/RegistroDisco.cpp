@@ -17,14 +17,14 @@ RegistroDisco::~RegistroDisco(){};
 Ttamanio RegistroDisco::deserializar(std::streambuf&entrada){
 	Ttamanio offset=sizeof(bool);
 	entrada.sgetn((char*)&estaBorrado,offset);
-	if(!estaBorrado)
-		offset+=Registro::deserializar(entrada);
+	//if(!estaBorrado)
+	offset+=Registro::deserializar(entrada);
 	return offset;
 };
 Ttamanio RegistroDisco::serializar(std::streambuf&salida){
 	Ttamanio offset=sizeof(bool);
 	salida.sputn((char*)&estaBorrado,offset);
-	//TODO if(!estaBorrado)
+	//if(!estaBorrado)
 	offset+=Registro::serializar(salida);
 	return offset;
 };
