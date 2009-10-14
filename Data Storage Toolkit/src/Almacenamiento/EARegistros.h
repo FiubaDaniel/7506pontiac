@@ -9,9 +9,12 @@
 #define EAREGISTROS_H_
 #include <sstream>
 #include "EstrategiaAlmacenamiento.h"
+#include "../Compuesto/Registro.h"
 
 class EARegistros: public EstrategiaAlmacenamiento {
-
+	size_t nroRegistro;
+	Ttamanio tamanioRegistro;
+	char* registroSerializado;
 public:
 	EARegistros();
 	virtual ~EARegistros();
