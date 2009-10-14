@@ -14,7 +14,9 @@
 class EARegistros: public EstrategiaAlmacenamiento {
 	size_t nroRegistro;
 	Ttamanio tamanioRegistro;
+	Ttamanio tamanioEncabezado;
 	char* registroSerializado;
+	size_t siguienteLibre;
 public:
 	EARegistros();
 	virtual ~EARegistros();
