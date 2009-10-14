@@ -28,3 +28,10 @@ void Archivo::posicionarByte(size_t posicion){
 	archivo.seekp(posicion);
 };
 bool Archivo::bienByte(){return archivo.good();};
+void Archivo::posicionarAlfinal(){
+	archivo.seekg(std::fstream::end);
+	archivo.seekp(std::fstream::end);
+};
+size_t Archivo::posicionActual(){
+	return archivo.tellg();
+};

@@ -17,11 +17,13 @@ EATexto::~EATexto() {
 }
 
 bool EATexto::modificar(Almacenamiento *almacen, Componente *componente){
+return false;
 }
 
 
 
 bool EATexto::buscar(Almacenamiento *almacen, Componente *componente){
+	return false;
 }
 
 
@@ -51,7 +53,7 @@ void EATexto::posicionarComponente(size_t nroCompuesto)
 
 
 size_t EATexto::insertar(Almacenamiento *almacen, Componente *componente)
-{
+{return false;
 }
 
 
