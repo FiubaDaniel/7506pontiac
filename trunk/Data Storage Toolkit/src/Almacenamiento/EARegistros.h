@@ -25,8 +25,8 @@ public:
 	Almacenamiento* abrir(Almacenamiento*almacen);
 	Almacenamiento* nuevo(Almacenamiento*almacen,Ttamanio tamRegistro);
 	void posicionarComponente(size_t nroCompuesto);
-	void escribir(Componente*componente);
-	void leer(Componente*componente);
+	bool escribir(Componente*componente);
+	bool leer(Componente*componente);
 	size_t insertar(Componente*componente);
 	bool modificar(Componente*componente);
 	bool eliminar(Componente*componente);

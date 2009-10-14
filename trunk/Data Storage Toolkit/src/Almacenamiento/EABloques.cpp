@@ -44,7 +44,7 @@ Almacenamiento* EABloques::abrir(Almacenamiento*almacen,const char*rutaArchivoEs
 void EABloques::posicionarComponente(size_t nroCompuesto){
 	corrienteBloque=nroCompuesto;
 };
-void EABloques::escribir(Componente*compuesto){
+bool EABloques::escribir(Componente*compuesto){
 	Bloque*bloque=NULL;
 	if((bloque=dynamic_cast<Bloque*>(compuesto))){
 		if(bloque->tamanioSerializado()<=capacBloque){
@@ -53,11 +53,13 @@ void EABloques::escribir(Componente*compuesto){
 			bloque->serializar(buf);
 			almacen->posicionarByte(capacBloque*corrienteBloque);
 			almacen->escribir(bloqueSerializado,capacBloque);
-		}//TODO demaciado grande
-	}//TODO no es un bloque
+			return true;
+		};
+	};
+	return false;
 };
 
-void EABloques::leer(Componente*compuesto){
+bool EABloques::leer(Componente*compuesto){
 	Bloque*bloque=NULL;
 	if((bloque=dynamic_cast<Bloque*>(compuesto))){
 		std::stringbuf buf(std::ios_base::binary | std::ios_base::in );
@@ -65,7 +67,9 @@ void EABloques::leer(Componente*compuesto){
 		almacen->posicionarByte(capacBloque*corrienteBloque);
 		almacen->leer(bloqueSerializado,capacBloque);
 		bloque->deserializar(buf);
-	}//TODO no es un bloque
+		return true;
+	}
+	return false;
 };
 bool EABloques::buscarEspacioLibre(Ttamanio espacio,size_t & nroBloque){
 	bool encontrado=false;
