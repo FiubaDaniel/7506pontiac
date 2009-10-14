@@ -7,6 +7,7 @@
 #ifndef ATRIBUTOFIJO_H_
 #define ATRIBUTOFIJO_H_
 #include <cstring>
+#include <iostream>
 #include "Atributo.h"
 template<typename T_tipo>
 class AtributoFijo : public Atributo{
@@ -24,6 +25,8 @@ public:
 	Ttamanio tamanioSerializado();
 	bool esfijo();
 	int comparar(Atributo*otroAtributo);
+	void imprimir(std::ostream&salida);
+	void leer(std::istream&entrada);
 };
 /*----------------------------------------------------------------------------*/
 /*Template Control de tipo*/
@@ -68,6 +71,14 @@ int AtributoFijo<T_tipo>::comparar(Atributo*otroAtributo){
 	}//TODO exception
 	return 0;
 };
+template<typename T_tipo>
+void AtributoFijo<T_tipo>::imprimir(std::ostream&salida){
+	salida<<dato;
+};
+template<typename T_tipo>
+void AtributoFijo<T_tipo>::leer(std::istream&entrada){
+	entrada>>dato;
+};
 /*----------------------------------------------------------------------------------------------------*/
 /*Especializacion de la clase para cadena de chars*/
 template<>
@@ -75,6 +86,14 @@ class AtributoFijo<char*> : public Atributo{
 private:
 	char*datos;
 	Ttamanio longitud;
+	void cpy(char*dest,const char*origen,Ttamanio n){
+			while(n>0){
+				*dest=*origen;
+				dest++;
+				origen++;
+				n--;
+			}
+		};
 public:
 	AtributoFijo(std::string nombreAtributo,Ttamanio nroCaracteres): Atributo(nombreAtributo)
 	{
@@ -114,6 +133,13 @@ public:
 		}//TODO exception
 		return 0;
 	}
+	void imprimir(std::ostream&salida){
+		salida.write(datos,longitud);
+	};
+
+	void leer(std::istream&entrada){
+		entrada.read(datos,longitud);
+	};
 };
 
 /*----------------------------------------------------------------------------*/

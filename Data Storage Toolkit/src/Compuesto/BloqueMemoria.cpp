@@ -43,6 +43,6 @@ Ttamanio BloqueMemoria::tamanioSerializado(){
 };
 Componente* BloqueMemoria::clonar(){
 	BloqueMemoria* clon=new BloqueMemoria(this);
-	//clon->estado=estado; TODO
+	clon->estado=estado;
 	return clon;
 };

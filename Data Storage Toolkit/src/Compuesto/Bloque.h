@@ -21,7 +21,7 @@ public:/*Heredados de Componente*/
 	virtual Ttamanio serializar(std::streambuf&salida);
 	virtual Ttamanio tamanioSerializado();
 	virtual Componente* clonar();
-	virtual bool esfijo();//TODO
+	virtual bool esfijo();
 public:/*Heredados de compuesto*/
 	virtual Componente* get(Ttamanio nroComponente);
 	virtual Ttamanio cantidadComponentes();

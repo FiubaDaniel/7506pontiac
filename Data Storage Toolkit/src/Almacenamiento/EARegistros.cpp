@@ -95,7 +95,7 @@ size_t EARegistros::insertar( Componente *componente){
 	return (posicionDeInsercion-tamanioEncabezado)/tamanioRegistro;
 }
 
-bool EARegistros::modificar( Componente *componente){
+bool EARegistros::modificar(Componente *componente){
 	size_t posicionDelModificado=0;
 	//TODO busqueda
 	Registro*registro=dynamic_cast<Registro*>(componente);
