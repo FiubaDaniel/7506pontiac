@@ -43,6 +43,7 @@ Almacenamiento* EABloques::abrir(Almacenamiento*almacen,const char*rutaArchivoEs
 };
 void EABloques::posicionarComponente(size_t nroCompuesto){
 	corrienteBloque=nroCompuesto;
+	almacen->posicionarByte(capacBloque*corrienteBloque);
 };
 bool EABloques::escribir(Componente*compuesto){
 	Bloque*bloque=NULL;
@@ -51,7 +52,6 @@ bool EABloques::escribir(Componente*compuesto){
 			std::stringbuf buf(std::ios_base::binary | std::ios_base::out );
 			buf.pubsetbuf(bloqueSerializado,capacBloque);
 			bloque->serializar(buf);
-			almacen->posicionarByte(capacBloque*corrienteBloque);
 			almacen->escribir(bloqueSerializado,capacBloque);
 			return true;
 		};
@@ -64,7 +64,6 @@ bool EABloques::leer(Componente*compuesto){
 	if((bloque=dynamic_cast<Bloque*>(compuesto))){
 		std::stringbuf buf(std::ios_base::binary | std::ios_base::in );
 		buf.pubsetbuf(bloqueSerializado,capacBloque);
-		almacen->posicionarByte(capacBloque*corrienteBloque);
 		almacen->leer(bloqueSerializado,capacBloque);
 		bloque->deserializar(buf);
 		return true;
@@ -114,11 +113,12 @@ bool EABloques::modificar(Componente*componente){
 	archivoEspacioLibre.read((char*)&nuevoTamanio,sizeof(Ttamanio));
 	almacen->leer(bloque);
 	Ttamanio nroComponente=0;
-	if(!buscarComponente(componente,nroComponente))return false;
+	if(!buscarComponente(componente,nroComponente)) return false;
 	nuevoTamanio+=bloque->get(nroComponente)->tamanioSerializado()-componente->tamanioSerializado();
 	if(nuevoTamanio< capacBloque){
 		Componente* eliminado=bloque->reemplazar(componente,nroComponente);
 		if(eliminado!=NULL){
+			posicionarComponente(corrienteBloque);
 			escribir(bloque);
 			nuevoTamanio=bloque->tamanioSerializado();
 			archivoEspacioLibre.seekp(corrienteBloque*sizeof(Ttamanio));
@@ -155,6 +155,7 @@ bool EABloques::eliminar(Componente*componente){
 	Ttamanio nuevoTamanio;
 	archivoEspacioLibre.seekg(corrienteBloque*sizeof(Ttamanio));
 	archivoEspacioLibre.read((char*)&nuevoTamanio,sizeof(Ttamanio));
+	posicionarComponente(corrienteBloque);
 	escribir(bloque);
 	nuevoTamanio=bloque->tamanioSerializado();
 	archivoEspacioLibre.seekp(corrienteBloque*sizeof(Ttamanio));
@@ -162,5 +163,19 @@ bool EABloques::eliminar(Componente*componente){
 	return true;
 };
 bool EABloques::buscar(Componente*componente){
-	return false;
+	Ttamanio nroComponente=0;
+	bool encontrado=false;
+	do{
+		leer(bloque);
+		if(buscarComponente(componente,nroComponente)){
+			encontrado=true;
+			std::stringbuf buf(std::ios_base::binary | std::ios_base::in );
+			buf.pubsetbuf(bloqueSerializado,capacBloque);
+			buf.pubseekpos(std::ios_base::beg);
+			bloque->get(nroComponente)->serializar(buf);
+			buf.pubseekpos(std::ios_base::beg);
+			componente->deserializar(buf);
+		};
+	}while(almacen->bienByte()&&!encontrado);
+	return encontrado;
 };
