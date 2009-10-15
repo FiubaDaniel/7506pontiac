@@ -23,7 +23,7 @@ void Buffer::posicionarByte(size_t posicion){
 	archivo->seekg(posicion);
 	archivo->seekp(posicion);
 };
-bool Buffer::bienByte(){
+bool Buffer::bien(){
 	return archivo->good();
 };
 void Buffer::posicionarAlfinal(){

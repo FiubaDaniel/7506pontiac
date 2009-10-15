@@ -22,7 +22,9 @@ public:
   virtual void posicionarByte(size_t posicion)=0;
   virtual void posicionarAlfinal()=0;
   virtual size_t posicionActual()=0;
-  virtual bool bienByte()=0;
+  virtual bool bien()=0;
+  virtual bool fin()=0;
 };
 
 #endif // ALMACENAMIENTO_H
+

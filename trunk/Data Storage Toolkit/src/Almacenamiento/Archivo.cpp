@@ -27,7 +27,7 @@ void Archivo::posicionarByte(size_t posicion){
 	archivo.seekg(posicion);
 	archivo.seekp(posicion);
 };
-bool Archivo::bienByte(){return archivo.good();};
+bool Archivo::bien(){return archivo.good();};
 void Archivo::posicionarAlfinal(){
 	archivo.seekg(std::fstream::end);
 	archivo.seekp(std::fstream::end);
