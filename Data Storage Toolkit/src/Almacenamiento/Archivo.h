@@ -17,7 +17,8 @@ public:
   virtual void leer(void* bytes,size_t cantidad);
   virtual void leer(void* unBytes);
   virtual void posicionarByte(size_t posicion);
-  virtual bool bienByte();
+  virtual bool bien();
+  virtual bool fin();
   virtual void posicionarAlfinal();
   virtual size_t posicionActual();
 };

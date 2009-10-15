@@ -176,6 +176,6 @@ bool EABloques::buscar(Componente*componente){
 			buf.pubseekpos(std::ios_base::beg);
 			componente->deserializar(buf);
 		};
-	}while(almacen->bienByte()&&!encontrado);
+	}while(almacen->bien()&&!encontrado);
 	return encontrado;
 };
