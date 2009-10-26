@@ -2,57 +2,15 @@
 #ifndef ESTRATEGIARECURSOS_H
 #define ESTRATEGIARECURSOS_H
 #include "RecursoAlmacenamiento.h"
+#include "Componente.h"
 
 class EstrategiaRecursos{
 public:
-
-
-  // Public attribute accessor methods
-  //  
-
-
-  // Public attribute accessor methods
-  //  
-
-
-protected:
-
-public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
-
-public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
-
-
+	virtual boolean er_guardar();
+	virtual boolean er_eliminar();
+	virtual boolean er_modificar();
+	virtual Componente er_obtener();
 private:
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
-
 
 };
 
