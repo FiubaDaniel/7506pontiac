@@ -1,97 +1,29 @@
-
 #ifndef FABRICADERECURSOSALMACENAMIENTO_H
 #define FABRICADERECURSOSALMACENAMIENTO_H
 
 #include <string>
-
-/**
-  * class FabricaDeRecursosAlmacenamiento
-  * 
-  */
+#include "RecursoAlmacenamiento.h"
+#include "Compuesto.h"
+#include "Componente.h"
+#include ""
 
 class FabricaDeRecursosAlmacenamiento
 {
 public:
-
-  // Constructors/Destructors
-  //  
-
-
-  /**
-   * Empty Constructor
-   */
   FabricaDeRecursosAlmacenamiento ( );
-
-  /**
-   * Empty Destructor
-   */
   virtual ~FabricaDeRecursosAlmacenamiento ( );
+  RecursoAlmacenamiento RecursoDeAlmacenamientoEnBuffer(std::string path, Compuesto unCompuesto, Componente unComponente);
 
-  // Static Public attributes
-  //  
+  RecursoAlmacenamiento RecursoDeAlmacenamientoEnArchivo(std::string path, Compuesto unCompuesto, Componente unComponente);
+  RecursoAlmacenamiento RecursoDeAlmacenamientoEnArchivoBsharp(std::string path, Compuesto unCompuesto, Componente unComponente);
+  RecursoAlmacenamiento RecursoDeAlmacenamientoEnArchivoHash(std::string path, Compuesto unCompuesto, Componente unComponente);
 
-  // Public attributes
-  //  
-
-
-  // Public attribute accessor methods
-  //  
-
-
-  // Public attribute accessor methods
-  //  
-
-
-protected:
-
-  // Static Protected attributes
-  //  
-
-  // Protected attributes
-  //  
-
-public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
-
-public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
+  RecursoAlmacenamiento RecursoDeAlmacenamientoEnArchivoConBuffer(std::string path, Compuesto unCompuesto, Componente unComponente);
+  RecursoAlmacenamiento RecursoDeAlmacenamientoEnArchivoConBufferBsharp(std::string path, Compuesto unCompuesto, Componente unComponente);
+  RecursoAlmacenamiento RecursoDeAlmacenamientoEnArchivoConBufferHash(std::string path, Compuesto unCompuesto, Componente unComponente);
 
 
 private:
-
-  // Static Private attributes
-  //  
-
-  // Private attributes
-  //  
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
-
 
 };
 
