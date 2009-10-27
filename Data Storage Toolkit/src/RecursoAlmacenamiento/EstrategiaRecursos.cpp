@@ -1,3 +1,0 @@
-#include "EstrategiaRecursos.h"
-
-//nada
