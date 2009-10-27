@@ -19,14 +19,13 @@ class EstrategiaIndice
 {
 public:
 
-
-  // Public attribute accessor methods
-  //  
-
-
-  // Public attribute accessor methods
-  //  
-
+	void crear(char* nombreArch,char* nomEspaciosLibres,unsigned int cantElemNodo,ComparadorClave* comp);
+	void abrir(char* nombreArch,char* nomEspaciosLibres,ComparadorClave* comp);
+	bool BuscarReferencia(Clave clave,Referencia* referencia);
+	Referencia Siguiente(bool ultimo);
+	bool insertar(Referencia ref,Clave* clave);
+    bool eliminar(Clave* clave);
+	bool modificar(Clave clave,Referencia refNueva);
 
 protected:
 
