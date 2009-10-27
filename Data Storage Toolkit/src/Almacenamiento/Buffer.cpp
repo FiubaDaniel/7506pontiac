@@ -30,6 +30,10 @@ void Buffer::posicionarAlfinal(){
 	archivo->seekg(std::ios_base::end);
 	archivo->seekp(std::ios_base::end);
 };
+bool Buffer::fin(){
+	return archivo->eof();
+}
+
 size_t Buffer::posicionActual(){
 	return archivo->tellg();
 };

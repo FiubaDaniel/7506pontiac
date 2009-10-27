@@ -38,13 +38,19 @@ AtributoFijo<T_tipo>::~AtributoFijo(){};
 /*----------------------------------------------------------------------------*/
 /*Templates sin especializacion*/
 template<typename T_tipo>
-void AtributoFijo<T_tipo>::set(void* valor){dato=*(T_tipo*)valor;};
+void AtributoFijo<T_tipo>::set(void* valor){
+	dato=*(T_tipo*)valor;
+};
 template<typename T_tipo>
 void AtributoFijo<T_tipo>::get(void* valor){*(T_tipo*)valor=dato;};
 template<typename T_tipo>
 Ttamanio AtributoFijo<T_tipo>::tamanio(){ return sizeof(T_tipo);};
 template<typename T_tipo>
-Atributo* AtributoFijo<T_tipo>::clonar(){ return new AtributoFijo<T_tipo>(nombre);};
+Atributo* AtributoFijo<T_tipo>::clonar(){
+	AtributoFijo<T_tipo>*clon=new AtributoFijo<T_tipo>(nombre);
+	clon->dato=dato;
+	return clon;
+};
 template<typename T_tipo>
 Ttamanio AtributoFijo<T_tipo>::serializar(std::streambuf&salida){
 	Ttamanio tamanioDato=sizeof(dato);
@@ -86,14 +92,6 @@ class AtributoFijo<char*> : public Atributo{
 private:
 	char*datos;
 	Ttamanio longitud;
-	void cpy(char*dest,const char*origen,Ttamanio n){
-			while(n>0){
-				*dest=*origen;
-				dest++;
-				origen++;
-				n--;
-			}
-		};
 public:
 	AtributoFijo(std::string nombreAtributo,Ttamanio nroCaracteres): Atributo(nombreAtributo)
 	{
@@ -102,15 +100,15 @@ public:
 	};
 	virtual ~AtributoFijo(){delete[]datos;};
 	void set(void* valor){
-		cpy(datos,(char*)valor,longitud);
+		strncpy(datos,(char*)valor,longitud);
 	};
 	void get(void* valor){
-		cpy((char*)valor,datos,longitud);
+		strncpy((char*)valor,datos,longitud);
 	};
 	Ttamanio tamanio(){return longitud;};
 	Atributo* clonar(){
 		AtributoFijo<char*>* clon=new AtributoFijo<char*>(nombre,longitud);
-		cpy(clon->datos,datos,longitud);
+		strncpy(clon->datos,datos,longitud);
 		return clon;
 	};
 	Ttamanio serializar(std::streambuf&salida){

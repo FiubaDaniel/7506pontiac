@@ -9,15 +9,14 @@ Archivo::~Archivo (){
 	archivo.close();
 };
 void Archivo::escribir(const void* bytes,size_t cantidad){
-	archivo.write((char*)&bytes,cantidad);
-	archivo.flush();
+	archivo.write((char*)bytes,cantidad);
 };
 void Archivo::escribir(const void* unByte){
 	archivo.put(*(char*)unByte);
 };
 void Archivo::leer(void* bytes,size_t cantidad){
-	archivo.read((char*)&bytes,cantidad);
-	archivo.sync();
+	archivo.read((char*)bytes,cantidad);
+
 };
 void Archivo::leer(void* unBytes){
 	*(char*)unBytes=archivo.get();
@@ -32,6 +31,10 @@ void Archivo::posicionarAlfinal(){
 	archivo.seekg(std::fstream::end);
 	archivo.seekp(std::fstream::end);
 };
+bool Archivo::fin(){
+	return archivo.eof();
+}
+
 size_t Archivo::posicionActual(){
 	return archivo.tellg();
 };
