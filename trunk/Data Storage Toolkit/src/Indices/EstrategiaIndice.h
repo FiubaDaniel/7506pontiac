@@ -19,7 +19,7 @@ class EstrategiaIndice
 {
 public:
 
-	void crear(char* nombreArch,char* nomEspaciosLibres,unsigned int cantElemNodo,ComparadorClave* comp);
+	void crear(char* nombreArch,char* nomEspaciosLibres,unsigned int tamanioBloque,int tamanioSerializadoClave,ComparadorClave* comp);
 	void abrir(char* nombreArch,char* nomEspaciosLibres,ComparadorClave* comp);
 	bool BuscarReferencia(Clave clave,Referencia* referencia);
 	Referencia Siguiente(bool ultimo);
