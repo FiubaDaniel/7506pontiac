@@ -4,7 +4,6 @@
  *  Created on: 07/10/2009
  *      Author: paulo
  */
-
 #include "EABloques.h"
 
 EABloques::EABloques(Bloque* tipoBloque,Ttamanio tamanioBloque) {
@@ -62,9 +61,10 @@ bool EABloques::escribir(Componente*compuesto){
 bool EABloques::leer(Componente*compuesto){
 	Bloque*bloque=NULL;
 	if((bloque=dynamic_cast<Bloque*>(compuesto))){
-		std::stringbuf buf(std::ios_base::binary | std::ios_base::in );
-		buf.pubsetbuf(bloqueSerializado,capacBloque);
 		almacen->leer(bloqueSerializado,capacBloque);
+		std::stringbuf buf;
+		buf.pubsetbuf(bloqueSerializado,capacBloque);
+		buf.pubseekpos(0,std::ios_base::binary | std::ios_base::in);
 		bloque->deserializar(buf);
 		return true;
 	}

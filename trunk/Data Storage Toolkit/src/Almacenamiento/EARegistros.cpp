@@ -4,14 +4,12 @@
  *  Created on: 07/10/2009
  *      Author: paulo
  */
-
 #include "EARegistros.h"
-
+#include <iostream>
 EARegistros::EARegistros(){
 	almacen=NULL;
 	registroSerializado=NULL;
 	tamanioRegistro=0;
-	tamanioEncabezado=sizeof(siguienteLibre)+sizeof(tamanioRegistro);
 }
 void EARegistros::finalizarAlmacenamiento(){
 	if(almacen!=NULL){
@@ -26,7 +24,7 @@ EARegistros::~EARegistros() {
 }
 Almacenamiento* EARegistros::abrir(Almacenamiento*almacen){
 	finalizarAlmacenamiento();
-	Almacenamiento* anterior=almacen;
+	Almacenamiento* anterior=this->almacen;
 	this->almacen=almacen;
 	almacen->posicionarByte(0);
 	Ttamanio tamRegistro=0;
@@ -40,23 +38,24 @@ Almacenamiento* EARegistros::abrir(Almacenamiento*almacen){
 	posicionarComponente(0);
 	return anterior;
 };
-Almacenamiento* EARegistros::nuevo(Almacenamiento*almacen,Ttamanio tamregistro){
+Almacenamiento* EARegistros::nuevo(Almacenamiento*almacenamiento,Ttamanio tamregistro){
 	finalizarAlmacenamiento();
 	Almacenamiento* anterior=almacen;
+	almacen=almacenamiento;
 	tamanioRegistro=tamregistro;
 	registroSerializado=new char[tamregistro];
-	tamanioEncabezado=sizeof(tamanioEncabezado)+sizeof(siguienteLibre);
+	tamanioEncabezado=sizeof(siguienteLibre);
 	siguienteLibre=0;
-	posicionarComponente(0);
+	this->almacen->posicionarByte(0);
+	this->almacen->escribir(&siguienteLibre,sizeof(siguienteLibre));
 	return anterior;
 }
 bool EARegistros::escribir( Componente *componente){
-	Registro*registro=NULL;
-	if((registro=dynamic_cast<Registro*>(componente))){
+	Registro*registro=dynamic_cast<Registro*>(componente);
+	if(registro){
 		std::stringbuf buf(std::ios_base::binary | std::ios_base::out );
 		buf.pubsetbuf(registroSerializado,tamanioRegistro);
 		registro->serializar(buf);
-		almacen->posicionarByte(nroRegistro);
 		almacen->escribir(registroSerializado,tamanioRegistro);
 		return true;
 	}
@@ -65,10 +64,10 @@ bool EARegistros::escribir( Componente *componente){
 bool EARegistros::leer( Componente *componente){
 	Registro*registro=NULL;
 	if((registro=dynamic_cast<Registro*>(componente))){
-		almacen->posicionarByte(nroRegistro);
 		almacen->leer(registroSerializado,tamanioRegistro);
-		std::stringbuf buf(std::ios_base::binary | std::ios_base::out );
+		std::stringbuf buf;
 		buf.pubsetbuf(registroSerializado,tamanioRegistro);
+		buf.pubseekpos(0,std::ios_base::binary | std::ios_base::out );
 		registro->deserializar(buf);
 		return true;
 	}
@@ -96,10 +95,10 @@ size_t EARegistros::insertar( Componente *componente){
 }
 
 bool EARegistros::modificar(Componente *componente){
-	size_t posicionDelModificado=0;
-	//TODO busqueda
+	if(!buscar(componente))return false;
+	size_t posicionDelModificado=almacen->posicionActual()-tamanioRegistro;
 	Registro*registro=dynamic_cast<Registro*>(componente);
-	if(registro!=NULL && posicionDelModificado!=0){
+	if(registro!=NULL){
 		std::stringbuf buf(std::ios_base::binary | std::ios_base::out );
 		buf.pubsetbuf(registroSerializado,tamanioRegistro);
 		registro->serializar(buf);
@@ -110,9 +109,15 @@ bool EARegistros::modificar(Componente *componente){
 	return false;
 }
 
-bool EARegistros::eliminar( Componente *componente){
-	size_t posicionEliminado=0;
-	//TODO busqueda
+bool EARegistros::eliminar(Componente *componente){
+	if(!buscar(componente))return false;
+	size_t posicionEliminado=almacen->posicionActual()-tamanioRegistro;
+	/*siguienteLibre=final-tamanioRegistro;
+	almacen->posicionarByte(siguienteLibre);
+	almacen->leer(registroSerializado,tamanioRegistro);
+	almacen->posicionarByte(posicionEliminado);
+	almacen->escribir(registroSerializado,tamanioRegistro);
+	almacen->truncar();*/
 	almacen->posicionarByte(posicionEliminado);
 	almacen->escribir((char*)siguienteLibre,sizeof(siguienteLibre));
 	siguienteLibre=posicionEliminado;
@@ -121,11 +126,25 @@ bool EARegistros::eliminar( Componente *componente){
 
 void EARegistros::posicionarComponente(size_t nroCompuesto){
 	nroRegistro=nroCompuesto*tamanioRegistro+tamanioEncabezado;
+	almacen->posicionarByte(nroRegistro);
 }
 bool EARegistros::buscar(Componente *componente){
-	return false;
+	bool encontrado=false;
+	Registro*registro=dynamic_cast<Registro*>(componente);
+	Registro*reg=(Registro*)componente->clonar();
+	posicionarComponente(0);
+	do{
+		leer(reg);
+		if(0==comparar(registro,reg)){
+		 	encontrado=true;
+		 	std::stringbuf buf;
+			buf.pubsetbuf(registroSerializado,tamanioRegistro);
+			buf.pubseekpos(0,std::ios_base::binary|std::ios_base::in| std::ios_base::out);
+		 	componente->deserializar(buf);
+		}
+	}while(!almacen->fin() && !encontrado);
+	delete reg;
+	return encontrado;
 }
-
-
 
 

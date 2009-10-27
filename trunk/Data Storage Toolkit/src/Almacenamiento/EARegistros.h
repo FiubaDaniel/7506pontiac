@@ -12,18 +12,21 @@
 #include "../Compuesto/Registro.h"
 
 class EARegistros: public EstrategiaAlmacenamiento {
-	Almacenamiento* almacen;
+
 	size_t nroRegistro;
 	Ttamanio tamanioRegistro;
 	Ttamanio tamanioEncabezado;
 	char* registroSerializado;
 	size_t siguienteLibre;
+	Almacenamiento* almacen;
 	void finalizarAlmacenamiento();
+	int comparar(Registro*reg1,Registro*reg2){return 0;}
 public:
+
 	EARegistros();
 	virtual ~EARegistros();
 	Almacenamiento* abrir(Almacenamiento*almacen);
-	Almacenamiento* nuevo(Almacenamiento*almacen,Ttamanio tamRegistro);
+	Almacenamiento* nuevo(Almacenamiento*almacenamiento,Ttamanio tamRegistro);
 	void posicionarComponente(size_t nroCompuesto);
 	bool escribir(Componente*componente);
 	bool leer(Componente*componente);
