@@ -19,7 +19,7 @@ void Buffer::leer(void* bytes,size_t cantidad){
 void Buffer::leer(void* unBytes){
 	*(char*)unBytes=archivo->get();
 };
-void Buffer::posicionarByte(size_t posicion){
+void Buffer::posicionar(size_t posicion){
 	archivo->seekg(posicion);
 	archivo->seekp(posicion);
 };

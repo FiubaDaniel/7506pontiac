@@ -22,7 +22,7 @@ void Archivo::leer(void* unBytes){
 	*(char*)unBytes=archivo.get();
 
 };
-void Archivo::posicionarByte(size_t posicion){
+void Archivo::posicionar(size_t posicion){
 	archivo.seekg(posicion);
 	archivo.seekp(posicion);
 };

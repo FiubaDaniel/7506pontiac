@@ -6,7 +6,7 @@
 #include <string>
 
 class Archivo : public Almacenamiento{
-	std::fstream archivo;
+ std::fstream archivo;
 public:
   Archivo (const char*ruta);
   virtual ~Archivo ( );
@@ -16,7 +16,7 @@ public:
   virtual void escribir(const void* unByte);
   virtual void leer(void* bytes,size_t cantidad);
   virtual void leer(void* unBytes);
-  virtual void posicionarByte(size_t posicion);
+  virtual void posicionar(size_t posicion);
   virtual bool bien();
   virtual bool fin();
   virtual void posicionarAlfinal();

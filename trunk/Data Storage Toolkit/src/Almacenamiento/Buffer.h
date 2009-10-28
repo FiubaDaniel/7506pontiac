@@ -21,7 +21,7 @@ public:
 	virtual void escribir(const void* unByte);
 	virtual void leer(void* bytes,size_t cantidad);
 	virtual void leer(void* unBytes);
-	virtual void posicionarByte(size_t posicion);
+	virtual void posicionar(size_t posicion);
 	virtual bool bien();
 	virtual bool fin();
 	virtual void posicionarAlfinal();

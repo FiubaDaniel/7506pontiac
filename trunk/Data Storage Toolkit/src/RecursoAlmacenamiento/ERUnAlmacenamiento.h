@@ -15,6 +15,10 @@ class ERUnAlmacenamiento : public EstrategiaRecursos
 public:
   ERUnAlmacenamiento ( );
   virtual ~ERUnAlmacenamiento ( );
+  virtual bool insertar(Registro* registro)=0;
+  virtual bool eliminar(Clave* unaClave)=0;
+  virtual bool modificar(Clave* unaClave,Registro* registro)=0;
+  virtual bool obtener(Clave* unaClave,Registro*registro)=0;
 private:
 
 };

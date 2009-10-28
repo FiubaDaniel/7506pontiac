@@ -19,10 +19,10 @@ public:
 public:
 	EREscrituraDirecta(Almacenamiento*buffer);
 	virtual ~EREscrituraDirecta();
-	virtual bool agregar(Registro* registro);
-	virtual bool eliminar(Clave unaClave);
-	virtual bool modificar(Clave unaClave,Registro* registro);
-	virtual bool obtener(Clave unaClave,Registro*registro);
+	virtual bool insertar(Registro* registro);
+	virtual bool eliminar(Clave* unaClave);
+	virtual bool modificar(Clave* unaClave,Registro* registro);
+	virtual bool obtener(Clave* unaClave,Registro*registro);
 };
 
 #endif // ESTRATEGIARECURSOSESCRITURADIRECTA_H

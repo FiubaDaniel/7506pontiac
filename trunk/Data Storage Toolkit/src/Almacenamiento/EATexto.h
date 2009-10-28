@@ -20,6 +20,7 @@ class EATexto: public EstrategiaAlmacenamiento {
 	std::string registroAstring(Registro*registro);
 	void stringAregistro(Registro*registro,std::string &str);
 	size_t buscar(Registro*registro,bool&encontrado);
+	int comparar(Registro*reg1,Registro*reg2);
 public:
 	EATexto();
 	virtual ~EATexto();
@@ -31,7 +32,7 @@ public:
 	size_t insertar(Componente*componente);
 	bool modificar(Componente*componente);
 	bool eliminar(Componente*componente);
-	bool buscar(Componente*componente);
+	bool siguiente(Componente*componente);
 };
 
 #endif /* EATEXTO_H_ */

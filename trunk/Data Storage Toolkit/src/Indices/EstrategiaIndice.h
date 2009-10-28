@@ -18,6 +18,7 @@ EstrategiaIndice does not have any pure virtual methods, but its author
 class EstrategiaIndice
 {
 public:
+/*
 
 	void crear(char* nombreArch,char* nomEspaciosLibres,unsigned int tamanioBloque,int tamanioSerializadoClave,ComparadorClave* comp);
 	void abrir(char* nombreArch,char* nomEspaciosLibres,ComparadorClave* comp);
@@ -26,44 +27,7 @@ public:
 	bool insertar(Referencia ref,Clave* clave);
     bool eliminar(Clave* clave);
 	bool modificar(Clave clave,Referencia refNueva);
-
-protected:
-
-public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
-
-public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
-
-
-private:
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
+*/
 
 
 };
