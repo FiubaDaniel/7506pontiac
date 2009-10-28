@@ -9,8 +9,8 @@
 #define EAREGISTROS_H_
 #include <sstream>
 #include "EstrategiaAlmacenamiento.h"
-#include "../ArbolB#/Clave.h"
-#include "../ArbolB#/ComparadorClave.h"
+#include "../ArbolBSharp/Clave.h"
+#include "../ArbolBSharp/ComparadorClave.h"
 #include "../Compuesto/Registro.h"
 
 class EARegistros: public EstrategiaAlmacenamiento {
@@ -36,7 +36,7 @@ public:
 	bool leer(Componente*componente);
 	size_t insertar(Componente*componente);
 	bool modificar(Componente*componente);
-	bool eliminar(Clave*clave);
+	bool eliminar(Componente*componente);
 	bool siguiente(Componente*componente);
 };
 

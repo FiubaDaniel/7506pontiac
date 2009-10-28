@@ -37,7 +37,7 @@ public:
 	bool leer(Componente*componente);
 	size_t insertar(Componente*componente);
 	bool modificar(Componente*componente);
-	bool eliminar(Clave*clave);
+	bool eliminar(Componente*componente);
 	bool siguiente(Componente*componente);
 };
 

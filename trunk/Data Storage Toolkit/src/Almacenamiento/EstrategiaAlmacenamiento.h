@@ -2,8 +2,8 @@
 #define ESTRATEGIAALMACENAMIENTO_H_
 #include <queue>
 #include "Almacenamiento.h"
-#include "../ArbolB#/ComparadorClave.h"
-#include "../ArbolB#/Clave.h"
+#include "../ArbolBSharp/ComparadorClave.h"
+#include "../ArbolBSharp/Clave.h"
 
 class Almacenamiento;
 class Cambio;
@@ -26,7 +26,7 @@ public:
 	virtual bool leer(Componente*componente)=0;
 	virtual size_t insertar(Componente*componente)=0;
 	virtual bool modificar(Componente*componente)=0;
-	virtual bool eliminar(Clave*clave)=0;
+	virtual bool eliminar(Componente*componente)=0;
 	virtual bool siguiente(Componente*componente)=0;
 	bool logActivo;
 	/* Cola que refleja los cambios producidos en la estructura del archivo

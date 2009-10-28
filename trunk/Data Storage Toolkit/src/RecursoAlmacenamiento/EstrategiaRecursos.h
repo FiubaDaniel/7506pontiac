@@ -2,7 +2,7 @@
 #define ESTRATEGIARECURSOS_H
 #include "Recurso.h"
 #include "../Compuesto/Registro.h"
-#include "../ArbolB#/Clave.h"
+#include "../ArbolBSharp/Clave.h"
 class Recurso;
 
 class EstrategiaRecursos{

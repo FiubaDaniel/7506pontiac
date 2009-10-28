@@ -171,7 +171,7 @@ bool EABloques::modificar(Componente*componente){
 	}
 	return false;
 };
-bool EABloques::buscarComponente(Clave*clave,Ttamanio & posicion){
+bool EABloques::buscarComponente(Registro*registro,Ttamanio & posicion){
 	clave->set(registro);
 	Clave*aux=clave->clonarce();
 	for(Ttamanio i=0;i<bloque->cantidadComponentes();i++){
@@ -185,11 +185,11 @@ bool EABloques::buscarComponente(Clave*clave,Ttamanio & posicion){
 	delete aux;
 	return false;
 };
-bool EABloques::eliminar(Clave*clave){
+bool EABloques::eliminar(Componente*componente){
 	leer(bloque);
 	nroBloque--;
 	Ttamanio nroComponente;
-	if(!buscarComponente(componente,nroComponente)) return false;
+	if(!buscarComponente((Registro*)componente,nroComponente)) return false;
 	bloque->eliminar(nroComponente);
 	if(logActivo){
 		clave->set((Registro*)componente);
