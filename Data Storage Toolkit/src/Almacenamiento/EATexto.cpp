@@ -98,7 +98,7 @@ bool EATexto::eliminar(Componente *componente){
 			almacen->escribir(str.c_str(),str.size());
 			if(logActivo){
 				clave->set(registro);
-				Cambio cambio(clave,nroRegistro,Cambio::Baja);
+				Cambio cambio(clave,posComp,Cambio::Baja);
 				cambiosLog.push(cambio);
 			}
 			posComp++;

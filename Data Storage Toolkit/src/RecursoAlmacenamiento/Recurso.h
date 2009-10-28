@@ -6,8 +6,8 @@
 #include "../Almacenamiento/EstrategiaAlmacenamiento.h"
 #include "../Indices/EstrategiaIndice.h"
 #include "../Compuesto/Registro.h"
-#include "../ArbolB#/ComparadorClave.h"
-#include "../ArbolB#/Clave.h"
+#include "../ArbolBSharp/ComparadorClave.h"
+#include "../ArbolBSharp/Clave.h"
 class EstrategiaRecursos;
 
 class Recurso{
