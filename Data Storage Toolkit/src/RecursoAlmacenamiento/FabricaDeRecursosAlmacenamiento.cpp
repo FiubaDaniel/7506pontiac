@@ -3,8 +3,10 @@
 // Constructors/Destructors
 //  
 
-FabricaDeRecursosAlmacenamiento::FabricaDeRecursosAlmacenamiento ( ) {
+/*
+FabricaDeRecursosAlmacenamiento::FabricaDeRecursosAlmacenamiento () {
 }
 
 FabricaDeRecursosAlmacenamiento::~FabricaDeRecursosAlmacenamiento ( ) { }
 
+*/

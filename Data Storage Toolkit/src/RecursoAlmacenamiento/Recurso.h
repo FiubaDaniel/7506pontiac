@@ -6,10 +6,8 @@
 #include "../Almacenamiento/EstrategiaAlmacenamiento.h"
 #include "../Indices/EstrategiaIndice.h"
 #include "../Compuesto/Registro.h"
-//Todo borrar
-class Clave{};
-class Comparador{};
-//todo fin borrar
+#include "../ArbolB#/ComparadorClave.h"
+#include "../ArbolB#/Clave.h"
 class EstrategiaRecursos;
 
 class Recurso{
@@ -27,25 +25,25 @@ public:
     * return :
     * true, si pudo eliminar, false sino el registro no existe.
     */
-   bool eliminar(Clave unaClave);
+   bool eliminar(Clave* unaClave);
    /*
     * Modifica el Registro que coincide con la clave proporcionada.
     * return:
     * true, si pudo modificar, false sino si el registro no existe.
     */
-   bool modificar(Clave unaClave,Registro* registro);
+   bool modificar(Clave *unaClave,Registro* registro);
    /*
     * Busca el registro de acuerdo a la clave.
     * return:
     * true, si pudo eliminar, false sino el registro no existe.
     */
-   bool obtener(Clave unaClave,Registro*registro);
+   bool obtener(Clave*unaClave,Registro*registro);
    void mostrarIndice();
    void mostrarDatos();
    void cerrarArchivo();
 private:
    Clave *clave;
-   Comparador *comparador;
+   ComparadorClave*comparador;
    EstrategiaAlmacenamiento*estrategiaAlmacenamiento;
    Almacenamiento* archivo;
    EstrategiaIndice* indice;

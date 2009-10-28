@@ -25,23 +25,23 @@ Recurso::~Recurso () {}
 
 
 bool Recurso::insertar(Registro* registro){
-	return estrategiaUsada->agregar(registro);
+	return estrategiaUsada->insertar(registro);
 };
 
 
-bool Recurso::eliminar(Clave unaClave){
+bool Recurso::eliminar(Clave*unaClave){
 	return estrategiaUsada->eliminar(unaClave);
 };
 
 
 
-bool Recurso::modificar(Clave unaClave,Registro* registro){
+bool Recurso::modificar(Clave* unaClave,Registro* registro){
 	return estrategiaUsada->modificar(unaClave,registro);
 };
 
 
 
-bool Recurso::obtener(Clave unaClave,Registro*registro){
+bool Recurso::obtener(Clave* unaClave,Registro*registro){
 	return estrategiaUsada->obtener(unaClave,registro);
 };
 

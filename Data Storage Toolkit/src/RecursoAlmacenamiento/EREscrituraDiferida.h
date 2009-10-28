@@ -5,94 +5,14 @@
 
 #include <string>
 
-/**
-  * class EREscrituraDiferida
-  * 
-  */
-
 class EREscrituraDiferida : public EstrategiaRecursos{
 public:
-
-  // Constructors/Destructors
-  //  
-
-
-  /**
-   * Empty Constructor
-   */
   EREscrituraDiferida ( );
-
-  /**
-   * Empty Destructor
-   */
   virtual ~EREscrituraDiferida ( );
-
-  // Static Public attributes
-  //  
-
-  // Public attributes
-  //  
-
-
-  // Public attribute accessor methods
-  //  
-
-
-  // Public attribute accessor methods
-  //  
-
-
-protected:
-
-  // Static Protected attributes
-  //  
-
-  // Protected attributes
-  //  
-
-public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
-
-public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
-
-
-private:
-
-  // Static Private attributes
-  //  
-
-  // Private attributes
-  //  
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
-
-
+  virtual bool insertar(Registro* registro)=0;
+  virtual bool eliminar(Clave* unaClave)=0;
+  virtual bool modificar(Clave* unaClave,Registro* registro)=0;
+  virtual bool obtener(Clave* unaClave,Registro*registro)=0;
 };
 
 #endif // ESTRATEGIARECURSOSESCRITURADIFERIDA_H

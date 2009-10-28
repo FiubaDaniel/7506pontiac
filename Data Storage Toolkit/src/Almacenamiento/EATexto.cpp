@@ -30,6 +30,11 @@ bool EATexto::escribir(Componente *componente){
 		std::string str=registroAstring(registro);
 		str.push_back('\n');
 		almacen->escribir(str.c_str(),str.size());
+		if(logActivo){
+			clave->set(registro);
+			Cambio cambio(clave,posComp,Cambio::Alta);
+			cambiosLog.push(cambio);
+		}
 		posComp++;
 		return true;
 	}
@@ -38,7 +43,7 @@ bool EATexto::escribir(Componente *componente){
 
 void EATexto::posicionarComponente(size_t nroCompuesto){
 	if(nroCompuesto<posComp){
-		almacen->posicionarByte(0);
+		almacen->posicionar(0);
 		posComp=0;
 	}
 	while(nroCompuesto>posComp&&!almacen->fin()){
@@ -53,7 +58,7 @@ size_t EATexto::insertar(Componente *componente){
 		std::string strRegistro=registroAstring(registro);
 		size_t posicion;
 		bool encontrado=false;
-		almacen->posicionarByte(0);
+		almacen->posicionar(0);
 		posComp=0;
 		while(!encontrado && !almacen->fin()){
 			posicion=almacen->posicionActual();
@@ -65,10 +70,16 @@ size_t EATexto::insertar(Componente *componente){
 			}else posComp++;
 		}
 		if(encontrado)
-			almacen->posicionarByte(posicion);
+			almacen->posicionar(posicion);
 		else
 			posicion=almacen->posicionActual();
 		almacen->escribir(strRegistro.c_str(),strRegistro.size());
+
+		if(logActivo){
+			clave->set(registro);
+			Cambio cambio(clave,posComp,Cambio::Alta);
+			cambiosLog.push(cambio);
+		}
 		return posicion;
 	}
 	return 0;
@@ -83,8 +94,13 @@ bool EATexto::eliminar(Componente *componente){
 			std::string str=ultimoLeido;
 			str.replace(str.begin(),str.end()-1,str.size(),' ');
 			str.at(str.size()-1)='\n';
-			almacen->posicionarByte(posicion);
+			almacen->posicionar(posicion);
 			almacen->escribir(str.c_str(),str.size());
+			if(logActivo){
+				clave->set(registro);
+				Cambio cambio(clave,nroRegistro,Cambio::Baja);
+				cambiosLog.push(cambio);
+			}
 			posComp++;
 		}
 	}
@@ -100,7 +116,7 @@ bool EATexto::modificar(Componente *componente){
 			if(str.size()<ultimoLeido.size()){
 				str.append(ultimoLeido.size()-str.size()-1,' ');
 				str.push_back('\n');
-				almacen->posicionarByte(posicion);
+				almacen->posicionar(posicion);
 				almacen->escribir(str.c_str(),str.size());
 				posComp++;
 			}else encontrado=false;
@@ -109,7 +125,7 @@ bool EATexto::modificar(Componente *componente){
 	return encontrado;
 };
 
-bool EATexto::buscar(Componente *componente){
+bool EATexto::siguiente(Componente *componente){
 	bool encontrado=false;
 	Registro* registro=dynamic_cast<Registro*>(componente);
 	if(registro){
@@ -136,12 +152,12 @@ size_t EATexto::buscar(Registro*registro,bool&encontrado){
 	encontrado=false;
 	Registro*regAux=(Registro*)registro->clonar();
 	posComp=0;
-	almacen->posicionarByte(0);
+	almacen->posicionar(0);
 	do{
 		posicion=almacen->posicionActual();
 		siguiente();
 		stringAregistro(regAux,ultimoLeido);
-		if( 0/*clave*/) encontrado=true;
+		if( 0==comparar(registro,regAux)) encontrado=true;
 		else posComp++;
 	}while(!encontrado && almacen->fin());
 	delete regAux;
@@ -161,4 +177,11 @@ std::string EATexto::registroAstring(Registro*registro){
 		strs<<" ";
 	}
 	return strs.str();
+};
+int EATexto::comparar(Registro*reg1,Registro*reg2){
+	clave->set(reg1);
+	Clave*clave2;//TODO =clave->clonarce();
+	int resultado=comparador->Comparar(clave,clave2);
+	delete clave2;
+	return resultado;
 };

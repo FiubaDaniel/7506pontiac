@@ -14,16 +14,19 @@
 class EABloques : public EstrategiaAlmacenamiento{
 private:
 	Almacenamiento* almacen;
-	size_t corrienteBloque;
+	Ttamanio nroRegistro;
+	size_t nroBloque;
 	Ttamanio libres;
 	Ttamanio capacBloque;
 	char* bloqueSerializado;
 	double porcCarga;
 	Bloque* bloque;
 	std::fstream archivoEspacioLibre;
-	bool buscarEspacioLibre(Ttamanio espacio,size_t & nroBloque);
-	bool buscarComponente(Componente*comp,Ttamanio&posicion);
+	size_t buscarEspacioLibre(Ttamanio espacio,bool& encontrado);
+	bool buscarComponente(Registro*registro,Ttamanio&posicion);
 	void finalizarAlamcenamiento();
+	void leer(Bloque*bloque);
+	void escribir(Bloque*bloque);
 public:
 	EABloques(Bloque* tipoBloque,Ttamanio tamanioBloque);
 	virtual ~EABloques();
@@ -34,8 +37,8 @@ public:
 	bool leer(Componente*componente);
 	size_t insertar(Componente*componente);
 	bool modificar(Componente*componente);
-	bool eliminar(Componente*componente);
-	bool buscar(Componente*componente);
+	bool eliminar(Clave*clave);
+	bool siguiente(Componente*componente);
 };
 
 #endif /* EABLOQUES_H_ */
