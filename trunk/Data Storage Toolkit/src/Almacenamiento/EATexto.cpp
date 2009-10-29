@@ -52,7 +52,7 @@ void EATexto::posicionarComponente(size_t nroCompuesto){
 	}
 };
 
-size_t EATexto::insertar(Componente *componente){
+bool EATexto::insertar(Componente *componente){
 	Registro* registro=dynamic_cast<Registro*>(componente);
 	if(registro){
 		std::string strRegistro=registroAstring(registro);
@@ -80,6 +80,7 @@ size_t EATexto::insertar(Componente *componente){
 			Cambio cambio(clave,posComp,Cambio::Alta);
 			cambiosLog.push(cambio);
 		}
+		//TODO
 		return posicion;
 	}
 	return 0;

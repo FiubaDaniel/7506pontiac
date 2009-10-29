@@ -12,10 +12,15 @@
 class EREscrituraDirecta : public EstrategiaRecursos{
 	Almacenamiento* buffer;
 public:
-	EstrategiaAlmacenamiento*estrategiaAlmacenamiento;
+	EstrategiaAlmacenamiento*estrategiaArchivo;
+	EstrategiaAlmacenamiento*estrategiaBuffer;
 	Almacenamiento* archivo;
 	EstrategiaIndice* indice;
-	EstrategiaRecursos* estrategiaUsada;
+	Registro*registro;
+	Clave*clave;
+	size_t posicionEnBuffer(size_t posicionArchivo);
+	void actualizarTabla(Cambio cambio);
+	void actualizarIndice(Cambio cambio);
 public:
 	EREscrituraDirecta(Almacenamiento*buffer);
 	virtual ~EREscrituraDirecta();

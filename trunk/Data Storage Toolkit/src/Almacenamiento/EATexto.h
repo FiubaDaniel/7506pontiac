@@ -29,7 +29,7 @@ public:
 	void posicionarComponente(size_t nroCompuesto);
 	bool escribir(Componente*componente);
 	bool leer(Componente*componente);
-	size_t insertar(Componente*componente);
+	bool insertar(Componente*componente);
 	bool modificar(Componente*componente);
 	bool eliminar(Componente*componente);
 	bool siguiente(Componente*componente);

@@ -95,12 +95,13 @@ bool EARegistros::leer(Componente *componente){
 	return false;
 }
 
-size_t EARegistros::insertar(Componente *componente){
+bool EARegistros::insertar(Componente *componente){
 	posicionarComponente(siguienteRegLibre);
 	if(escribir(componente)){
 		siguienteRegLibre++;
+		return true;
 	}
-	return nroRegistro;
+	return false;
 }
 
 bool EARegistros::modificar(Componente *componente){
