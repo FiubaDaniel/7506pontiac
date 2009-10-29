@@ -38,7 +38,7 @@ public:
 private:
 	NodoHoja* buscarPrimerNodoHoja();
 	int calcularTamanioSerializado(int tamanioSerializadoClave);
-	int bucarIterativo(Nodo nodo, Clave* clave);
+	int bucarIterativo(Nodo nodo, Clave clave);
 	unsigned int utimoNodo,numeroDeElementosXnodo,posicionRaiz,tamanioNodo;
 	std::fstream archivoArbol;
 	std::fstream archivoEspaciosLibres;

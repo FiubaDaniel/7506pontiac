@@ -49,13 +49,14 @@
 </toolChain>
 </folderInfo>
 <sourceEntries>
-<entry excluding="tests|Compuesto|RecursoAlmacenamiento|Almacenamiento|Indices" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
-<entry excluding="Compuesto" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/RecursoAlmacenamiento"/>
-<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests/Compuesto"/>
+<entry excluding="ArbolBSharp|tests|Compuesto|RecursoAlmacenamiento|Almacenamiento|Indices" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Compuesto"/>
+<entry excluding="Compuesto" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Indices"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Almacenamiento"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/ArbolBSharp"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests/Compuesto"/>
 </sourceEntries>
 </configuration>
 </storageModule>
@@ -519,12 +520,13 @@
 </toolChain>
 </folderInfo>
 <sourceEntries>
-<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/RecursoAlmacenamiento"/>
 <entry excluding="Compuesto" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests"/>
-<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Compuesto"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests/Compuesto"/>
-<entry excluding="tests|Indices|RecursoAlmacenamiento|Almacenamiento|Compuesto" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/RecursoAlmacenamiento"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/ArbolBSharp"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Almacenamiento"/>
+<entry excluding="ArbolBSharp|tests|Indices|RecursoAlmacenamiento|Almacenamiento|Compuesto" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Compuesto"/>
 </sourceEntries>
 </configuration>
 </storageModule>
