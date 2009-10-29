@@ -78,8 +78,10 @@ bool BSharpTree::Buscar(Clave clave,Referencia referencia){
 int BSharpTree::bucarIterativo(Nodo nodo, Clave clave){
 	int  noExiste = -1;
 	if(nodo.getNumeroNivel()!=0){
-		NodoIntermedio nodoAux = (NodoIntermedio) nodo;
+		NodoIntermedio& nodoAux = (NodoIntermedio&) nodo;
 		Referencia refAux = nodoAux.bucarReferenciaAsiguienteNodo(clave);
+		nodoAux.getNumeroDeNodo();
+		refAux+=0;
 	}
 	return noExiste;
 };
