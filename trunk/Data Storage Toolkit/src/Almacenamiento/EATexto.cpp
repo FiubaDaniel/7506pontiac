@@ -41,7 +41,7 @@ bool EATexto::escribir(Componente *componente){
 	return false;
 };
 
-void EATexto::posicionarComponente(size_t nroCompuesto){
+bool EATexto::posicionarComponente(size_t nroCompuesto){
 	if(nroCompuesto<posComp){
 		almacen->posicionar(0);
 		posComp=0;
@@ -50,6 +50,7 @@ void EATexto::posicionarComponente(size_t nroCompuesto){
 		siguiente();
 		posComp++;
 	}
+	return true;
 };
 
 bool EATexto::insertar(Componente *componente){
@@ -186,6 +187,6 @@ int EATexto::comparar(Registro*reg1,Registro*reg2){
 	delete clave2;
 	return resultado;
 };
-bool EATexto::obtenerSiguiente(Componente*componente){
+bool EATexto::obtener(Componente*componente){
 	return siguiente(componente);
 };

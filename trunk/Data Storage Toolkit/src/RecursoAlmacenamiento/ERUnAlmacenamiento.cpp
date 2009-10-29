@@ -11,7 +11,6 @@ bool ERUnAlmacenamiento::insertar(Registro* registro){
 	if(indice->BuscarReferencia(*clave,&referencia))
 		return false;
 	estrategiAlmacenamiento->insertar(registro);
-
 	while(!estrategiAlmacenamiento->cambiosLog.empty()){
 		Cambio cambio=estrategiAlmacenamiento->cambiosLog.front();
 		actualizarIndice(cambio);
@@ -54,7 +53,7 @@ bool ERUnAlmacenamiento::obtener(Clave* unaClave,Registro*registro){
 	if(!indice->BuscarReferencia(*clave,&referencia))
 		return false;
 	estrategiAlmacenamiento->posicionarComponente(referencia);
-	return estrategiAlmacenamiento->obtenerSiguiente(registro);
+	return estrategiAlmacenamiento->obtener(registro);
 };
 
 void ERUnAlmacenamiento::actualizarIndice(Cambio cambio){

@@ -26,14 +26,14 @@ public:
 	virtual ~EATexto();
 	void abrir(Almacenamiento*almacen);
 	void nuevo(Almacenamiento*almacen);
-	void posicionarComponente(size_t nroCompuesto);
+	bool posicionarComponente(size_t nroCompuesto);
 	bool escribir(Componente*componente);
 	bool leer(Componente*componente);
 	bool insertar(Componente*componente);
 	bool modificar(Componente*componente);
 	bool eliminar(Componente*componente);
 	bool siguiente(Componente*componente);
-	bool obtenerSiguiente(Componente*componente);
+	bool obtener(Componente*componente);
 };
 
 #endif /* EATEXTO_H_ */

@@ -152,14 +152,15 @@ bool EARegistros::eliminar(Componente *componente){
 	}
 	return resultado;
 }
-void EARegistros::posicionarComponente(size_t nroCompuesto){
+bool EARegistros::posicionarComponente(size_t nroCompuesto){
 	nroRegistro=nroCompuesto;
 	almacen->posicionar(nroRegistro*tamanioRegistro+tamanioEncabezado);
+	return true;
 }
 bool EARegistros::siguiente(Componente *componente){
 	return leer(componente);
 };
-bool EARegistros::obtenerSiguiente(Componente*componente){
+bool EARegistros::obtener(Componente*componente){
 	return leer(componente);
 };
 

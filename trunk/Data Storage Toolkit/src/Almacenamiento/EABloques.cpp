@@ -40,9 +40,10 @@ Almacenamiento* EABloques::abrir(Almacenamiento*almacen,const char*rutaArchivoEs
 	archivoEspacioLibre.open(rutaArchivoEspacios,std::fstream::binary | std::fstream::in| std::fstream::out );
 	return anterior;
 };
-void EABloques::posicionarComponente(size_t nroCompuesto){
+bool EABloques::posicionarComponente(size_t nroCompuesto){
 	nroBloque=nroCompuesto;
 	almacen->posicionar(capacBloque*nroBloque);
+	return true;
 };
 void EABloques::leer(Bloque*bloque){
 	/*leo el bloque*/
@@ -214,7 +215,7 @@ bool EABloques::siguiente(Componente*componente){
 	componente->deserializar(buf);
 	return true;
 };
-bool EABloques::obtenerSiguiente(Componente*componente){
+bool EABloques::obtener(Componente*componente){
 	leer(bloque);
 	Ttamanio nroComp;
 	if(!buscarComponente((Registro*)componente,nroComp)) return false;
