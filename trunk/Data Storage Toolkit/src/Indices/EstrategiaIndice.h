@@ -3,7 +3,8 @@
 #define ESTRATEGIAINDICE_H
 
 #include <string>
-
+#include "../ArbolBSharp/Clave.h"
+#include "../ArbolBSharp/ComparadorClave.h"
 /**
   * class EstrategiaIndice
   * 
@@ -18,18 +19,13 @@ EstrategiaIndice does not have any pure virtual methods, but its author
 class EstrategiaIndice
 {
 public:
-/*
-
-	void crear(char* nombreArch,char* nomEspaciosLibres,unsigned int tamanioBloque,int tamanioSerializadoClave,ComparadorClave* comp);
-	void abrir(char* nombreArch,char* nomEspaciosLibres,ComparadorClave* comp);
-	bool BuscarReferencia(Clave clave,Referencia* referencia);
-	Referencia Siguiente(bool ultimo);
-	bool insertar(Referencia ref,Clave* clave);
-    bool eliminar(Clave* clave);
-	bool modificar(Clave clave,Referencia refNueva);
-*/
-
-
+	virtual void crear(char* nombreArch,char* nomEspaciosLibres,unsigned int tamanioBloque,int tamanioSerializadoClave,ComparadorClave* comp)=0;
+	virtual void abrir(char* nombreArch,char* nomEspaciosLibres,ComparadorClave* comp)=0;
+	virtual bool BuscarReferencia(Clave clave,Referencia* referencia)=0;
+	virtual Referencia Siguiente(bool ultimo)=0;
+	virtual bool insertar(Referencia ref,Clave* clave)=0;
+    virtual bool eliminar(Clave* clave)=0;
+	virtual bool modificar(Clave clave,Referencia refNueva)=0;
 };
 
 #endif // ESTRATEGIAINDICE_H

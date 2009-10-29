@@ -28,6 +28,8 @@ public:
 	virtual bool modificar(Componente*componente)=0;
 	virtual bool eliminar(Componente*componente)=0;
 	virtual bool siguiente(Componente*componente)=0;
+	virtual bool obtenerSiguiente(Componente*componente)=0;
+
 	bool logActivo;
 	/* Cola que refleja los cambios producidos en la estructura del archivo
 	 * a causa de las operaciones. La cola es exclusivamente para uso externo.
@@ -42,7 +44,7 @@ public:
 	enum TOperacion{Alta,Baja,Reubicacion} operacion;
 public:
 	Cambio(Clave*clave,Referencia referencia,TOperacion op){
-		//TODO this->clave=clave->clonarce();
+		this->clave=clave->clonarce();
 		this->referencia=referencia;
 		this->operacion=op;
 	}
