@@ -213,3 +213,9 @@ bool EABloques::siguiente(Componente*componente){
 	componente->deserializar(buf);
 	return true;
 };
+bool EABloques::obtenerSiguiente(Componente*componente){
+	leer(bloque);
+	Ttamanio nroComp;
+	if(!buscarComponente((Registro*)componente,nroComp)) return false;
+	return true;
+};

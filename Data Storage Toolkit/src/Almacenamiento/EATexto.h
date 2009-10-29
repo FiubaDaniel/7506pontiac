@@ -33,6 +33,7 @@ public:
 	bool modificar(Componente*componente);
 	bool eliminar(Componente*componente);
 	bool siguiente(Componente*componente);
+	bool obtenerSiguiente(Componente*componente);
 };
 
 #endif /* EATEXTO_H_ */

@@ -20,7 +20,7 @@ void EARegistros::finalizarAlmacenamiento(){
 }
 int EARegistros::comparar(Registro*reg1,Registro*reg2){
 	clave->set(reg1);
-	Clave*clave2;//TODO =clave->clonarce();
+	Clave*clave2=clave->clonarce();
 	int resultado=comparador->Comparar(clave,clave2);
 	delete clave2;
 	return resultado;
@@ -158,5 +158,7 @@ void EARegistros::posicionarComponente(size_t nroCompuesto){
 bool EARegistros::siguiente(Componente *componente){
 	return leer(componente);
 };
-
+bool EARegistros::obtenerSiguiente(Componente*componente){
+	return leer(componente);
+};
 

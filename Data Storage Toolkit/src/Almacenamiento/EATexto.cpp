@@ -180,8 +180,11 @@ std::string EATexto::registroAstring(Registro*registro){
 };
 int EATexto::comparar(Registro*reg1,Registro*reg2){
 	clave->set(reg1);
-	Clave*clave2;//TODO =clave->clonarce();
+	Clave*clave2=clave->clonarce();
 	int resultado=comparador->Comparar(clave,clave2);
 	delete clave2;
 	return resultado;
+};
+bool EATexto::obtenerSiguiente(Componente*componente){
+	return siguiente(componente);
 };
