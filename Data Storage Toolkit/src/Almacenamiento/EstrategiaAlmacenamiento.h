@@ -15,20 +15,16 @@ protected:
 public:
 	EstrategiaAlmacenamiento(){};
 	virtual ~EstrategiaAlmacenamiento(){};
-	virtual void setClave(Clave*unaClave){
-		clave=unaClave;
-	};
-	virtual void setComparador(ComparadorClave*unComparador){
-		comparador=unComparador;
-	};
-	virtual void posicionarComponente(size_t nroCompuesto)=0;
+	virtual void setClave(Clave*unaClave){clave=unaClave;};
+	virtual void setComparador(ComparadorClave*unComparador){comparador=unComparador;};
+	virtual bool posicionarComponente(size_t nroComponente)=0;
 	virtual bool escribir(Componente*componente)=0;
 	virtual bool leer(Componente*componente)=0;
 	virtual bool insertar(Componente*componente)=0;
 	virtual bool modificar(Componente*componente)=0;
 	virtual bool eliminar(Componente*componente)=0;
 	virtual bool siguiente(Componente*componente)=0;
-	virtual bool obtenerSiguiente(Componente*componente)=0;
+	virtual bool obtener(Componente*componente)=0;
 
 	bool logActivo;
 	/* Cola que refleja los cambios producidos en la estructura del archivo
