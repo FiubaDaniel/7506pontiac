@@ -108,7 +108,7 @@ size_t EABloques::buscarEspacioLibre(Ttamanio espacio,bool& encontrado){
 	return nroBloque;
 };
 
-size_t EABloques::insertar(Componente*componente){
+bool EABloques::insertar(Componente*componente){
 	bool encontrado;
 	Registro*registro=dynamic_cast<Registro*>(componente);
 	if(registro!=NULL){
@@ -130,7 +130,8 @@ size_t EABloques::insertar(Componente*componente){
 		posicionarComponente(nroBloque);
 		escribir(bloque);
 	}
-	return nroBloque-1;
+	//todo
+	return true;
 };
 
 

@@ -10,7 +10,8 @@ bool ERUnAlmacenamiento::insertar(Registro* registro){
 	Referencia referencia;
 	if(indice->BuscarReferencia(*clave,&referencia))
 		return false;
-	referencia=estrategiAlmacenamiento->insertar(registro);
+	estrategiAlmacenamiento->insertar(registro);
+
 	while(!estrategiAlmacenamiento->cambiosLog.empty()){
 		Cambio cambio=estrategiAlmacenamiento->cambiosLog.front();
 		actualizarIndice(cambio);
