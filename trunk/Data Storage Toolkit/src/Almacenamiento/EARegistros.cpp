@@ -6,10 +6,11 @@
  */
 #include "EARegistros.h"
 #include <iostream>
-EARegistros::EARegistros(){
+EARegistros::EARegistros(Registro*registro){
 	almacen=NULL;
 	registroSerializado=NULL;
 	tamanioRegistro=0;
+	this->registro=(Registro*)registro->clonar();
 }
 void EARegistros::finalizarAlmacenamiento(){
 	if(almacen!=NULL){
@@ -28,6 +29,7 @@ int EARegistros::comparar(Registro*reg1,Registro*reg2){
 EARegistros::~EARegistros() {
 	finalizarAlmacenamiento();
 	delete[] registroSerializado;
+	delete registro;
 }
 Almacenamiento* EARegistros::abrir(Almacenamiento*almacen){
 	finalizarAlmacenamiento();
@@ -160,6 +162,10 @@ bool EARegistros::posicionarComponente(size_t nroCompuesto){
 bool EARegistros::siguiente(Componente *componente){
 	return leer(componente);
 };
+Componente *EARegistros::getComponente(){
+	return registro;
+};
+
 bool EARegistros::obtener(Componente*componente){
 	return leer(componente);
 };

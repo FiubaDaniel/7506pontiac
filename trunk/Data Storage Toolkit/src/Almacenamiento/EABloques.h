@@ -32,6 +32,7 @@ public:
 	virtual ~EABloques();
 	Almacenamiento* abrir(Almacenamiento*almacen,const char*rutaArchivoEspacios);
 	Almacenamiento* nuevo(Almacenamiento*almacen,const char*rutaArchivoEspacios);
+	Componente* getComponente();
 	bool posicionarComponente(size_t nroCompuesto);
 	bool escribir(Componente*componente);
 	bool leer(Componente*componente);

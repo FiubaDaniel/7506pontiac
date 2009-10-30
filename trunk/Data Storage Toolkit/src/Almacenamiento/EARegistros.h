@@ -14,7 +14,7 @@
 #include "../Compuesto/Registro.h"
 
 class EARegistros: public EstrategiaAlmacenamiento {
-
+	Registro*registro;
 	size_t nroRegistro;
 	size_t siguienteRegLibre;
 	Ttamanio tamanioRegistro;
@@ -27,10 +27,11 @@ class EARegistros: public EstrategiaAlmacenamiento {
 	void escribir(Registro*registro);
 	void leer(Registro*registro);
 public:
-	EARegistros();
+	EARegistros(Registro*registro);
 	virtual ~EARegistros();
 	Almacenamiento* abrir(Almacenamiento*almacen);
 	Almacenamiento* nuevo(Almacenamiento*almacenamiento,Ttamanio tamRegistro);
+	Componente* getComponente();
 	bool posicionarComponente(size_t nroCompuesto);
 	bool escribir(Componente*componente);
 	bool leer(Componente*componente);

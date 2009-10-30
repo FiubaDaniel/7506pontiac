@@ -13,6 +13,7 @@
 #include "EstrategiaAlmacenamiento.h"
 
 class EATexto: public EstrategiaAlmacenamiento {
+	Registro*registro;
 	Almacenamiento* almacen;
 	size_t posComp;
 	std::string ultimoLeido;
@@ -22,10 +23,11 @@ class EATexto: public EstrategiaAlmacenamiento {
 	size_t buscar(Registro*registro,bool&encontrado);
 	int comparar(Registro*reg1,Registro*reg2);
 public:
-	EATexto();
+	EATexto(Registro*registro);
 	virtual ~EATexto();
 	void abrir(Almacenamiento*almacen);
 	void nuevo(Almacenamiento*almacen);
+	Componente* getComponente();
 	bool posicionarComponente(size_t nroCompuesto);
 	bool escribir(Componente*componente);
 	bool leer(Componente*componente);

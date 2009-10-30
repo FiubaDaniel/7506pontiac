@@ -24,7 +24,7 @@ public:
 	size_t posicionEnBuffer(size_t posicionArchivo);
 	void actualizarIndice(Cambio cambio);
 	void actualizarBuffer(Cambio cambio);
-	void insertarEnBuffer(Referencia refArchivo,Registro*registro);
+	void insertarEnBuffer(Referencia refArchivo,Componente*componente);
 public:
 	EREscrituraDirecta(Almacenamiento*buffer);
 	virtual ~EREscrituraDirecta();
