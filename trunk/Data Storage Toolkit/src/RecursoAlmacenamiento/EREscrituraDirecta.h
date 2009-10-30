@@ -1,17 +1,20 @@
 #ifndef ESTRATEGIARECURSOSESCRITURADIRECTA_H
 #define ESTRATEGIARECURSOSESCRITURADIRECTA_H
 #include "EstrategiaRecursos.h"
-
-#include <string>
+#include <list>
 
 /**
  * class EREscrituraDirecta
  *
  */
-
+struct ParDireccionArchivoBuffer{
+	size_t posicionArchivo;
+	size_t posicionBuffer;
+};
 class EREscrituraDirecta : public EstrategiaRecursos{
-	Almacenamiento* buffer;
 public:
+	std::list<ParDireccionArchivoBuffer> tablaArchivoBuffer;
+	Almacenamiento* buffer;
 	EstrategiaAlmacenamiento*estrategiaArchivo;
 	EstrategiaAlmacenamiento*estrategiaBuffer;
 	Almacenamiento* archivo;
@@ -19,8 +22,9 @@ public:
 	Registro*registro;
 	Clave*clave;
 	size_t posicionEnBuffer(size_t posicionArchivo);
-	void actualizarTabla(Cambio cambio);
 	void actualizarIndice(Cambio cambio);
+	void actualizarBuffer(Cambio cambio);
+	void insertarEnBuffer(Referencia refArchivo,Registro*registro);
 public:
 	EREscrituraDirecta(Almacenamiento*buffer);
 	virtual ~EREscrituraDirecta();

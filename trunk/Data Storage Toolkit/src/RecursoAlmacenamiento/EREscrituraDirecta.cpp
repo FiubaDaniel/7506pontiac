@@ -52,6 +52,8 @@ bool EREscrituraDirecta::modificar(Clave* unaClave,Registro* registro){
 	};
 	return true;
 };
+
+
 bool EREscrituraDirecta::obtener(Clave* unaClave,Registro*registro){
 	Referencia referencia;
 	if(!indice->BuscarReferencia(*clave,&referencia))
@@ -69,7 +71,22 @@ bool EREscrituraDirecta::obtener(Clave* unaClave,Registro*registro){
 	};
 	return false;
 };
+void EREscrituraDirecta::insertarEnBuffer(Referencia refArchivo, Registro *registro){
 
+};
+size_t EREscrituraDirecta::posicionEnBuffer(size_t posicionArchivo){
+	std::list<ParDireccionArchivoBuffer>::iterator i;
+	size_t menor, medio,mayor;
+	menor=0;
+	mayor=tablaArchivoBuffer.size();
+	do{
+		medio=(mayor+menor)/2;
+		if((*i).posicionArchivo > posicionArchivo) mayor=medio-1;
+		else if((*i).posicionArchivo< posicionArchivo) menor=medio+1;
+		else return (*i).posicionBuffer+1;
+	}while(menor<mayor);
+	return 0;
+};
 void EREscrituraDirecta::actualizarIndice(Cambio cambio){
 	switch(cambio.operacion){
 		case Cambio::Alta : indice->insertar(cambio.referencia,cambio.clave); break;
@@ -77,7 +94,42 @@ void EREscrituraDirecta::actualizarIndice(Cambio cambio){
 		case Cambio::Reubicacion : indice->modificar(*cambio.clave,cambio.referencia); break;
 	}
 }
-
-
+void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
+	size_t posicionBuffer;
+	switch(cambio.operacion){
+		case Cambio::Alta :
+			registro=NULL;
+			insertarEnBuffer(cambio.referencia,registro);
+			break;
+		case Cambio::Baja :
+			posicionBuffer=posicionEnBuffer(cambio.referencia);
+			if(posicionBuffer!=0){
+				posicionBuffer--;
+				estrategiaBuffer->posicionarComponente(posicionBuffer);
+				Registro* registro=NULL;//TODO inicializar o trabajar con la Clave
+				estrategiaBuffer->eliminar(registro);
+			}
+			break;
+		case Cambio::Reubicacion :
+			Referencia posicionAnterior;
+			indice->BuscarReferencia(*cambio.clave,&posicionAnterior);
+			posicionBuffer=posicionEnBuffer(posicionAnterior);
+			if(posicionBuffer!=0){
+				posicionBuffer--;
+				estrategiaBuffer->posicionarComponente(posicionBuffer);
+				Registro* registro=NULL;//TODO inicializar o trabajar con la Clave
+				estrategiaBuffer->eliminar(registro);
+			}
+			posicionBuffer=posicionEnBuffer(cambio.referencia);
+			if(posicionBuffer!=0){
+				posicionBuffer--;
+				estrategiaArchivo->posicionarComponente(posicionAnterior);
+				//TODO estrategiaArchivo->leer(componente);
+				estrategiaBuffer->posicionarComponente(posicionBuffer);
+				//estrategiaBuffer->escribir(componente);
+			};
+			break;
+	}
+};
 
 
