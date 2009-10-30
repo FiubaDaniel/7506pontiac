@@ -15,6 +15,7 @@ protected:
 public:
 	EstrategiaAlmacenamiento(){};
 	virtual ~EstrategiaAlmacenamiento(){};
+	virtual Componente* getComponente()=0;
 	virtual void setClave(Clave*unaClave){clave=unaClave;};
 	virtual void setComparador(ComparadorClave*unComparador){comparador=unComparador;};
 	virtual bool posicionarComponente(size_t nroComponente)=0;

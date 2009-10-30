@@ -215,6 +215,10 @@ bool EABloques::siguiente(Componente*componente){
 	componente->deserializar(buf);
 	return true;
 };
+Componente *EABloques::getComponente(){
+	return bloque;
+}
+
 bool EABloques::obtener(Componente*componente){
 	leer(bloque);
 	Ttamanio nroComp;

@@ -7,7 +7,9 @@
 
 #include "EATexto.h"
 
-EATexto::EATexto() {};
+EATexto::EATexto(Registro*registro) {
+	this->registro=registro;
+};
 
 EATexto::~EATexto() {};
 
@@ -187,6 +189,14 @@ int EATexto::comparar(Registro*reg1,Registro*reg2){
 	delete clave2;
 	return resultado;
 };
+void EATexto::nuevo(Almacenamiento *almacen)
+{
+}
+
+Componente *EATexto::getComponente(){
+	return registro;
+}
+
 bool EATexto::obtener(Componente*componente){
 	return siguiente(componente);
 };
