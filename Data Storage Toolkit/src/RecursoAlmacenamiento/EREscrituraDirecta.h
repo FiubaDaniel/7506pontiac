@@ -11,9 +11,22 @@ struct ParDireccionArchivoBuffer{
 	size_t posicionArchivo;
 	size_t posicionBuffer;
 };
-class EREscrituraDirecta : public EstrategiaRecursos{
+class AdministradorBuffer{
+private:
+	size_t posicionesTotalesDelBuffer;
+	std::vector<ParDireccionArchivoBuffer> tablaArchivoBuffer;
+	std::vector<size_t> posicionesUsadasDelArchivo;
+	bool buscar(size_t posicionArchivo);
+	size_t posicionEnTabla;
 public:
-	std::list<ParDireccionArchivoBuffer> tablaArchivoBuffer;
+	size_t getPosicionEnBuffer();
+	bool acceder(size_t posicionArchivo);
+	void insertar(size_t posicionArchivo);
+};
+
+class EREscrituraDirecta : public EstrategiaRecursos{
+private:
+	AdministradorBuffer admin;
 	Almacenamiento* buffer;
 	EstrategiaAlmacenamiento*estrategiaArchivo;
 	EstrategiaAlmacenamiento*estrategiaBuffer;
@@ -24,7 +37,7 @@ public:
 	size_t posicionEnBuffer(size_t posicionArchivo);
 	void actualizarIndice(Cambio cambio);
 	void actualizarBuffer(Cambio cambio);
-	void insertarEnBuffer(Referencia refArchivo,Componente*componente);
+	void insertarEnBuffer(Referencia refArchivo);
 public:
 	EREscrituraDirecta(Almacenamiento*buffer);
 	virtual ~EREscrituraDirecta();

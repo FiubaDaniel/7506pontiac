@@ -66,20 +66,40 @@ bool EREscrituraDirecta::obtener(Clave* unaClave,Registro*registro){
 	}
 	estrategiaArchivo->posicionarComponente(referencia);
 	if(estrategiaArchivo->obtener(registro)){
-		insertarEnBuffer(referencia,registro);
+		insertarEnBuffer(referencia);
 		return true;
 	};
 	return false;
 };
-void EREscrituraDirecta::insertarEnBuffer(Referencia refArchivo, Componente *componente){
+void EREscrituraDirecta::insertarEnBuffer(Referencia refArchivo){
+/*	ParDireccionArchivoBuffer par;
+	if(posicionesUsadasPorBuffer.size() < posicionesTotalesDelBuffer){
+		si el buffer tiene espacion, el componente se copia al final
+		par.posicionArchivo=refArchivo;
+		par.posicionBuffer=posicionesUsadasPorBuffer.size();
+		posicionesUsadasPorBuffer.push_back(par.posicionBuffer);
+	}else{
+		si el buffer esta lleno,se toma la ultima posicionUsadasPorBuffer
+		 * la cual corresponde a la menos recientemente usada
 
+		par.posicionBuffer=posicionesUsadasPorBuffer.back();
+	}
+	como la ultima posicion esta siendo usada , se promueve
+	(*posicionesUsadasPorBuffer.end())=*(posicionesUsadasPorBuffer.end()-1);
+	*posicionesUsadasPorBuffer.end()=par.posicionBuffer;
+	escribo en el buffer
+	estrategiaArchivo->posicionarComponente(par.posicionBuffer);
+	Componente *componente=estrategiaArchivo->getComponente();
+	estrategiaArchivo->leer(componente);
+	estrategiaBuffer->posicionarComponente(par.posicionBuffer);
+	estrategiaBuffer->escribir(componente);*/
 };
 
 size_t EREscrituraDirecta::posicionEnBuffer(size_t posicionArchivo){
 	std::list<ParDireccionArchivoBuffer>::iterator i;
 	size_t menor, medio,mayor;
 	menor=0;
-	mayor=tablaArchivoBuffer.size();
+	//TODO mayor=tablaArchivoBuffer.size();
 	do{
 		medio=(mayor+menor)/2;
 		if((*i).posicionArchivo > posicionArchivo) mayor=medio-1;
@@ -88,21 +108,20 @@ size_t EREscrituraDirecta::posicionEnBuffer(size_t posicionArchivo){
 	}while(menor<mayor);
 	return 0;
 };
-
 void EREscrituraDirecta::actualizarIndice(Cambio cambio){
 	switch(cambio.operacion){
 		case Cambio::Alta : indice->insertar(cambio.referencia,cambio.clave); break;
 		case Cambio::Baja : indice->eliminar(cambio.clave); break;
 		case Cambio::Reubicacion : indice->modificar(*cambio.clave,cambio.referencia); break;
 	}
-}
+};
 void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 	size_t posicionBuffer;
 	Componente* componente;
 	switch(cambio.operacion){
 		case Cambio::Alta :
 			registro=NULL;
-			insertarEnBuffer(cambio.referencia,registro);
+			insertarEnBuffer(cambio.referencia);
 			break;
 		case Cambio::Baja :
 			posicionBuffer=posicionEnBuffer(cambio.referencia);
@@ -139,5 +158,35 @@ void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 			break;
 	}
 };
+
+size_t AdministradorBuffer::getPosicionEnBuffer(){
+	return tablaArchivoBuffer.at(posicionEnTabla).posicionBuffer;
+};
+
+bool AdministradorBuffer::buscar(size_t posicionArchivo){
+	size_t menor,mayor;
+	menor=0;
+	mayor=tablaArchivoBuffer.size();
+	do{
+		posicionEnTabla=(mayor+menor)/2;
+		if(tablaArchivoBuffer.at(posicionEnTabla).posicionArchivo > posicionArchivo) mayor=posicionEnTabla-1;
+		else if(tablaArchivoBuffer.at(posicionEnTabla).posicionArchivo < posicionArchivo) menor=posicionEnTabla+1;
+		else return true;
+	}while(menor<mayor);
+	return false;
+}
+
+void AdministradorBuffer::insertar(size_t posicionArchivo){
+
+}
+bool AdministradorBuffer::acceder(size_t posicionArchivo){
+	if(buscar(posicionArchivo)){
+
+		return true;
+	}
+	return false;
+}
+
+
 
 
