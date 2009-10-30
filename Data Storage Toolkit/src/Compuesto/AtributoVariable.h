@@ -26,7 +26,7 @@ public:
 	Ttamanio deserializar(std::streambuf &entrada);
 	Ttamanio tamanioSerializado();
 	bool esfijo();
-	int comparar(Atributo*otroAtributo);
+	int comparar(const Atributo*otroAtributo);
 	void imprimir(std::ostream&salida);
 	void leer(std::istream&entrada);
 public:
@@ -121,8 +121,8 @@ void AtributoVariable<T_tipo>::eliminarApuntado(){valores.erase(valores.begin()+
 template<typename T_tipo>
 void AtributoVariable<T_tipo>::cantidadValores(){return valores.size();};
 template<typename T_tipo>
-int AtributoVariable<T_tipo>::comparar(Atributo*otroAtributo){
-	AtributoVariable<T_tipo>* otro=dynamic_cast<AtributoVariable<T_tipo>*>(otroAtributo);
+int AtributoVariable<T_tipo>::comparar(const Atributo*otroAtributo){
+	AtributoVariable<T_tipo>* otro=dynamic_cast<AtributoVariable<T_tipo>*>(const_cast<Atributo*>(otroAtributo));
 	if(otro!=NULL){
 		return this->valores.at(valorActual)-otro->valores.at(otro->valorActual);
 	}//TODO exception
@@ -164,8 +164,8 @@ public:
 	bool esfijo(){
 		return false;
 	};
-	int comparar(Atributo*otroAtributo){
-		AtributoVariable<char*>* otro=dynamic_cast<AtributoVariable<char*>*>(otroAtributo);
+	int comparar(const Atributo*otroAtributo){
+		AtributoVariable<char*>* otro=dynamic_cast<AtributoVariable<char*>*>(const_cast<Atributo*>(otroAtributo));
 		if(otro!=NULL){
 			return str.compare(otro->str);
 		}//TODO exception
