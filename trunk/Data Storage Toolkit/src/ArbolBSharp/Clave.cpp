@@ -41,7 +41,8 @@ Atributo* Clave::getAtributo(Ttamanio posicion){
 };
 Atributo* Clave::getAtributo(std::string nombre){
 	for(Ttamanio i=0;i<atributosDeClave.size();i++)
-	    if(atributosDeClave.at(i)->getNombre()==nombre) return atributosDeClave.at(i);
+	    if(atributosDeClave.at(i)->getNombre()==nombre)
+	    	return atributosDeClave.at(i);
 	return NULL;
 };
 void Clave::deserializar(std::streambuf&buf){

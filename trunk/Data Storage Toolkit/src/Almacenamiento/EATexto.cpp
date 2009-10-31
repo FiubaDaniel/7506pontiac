@@ -178,7 +178,7 @@ std::string EATexto::registroAstring(Registro*registro){
 	std::stringstream strs;
 	for(Ttamanio i=0;i<registro->cantidadAtributos();i++){
 		//TODO
-		registro->get(i)->imprimir();
+		registro->get(i)->imprimir(strs);
 		strs<<" ";
 	}
 	return strs.str();

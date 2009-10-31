@@ -208,8 +208,9 @@ int main() {
     std::list<ElementoNodo*>::iterator it = nodoIntermedio1->getListaElementos()->begin();
     while(it!=nodoIntermedio1->getListaElementos()->end()){
     ElementoNodo* elem = *it;
-    elem->getClave()->getAtributo("dni") ->imprimir();
-    elem->getClave()->getAtributo("nombre") ->imprimir();
+			elem->getClave()->getAtributo("dni")->imprimir(cout);
+			elem->getClave()->getAtributo("nombre") ->imprimir(cout);
+
     ++it;
     }
     int retorno = nodoIntermedio1->agregarElemento(elementoNodoInteremdio5);
