@@ -40,7 +40,7 @@ int Nodo::Eliminar(const Clave* clave){
 	while(!encontrado && it!=listaElementos.end()){
 	    	ElementoNodo* elemento = *it;
 	    	if(comparador->Comparar(elemento->getClave(),clave)==0){
-	    		//listaElementos.erase(it);
+	    		listaElementos.erase(it);
 	    		delete elemento;
 	    		cantidadDeElementosLibre = cantidadDeElementosLibre+1;
 	    		if(listaElementos.size()<(((cantidadMaximaDeElementos)*2)/3)){
