@@ -71,12 +71,8 @@ template<typename T_tipo>
 bool AtributoFijo<T_tipo>::esfijo(){ return true;};
 template<typename T_tipo>
 int AtributoFijo<T_tipo>::comparar(const Atributo*otroAtributo){
-
 	AtributoFijo<T_tipo>* otro=dynamic_cast<AtributoFijo<T_tipo>*>(const_cast<Atributo*>(otroAtributo));
-	if(otro!=NULL){
-		return (this->dato)-(otro->dato);
-	}//TODO exception
-	return 0;
+	return (this->dato)-(otro->dato);
 };
 template<typename T_tipo>
 void AtributoFijo<T_tipo>::imprimir(std::ostream&salida){
@@ -128,10 +124,7 @@ public:
 	};
 	int comparar(const Atributo*otroAtributo){
 		const AtributoFijo<char*>* otro=dynamic_cast<AtributoFijo<char*>*>(const_cast<Atributo*>(otroAtributo));
-		if(otro!=NULL){
-			return strncmp(this->datos,otro->datos,longitud);
-		}//TODO exception
-		return 0;
+		return strncmp(this->datos,otro->datos,longitud);
 	}
 	void imprimir(std::ostream&salida){
 		salida<<datos;
