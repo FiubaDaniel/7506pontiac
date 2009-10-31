@@ -25,7 +25,7 @@ public:
 	Ttamanio tamanioSerializado();
 	bool esfijo();
 	int comparar(const Atributo*otroAtributo);
-	void imprimir(std::ostream&salida);
+	void imprimir();
 	void leer(std::istream&entrada);
 };
 /*----------------------------------------------------------------------------*/
@@ -79,8 +79,8 @@ int AtributoFijo<T_tipo>::comparar(const Atributo*otroAtributo){
 	return 0;
 };
 template<typename T_tipo>
-void AtributoFijo<T_tipo>::imprimir(std::ostream&salida){
-	salida<<dato;
+void AtributoFijo<T_tipo>::imprimir(){
+	std::cout<<dato;
 };
 template<typename T_tipo>
 void AtributoFijo<T_tipo>::leer(std::istream&entrada){
@@ -132,8 +132,8 @@ public:
 		}//TODO exception
 		return 0;
 	}
-	void imprimir(std::ostream&salida){
-		salida.write(datos,longitud);
+	void imprimir(){
+		std::cout.write(datos,longitud);
 	};
 
 	void leer(std::istream&entrada){

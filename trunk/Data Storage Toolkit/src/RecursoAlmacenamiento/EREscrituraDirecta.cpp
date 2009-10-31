@@ -198,8 +198,12 @@ AdministradorDeBuffer::AdministradorDeBuffer(size_t maximo){
 }
 
 void AdministradorDeBuffer::insertar(size_t posicionArchivo){
-	if(tablaArchivoBuffer.size()>= posicionesTotalesDelBuffer){
-		if(buscar(tope->posicionArchivo)){
+	if(tablaArchivoBuffer.size()<= posicionesTotalesDelBuffer){
+		if(tope==NULL){
+			NodoArchivoBuffer nodo;
+			nodo.posicionArchivo=posicionArchivo;
+			nodo.siguiente=tope;
+		}else if(buscar(tope->posicionArchivo)){
 			tope->posicionArchivo=posicionArchivo;
 			promover(tope);
 		}
