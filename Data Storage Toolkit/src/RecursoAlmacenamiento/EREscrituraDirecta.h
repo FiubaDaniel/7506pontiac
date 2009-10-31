@@ -17,14 +17,18 @@ struct NodoArchivoBuffer{
 class AdministradorDeBuffer{
 private:
 	size_t posicionEnTabla;
-	size_t posicionesTotalesDelBuffer;
-	NodoArchivoBuffer* tope;
+	size_t ultimo;
+	size_t capacidad;
 	void promover(NodoArchivoBuffer*promovido);
+	NodoArchivoBuffer* tablaArchivoBuffer;
 public:
-	AdministradorDeBuffer(size_t maximo);
+	NodoArchivoBuffer* tope;
+	AdministradorDeBuffer(size_t capacidad);
+	virtual ~AdministradorDeBuffer();
 	bool buscar(size_t posicionArchivo);
-	std::vector<NodoArchivoBuffer> tablaArchivoBuffer;
 	size_t getPosicionEnBuffer();
+	size_t size();
+	NodoArchivoBuffer* at(size_t pos);
 	bool acceder(size_t posicionArchivo);
 	void insertar(size_t posicionArchivo);
 };
