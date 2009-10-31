@@ -12,7 +12,8 @@ void imprimir(const AdministradorDeBuffer &admin){
 	for(unsigned int i=0;i<admin.tablaArchivoBuffer.size();i++){
 		cout<<admin.tablaArchivoBuffer.at(i).posicionArchivo<<" : ";
 		cout<<admin.tablaArchivoBuffer.at(i).posicionBuffer<<" : ";
-		cout<<admin.tablaArchivoBuffer.at(i).siguiente->posicionArchivo<<endl;
+		if(admin.tablaArchivoBuffer.at(i).siguiente!=NULL)
+			cout<<admin.tablaArchivoBuffer.at(i).siguiente->posicionArchivo<<endl;
 	};
 };
 int main(int argc,char* argv[]){

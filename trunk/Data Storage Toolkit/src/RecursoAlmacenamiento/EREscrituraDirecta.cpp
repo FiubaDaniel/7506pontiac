@@ -199,21 +199,23 @@ AdministradorDeBuffer::AdministradorDeBuffer(size_t maximo){
 
 void AdministradorDeBuffer::insertar(size_t posicionArchivo){
 	if(tablaArchivoBuffer.size()<= posicionesTotalesDelBuffer){
-		if(tope==NULL){
-			NodoArchivoBuffer nodo;
-			nodo.posicionArchivo=posicionArchivo;
-			nodo.siguiente=tope;
-		}else if(buscar(tope->posicionArchivo)){
-			tope->posicionArchivo=posicionArchivo;
-			promover(tope);
-		}
-	}else {
 		NodoArchivoBuffer nuevo;
+		if(tope!=NULL)
+			nuevo.siguiente=tope;
+		else
+			nuevo.siguiente=NULL;
 		nuevo.posicionArchivo=posicionArchivo;
 		nuevo.posicionBuffer=tablaArchivoBuffer.size();
 		tablaArchivoBuffer.push_back(nuevo);
 		tope=&tablaArchivoBuffer.back();
+	}else {
+		if(buscar(tope->posicionArchivo)){
+			tope->posicionArchivo=posicionArchivo;
+			promover(tope);
+		}
+
 	}
+
 }
 bool AdministradorDeBuffer::acceder(size_t posicionArchivo){
 	if(buscar(posicionArchivo)){

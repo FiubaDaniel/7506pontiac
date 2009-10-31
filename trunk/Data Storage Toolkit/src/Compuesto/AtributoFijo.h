@@ -81,6 +81,7 @@ int AtributoFijo<T_tipo>::comparar(const Atributo*otroAtributo){
 template<typename T_tipo>
 void AtributoFijo<T_tipo>::imprimir(){
 	std::cout<<dato;
+	std::cout.flush();
 };
 template<typename T_tipo>
 void AtributoFijo<T_tipo>::leer(std::istream&entrada){
@@ -134,6 +135,7 @@ public:
 	}
 	void imprimir(){
 		std::cout.write(datos,longitud);
+		std::cout.flush();
 	};
 
 	void leer(std::istream&entrada){
