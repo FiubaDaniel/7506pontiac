@@ -15,14 +15,13 @@
 
 class ComparadorClave {
 public:
-	ComparadorClave();
+	ComparadorClave(){};
 	/*
 	 * La funcion mostrar devuelve mayor, igual o menos a 0 si la clave pasada
 	 * como primer parametro es mayor, igual o menor a la clave pasada como segundo
 	 * parametro.
-	 *
 	 */
-	virtual int Comparar(Clave* clave1,Clave* clave2) const = 0;
-	virtual ~ComparadorClave();
+	virtual int Comparar(const Clave* clave1,const Clave* clave2)=0;
+	virtual ~ComparadorClave(){};
 };
 #endif /* COMPARADORCLAVE_H_ */

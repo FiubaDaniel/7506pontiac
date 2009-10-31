@@ -32,21 +32,21 @@ unsigned int Nodo::getNumeroNivel(){
 void Nodo::setNumeroNivel(unsigned int num){
 	numeroNivel = num;
 };
-int Nodo::Eliminar(Clave clave){
+int Nodo::Eliminar(const Clave* clave){
 	std::list<ElementoNodo*>::iterator it = listaElementos.begin();
     bool encontrado = false;
     int retorno = 1;
     bool noExiste = false;
 	while(!encontrado || it!=listaElementos.end()){
 	    	ElementoNodo* elemento = *it;
-	    	if(comparador->Comparar(elemento->getClave(),&clave)==0){
+	    	if(comparador->Comparar(elemento->getClave(),clave)==0){
 	    		listaElementos.erase(it);
 	    		cantidadDeElementosLibre = cantidadDeElementosLibre+1;
 	    		if(listaElementos.size()<(((cantidadMaximaDeElementos)*2)/3)){
 	    		    retorno = 2;
 	    		}
 	    		encontrado = true;
-	    	  }else if(comparador->Comparar(elemento->getClave(),&clave)>0){
+	    	  }else if(comparador->Comparar(elemento->getClave(),clave)>0){
 	    		retorno = 0;
 	    		encontrado = true;
 	    		noExiste = true;

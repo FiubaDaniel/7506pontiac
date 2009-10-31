@@ -287,14 +287,14 @@ ElementoNodo* NodoHoja::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMe
 /*
  * Retorna un elemento buscado.
  */
-bool NodoHoja::buscar(Clave clave,ElementoNodo*elemento){
+bool NodoHoja::buscar(const Clave* clave,ElementoNodo*elemento){
 	std::list<ElementoNodo*>::iterator it = listaElementos.begin();
 	bool encontrado = false;
 	bool existe = true;
 	pos = 0;
 	while(!encontrado && it!=listaElementos.end() && existe){
 		elemento = *it;
-	    int comparacion = comparador->Comparar(elemento->getClave(),&clave);
+	    int comparacion = comparador->Comparar(elemento->getClave(),clave);
 	    if(comparacion>0){
 	    	existe=false;
 	 	   }else if(comparacion==0){
@@ -311,7 +311,7 @@ bool NodoHoja::buscar(Clave clave,ElementoNodo*elemento){
  * Bucas la clave dentro del nodo Hoja, y si la encuentra la retorna la referencia
  * al archivo de esa clave.En caso de no existir retorna el valor -1.
  */
-bool NodoHoja::buscarReferenciaDeClaveX(Clave clave,Referencia* ref){
+bool NodoHoja::buscarReferenciaDeClaveX(const Clave* clave,Referencia* ref){
    ElementoNodo * elemento;
    bool encontro= NodoHoja::buscar(clave,elemento);
    *ref = elemento->getReferencia();
@@ -321,7 +321,7 @@ bool NodoHoja::buscarReferenciaDeClaveX(Clave clave,Referencia* ref){
  * Busca una clave determinada y modifica la referencia al archivo que le corresponde
  * devuelve false si no encontro la clave o true si la encontro y modifico.
  */
-bool NodoHoja::setReferenciaDeClaveX(Clave clave,Referencia refNueva){
+bool NodoHoja::setReferenciaDeClaveX(const Clave* clave,Referencia refNueva){
 	ElementoNodo* elemento;
 	bool encontro = NodoHoja::buscar(clave,elemento);
 	elemento->setReferencia(refNueva);
@@ -355,14 +355,14 @@ int NodoHoja::busquedaSecuencial(Clave clave,ElementoNodo* elemento){
 int NodoHoja::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre){
 	std::list<ElementoNodo*>::reverse_iterator it = Padre->getListaElementos()->rbegin();
 	ElementoNodo* elementoPadre;
-	Clave clave;
+	Clave* clave;
 	bool encontrado = false;
 	while(!encontrado && it!=Padre->getListaElementos()->rend()){
 		elementoPadre = *it;
 		if(comparador->Comparar(elementoPadre->getClave(),nodoHermanoDer->getListaElementos()->front()->getClave())==0||comparador->Comparar(elementoPadre->getClave(),nodoHermanoDer->getListaElementos()->front()->getClave())<0){
 			encontrado = true;
 			/*elemento del padre q tengo q eliminar*/
-			clave = *(elementoPadre->getClave());
+			clave = elementoPadre->getClave();
 		}
 		if(encontrado){
 			--it;

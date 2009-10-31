@@ -8,7 +8,7 @@
 #include "ElementoNodo.h"
 
 ElementoNodo::ElementoNodo(Referencia ref,Clave* cla) {
-	referencia= referencia;
+	referencia= ref;
     clave = cla->clonarce();
 };
 ElementoNodo::ElementoNodo(){};
