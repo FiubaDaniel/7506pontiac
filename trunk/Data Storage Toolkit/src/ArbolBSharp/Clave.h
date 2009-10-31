@@ -8,8 +8,9 @@
 #ifndef CLAVE_H_
 #define CLAVE_H_
 
-#include "Registro.h"
-#include "Atributo.h"
+#include "../Compuesto/Registro.h"
+#include "../Compuesto/AtributoFijo.h"
+#include "../Compuesto/Atributo.h"
 typedef unsigned int Referencia;
 class Clave {
 
