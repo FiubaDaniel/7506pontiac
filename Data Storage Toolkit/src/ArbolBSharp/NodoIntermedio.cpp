@@ -58,11 +58,11 @@ void NodoIntermedio::serializate(std::stringbuf* buffer){
  */
 int NodoIntermedio::agregarElemento(ElementoNodo* elemento){
 	int retorno = 1;
-	if(listaElementos.size() == Nodo::getCatidadMaximaDeElementos()){
+	if(listaElementos.size() == cantidadMaximaDeElementos){
 		retorno = 2;
 	}
 	if(listaElementos.empty()){
-			listaElementos.push_back(elemento);
+			listaElementos.push_back(elemento->clonarce());
 			cantidadDeElementosLibre = cantidadDeElementosLibre - 1;
 			return 1;
 		}
@@ -74,7 +74,7 @@ int NodoIntermedio::agregarElemento(ElementoNodo* elemento){
 			retorno = 0,
 			ubicado=true;
 		}else if(comparador->Comparar(elemento->getClave(),elementoAux->getClave())<0){
-			listaElementos.insert(it,elemento);
+			listaElementos.insert(it,elemento->clonarce());
 			if(retorno==1){
 				cantidadDeElementosLibre = cantidadDeElementosLibre - 1;
 			}
@@ -84,7 +84,7 @@ int NodoIntermedio::agregarElemento(ElementoNodo* elemento){
 			}
 		}
 	if(!ubicado){
-		listaElementos.push_back(elemento);
+		listaElementos.push_back(elemento->clonarce());
 		if(retorno==1){
 			cantidadDeElementosLibre = cantidadDeElementosLibre - 1;
 		}
