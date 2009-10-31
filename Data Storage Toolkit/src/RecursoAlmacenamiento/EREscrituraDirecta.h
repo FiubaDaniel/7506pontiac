@@ -7,18 +7,23 @@
  * class EREscrituraDirecta
  *
  */
-struct ParDireccionArchivoBuffer{
+
+
+struct NodoArchivoBuffer{
 	size_t posicionArchivo;
 	size_t posicionBuffer;
+	NodoArchivoBuffer* siguiente;
 };
-class AdministradorBuffer{
+class AdministradorDeBuffer{
 private:
-	size_t posicionesTotalesDelBuffer;
-	std::vector<ParDireccionArchivoBuffer> tablaArchivoBuffer;
-	std::vector<size_t> posicionesUsadasDelArchivo;
-	bool buscar(size_t posicionArchivo);
 	size_t posicionEnTabla;
+	size_t posicionesTotalesDelBuffer;
+	NodoArchivoBuffer* tope;
+	void promover(NodoArchivoBuffer*promovido);
 public:
+	AdministradorDeBuffer(size_t maximo);
+	bool buscar(size_t posicionArchivo);
+	std::vector<NodoArchivoBuffer> tablaArchivoBuffer;
 	size_t getPosicionEnBuffer();
 	bool acceder(size_t posicionArchivo);
 	void insertar(size_t posicionArchivo);
@@ -26,7 +31,7 @@ public:
 
 class EREscrituraDirecta : public EstrategiaRecursos{
 private:
-	AdministradorBuffer admin;
+	AdministradorDeBuffer admin;
 	Almacenamiento* buffer;
 	EstrategiaAlmacenamiento*estrategiaArchivo;
 	EstrategiaAlmacenamiento*estrategiaBuffer;
