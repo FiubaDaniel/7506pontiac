@@ -10,9 +10,10 @@
 #include <cstring>
 #include "Clave.h"
 #include "ElementoNodo.h"
-#include "Atributo.h"
-#include "AtributoFijo.h"
-#include "AtributoVariable.h"
+#include "../Compuesto/Registro.h"
+#include "../Compuesto/AtributoFijo.h"
+#include "../Compuesto/AtributoVariable.h"
+#include "../Componente.h"
 #include "Registro.h"
 #include "Componente.h"
 #include "Nodo.h"
