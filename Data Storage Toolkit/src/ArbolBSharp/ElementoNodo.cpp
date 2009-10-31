@@ -13,7 +13,6 @@ ElementoNodo::ElementoNodo(Referencia ref,Clave* cla) {
 };
 ElementoNodo::ElementoNodo(){};
 ElementoNodo::~ElementoNodo() {
-       clave->~Clave();
        delete clave;
 };
 Referencia ElementoNodo::getReferencia(){
