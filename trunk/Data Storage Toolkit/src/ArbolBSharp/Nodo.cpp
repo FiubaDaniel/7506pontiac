@@ -37,10 +37,11 @@ int Nodo::Eliminar(const Clave* clave){
     bool encontrado = false;
     int retorno = 1;
     bool noExiste = false;
-	while(!encontrado || it!=listaElementos.end()){
+	while(!encontrado && it!=listaElementos.end()){
 	    	ElementoNodo* elemento = *it;
 	    	if(comparador->Comparar(elemento->getClave(),clave)==0){
-	    		listaElementos.erase(it);
+	    		//listaElementos.erase(it);
+	    		delete elemento;
 	    		cantidadDeElementosLibre = cantidadDeElementosLibre+1;
 	    		if(listaElementos.size()<(((cantidadMaximaDeElementos)*2)/3)){
 	    		    retorno = 2;
@@ -56,4 +57,10 @@ int Nodo::Eliminar(const Clave* clave){
 	if(noExiste || !encontrado){retorno = 0;}
 	return retorno;
 };
-Nodo::~Nodo() {	};
+Nodo::~Nodo() {	 std::list<ElementoNodo*>::iterator it = listaElementos.begin();
+while(it!=listaElementos.end()){
+	ElementoNodo* elemento = *it;
+	delete elemento;
+	++it;
+}
+listaElementos.clear();};

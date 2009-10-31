@@ -19,11 +19,10 @@
 
 class BSharpTree {
 public:
-	//ver los dos primeros q tengo q meter el constructor adentro
+	BSharpTree(Clave* clave);
+
 	void crear(string nombreArch,unsigned int tamanioBloque,int tamanioSerializadoClave,ComparadorClave* comp);
 	void abrir(string nombreArch,ComparadorClave* comp);
-	BSharpTree(string nombreArch,unsigned int tamanioBloque,int tamanioSerializadoClave,ComparadorClave* comp);
-	BSharpTree(string nombreArch,ComparadorClave* comp);
 	bool Buscar(const Clave* clave,Referencia* referencia);
 	Referencia Siguiente(bool ultimo);
 	bool insertar(Referencia ref,Clave* clave);
@@ -67,6 +66,7 @@ private:
 	ComparadorClave* comparador;
 	NodoIntermedio* Raiz;
 	NodoHoja* ultimoNodo;
+	Clave * claveEstructural;
 };
 
 #endif /* BSHARPTREE_H_ */

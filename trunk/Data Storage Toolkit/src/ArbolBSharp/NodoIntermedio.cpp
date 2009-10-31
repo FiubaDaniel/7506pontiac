@@ -10,21 +10,17 @@
 NodoIntermedio::NodoIntermedio(unsigned int nivelNodo,unsigned int cantElem,ComparadorClave* comp): NodoIntermedio ::Nodo(cantElem,nivelNodo,comp){
 	referenciaIzq = 0;
 };
-NodoIntermedio::NodoIntermedio(std::stringbuf* buf,unsigned int cantElem,ComparadorClave* comp): NodoIntermedio ::Nodo(cantElem,0,comp){
+NodoIntermedio::NodoIntermedio(std::stringbuf* buf,unsigned int cantElem,ComparadorClave* comp,Clave* claveEstructural): NodoIntermedio ::Nodo(cantElem,0,comp){
 	buf->pubseekpos(0);
-	unsigned int cantElemLibres,Nnivel;
-	buf->sgetn((char*)&Nnivel,sizeof(Nnivel));
-	Nodo::setNumeroNivel(Nnivel);
-	buf->sgetn((char*)&cantElemLibres,sizeof(cantElemLibres));
-	Nodo::setEspacioLibre(cantElemLibres);
-	int Aux = cantElem - cantElemLibres;
+	buf->sgetn((char*)&numeroNivel,sizeof(numeroNivel));
+	buf->sgetn((char*)&cantidadDeElementosLibre,sizeof(cantidadDeElementosLibre));
+	int Aux = cantElem - cantidadDeElementosLibre;
 	buf->sgetn((char*)&referenciaIzq,sizeof(Referencia));
 	Referencia refD;
 	while(Aux>0){
-		Clave* clave = new Clave();
-		clave->deserializar(*buf);
+		claveEstructural->deserializar(*buf);
 		buf->sgetn((char*)&refD,sizeof(Referencia));
-		ElementoNodo* elemento = new ElementoNodo(refD,clave);
+		ElementoNodo* elemento = new ElementoNodo(refD,claveEstructural->clonarce());
 		listaElementos.push_back(elemento);
 		Aux--;
 	}
@@ -37,11 +33,8 @@ void NodoIntermedio::setRefereciaIzq(Referencia ref){
 };
 void NodoIntermedio::serializate(std::stringbuf* buffer){
 	    buffer->pubseekpos(0);
-		unsigned int cantElemLibres,nivel;
-		nivel = Nodo::getNumeroNivel();
-		cantElemLibres = Nodo::getEspacioLibre();
-		buffer->sputn ((char*)&nivel,sizeof(nivel));
-		buffer->sputn ((char*)&cantElemLibres,sizeof(cantElemLibres));
+		buffer->sputn ((char*)&numeroNivel,sizeof(numeroNivel));
+		buffer->sputn ((char*)&cantidadDeElementosLibre,sizeof(cantidadDeElementosLibre));
 		buffer->sputn ((char*)&referenciaIzq,sizeof(referenciaIzq));
 		std::list<ElementoNodo*>::iterator it = listaElementos.begin();
 		if(!listaElementos.empty()){
@@ -50,7 +43,7 @@ void NodoIntermedio::serializate(std::stringbuf* buffer){
 			    Clave * clave = elemento->getClave();
 			    clave->serializar(*buffer);
 			    Referencia refD = elemento->getReferencia();
-			    buffer->sputn ((char*)refD,sizeof(Referencia));
+			    buffer->sputn ((char*)&refD,sizeof(Referencia));
 			    ++it;
 			}
 		}
@@ -391,9 +384,10 @@ bool NodoIntermedio::estaClave(const Clave* clave){
 	std::list<ElementoNodo*>::iterator it = listaElementos.begin();
 	while(it != listaElementos.end()){
 			ElementoNodo* elemento = *it;
-			if(comparador->Comparar(clave,elemento->getClave())){
+			if(comparador->Comparar(clave,elemento->getClave())==0){
 				return true;
 			}
+			++it;
 		}
     return false;
 };
@@ -405,7 +399,6 @@ void NodoIntermedio::limpiar(){
 		}
 };
 NodoIntermedio::~NodoIntermedio() {
-	NodoIntermedio::limpiar();
-	listaElementos.clear();
+
 };
 
