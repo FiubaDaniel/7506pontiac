@@ -6,7 +6,7 @@ ERUnAlmacenamiento::ERUnAlmacenamiento(){
 ERUnAlmacenamiento::~ERUnAlmacenamiento(){}
 
 bool ERUnAlmacenamiento::insertar(Registro* registro){
-	clave->set(registro);
+	//TODO clave->set(registro);
 	Referencia referencia;
 	if(indice->BuscarReferencia(*clave,&referencia))
 		return false;
@@ -34,9 +34,9 @@ bool ERUnAlmacenamiento::eliminar(Clave* unaClave){
 	return true;
 };
 bool ERUnAlmacenamiento::modificar(Clave* unaClave,Registro* registro){
-	clave->set(registro);
+	//TODO clave->set(registro);
 	Referencia referencia;
-	if(!indice->BuscarReferencia(*clave,&referencia))
+	if(!indice->BuscarReferencia(*unaClave,&referencia))
 		return false;
 	estrategiAlmacenamiento->posicionarComponente(referencia);
 	if(!estrategiAlmacenamiento->modificar(registro))

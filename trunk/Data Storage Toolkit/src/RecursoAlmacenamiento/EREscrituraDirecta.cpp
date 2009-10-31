@@ -1,13 +1,13 @@
 #include "EREscrituraDirecta.h"
 
-EREscrituraDirecta::EREscrituraDirecta(Almacenamiento *buffer){
+EREscrituraDirecta::EREscrituraDirecta(Almacenamiento *buffer): admin(10){
 	this->buffer=buffer;
 }
 
 EREscrituraDirecta::~EREscrituraDirecta(){}
 
 bool EREscrituraDirecta::insertar(Registro* registro){
-	clave->set(registro);
+	//TODO clave->set(registro);
 	Referencia referencia;
 	if(indice->BuscarReferencia(*clave,&referencia))
 		return false;
@@ -37,7 +37,7 @@ bool EREscrituraDirecta::eliminar(Clave* unaClave){
 	return true;
 };
 bool EREscrituraDirecta::modificar(Clave* unaClave,Registro* registro){
-	clave->set(registro);
+	//TODO clave->set(registro);
 	Referencia referencia;
 	if(!indice->BuscarReferencia(*clave,&referencia))
 		return false;
@@ -96,7 +96,7 @@ void EREscrituraDirecta::insertarEnBuffer(Referencia refArchivo){
 };
 
 size_t EREscrituraDirecta::posicionEnBuffer(size_t posicionArchivo){
-	std::list<ParDireccionArchivoBuffer>::iterator i;
+/*	std::list<ParDireccionArchivoBuffer>::iterator i;
 	size_t menor, medio,mayor;
 	menor=0;
 	//TODO mayor=tablaArchivoBuffer.size();
@@ -106,6 +106,7 @@ size_t EREscrituraDirecta::posicionEnBuffer(size_t posicionArchivo){
 		else if((*i).posicionArchivo< posicionArchivo) menor=medio+1;
 		else return (*i).posicionBuffer+1;
 	}while(menor<mayor);
+	return 0;*/
 	return 0;
 };
 void EREscrituraDirecta::actualizarIndice(Cambio cambio){
@@ -158,12 +159,12 @@ void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 			break;
 	}
 };
-
-size_t AdministradorBuffer::getPosicionEnBuffer(){
+/*---------------------------------------------------------------------------------------------------------------*/
+size_t AdministradorDeBuffer::getPosicionEnBuffer(){
 	return tablaArchivoBuffer.at(posicionEnTabla).posicionBuffer;
 };
 
-bool AdministradorBuffer::buscar(size_t posicionArchivo){
+bool AdministradorDeBuffer::buscar(size_t posicionArchivo){
 	size_t menor,mayor;
 	menor=0;
 	mayor=tablaArchivoBuffer.size();
@@ -176,12 +177,43 @@ bool AdministradorBuffer::buscar(size_t posicionArchivo){
 	return false;
 }
 
-void AdministradorBuffer::insertar(size_t posicionArchivo){
+void AdministradorDeBuffer::promover(NodoArchivoBuffer*promovido){
+	NodoArchivoBuffer*mayor=tope;
+	NodoArchivoBuffer*menor=promovido->siguiente;;
+	promovido->siguiente=menor->siguiente;
+	menor->siguiente=promovido;
+	if(promovido==tope){
+		tope=menor;
+	}else{
+		while(mayor->siguiente!=promovido){
+			mayor=mayor->siguiente;
+		};
+		mayor->siguiente=menor;
+	};
+};
 
+AdministradorDeBuffer::AdministradorDeBuffer(size_t maximo){
+	tope=NULL;
+	posicionesTotalesDelBuffer=maximo;
 }
-bool AdministradorBuffer::acceder(size_t posicionArchivo){
-	if(buscar(posicionArchivo)){
 
+void AdministradorDeBuffer::insertar(size_t posicionArchivo){
+	if(tablaArchivoBuffer.size()>= posicionesTotalesDelBuffer){
+		if(buscar(tope->posicionArchivo)){
+			tope->posicionArchivo=posicionArchivo;
+			promover(tope);
+		}
+	}else {
+		NodoArchivoBuffer nuevo;
+		nuevo.posicionArchivo=posicionArchivo;
+		nuevo.posicionBuffer=tablaArchivoBuffer.size();
+		tablaArchivoBuffer.push_back(nuevo);
+		tope=&tablaArchivoBuffer.back();
+	}
+}
+bool AdministradorDeBuffer::acceder(size_t posicionArchivo){
+	if(buscar(posicionArchivo)){
+		promover(& tablaArchivoBuffer.at(posicionEnTabla));
 		return true;
 	}
 	return false;
