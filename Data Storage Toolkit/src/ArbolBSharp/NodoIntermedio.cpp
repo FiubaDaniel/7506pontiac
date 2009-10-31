@@ -111,7 +111,7 @@ void NodoIntermedio::balanceo(Nodo* nodoHermanoE,Nodo* nodoPadreE, bool izq){
 		    referenciaDeBusqueda = listaElementos.front();
 		    std::list<ElementoNodo*>::reverse_iterator itReversa = nodoPadre->getListaElementos()->rbegin();
 		    while(!encontrado && itReversa != nodoPadre->getListaElementos()->rend()){
-		    	ElementoNodo* elementoPadre = *itReversa;
+		    	elementoPadre = *itReversa;
 		    	if(comparador->Comparar(referenciaDeBusqueda->getClave(),elementoPadre->getClave())<0){
 		    		++itReversa;
 		    	}else{
@@ -129,6 +129,7 @@ void NodoIntermedio::balanceo(Nodo* nodoHermanoE,Nodo* nodoPadreE, bool izq){
 		    referenciaDeBusqueda->setClave(elementoPadre->getClave());//para elemento q cambia de nodo, y la clave será la del elemento del padre
 		    referenciaDeBusqueda->setReferencia(referenciaIzq);
 		    nodoHermano->getListaElementos()->push_back(referenciaDeBusqueda);
+		    nodoHermano->setEspacioLibre(nodoHermano->getEspacioLibre()-1);
 			/*Se modifica el elemento del padre,su clave*/
 		    elementoPadre->setClave(claveAux);
 			/* modifico la referencia izq del nodo q estaba sobrebordado*/
@@ -142,7 +143,7 @@ void NodoIntermedio::balanceo(Nodo* nodoHermanoE,Nodo* nodoPadreE, bool izq){
 			/*busco el elemento del padre afectado*/
 			std::list<ElementoNodo*>::iterator it = nodoPadre->getListaElementos()->begin();
 			while(!encontrado && it != nodoPadre->getListaElementos()->end()){
-		         ElementoNodo* elementoPadre = *it;
+		          elementoPadre = *it;
 				 if(comparador->Comparar(referenciaDeBusqueda->getClave(),elementoPadre->getClave())>0){
 					    ++it;
 				}else{
@@ -154,8 +155,9 @@ void NodoIntermedio::balanceo(Nodo* nodoHermanoE,Nodo* nodoPadreE, bool izq){
 			Clave* clave = referenciaDeBusqueda->getClave();
 			/*agrega en el nodo der el elemento q corresponde*/
 			referenciaDeBusqueda->setClave(elementoPadre->getClave());
-			referenciaDeBusqueda->setReferencia(referenciaIzq);
+			referenciaDeBusqueda->setReferencia(nodoHermano->getReferenciaIzq());
 			nodoHermano->getListaElementos()->push_front(referenciaDeBusqueda);
+			nodoHermano->setEspacioLibre(nodoHermano->getEspacioLibre()-1);
 			/*Se modifica el elemento del padre, su referencia y su clave*/
 		    elementoPadre->setClave(clave);
 		    /* modifico la referencia izq del nodo derecho*/
