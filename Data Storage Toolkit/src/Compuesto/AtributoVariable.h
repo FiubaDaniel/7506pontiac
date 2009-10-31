@@ -27,7 +27,7 @@ public:
 	Ttamanio tamanioSerializado();
 	bool esfijo();
 	int comparar(const Atributo*otroAtributo);
-	void imprimir(std::ostream&salida);
+	void imprimir();
 	void leer(std::istream&entrada);
 public:
 	/* metodo propios de la clase permiten iteracion sobre los valores guardados*/
@@ -129,9 +129,9 @@ int AtributoVariable<T_tipo>::comparar(const Atributo*otroAtributo){
 	return 0;
 };
 template<typename T_tipo>
-void AtributoVariable<T_tipo>::imprimir(std::ostream&salida){
+void AtributoVariable<T_tipo>::imprimir(){
 	for(Ttamanio i=0;i<valores.size();i++){
-			salida<<valores.at(i)<<" ";
+			std::cout<<valores.at(i)<<" ";
 	}
 };
 template<typename T_tipo>
@@ -171,8 +171,8 @@ public:
 		}//TODO exception
 		return 0;
 	};
-	void imprimir(std::ostream&salida){
-		salida<<str;
+	void imprimir(){
+		std::cout<<str;
 
 	};
 	void leer(std::istream&entrada){
