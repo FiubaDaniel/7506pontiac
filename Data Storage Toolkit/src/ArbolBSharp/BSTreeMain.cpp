@@ -9,8 +9,6 @@
 #include <iostream>
 #include "Clave.h"
 #include "ElementoNodo.h"
-#include "Registro.h"
-#include "Atributo.h"
 #include "Nodo.h"
 #include "NodoHoja.h"
 #include "NodoIntermedio.h"
