@@ -24,13 +24,12 @@ public:
 	ElementoNodo* dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMedioE,Nodo* nodoDerE,Nodo* nodoPadreE,Clave clave);
 	Referencia getReferenciaIzq();
 	int unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre);
-	Referencia bucarReferenciaAsiguienteNodo(Clave clave);
+	Referencia bucarReferenciaAsiguienteNodo(const Clave* clave);
 	void setRefereciaIzq(Referencia ref);
-	void setearClave(Clave claveAeliminar,Clave* claveSetear);
-	bool estaClave(Clave clave);
+	void setearClave(const Clave* claveAeliminar,Clave* claveSetear);
+	bool estaClave(const Clave* clave);
 	void limpiar();
 private:
-	std::list<ElementoNodo*> listaElementos;
 	/*
 	 * si un elemento se agrega y se crea un nodo a la izq del primer elemento entonces
 	 * se utilizq la refeecia izq del nodo

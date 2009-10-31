@@ -14,7 +14,7 @@
 #include <iostream>
 #include <string>
 #include "ElementoNodo.h"
-typedef unsigned int Referencia;
+typedef size_t Referencia;
 class Nodo {
 public:
 	     Nodo(unsigned int cantElem,unsigned int nNivel,ComparadorClave* comparador);
@@ -29,7 +29,7 @@ public:
 	     virtual ElementoNodo* dividirse(Nodo* nodoHermano,Nodo* nodoIzq,Nodo* nodoMedio,Nodo* nodoDer,Nodo* nodoPadreE,Clave clave)=0;
 	     virtual void serializate(std::stringbuf* buffer)=0;
 	     virtual int agregarElemento(ElementoNodo* elemento)=0;
-	     int Eliminar(Clave clave);
+	     int Eliminar(const Clave* clave);
 	     virtual int unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre)=0;
 	     virtual ~Nodo();
 protected:

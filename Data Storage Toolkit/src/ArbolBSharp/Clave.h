@@ -8,16 +8,14 @@
 #ifndef CLAVE_H_
 #define CLAVE_H_
 
-#include "../Compuesto/Registro.h"
-#include "../Compuesto/AtributoFijo.h"
-#include "../Compuesto/Atributo.h"
-typedef unsigned int Referencia;
+#include "Registro.h"
+#include "Atributo.h"
+typedef size_t Referencia;
 class Clave {
 
 public:
 	Clave(Registro* registro,unsigned int cantidadAtributosEntrantes,...);
 	Clave();
-	void set(Registro*registro){};
 	unsigned int getCantidadAtributos();
 	void setCantidadAtributos(unsigned int cant);
 	Atributo* getAtributo(Ttamanio posicion);

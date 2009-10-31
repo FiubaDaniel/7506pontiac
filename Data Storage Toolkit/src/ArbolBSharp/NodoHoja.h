@@ -17,8 +17,7 @@ class NodoHoja: public Nodo{
 
 private:
 		Referencia referenciaSiguiente;
-		std::list <ElementoNodo*> listaElementos;
-		bool buscar(Clave clave,ElementoNodo* elemento);
+		bool buscar(const Clave* clave,ElementoNodo* elemento);
 		int pos;
 public:
 	/*
@@ -29,7 +28,7 @@ public:
 		NodoHoja(unsigned int cantElem,Referencia refSiguiente,ComparadorClave* comp);
 		virtual ~NodoHoja();
 		void setReferenciaSiguiente(Referencia ref);
-		bool setReferenciaDeClaveX(Clave clave,Referencia refNueva);
+		bool setReferenciaDeClaveX(const Clave* clave,Referencia refNueva);
 		int agregarElemento(ElementoNodo* elemento);
 		void serializate(stringbuf* buffer);
 		int unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre);
@@ -38,7 +37,7 @@ public:
 		void balanceoEspecial(Nodo* nodoPegado,Nodo* nodoAlejado,Nodo* padre,bool Izq);
 		int busquedaSecuencial(Clave clave,ElementoNodo* elemento);
 		Referencia getReferenciaSiguiente();
-		bool buscarReferenciaDeClaveX(Clave clave,Referencia* ref);
+		bool buscarReferenciaDeClaveX(const Clave* clave,Referencia* ref);
 		void setPos();
 		void avanzarPos();
 		ElementoNodo* getPos();
