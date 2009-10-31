@@ -124,7 +124,8 @@ public:
 	};
 	int comparar(const Atributo*otroAtributo){
 		const AtributoFijo<char*>* otro=dynamic_cast<AtributoFijo<char*>*>(const_cast<Atributo*>(otroAtributo));
-		return strncmp(this->datos,otro->datos,longitud);
+		if(otro==NULL)std::cout<<"FUCK";
+		return strcmp(this->datos,otro->datos);
 	}
 	void imprimir(std::ostream&salida){
 		salida<<datos;
