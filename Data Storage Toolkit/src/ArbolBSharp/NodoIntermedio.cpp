@@ -181,7 +181,7 @@ void NodoIntermedio::balanceoEspecial(Nodo* nodoPegadoE,Nodo* nodoAlejadoE,Nodo*
 		balanceoEspecialDer(nodoPegado,elemPadre,&listaElementos,referenciaIzq);
 		++itPadre;
 		elemPadre = *itPadre;
-		balanceoEspecialDer(nodoAlejado,elemPadre,nodoPegado->getListaElementos(),nodoPegado->getReferenciaIzq());
+		//balanceoEspecialDer(nodoAlejado,elemPadre,nodoPegado->getListaElementos(),nodoPegado->getReferenciaIzq());
 	}
 };
 void NodoIntermedio::balanceoEspecialIzq(NodoIntermedio* nodoQcede,ElementoNodo* elemPadre,std::list<ElementoNodo*> *listaQrecibe){
