@@ -11,9 +11,12 @@
 #include "TamanioInsuficienteException.h"
 using namespace std;
 
-BSharpTree::BSharpTree(string nombreArch,unsigned int tamanioDeBloque, int tamanioSerializadoClave,ComparadorClave* comp) {
-	comparador = comp;
-	tamanioNodo = tamanioDeBloque;
+BSharpTree::BSharpTree(Clave* clave){
+	 claveEstructural = clave->clonarce();
+}
+void BSharpTree::crear(string nombreArch,unsigned int tamanioDeBloque, int tamanioSerializadoClave,ComparadorClave* comp) {
+	 comparador = comp;
+	 tamanioNodo = tamanioDeBloque;
 	numeroDeElementosXnodo = calcularCantidadElementosPorNodo(tamanioSerializadoClave);
 	cantidadMinimaDeElementos = (unsigned int) ((numeroDeElementosXnodo)*2)/3;
 	nombreArchivo = nombreArch+"_Arbol";
@@ -44,7 +47,7 @@ BSharpTree::BSharpTree(string nombreArch,unsigned int tamanioDeBloque, int taman
 	archivoArbol.close();
 	archivoEspaciosLibres.close();
 };
-BSharpTree::BSharpTree(string nombreArch,ComparadorClave* comp){
+void BSharpTree::abrir(string nombreArch,ComparadorClave* comp){
 	comparador = comp;
 	nombreArchivo = nombreArch+"_Arbol";
     nombreEspaciosLibres = nombreArch+"_EspaciosLibre";
@@ -60,7 +63,7 @@ BSharpTree::BSharpTree(string nombreArch,ComparadorClave* comp){
 	buf.sgetn((char*)&posicionRaiz,sizeof(int));
 	buf.pubseekpos(0);
 	archivoArbol.read((char*)&buf,tamanioNodo);
-	Raiz = new NodoIntermedio(&buf,numeroDeElementosXnodo,comparador);
+	Raiz = new NodoIntermedio(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
     archivoArbol.close();
     archivoEspaciosLibres.close();
     cantidadMinimaDeElementos = (unsigned int) ((numeroDeElementosXnodo)*2)/3;
@@ -94,12 +97,12 @@ bool BSharpTree::buscarIterativo(NodoIntermedio nodo,const Clave* clave,Referenc
     buf.pubseekpos(0);
     buf.sgetn((char*)&nivel,sizeof(int));
     if(nivel!=0){
-       NodoIntermedio nodoAux(&buf,numeroDeElementosXnodo,comparador);
+       NodoIntermedio nodoAux(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
        return buscarIterativo(nodoAux,clave,ref,ultimo);
      }else{
     	 /*ver si esta bien lo de destruir el nodo hoja q tenia antes*/
        delete ultimo;
-       ultimo = new NodoHoja(&buf,numeroDeElementosXnodo,comparador);
+       ultimo = new NodoHoja(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
        bool retorno = ultimo->buscarReferenciaDeClaveX(clave,ref);
        return retorno;
      }
@@ -125,10 +128,10 @@ NodoHoja* BSharpTree::buscarPrimerNodoHoja(NodoIntermedio nodo){
 	buf.pubseekpos(0);
 	buf.sgetn((char*)&nivel,sizeof(int));
 	if(nivel!=0){
-	NodoIntermedio nodoAux(&buf,numeroDeElementosXnodo,comparador);
+	NodoIntermedio nodoAux(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
 	return buscarPrimerNodoHoja(nodoAux);
 	     }else{
-	    	 NodoHoja* nodoAux = new NodoHoja(&buf,numeroDeElementosXnodo,comparador);
+	    	 NodoHoja* nodoAux = new NodoHoja(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
 	    	 nodoAux->setPos();
 	    	 return nodoAux;
 	     }
@@ -176,10 +179,10 @@ NodoHoja* BSharpTree::buscarHoja(NodoIntermedio nodo,const Clave* clave,Referenc
 	buf.pubseekpos(0);
 	buf.sgetn((char*)&nivel,sizeof(int));
 	if(nivel!=0){
-		NodoIntermedio nodoAux(&buf,numeroDeElementosXnodo,comparador);
+		NodoIntermedio nodoAux(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
 		return buscarHoja(nodoAux,clave,referenciaDeNodoHoja);
 	}else{
-		NodoHoja* nodoAux = new NodoHoja(&buf,numeroDeElementosXnodo,comparador);
+		NodoHoja* nodoAux = new NodoHoja(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
 		return nodoAux;
 	}
 	return NULL;
@@ -203,7 +206,7 @@ bool BSharpTree::insertar(Referencia ref,Clave* clave){
 		buf.pubseekpos(0);
 		/*Ahora toma la referencia izquierda q ya existia y le seteo su referencia izq hacia la hoja agregada*/
 		archivoArbol.read((char*)&buf,tamanioNodo);
-		hoja = new NodoHoja(&buf,numeroDeElementosXnodo,comparador);
+		hoja = new NodoHoja(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
 		hoja->setReferenciaSiguiente(refAux);
 	    grabarUnitario(hoja,Raiz->getReferenciaIzq());
 		return true;
@@ -239,12 +242,12 @@ void BSharpTree::BuscarInsertarOEliminar(Nodo* hoja,std::list<Referencia>&listaD
 		delete nodo;
 	}else{ esRaiz = false;}
 	if(nivel!=0){//es nodo intermedio
-		NodoIntermedio* nodo = new NodoIntermedio(&buf,numeroDeElementosXnodo,comparador);
+		NodoIntermedio* nodo = new NodoIntermedio(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
 		modificarLista(listaDePadres,esInsertar,nodo);
 		listaDePadres.push_front(refAux);/*el ultimo lo pongo delante siempre*/
 		BuscarInsertarOEliminar(hoja,listaDePadres,nodo,clave,refHoja,esRaiz,esInsertar);
 	}else{
-		hoja =  new NodoHoja(&buf,numeroDeElementosXnodo,comparador);
+		hoja =  new NodoHoja(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
 		refHoja = refAux;
 		return;
 	}
@@ -307,7 +310,7 @@ void BSharpTree::resolverDesborde(Nodo* nodo,std::list<Referencia>&listaDePadres
 	//Obtengo el padre del nodo desbordado
 	archivoArbol.seekg(listaDePadres.front());
 	archivoArbol.read((char*)&buff,tamanioNodo);
-	NodoIntermedio* padre = new NodoIntermedio(&buff,numeroDeElementosXnodo,comparador);
+	NodoIntermedio* padre = new NodoIntermedio(&buff,numeroDeElementosXnodo,comparador,claveEstructural);
 	//primero obtengo si se balancea y si es con hermano derecho o izq
 	buscarNodoBalancearODividir(*padre,nodo,hermano,refHijo,izq,balancear,refHermano,elementoPadre);
 	if(balancear){
@@ -412,8 +415,8 @@ void BSharpTree::obtenerHermano(Referencia ref,Nodo* hermano,unsigned int nivel,
 	archivoArbol.seekg(ref);
 	archivoArbol.read((char*)&buffer,tamanioNodo);
 	if(nivel==0){
-	   hermano = new NodoHoja(&buffer,numeroDeElementosXnodo,comparador);
-	}else{ hermano = new NodoIntermedio(&buffer,numeroDeElementosXnodo,comparador);}
+	   hermano = new NodoHoja(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
+	}else{ hermano = new NodoIntermedio(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);}
 	if(hermano->getEspacioLibre()==0){balancear = false;
 	   }else{
 		   balancear=true;
@@ -495,7 +498,7 @@ void BSharpTree::resolverSubflujo(Nodo* nodo,std::list<Referencia>&listaDePadres
 	if(refHijo == posicionRaiz){return;}//La raiz tiene permitido estar en subflujo, es mas tene solo un elemento
 	archivoArbol.seekg(listaDePadres.front());//listaDePadre.front() tiene la ref al padre
 	archivoArbol.read((char*)&buff,tamanioNodo);
-	NodoIntermedio* padre = new NodoIntermedio(&buff,numeroDeElementosXnodo,comparador);
+	NodoIntermedio* padre = new NodoIntermedio(&buff,numeroDeElementosXnodo,comparador,claveEstructural);
 	buscarHermanos(nodo,padre,hermanoIzq,hermanoDer,refHermanoIzq,refHermanoDer,refHijo,booleanoInformacion);
 	if(booleanoInformacion[0]){
 		hermanoIzq->balanceo(nodo,padre,false);
@@ -637,10 +640,10 @@ Nodo* BSharpTree::obtenerHermanoXsuBflujo(int nivel,Referencia ref){
       buff.pubseekpos(0);
       archivoArbol.read((char*)&buff,tamanioNodo);
       if(nivel==0){
-    	  NodoHoja* nodo = new NodoHoja(&buff,numeroDeElementosXnodo,comparador);
+    	  NodoHoja* nodo = new NodoHoja(&buff,numeroDeElementosXnodo,comparador,claveEstructural);
     	  return nodo;
       }
-      NodoIntermedio* nodo = new NodoIntermedio(&buff,numeroDeElementosXnodo,comparador);
+      NodoIntermedio* nodo = new NodoIntermedio(&buff,numeroDeElementosXnodo,comparador,claveEstructural);
       return nodo;
 };
 void BSharpTree::resolverReferenciaSiguiente(Nodo* nodoIzq,Referencia refAHermanoNuevo){
@@ -668,7 +671,7 @@ NodoIntermedio* BSharpTree::buscarIntermedio(const Clave* clave,NodoIntermedio* 
 		buf.sgetn((char*)&nivel,sizeof(int));
 		if(nivel==0){return NULL;}
 		else{
-			nodo = new NodoIntermedio(&buf,numeroDeElementosXnodo,comparador);
+			nodo = new NodoIntermedio(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
 			return buscarIntermedio(clave,nodo);
 		}
 	}

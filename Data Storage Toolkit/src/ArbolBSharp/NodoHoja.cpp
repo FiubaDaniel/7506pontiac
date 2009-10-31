@@ -13,7 +13,7 @@ NodoHoja::NodoHoja(unsigned int cantElem,Referencia refSiguiente,ComparadorClave
  * Se cre el  nodo hoja a partir de un buffer, la cantidad de elementos, el tamaño de
  * la hoja y el tamaño de la clave  son parametros ya q se guardan solo una vez.
  */
-NodoHoja::NodoHoja(std::stringbuf* buf,unsigned int cantElem,ComparadorClave* comp) : NodoHoja ::Nodo(cantElem,0,comp){
+NodoHoja::NodoHoja(std::stringbuf* buf,unsigned int cantElem,ComparadorClave* comp,Clave* claveEstructural) : NodoHoja ::Nodo(cantElem,0,comp){
 	pos = 0;
 	buf->pubseekpos(0);
 	unsigned int cantElemLibres,nivel;
@@ -25,10 +25,9 @@ NodoHoja::NodoHoja(std::stringbuf* buf,unsigned int cantElem,ComparadorClave* co
 	int Aux = cantElem - cantElemLibres;
 	Referencia ref;
 	while(Aux>0){
-		Clave* clave = new Clave();
-		clave->deserializar(*buf);
+		claveEstructural->deserializar(*buf);
 		buf->sgetn((char*)&ref,sizeof(Referencia));
-		ElementoNodo* elemento = new ElementoNodo(ref,clave);
+		ElementoNodo* elemento = new ElementoNodo(ref,claveEstructural->clonarce());
 		listaElementos.push_back(elemento);
 		Aux--;
 	}
@@ -108,11 +107,17 @@ int NodoHoja::agregarElemento(ElementoNodo* elemento){
 		}else if(comparador->Comparar(elemento->getClave(),elementoAux->getClave())<0){
 			listaElementos.insert(it,elemento);
 			if(retorno==1){
-			Nodo:: setEspacioLibre(Nodo::getEspacioLibre()-1);
+				cantidadDeElementosLibre=cantidadDeElementosLibre-1;
 			}
 			ubicado=true;
 		}else{
 			it++;
+		}
+	}
+	if(!ubicado){
+		listaElementos.push_back(elemento);
+		if(retorno==1){
+			cantidadDeElementosLibre=cantidadDeElementosLibre-1;
 		}
 	}
     return retorno;
@@ -386,11 +391,5 @@ int NodoHoja::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre){
 	return Padre->Eliminar(clave);
 };
 NodoHoja::~NodoHoja() {
-    std::list<ElementoNodo*>::iterator it = listaElementos.begin();
-    while(it!=listaElementos.end()){
-    	ElementoNodo* elemento = *it;
-    	delete elemento;
-    	++it;
-    }
-    listaElementos.clear();
+
 };

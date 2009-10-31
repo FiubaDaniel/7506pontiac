@@ -13,7 +13,7 @@
 class NodoIntermedio : public Nodo{
 public:
 	NodoIntermedio(unsigned int nivelNodo,unsigned int cantElem,ComparadorClave* comp);
-	NodoIntermedio(std::stringbuf* buf,unsigned int cantElem,ComparadorClave* comp);
+	NodoIntermedio(std::stringbuf* buf,unsigned int cantElem,ComparadorClave* comp,Clave* claveEstructural);
     virtual ~NodoIntermedio();
 	void serializate(std::stringbuf* buf);
 	void balanceo(Nodo* nodoIncompletoE,Nodo* nodoPadre, bool izq);

@@ -24,7 +24,7 @@ public:
 	 * Los nodos hojas deben poder crearce de dos formas, una mediante una tira de bytes
 	 * que se obtiene del archivo y otra mediante nuevos datos.
 	 */
-		NodoHoja(std::stringbuf* buf,int unsigned cantElem,ComparadorClave* comp);
+		NodoHoja(std::stringbuf* buf,int unsigned cantElem,ComparadorClave* comp,Clave* claveEstructural);
 		NodoHoja(unsigned int cantElem,Referencia refSiguiente,ComparadorClave* comp);
 		virtual ~NodoHoja();
 		void setReferenciaSiguiente(Referencia ref);
