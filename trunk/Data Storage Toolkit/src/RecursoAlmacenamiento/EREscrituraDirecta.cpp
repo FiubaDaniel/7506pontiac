@@ -198,6 +198,7 @@ void AdministradorDeBuffer::insertar(size_t posicionArchivo){
 		tablaArchivoBuffer[ultimo].posicionArchivo=posicionArchivo;
 		tablaArchivoBuffer[ultimo].posicionBuffer=ultimo;
 		tope=tablaArchivoBuffer+ultimo;
+		promover(tope);
 		ultimo++;
 	}else {
 		if(buscar(tope->posicionArchivo)){
