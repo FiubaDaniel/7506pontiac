@@ -9,7 +9,7 @@ EREscrituraDirecta::~EREscrituraDirecta(){}
 bool EREscrituraDirecta::insertar(Registro* registro){
 	//TODO clave->set(registro);
 	Referencia referencia;
-	if(indice->BuscarReferencia(*clave,&referencia))
+	if(indice->BuscarReferencia(clave,&referencia))
 		return false;
 	estrategiaArchivo->insertar(registro);
 	while(!estrategiaArchivo->cambiosLog.empty()){
@@ -22,7 +22,7 @@ bool EREscrituraDirecta::insertar(Registro* registro){
 };
 bool EREscrituraDirecta::eliminar(Clave* unaClave){
 	Referencia referencia;
-	if(!indice->BuscarReferencia(*unaClave,&referencia))
+	if(!indice->BuscarReferencia(unaClave,&referencia))
 		return false;
 	estrategiaArchivo->posicionarComponente(referencia);
 	//TODO registro.set(clave);
@@ -39,7 +39,7 @@ bool EREscrituraDirecta::eliminar(Clave* unaClave){
 bool EREscrituraDirecta::modificar(Clave* unaClave,Registro* registro){
 	//TODO clave->set(registro);
 	Referencia referencia;
-	if(!indice->BuscarReferencia(*clave,&referencia))
+	if(!indice->BuscarReferencia(clave,&referencia))
 		return false;
 	estrategiaArchivo->posicionarComponente(referencia);
 	if(!estrategiaArchivo->modificar(registro))
@@ -56,7 +56,7 @@ bool EREscrituraDirecta::modificar(Clave* unaClave,Registro* registro){
 
 bool EREscrituraDirecta::obtener(Clave* unaClave,Registro*registro){
 	Referencia referencia;
-	if(!indice->BuscarReferencia(*clave,&referencia))
+	if(!indice->BuscarReferencia(clave,&referencia))
 		return false;
 	size_t posicioBuffer=posicionEnBuffer(referencia);
 	if(referencia!=0){
@@ -113,7 +113,7 @@ void EREscrituraDirecta::actualizarIndice(Cambio cambio){
 	switch(cambio.operacion){
 		case Cambio::Alta : indice->insertar(cambio.referencia,cambio.clave); break;
 		case Cambio::Baja : indice->eliminar(cambio.clave); break;
-		case Cambio::Reubicacion : indice->modificar(*cambio.clave,cambio.referencia); break;
+		case Cambio::Reubicacion : indice->modificar(cambio.clave,cambio.referencia); break;
 	}
 };
 void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
@@ -137,7 +137,7 @@ void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 			break;
 		case Cambio::Reubicacion :
 			Referencia posicionAnterior;
-			indice->BuscarReferencia(*cambio.clave,&posicionAnterior);
+			indice->BuscarReferencia(cambio.clave,&posicionAnterior);
 			posicionBuffer=posicionEnBuffer(posicionAnterior);
 			if(posicionBuffer!=0){
 				posicionBuffer--;

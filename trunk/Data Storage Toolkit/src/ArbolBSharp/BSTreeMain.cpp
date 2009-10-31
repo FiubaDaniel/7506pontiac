@@ -6,7 +6,7 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include <iostream>
+/*#include <iostream>
 #include "Clave.h"
 #include "ElementoNodo.h"
 #include "Nodo.h"
@@ -18,8 +18,8 @@ using namespace std;
 
 int main() {
 	cout << "BSharpTree" << endl; // prints BSharpTree
-	/*Atributo atributo1 = new Atributo("Nombre");
+	Atributo atributo1 = new Atributo("Nombre");
 	Registro reg = new Registro(1,atributo1);
-	Clave clave = new Clave(reg,1,"Nombre");*/
+	Clave clave = new Clave(reg,1,"Nombre");
 	return 0;
-}
+}*/
