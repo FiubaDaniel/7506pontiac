@@ -18,7 +18,7 @@ typedef size_t Referencia;
 class Nodo {
 public:
 	     Nodo(unsigned int cantElem,unsigned int nNivel,ComparadorClave* comparador);
-	     unsigned int getEspacioLibre();//
+	     unsigned int getEspacioLibre();
 	     unsigned int getCatidadMaximaDeElementos();
          unsigned int getNumeroNivel();
          void setNumeroNivel(unsigned int num);
