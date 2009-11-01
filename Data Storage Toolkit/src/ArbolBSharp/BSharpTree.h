@@ -35,7 +35,7 @@ public:
 	NodoHoja* buscarHoja(NodoIntermedio nodo,const Clave* clave,Referencia referenciaDeNodoHoja);
 	bool buscarIterativo(NodoIntermedio nodo,const Clave* clave,Referencia* ref,NodoHoja* ultimo);
 	int calcularCantidadElementosPorNodo(unsigned int tamSerializadoClave);
-	void BuscarInsertarOEliminar(Nodo* &hoja,std::list<Referencia>&listaDePadres,NodoIntermedio* nodo,const Clave* clave,Referencia refHoja,bool& esRaiz,bool esInsertar);
+	void BuscarInsertarOEliminar(Nodo* &hoja,std::list<Referencia>&listaDePadres,NodoIntermedio* nodo,const Clave* clave,Referencia& refHoja,bool& esRaiz,bool esInsertar);
 	Referencia buscarEspacioLibre();
 	void grabado(Nodo* original,Nodo* hermano,Nodo* padre,Referencia refOriginal,Referencia refPadre,Referencia refHermano);
 	void grabar(Nodo* nodoOriginal,Nodo* nodoHermano,Referencia refOriginal,Referencia refHermano);
@@ -43,8 +43,8 @@ public:
 	void destrozarLista(std::list<NodoIntermedio*>);
 	void resolverDesborde(Nodo* nodo,list<Referencia>&listaDePadres,Referencia refHijo);
 	void desbordeRaiz();
-	void buscarNodoBalancearODividir(NodoIntermedio padre,Nodo* hijo,Nodo* hermano,Referencia& refHijo,bool& izq,bool& balancear,Referencia refHermano,ElementoNodo* elemPadre);
-	void obtenerHermano(Referencia ref,Nodo* Hermano,unsigned int nivel,bool& balancear);
+	void buscarNodoBalancearODividir(NodoIntermedio* padre,Nodo* hijo,Nodo*& hermano,Referencia refHijo,bool& izq,bool& balancear,Referencia& refHermano,ElementoNodo* elemPadre);
+	void obtenerHermano(Referencia ref,Nodo*& Hermano,unsigned int nivel,bool& balancear);
 	ElementoNodo* ObtenerRaiz();
 	void modificarLista(std::list<Referencia>&listaDePadres,bool esInsertar,Nodo* nodo);
 	void resolverSubflujo(Nodo* nodo,std::list<Referencia>&listaDePadres,Referencia refHijo);
