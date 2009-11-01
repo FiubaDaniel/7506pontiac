@@ -30,11 +30,11 @@ public:
 	bool modificar(const Clave* clave,Referencia refNueva);
 	/*Falta el listar*/
 	virtual ~BSharpTree();
-private:
+//private: pongo todo publico para probar
 	NodoHoja* buscarPrimerNodoHoja(NodoIntermedio nodo);
 	NodoHoja* buscarHoja(NodoIntermedio nodo,const Clave* clave,Referencia referenciaDeNodoHoja);
 	bool buscarIterativo(NodoIntermedio nodo,const Clave* clave,Referencia* ref,NodoHoja* ultimo);
-	int calcularCantidadElementosPorNodo(int tamSerializadoClave);
+	int calcularCantidadElementosPorNodo(unsigned int tamSerializadoClave);
 	void BuscarInsertarOEliminar(Nodo* hoja,std::list<Referencia>&listaDePadres,NodoIntermedio* nodo,const Clave* clave,Referencia refHoja,bool& esRaiz,bool esInsertar);
 	Referencia buscarEspacioLibre();
 	void grabado(Nodo* original,Nodo* hermano,Nodo* padre,Referencia refOriginal,Referencia refPadre,Referencia refHermano);
@@ -58,6 +58,7 @@ private:
 	void buscarHermanos(Nodo* nodoActual,NodoIntermedio* padre,Nodo* hermanoIzq,Nodo* hermanoDer,Referencia& refHermanoIzq,Referencia& refHermanoDer,Referencia refHijo,vector<bool> &informacion);
 	Referencia obtenerReferenciaHermano(Nodo* padre,Clave clave,bool Izq);
 	Nodo* obtenerHermanoXsuBflujo(int nivel,Referencia ref);
+	Nodo* obtenerNodoPorPosiciones(int posInicial);
 	unsigned int numeroDeElementosXnodo,posicionRaiz,tamanioNodo,cantidadMinimaDeElementos;
 	std::fstream archivoArbol;
 	std::fstream archivoEspaciosLibres;
