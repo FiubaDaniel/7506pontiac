@@ -81,12 +81,11 @@ void EARegistros::leer(Registro*registro){
 bool EARegistros::escribir(Componente *componente){
 	Registro*registro=dynamic_cast<Registro*>(componente);
 	if(registro){
-		escribir(registro);
 		if(logActivo){
 			clave->set(registro);
-			Cambio cambio(clave,nroRegistro,Cambio::Alta);
-			cambiosLog.push(cambio);
+			cambiosLog.push(new Cambio(*clave,nroRegistro,Cambio::Alta));
 		}
+		escribir(registro);
 		return true;
 	}
 	return false;
@@ -116,13 +115,13 @@ bool EARegistros::modificar(Componente *componente){
 		leer(registro);
 		if(comparar(nuevo,registro)==0){
 			nroRegistro--;
-			posicionarComponente(nroRegistro);
-			escribir(nuevo);
 			if(logActivo){
 				clave->set(nuevo);
-				Cambio cambio(clave,nroRegistro,Cambio::Modificacion);
-				cambiosLog.push(cambio);
+				cambiosLog.push(new Cambio(*clave,nroRegistro,Cambio::Modificacion));
 			}
+			posicionarComponente(nroRegistro);
+			escribir(nuevo);
+
 			return true;
 		}
 	}
@@ -130,32 +129,26 @@ bool EARegistros::modificar(Componente *componente){
 }
 
 bool EARegistros::eliminar(Componente *componente){
-	bool resultado=false;
-	Registro*registro=dynamic_cast<Registro*>(componente);
-	if(registro!=NULL){
-		Registro*aux=(Registro*)registro->clonar();
+	Registro*eliminado=dynamic_cast<Registro*>(componente);
+	if(eliminado!=NULL){
 		size_t borrado=nroRegistro;
-		leer(aux);
-		if(comparar(registro,aux)==0){
-			resultado=true;
-			posicionarComponente(siguienteRegLibre-1);
-			leer(aux);
-			posicionarComponente(borrado);
-			escribir(aux);
-			if(logActivo){
-				clave->set(registro);
-				Cambio eliminado(clave,nroRegistro,Cambio::Baja);
-				clave->set(aux);
-				Cambio reubicado(clave,nroRegistro,Cambio::Reubicacion);
-				cambiosLog.push(eliminado);
-				cambiosLog.push(reubicado);
-			}
+		leer(registro);
+		if(comparar(eliminado,registro)==0){
 			siguienteRegLibre--;
+			posicionarComponente(siguienteRegLibre);
+			leer(registro);
+			if(logActivo){
+				clave->set(eliminado);
+				cambiosLog.push(new Cambio(*clave,borrado,Cambio::Baja));
+				clave->set(registro);
+				cambiosLog.push(new Cambio(*clave,borrado,Cambio::Reubicacion));
+			}
+			posicionarComponente(borrado);
+			escribir(registro);
+			return true;
 		}
-
-		delete aux;
 	}
-	return resultado;
+	return false;
 }
 bool EARegistros::posicionarComponente(size_t nroCompuesto){
 	nroRegistro=nroCompuesto;

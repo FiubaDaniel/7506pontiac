@@ -34,8 +34,7 @@ bool EATexto::escribir(Componente *componente){
 		almacen->escribir(str.c_str(),str.size());
 		if(logActivo){
 			clave->set(registro);
-			Cambio cambio(clave,posComp,Cambio::Alta);
-			cambiosLog.push(cambio);
+			cambiosLog.push(new Cambio(*clave,posComp,Cambio::Alta));
 		}
 		posComp++;
 		return true;
@@ -80,8 +79,7 @@ bool EATexto::insertar(Componente *componente){
 
 		if(logActivo){
 			clave->set(registro);
-			Cambio cambio(clave,posComp,Cambio::Alta);
-			cambiosLog.push(cambio);
+			cambiosLog.push(new Cambio(*clave,posComp,Cambio::Alta));
 		}
 		//TODO
 		return posicion;
@@ -102,8 +100,8 @@ bool EATexto::eliminar(Componente *componente){
 			almacen->escribir(str.c_str(),str.size());
 			if(logActivo){
 				clave->set(registro);
-				Cambio cambio(clave,posComp,Cambio::Baja);
-				cambiosLog.push(cambio);
+
+				cambiosLog.push(new Cambio(*clave,posComp,Cambio::Baja));
 			}
 			posComp++;
 		}
