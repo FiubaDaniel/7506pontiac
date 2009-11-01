@@ -15,6 +15,7 @@ class EABloques : public EstrategiaAlmacenamiento{
 private:
 	Almacenamiento* almacen;
 	Ttamanio nroRegistro;
+	Ttamanio cantidadBloques;
 	size_t nroBloque;
 	Ttamanio libres;
 	Ttamanio capacBloque;
@@ -31,7 +32,7 @@ public:
 	EABloques(Bloque* tipoBloque,Ttamanio tamanioBloque);
 	virtual ~EABloques();
 	Almacenamiento* abrir(Almacenamiento*almacen,const char*rutaArchivoEspacios);
-	Almacenamiento* nuevo(Almacenamiento*almacen,const char*rutaArchivoEspacios);
+	Almacenamiento* crear(Almacenamiento*almacen,const char*rutaArchivoEspacios);
 	Componente* getComponente();
 	bool posicionarComponente(size_t nroCompuesto);
 	bool escribir(Componente*componente);
