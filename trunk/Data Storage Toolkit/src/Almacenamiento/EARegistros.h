@@ -40,6 +40,7 @@ public:
 	bool eliminar(Componente*componente);
 	bool siguiente(Componente*componente);
 	bool obtener(Componente*componente);
+	size_t posicionComponente();
 };
 
 #endif /* EAREGISTROS_H_ */

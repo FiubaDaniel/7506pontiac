@@ -26,7 +26,7 @@ public:
 	EATexto(Registro*registro);
 	virtual ~EATexto();
 	void abrir(Almacenamiento*almacen);
-	void nuevo(Almacenamiento*almacen);
+	void crear(Almacenamiento*almacen);
 	Componente* getComponente();
 	bool posicionarComponente(size_t nroCompuesto);
 	bool escribir(Componente*componente);
@@ -36,6 +36,7 @@ public:
 	bool eliminar(Componente*componente);
 	bool siguiente(Componente*componente);
 	bool obtener(Componente*componente);
+	size_t posicionComponente();
 };
 
 #endif /* EATEXTO_H_ */

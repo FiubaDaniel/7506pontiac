@@ -74,13 +74,12 @@ void EARegistros::leer(Registro*registro){
 		buf.pubseekpos(0,std::ios_base::binary | std::ios_base::in );
 		buf.pubsetbuf(registroSerializado,tamanioRegistro);
 		registro->deserializar(buf);
-
+		nroRegistro++;
 	};
-	nroRegistro++;
 }
 bool EARegistros::escribir(Componente *componente){
 	Registro*registro=dynamic_cast<Registro*>(componente);
-	if(registro){
+	if(registro!=NULL&&nroRegistro<=siguienteRegLibre){
 		if(logActivo){
 			clave->set(registro);
 			cambiosLog.push(new Cambio(*clave,nroRegistro,Cambio::Alta));
@@ -93,7 +92,7 @@ bool EARegistros::escribir(Componente *componente){
 
 bool EARegistros::leer(Componente *componente){
 	Registro*registro=dynamic_cast<Registro*>(componente);
-	if(registro!=NULL ){
+	if(registro!=NULL&&nroRegistro<siguienteRegLibre){
 		leer(registro);
 		return true;
 	}
@@ -111,7 +110,7 @@ bool EARegistros::insertar(Componente *componente){
 
 bool EARegistros::modificar(Componente *componente){
 	Registro*nuevo=dynamic_cast<Registro*>(componente);
-	if(nuevo!=NULL){
+	if(nuevo!=NULL && nroRegistro<siguienteRegLibre){
 		leer(registro);
 		if(comparar(nuevo,registro)==0){
 			nroRegistro--;
@@ -130,7 +129,7 @@ bool EARegistros::modificar(Componente *componente){
 
 bool EARegistros::eliminar(Componente *componente){
 	Registro*eliminado=dynamic_cast<Registro*>(componente);
-	if(eliminado!=NULL){
+	if(eliminado!=NULL && nroRegistro<siguienteRegLibre){
 		size_t borrado=nroRegistro;
 		leer(registro);
 		if(comparar(eliminado,registro)==0){
@@ -167,4 +166,4 @@ Componente *EARegistros::getComponente(){
 bool EARegistros::obtener(Componente*componente){
 	return leer(componente);
 };
-
+size_t EARegistros::posicionComponente(){return nroRegistro;};

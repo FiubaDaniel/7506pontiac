@@ -15,7 +15,7 @@ class EABloques : public EstrategiaAlmacenamiento{
 private:
 	Almacenamiento* almacen;
 	Ttamanio nroRegistro;
-	Ttamanio cantidadBloques;
+	Ttamanio siguienteLibre;
 	size_t nroBloque;
 	Ttamanio libres;
 	Ttamanio capacBloque;
@@ -42,6 +42,7 @@ public:
 	bool eliminar(Componente*componente);
 	bool siguiente(Componente*componente);
 	bool obtener(Componente*componente);
+	size_t posicionComponente();
 };
 
 #endif /* EABLOQUES_H_ */

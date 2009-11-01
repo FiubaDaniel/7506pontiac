@@ -22,6 +22,7 @@ public:
   virtual void posicionar(size_t posicion);
   virtual bool bien();
   virtual bool fin();
+  virtual void reiniciar();
   virtual void posicionarAlfinal();
   virtual size_t posicionActual();
 };

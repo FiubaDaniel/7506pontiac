@@ -13,8 +13,15 @@ EATexto::EATexto(Registro*registro) {
 
 EATexto::~EATexto() {};
 
-void EATexto::abrir(Almacenamiento*almacen){}
-
+void EATexto::abrir(Almacenamiento*almacen){
+	this->almacen=almacen;
+	posComp=0;
+};
+void EATexto::crear(Almacenamiento *almacen){
+	this->almacen=almacen;
+	posComp=0;
+	ultimoLeido=' ';
+};
 bool EATexto::leer(Componente *componente){
 	Registro* registro=dynamic_cast<Registro*>(componente);
 	if(registro){
@@ -58,10 +65,12 @@ bool EATexto::insertar(Componente *componente){
 	Registro* registro=dynamic_cast<Registro*>(componente);
 	if(registro){
 		std::string strRegistro=registroAstring(registro);
+		std::cout<<strRegistro<<std::endl;
 		size_t posicion;
 		bool encontrado=false;
 		almacen->posicionar(0);
 		posComp=0;
+		/*busco un espacio libre donde entre el texto*/
 		while(!encontrado && !almacen->fin()){
 			posicion=almacen->posicionActual();
 			siguiente();
@@ -76,12 +85,11 @@ bool EATexto::insertar(Componente *componente){
 		else
 			posicion=almacen->posicionActual();
 		almacen->escribir(strRegistro.c_str(),strRegistro.size());
-
+		posComp++;
 		if(logActivo){
 			clave->set(registro);
-			cambiosLog.push(new Cambio(*clave,posComp,Cambio::Alta));
+			cambiosLog.push(new Cambio(*clave,posicion,Cambio::Alta));
 		}
-		//TODO
 		return posicion;
 	}
 	return 0;
@@ -127,17 +135,7 @@ bool EATexto::modificar(Componente *componente){
 	return encontrado;
 };
 
-bool EATexto::siguiente(Componente *componente){
-	bool encontrado=false;
-	Registro* registro=dynamic_cast<Registro*>(componente);
-	if(registro){
-		buscar(registro,encontrado);
-		if(encontrado){
-			stringAregistro(registro,ultimoLeido);
-		}
-	}
-	return encontrado;
-};
+
 void EATexto::siguiente(){
 	ultimoLeido.clear();
 	char chr;
@@ -175,7 +173,6 @@ void EATexto::stringAregistro(Registro*registro,std::string &str){
 std::string EATexto::registroAstring(Registro*registro){
 	std::stringstream strs;
 	for(Ttamanio i=0;i<registro->cantidadAtributos();i++){
-		//TODO
 		registro->get(i)->imprimir(strs);
 		strs<<" ";
 	}
@@ -183,14 +180,10 @@ std::string EATexto::registroAstring(Registro*registro){
 };
 int EATexto::comparar(Registro*reg1,Registro*reg2){
 	clave->set(reg1);
-	Clave*clave2=clave->clonarce();
-	int resultado=comparador->Comparar(clave,clave2);
-	delete clave2;
+	Clave clave2(*clave);
+	int resultado=comparador->Comparar(clave,&clave2);
 	return resultado;
 };
-void EATexto::nuevo(Almacenamiento *almacen)
-{
-}
 
 Componente *EATexto::getComponente(){
 	return registro;
@@ -199,3 +192,17 @@ Componente *EATexto::getComponente(){
 bool EATexto::obtener(Componente*componente){
 	return siguiente(componente);
 };
+bool EATexto::siguiente(Componente *componente){
+	bool encontrado=false;
+	Registro* registro=dynamic_cast<Registro*>(componente);
+	if(registro&&!almacen->fin()){
+		/*buscar(registro,encontrado);
+		if(encontrado){
+			stringAregistro(registro,ultimoLeido);
+		}*/
+		siguiente();
+		stringAregistro(registro,ultimoLeido);
+	}
+	return encontrado;
+};
+size_t EATexto::posicionComponente(){return this->posComp;};
