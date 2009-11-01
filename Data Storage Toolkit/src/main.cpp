@@ -19,7 +19,7 @@ using namespace std;
 
 int main() {
 	cout << "BSharpTree" << endl;
-	/*creo registros*/
+	ComparadorClave* comparador = new ComparadorPrueba();
 	int numero=1;
 	char unNombre[15]="jja";
 	AtributoFijo<int> dni("dni");
@@ -27,7 +27,22 @@ int main() {
 	nombre.set(unNombre);
 	dni.set(&numero);
 	Registro reg1(2,&nombre,&dni);
-	numero=2;
+	Clave clave1(&reg1,2,"nombre","dni");
+	BSharpTree* arbol = new BSharpTree(&clave1);
+	string nombreArchivo = "Daniel";
+	unsigned int tamanioBloque = 150;
+    int tamanioClave = clave1.tamanioSerializado();
+	arbol->crear(nombreArchivo,tamanioBloque,tamanioClave,comparador);
+	int cantidadDeElemXNodo = arbol->calcularCantidadElementosPorNodo(clave1.tamanioSerializado());
+	cout << "entran: "<<cantidadDeElemXNodo<<endl;
+    delete arbol;
+    BSharpTree* arbol2 = new BSharpTree(&clave1);
+    arbol2->abrir(nombreArchivo,comparador);
+    Referencia ref = 1;
+    arbol2->insertar(ref,&clave1);
+    cout<<"llego"<<endl;
+	/*creo registros*/
+	/*numero=2;
 	strncpy(unNombre,"jjb",15);
 	nombre.set(unNombre);
 	dni.set(&numero);
@@ -47,7 +62,7 @@ int main() {
 	nombre.set(unNombre);
 	dni.set(&numero);
 	Registro reg5(2,&nombre,&dni);
-	numero=6;// Para probar sobre flujo
+	numero=6;
 	strncpy(unNombre,"jjg",15);
 	nombre.set(unNombre);
 	dni.set(&numero);
@@ -57,7 +72,6 @@ int main() {
 	nombre.set(unNombre);
 	dni.set(&numero);
 	Registro reg7(2,&nombre,&dni);
-	/*-------nodo padre (nodoIntermedio2)-----------*/
 	numero=8;
 	strncpy(unNombre,"aaa",15);
 	nombre.set(unNombre);
@@ -78,8 +92,7 @@ int main() {
 	nombre.set(unNombre);
 	dni.set(&numero);
 	Registro reg11(2,&nombre,&dni);
-	/*----------------nodo hermano (nodoInterne3)--------------*/
-	numero=12;
+    numero=12;
 	strncpy(unNombre,"lll",15);
 	nombre.set(unNombre);
 	dni.set(&numero);
@@ -99,7 +112,6 @@ int main() {
     nombre.set(unNombre);
     dni.set(&numero);
     Registro reg15(2,&nombre,&dni);
-    /*------------------NodoIntermedio 4-------------------*/
     numero=16;
     strncpy(unNombre,"aab",15);
     nombre.set(unNombre);
@@ -114,33 +126,13 @@ int main() {
     strncpy(unNombre,"aad",15);
     nombre.set(unNombre);
     dni.set(&numero);
-    Registro reg18(2,&nombre,&dni);
-    /*numero=19;
-    strncpy(unNombre,"eee",15);
-    nombre.set(unNombre);
-    dni.set(&numero);
-    Registro reg19(2,&nombre,&dni);
-    numero=20;
-    strncpy(unNombre,"eee",15);
-    nombre.set(unNombre);
-    dni.set(&numero);
-    Registro reg20(2,&nombre,&dni);
-    numero=21;
-    strncpy(unNombre,"eee",15);
-    nombre.set(unNombre);
-    dni.set(&numero);
-    Registro reg21(2,&nombre,&dni);*/
-    /*Creo comparador de las claves*/
-    ComparadorClave* comparador = new ComparadorPrueba();
-    /*Creo las claves*/
-    Clave clave1(&reg1,2,"nombre","dni");
-    Clave clave2(&reg2,2,"nombre","dni");
+    Registro reg18(2,&nombre,&dni);*/
+
+    /*Clave clave2(&reg2,2,"nombre","dni");
     Clave clave3(&reg3,2,"nombre","dni");
     Clave clave4(&reg4,2,"nombre","dni");
     Clave clave5(&reg5,2,"nombre","dni");
     Clave clave6(&reg6,2,"nombre","dni");
-    int comparado = comparador->Comparar(&clave1,&clave1);
-    cout << comparado << endl;
     Clave clave7(&reg7,2,"nombre","dni");
     Clave clave8(&reg8,2,"nombre","dni");
     Clave clave9(&reg9,2,"nombre","dni");
@@ -153,10 +145,7 @@ int main() {
     Clave clave16(&reg16,2,"nombre","dni");
     Clave clave17(&reg17,2,"nombre","dni");
     Clave clave18(&reg18,2,"nombre","dni");
-    /*Clave clave19(&reg19,2,"nombre","dni");
-    Clave clave20(&reg20,2,"nombre","dni");
-    Clave clave21(&reg21,2,"nombre","dni");
-    Clave clave22(&reg22,2,"nombre","dni");*/
+
     Referencia ref1 = 1;
     Referencia ref2 = 2;
     Referencia ref3 = 3;
@@ -175,9 +164,7 @@ int main() {
     Referencia ref16 = 16;
     Referencia ref17 = 17;
     Referencia ref18 = 18;
-    /*Referencia ref19 = 19;
-    Referencia ref20 = 20;
-    Referencia ref21 = 21;*/
+
     ElementoNodo elementoNodoInteremdio1(ref1,&clave1);
     ElementoNodo elementoNodoInteremdio2(ref2,&clave2);
     ElementoNodo elementoNodoInteremdio3(ref3,&clave3);
@@ -203,240 +190,31 @@ int main() {
     NodoIntermedio* nodoIntermedio3 = new NodoIntermedio(1,5,comparador);
     nodoIntermedio3->setRefereciaIzq(50);
     NodoIntermedio* nodoIntermedio4 = new NodoIntermedio(1,5,comparador);
-    nodoIntermedio4->setRefereciaIzq(80);
+    nodoIntermedio4->setRefereciaIzq(80);*/
     /*------------------------------------------------------------*/
-    nodoIntermedio1->agregarElemento(&elementoNodoInteremdio1);
+    /*nodoIntermedio1->agregarElemento(&elementoNodoInteremdio1);
     nodoIntermedio1->agregarElemento(&elementoNodoInteremdio2);
     nodoIntermedio1->agregarElemento(&elementoNodoInteremdio3);
     nodoIntermedio1->agregarElemento(&elementoNodoInteremdio4);
-    nodoIntermedio1->agregarElemento(&elementoNodoInteremdio5);
+    nodoIntermedio1->agregarElemento(&elementoNodoInteremdio5);*/
     /*-------------------------------------------------------------*/
-    nodoIntermedio2->agregarElemento(&elementoNodoInteremdio8);
+    /*nodoIntermedio2->agregarElemento(&elementoNodoInteremdio8);
     nodoIntermedio2->agregarElemento(&elementoNodoInteremdio9);
     nodoIntermedio2->agregarElemento(&elementoNodoInteremdio10);
-    nodoIntermedio2->agregarElemento(&elementoNodoInteremdio11);
+    nodoIntermedio2->agregarElemento(&elementoNodoInteremdio11);*/
     /*--------------------------------------------------------------*/
-    nodoIntermedio3->agregarElemento(&elementoNodoInteremdio12);
+    /*nodoIntermedio3->agregarElemento(&elementoNodoInteremdio12);
     nodoIntermedio3->agregarElemento(&elementoNodoInteremdio13);
     nodoIntermedio3->agregarElemento(&elementoNodoInteremdio14);
-    nodoIntermedio3->agregarElemento(&elementoNodoInteremdio15);
+    nodoIntermedio3->agregarElemento(&elementoNodoInteremdio15);*/
     /*---------------------------------------------------------------*/
-    nodoIntermedio4->agregarElemento(&elementoNodoInteremdio16);
+    /*nodoIntermedio4->agregarElemento(&elementoNodoInteremdio16);
     nodoIntermedio4->agregarElemento(&elementoNodoInteremdio17);
-    nodoIntermedio4->agregarElemento(&elementoNodoInteremdio18);
-    /* el esta de nodo intermedio*/
-    if(nodoIntermedio1->estaClave(&clave1)){
-    	cout << "Bien Esta" << endl;
-    }
-    numero = 8;
-    nombre.set(unNombre);
-    dni.set(&numero);
-    Registro regAux(2,&nombre,&dni);
-    Clave claveAux(&regAux,2,"nombre","dni");
-    if(!nodoIntermedio1->estaClave(&claveAux)){
-        	cout << "Bien no esta" << endl;
-      }
-    /*El agregar de nodoIntermedio*/
-    std::list<ElementoNodo*>::iterator it = nodoIntermedio1->getListaElementos()->begin();
-    while(it!=nodoIntermedio1->getListaElementos()->end()){
-    ElementoNodo* elem = *it;
-			elem->getClave()->getAtributo("dni")->imprimir(cout);
-			cout << " " << endl;
-			elem->getClave()->getAtributo("nombre") ->imprimir(cout);
-            cout << " " << endl;
-    ++it;
-    }
-    int retorno = nodoIntermedio1->agregarElemento(&elementoNodoInteremdio5);
-    cout << retorno << endl;
-    retorno = nodoIntermedio1->agregarElemento(&elementoNodoInteremdio6);
-    cout << retorno << endl;
-    cout << nodoIntermedio1->getListaElementos()->size() <<endl;//se espera 6
-    /*meto uno por el medio*/
-    nodoIntermedio1->agregarElemento(&elementoNodoInteremdio7);
-    std::list<ElementoNodo*>::iterator itInsert = nodoIntermedio1->getListaElementos()->begin();
-    cout << "aac tiene q quedar tercero"<< endl;
-    while(itInsert!=nodoIntermedio1->getListaElementos()->end()){
-        ElementoNodo* elem = *itInsert;
-    	elem->getClave()->getAtributo("dni")->imprimir(cout);
-    	cout << " " << endl;
-    	elem->getClave()->getAtributo("nombre") ->imprimir(cout);
-        cout << " " << endl;
-        ++itInsert;
-        }
-    /*seriañizar*/
-    cout<< "deserilizar y serializar"<<endl;
-    std:: stringbuf buf(ios_base :: in | ios_base :: out | ios_base :: binary);
-    nodoIntermedio1->serializate(&buf);
-    NodoIntermedio* nodoDeserealizado = new NodoIntermedio(&buf,5,comparador,&clave2);
-    std::list<ElementoNodo*>::iterator itdes = nodoDeserealizado->getListaElementos()->begin();
-    while(itdes!=nodoDeserealizado->getListaElementos()->end()){
-        ElementoNodo* elem = *itdes;
-    	elem->getClave()->getAtributo("dni")->imprimir(cout);
-    	cout << " " << endl;
-    	elem->getClave()->getAtributo("nombre") ->imprimir(cout);
-        cout << " " << endl;
-        ++itdes;
-    }
-    delete nodoDeserealizado;
-    /*Eliminar*/
-    cout << "Eliminar"<<endl;
-    nodoIntermedio1->Eliminar(&clave7);
-    if(!nodoIntermedio1->estaClave(&claveAux)){
-            	cout << "Bien no esta2" << endl;
-          }
-    std::list<ElementoNodo*>::iterator itEliminar = nodoIntermedio1->getListaElementos()->begin();
-    while(itEliminar!=nodoIntermedio1->getListaElementos()->end()){
-       ElementoNodo* elem = *itEliminar;
-       elem->getClave()->getAtributo("dni")->imprimir(cout);
-       cout << " " << endl;
-       elem->getClave()->getAtributo("nombre") ->imprimir(cout);
-       cout << " " << endl;
-       ++itEliminar;
-     }
-    cout << "Espacion Libre: "<< nodoIntermedio1->getEspacioLibre() << endl;
-    /*balanceo*/
-    cout << "Balanceo  "<<endl;
-    nodoIntermedio1->balanceo(nodoIntermedio3,nodoIntermedio2,false);
-    nodoIntermedio1->balanceo(nodoIntermedio3,nodoIntermedio2,false);
-    nodoIntermedio3->balanceo(nodoIntermedio1,nodoIntermedio2,true);
-    nodoIntermedio2->Eliminar(&clave11);
-    nodoIntermedio3->balanceoEspecial(nodoIntermedio1,nodoIntermedio4,nodoIntermedio2,false);
-    nodoIntermedio2->Eliminar(&clave8);
-    nodoIntermedio4->balanceoEspecial(nodoIntermedio1,nodoIntermedio3,nodoIntermedio2,true);
-    cout << "NodoIntermedio1 "<<endl;
-    std::list<ElementoNodo*>::iterator itDe1= nodoIntermedio1->getListaElementos()->begin();
-    while(itDe1!=nodoIntermedio1->getListaElementos()->end()){
-           ElementoNodo* elem = *itDe1;
-           elem->getClave()->getAtributo("dni")->imprimir(cout);
-           cout << " " << endl;
-           elem->getClave()->getAtributo("nombre") ->imprimir(cout);
-           cout << " " << endl;
-           cout <<"Referencia: " << elem->getReferencia() << endl;
-           ++itDe1;
-         }
-    cout << "NodoIntermedio2 "<<endl;
-    std::list<ElementoNodo*>::iterator itDe2= nodoIntermedio2->getListaElementos()->begin();
-    while(itDe2!=nodoIntermedio2->getListaElementos()->end()){
-               ElementoNodo* elem = *itDe2;
-               elem->getClave()->getAtributo("dni")->imprimir(cout);
-               cout << " " << endl;
-               elem->getClave()->getAtributo("nombre") ->imprimir(cout);
-               cout << " " << endl;
-               cout << "Referencia: " << elem->getReferencia() << endl;
-               ++itDe2;
-             }
-    cout << "NodoIntermedio3 "<<endl;
-    std::list<ElementoNodo*>::iterator itDe3= nodoIntermedio3->getListaElementos()->begin();
-    while(itDe3!=nodoIntermedio3->getListaElementos()->end()){
-                   ElementoNodo* elem = *itDe3;
-                   elem->getClave()->getAtributo("dni")->imprimir(cout);
-                   cout << " " << endl;
-                   elem->getClave()->getAtributo("nombre") ->imprimir(cout);
-                   cout << " " << endl;
-                   cout << "Referencia: " << elem->getReferencia() << endl;
-                   ++itDe3;
-     }
-    cout << "NodoIntermedio4 "<<endl;
-    std::list<ElementoNodo*>::iterator itDe4= nodoIntermedio4->getListaElementos()->begin();
-    while(itDe4!=nodoIntermedio4->getListaElementos()->end()){
-                       ElementoNodo* elem = *itDe4;
-                       elem->getClave()->getAtributo("dni")->imprimir(cout);
-                       cout << " " << endl;
-                       elem->getClave()->getAtributo("nombre") ->imprimir(cout);
-                       cout << " " << endl;
-                       cout << "Referencia: " << elem->getReferencia() << endl;
-                       ++itDe4;
-                     }
-    nodoIntermedio2->Eliminar(&clave11);
-    /*Unirce*/
-    cout<<"Unirce"<<endl;
-    nodoIntermedio1->Eliminar(&clave3);
-    nodoIntermedio1->Eliminar(&clave4);
-    nodoIntermedio1->Eliminar(&clave5);
-    nodoIntermedio3->Eliminar(&clave14);
-    nodoIntermedio3->Eliminar(&clave15);
-    cout << nodoIntermedio3->getListaElementos()->size()<<endl;
-    nodoIntermedio1->unirse(nodoIntermedio4,nodoIntermedio3,nodoIntermedio2);
-    cout << nodoIntermedio1->getReferenciaIzq()<<endl;
-    cout << nodoIntermedio2->getReferenciaIzq()<<endl;
-    cout << nodoIntermedio3->getReferenciaIzq()<<endl;
-    cout << nodoIntermedio4->getReferenciaIzq()<<endl;
-    delete nodoIntermedio1;
-    delete nodoIntermedio2;
-    delete nodoIntermedio3;
-    cout<< "Diviedirce" <<endl;
-    /*Uso nodo intermedio 1 q sera el izq, y dos nuevos*/
-    Nodo* nodoPadre = new NodoIntermedio(1,5,comparador);
-    Nodo* nodoHermano = new NodoIntermedio(1,5,comparador);
-
-    /*cargo nodo padre y nodo hermano*/
-    nodoPadre->agregarElemento(&elementoNodoInteremdio2);
-    nodoHermano->agregarElemento(&elementoNodoInteremdio6);
-    nodoHermano->agregarElemento(&elementoNodoInteremdio10);
-    nodoHermano->agregarElemento(&elementoNodoInteremdio12);
-    nodoHermano->agregarElemento(&elementoNodoInteremdio13);
-    nodoHermano->agregarElemento(&elementoNodoInteremdio14);
-    nodoHermano->agregarElemento(&elementoNodoInteremdio11);
-
-    NodoIntermedio* nodoPadreE = dynamic_cast<NodoIntermedio*>(nodoPadre);
-    NodoIntermedio* nodoHermanoE = dynamic_cast<NodoIntermedio*>(nodoHermano);
-    nodoPadreE->setRefereciaIzq(40);
-    nodoHermanoE->setRefereciaIzq(50);
-
-    Nodo* nodoIntermedioIzq = new NodoIntermedio(1,5,comparador);
-    Nodo* nodoIntermedioMedio = new NodoIntermedio(1,5,comparador);
-    Nodo* nodoIntermedioDer = new NodoIntermedio(1,5,comparador);
-
-    ElementoNodo* elemAagregar = nodoIntermedio4->dividirse(nodoHermano,nodoIntermedioIzq,nodoIntermedioMedio,nodoIntermedioDer,nodoPadre,clave2);
-    elemAagregar->getClave()->getAtributo("dni")->imprimir(cout);
-    cout << " " << endl;
-    elemAagregar->getClave()->getAtributo("nombre")->imprimir(cout);
-    cout << " " << endl;
-
-    cout << "NodoIntermedio1  "<<endl;
-       itDe1= nodoIntermedio1->getListaElementos()->begin();
-       while(itDe1!=nodoIntermedio1->getListaElementos()->end()){
-                          ElementoNodo* elem = *itDe1;
-                          elem->getClave()->getAtributo("dni")->imprimir(cout);
-                          cout << " " << endl;
-                          elem->getClave()->getAtributo("nombre") ->imprimir(cout);
-                          cout << " " << endl;
-                          cout << "Referencia: " << elem->getReferencia() << endl;
-                          ++itDe1;
-       }
-       cout << "NodoIntermedioMedio  "<<endl;
-       itDe2= nodoIntermedioMedio->getListaElementos()->begin();
-       while(itDe2!=nodoIntermedioMedio->getListaElementos()->end()){
-                      ElementoNodo* elem = *itDe2;
-                      elem->getClave()->getAtributo("dni")->imprimir(cout);
-                      cout << " " << endl;
-                      elem->getClave()->getAtributo("nombre") ->imprimir(cout);
-                      cout << " " << endl;
-                      cout << "Referencia: " << elem->getReferencia() << endl;
-                      ++itDe2;
-                    }
-        cout << "NodoIntermedio3 "<<endl;
-        itDe3= nodoIntermedioDer->getListaElementos()->begin();
-        while(itDe3!=nodoIntermedioDer->getListaElementos()->end()){
-                          ElementoNodo* elem = *itDe3;
-                          elem->getClave()->getAtributo("dni")->imprimir(cout);
-                          cout << " " << endl;
-                          elem->getClave()->getAtributo("nombre") ->imprimir(cout);
-                          cout << " " << endl;
-                          cout << "Referencia: " << elem->getReferencia() << endl;
-                          ++itDe3;
-            }
+    nodoIntermedio4->agregarElemento(&elementoNodoInteremdio18);*/
 
 
+    /*---------------------------------------------------------*/
 
-    /*destruccion*/
-    delete nodoPadre;
-    delete nodoHermano;
-    delete nodoIntermedioIzq;
-    delete nodoIntermedioMedio;
-    delete nodoIntermedioDer;
-    return 0;
-};
 
 /*
  * main.cpp
@@ -491,8 +269,8 @@ int main(int argc,char* argv[]){
 	imprimir2(admin);
 	admin.insertar(100);
 	imprimir2(admin);
-	cout<<endl;
+	cout<<endl;*/
 	return 0;
-};*/
+};
 
 
