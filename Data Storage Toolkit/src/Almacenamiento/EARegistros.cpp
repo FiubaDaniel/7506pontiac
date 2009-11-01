@@ -9,7 +9,7 @@
 EARegistros::EARegistros(Registro*registro){
 	almacen=NULL;
 	registroSerializado=NULL;
-	tamanioRegistro=0;
+	tamanioRegistro=registro->tamanioSerializado();
 	this->registro=(Registro*)registro->clonar();
 }
 void EARegistros::finalizarAlmacenamiento(){
@@ -47,12 +47,11 @@ Almacenamiento* EARegistros::abrir(Almacenamiento*almacen){
 	posicionarComponente(0);
 	return anterior;
 };
-Almacenamiento* EARegistros::nuevo(Almacenamiento*almacenamiento,Ttamanio tamregistro){
+Almacenamiento* EARegistros::crear(Almacenamiento*almacenamiento){
 	finalizarAlmacenamiento();
 	Almacenamiento* anterior=almacen;
 	almacen=almacenamiento;
-	tamanioRegistro=tamregistro;
-	registroSerializado=new char[tamregistro];
+	registroSerializado=new char[tamanioRegistro];
 	tamanioEncabezado=sizeof(siguienteRegLibre);
 	siguienteRegLibre=0;
 	this->almacen->posicionar(0);
@@ -60,18 +59,23 @@ Almacenamiento* EARegistros::nuevo(Almacenamiento*almacenamiento,Ttamanio tamreg
 	return anterior;
 }
 void EARegistros::escribir(Registro*registro){
-	std::stringbuf buf(std::ios_base::binary | std::ios_base::out );
-	buf.pubsetbuf(registroSerializado,tamanioRegistro);
-	registro->serializar(buf);
-	almacen->escribir(registroSerializado,tamanioRegistro);
-	nroRegistro++;
+	if(!almacen->fin()){
+		std::stringbuf buf(std::ios_base::binary | std::ios_base::out );
+		buf.pubsetbuf(registroSerializado,tamanioRegistro);
+		registro->serializar(buf);
+		almacen->escribir(registroSerializado,tamanioRegistro);
+		nroRegistro++;
+	}
 }
 void EARegistros::leer(Registro*registro){
-	almacen->leer(registroSerializado,tamanioRegistro);
-	std::stringbuf buf;
-	buf.pubsetbuf(registroSerializado,tamanioRegistro);
-	buf.pubseekpos(0,std::ios_base::binary | std::ios_base::out );
-	registro->deserializar(buf);
+	if(!almacen->fin()){
+		almacen->leer(registroSerializado,tamanioRegistro);
+		std::stringbuf buf;
+		buf.pubseekpos(0,std::ios_base::binary | std::ios_base::in );
+		buf.pubsetbuf(registroSerializado,tamanioRegistro);
+		registro->deserializar(buf);
+
+	};
 	nroRegistro++;
 }
 bool EARegistros::escribir(Componente *componente){
@@ -90,7 +94,7 @@ bool EARegistros::escribir(Componente *componente){
 
 bool EARegistros::leer(Componente *componente){
 	Registro*registro=dynamic_cast<Registro*>(componente);
-	if(registro){
+	if(registro!=NULL ){
 		leer(registro);
 		return true;
 	}
@@ -107,24 +111,22 @@ bool EARegistros::insertar(Componente *componente){
 }
 
 bool EARegistros::modificar(Componente *componente){
-	bool resultado=false;
-	Registro*registro=dynamic_cast<Registro*>(componente);
-	if(registro!=NULL){
-		Registro*aux=(Registro*)registro->clonar();
-		leer(aux);
-		if(comparar(registro,aux)==0){
-			posicionarComponente(nroRegistro-1);
-			escribir(registro);
+	Registro*nuevo=dynamic_cast<Registro*>(componente);
+	if(nuevo!=NULL){
+		leer(registro);
+		if(comparar(nuevo,registro)==0){
+			nroRegistro--;
+			posicionarComponente(nroRegistro);
+			escribir(nuevo);
 			if(logActivo){
-				clave->set(registro);
-				Cambio cambio(clave,nroRegistro,Cambio::Alta);
+				clave->set(nuevo);
+				Cambio cambio(clave,nroRegistro,Cambio::Modificacion);
 				cambiosLog.push(cambio);
 			}
-			resultado=true;
+			return true;
 		}
-		delete aux;
 	}
-	return resultado;
+	return false;
 }
 
 bool EARegistros::eliminar(Componente *componente){
@@ -148,6 +150,7 @@ bool EARegistros::eliminar(Componente *componente){
 				cambiosLog.push(eliminado);
 				cambiosLog.push(reubicado);
 			}
+			siguienteRegLibre--;
 		}
 
 		delete aux;
@@ -156,11 +159,13 @@ bool EARegistros::eliminar(Componente *componente){
 }
 bool EARegistros::posicionarComponente(size_t nroCompuesto){
 	nroRegistro=nroCompuesto;
-	almacen->posicionar(nroRegistro*tamanioRegistro+tamanioEncabezado);
+	almacen->posicionar(nroCompuesto*tamanioRegistro+tamanioEncabezado);
 	return true;
 }
 bool EARegistros::siguiente(Componente *componente){
-	return leer(componente);
+	if(!almacen->fin() && nroRegistro < siguienteRegLibre)
+		return leer(componente);
+	return false;
 };
 Componente *EARegistros::getComponente(){
 	return registro;

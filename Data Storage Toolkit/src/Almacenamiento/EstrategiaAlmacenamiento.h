@@ -38,7 +38,7 @@ class Cambio{
 public:
 	Clave *clave;
 	Referencia referencia;
-	enum TOperacion{Alta,Baja,Reubicacion} operacion;
+	enum TOperacion{Alta,Baja,Reubicacion,Modificacion} operacion;
 public:
 	Cambio(Clave*clave,Referencia referencia,TOperacion op){
 		this->clave=clave->clonarce();

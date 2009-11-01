@@ -30,7 +30,7 @@ public:
 	EARegistros(Registro*registro);
 	virtual ~EARegistros();
 	Almacenamiento* abrir(Almacenamiento*almacen);
-	Almacenamiento* nuevo(Almacenamiento*almacenamiento,Ttamanio tamRegistro);
+	Almacenamiento* crear(Almacenamiento*almacenamiento);
 	Componente* getComponente();
 	bool posicionarComponente(size_t nroCompuesto);
 	bool escribir(Componente*componente);
