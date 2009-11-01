@@ -6,7 +6,11 @@
  */
 
 #include "Clave.h"
-
+Clave::Clave(const Clave & otra){
+	for(Ttamanio i=0;i<otra.atributosDeClave.size();i++){
+			atributosDeClave.push_back(  otra.atributosDeClave.at(i)->clonar()   );
+	}
+};
 Clave::Clave(Registro* registro,unsigned int cantidadAtributosEntrantes,...){
 	va_list ap;
 	va_start(ap, cantidadAtributosEntrantes);
@@ -22,6 +26,12 @@ Clave::Clave(Registro* registro,unsigned int cantidadAtributosEntrantes,...){
 	va_end(ap);
 };
 Clave::Clave(){};
+void Clave::set(Registro*reg){
+	for(Ttamanio i=0;i<atributosDeClave.size();i++){
+		Atributo*att=atributosDeClave.at(i);
+		att->set( reg->get(att->getNombre()) );
+	}
+};
 unsigned int Clave::getCantidadAtributos(){
 	return cantidadAtributos;
 };
