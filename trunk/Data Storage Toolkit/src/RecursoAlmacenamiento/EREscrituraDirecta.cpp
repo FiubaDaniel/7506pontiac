@@ -5,7 +5,12 @@ EREscrituraDirecta::EREscrituraDirecta(Almacenamiento *buffer): admin(10){
 }
 
 EREscrituraDirecta::~EREscrituraDirecta(){}
-
+void EREscrituraDirecta::setClave(Registro*reg,Clave*clave){
+	for(Ttamanio i=0;i<clave->getCantidadAtributos();i++){
+		Atributo*att=clave->getAtributo(i);
+		reg->get(att->getNombre())->set(att);
+	}
+};
 bool EREscrituraDirecta::insertar(Registro* registro){
 	clave->set(registro);
 	Referencia referencia;
@@ -25,7 +30,7 @@ bool EREscrituraDirecta::eliminar(Clave* unaClave){
 	if(!indice->BuscarReferencia(unaClave,&referencia))
 		return false;
 	estrategiaArchivo->posicionarComponente(referencia);
-	//Todo registro->set(clave);
+	setClave(registro,clave);
 	estrategiaArchivo->eliminar(registro);
 	indice->eliminar(unaClave);
 	while(!estrategiaArchivo->cambiosLog.empty()){
@@ -93,6 +98,7 @@ void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 			registro=NULL;
 			insertarEnBuffer(cambio.referencia);
 			break;
+		case Cambio::Modificacion:
 		case Cambio::Baja :
 			if(admin.acceder(cambio.referencia)){
 				posicionBuffer=admin.getPosicionEnBuffer();
@@ -117,7 +123,7 @@ void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 			}
 			/*actualizo la nueva posicion si esta en el buffer*/
 			if(!admin.acceder(cambio.referencia))
-				//TODO admin.insertar(cambio.referencia);
+				admin.insertar(cambio.referencia);
 			posicionBuffer=admin.getPosicionEnBuffer();
 			estrategiaArchivo->posicionarComponente(cambio.referencia);
 			componente=estrategiaArchivo->getComponente();
@@ -202,8 +208,6 @@ void AdministradorDeBuffer::insertar(size_t posicionArchivo){
 	}
 	promover(aux);
 	posicionEnTabla=aux;
-
-
 };
 bool AdministradorDeBuffer::acceder(size_t posicionArchivo){
 	if(buscar(posicionArchivo)){

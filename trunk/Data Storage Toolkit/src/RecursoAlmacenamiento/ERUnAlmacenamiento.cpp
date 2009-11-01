@@ -6,7 +6,7 @@ ERUnAlmacenamiento::ERUnAlmacenamiento(){
 ERUnAlmacenamiento::~ERUnAlmacenamiento(){}
 
 bool ERUnAlmacenamiento::insertar(Registro* registro){
-	//TODO clave->set(registro);
+	clave->set(registro);
 	Referencia referencia;
 	if(indice->BuscarReferencia(clave,&referencia))
 		return false;
@@ -23,7 +23,7 @@ bool ERUnAlmacenamiento::eliminar(Clave* unaClave){
 	if(!indice->BuscarReferencia(unaClave,&referencia))
 		return false;
 	estrategiAlmacenamiento->posicionarComponente(referencia);
-	//TODO registro.set(clave);
+	setClave(registro,clave);
 	estrategiAlmacenamiento->eliminar(registro);
 	indice->eliminar(unaClave);
 	while(!estrategiAlmacenamiento->cambiosLog.empty()){
@@ -34,7 +34,7 @@ bool ERUnAlmacenamiento::eliminar(Clave* unaClave){
 	return true;
 };
 bool ERUnAlmacenamiento::modificar(Clave* unaClave,Registro* registro){
-	//TODO clave->set(registro);
+	clave->set(registro);
 	Referencia referencia;
 	if(!indice->BuscarReferencia(unaClave,&referencia))
 		return false;
@@ -63,6 +63,11 @@ void ERUnAlmacenamiento::actualizarIndice(Cambio cambio){
 		case Cambio::Reubicacion : indice->modificar(cambio.clave,cambio.referencia); break;
 	}
 }
-
+void ERUnAlmacenamiento::setClave(Registro*reg,Clave*clave){
+	for(Ttamanio i=0;i<clave->getCantidadAtributos();i++){
+		Atributo*att=clave->getAtributo(i);
+		reg->get(att->getNombre())->set(att);
+	}
+};
 
 
