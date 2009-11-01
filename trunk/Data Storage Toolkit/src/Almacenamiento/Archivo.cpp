@@ -18,10 +18,12 @@ void Archivo::leer(void* unBytes){
 
 };
 void Archivo::posicionar(size_t posicion){
-	archivo.seekg(posicion);
-	archivo.seekp(posicion);
+	archivo.seekp(posicion,std::fstream::beg);
+	archivo.seekg(posicion,std::fstream::beg);
 };
-bool Archivo::bien(){return archivo.good();};
+bool Archivo::bien(){
+	return archivo.good() && archivo.is_open();
+};
 void Archivo::posicionarAlfinal(){
 	archivo.seekg(std::fstream::end);
 	archivo.seekp(std::fstream::end);
@@ -31,9 +33,9 @@ bool Archivo::fin(){
 }
 
 void Archivo::crear(const char *ruta){
-	archivo.open(ruta,std::fstream::out|std::fstream::trunc);
+	archivo.open(ruta,std::fstream::out|std::fstream::trunc|std::fstream::binary);
 	archivo.close();
-	archivo.open(ruta,std::fstream::out|std::fstream::binary|std::fstream::in);
+	archivo.open(ruta,std::ios_base::out|std::fstream::in|std::fstream::binary);
 }
 
 void Archivo::abrir(const char *ruta){
