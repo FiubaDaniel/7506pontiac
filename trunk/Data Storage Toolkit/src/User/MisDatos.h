@@ -24,7 +24,6 @@
 
 enum TipoIndice {ARBOL, HASH};
 
-
 class MisDatos {
 public:
 	MisDatos();

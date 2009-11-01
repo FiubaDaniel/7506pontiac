@@ -1,28 +1,28 @@
 #ifndef ESTRATEGIARECURSOSESCRITURADIRECTA_H
 #define ESTRATEGIARECURSOSESCRITURADIRECTA_H
 #include "EstrategiaRecursos.h"
-#include <list>
+#include <map>
 
 /**
  * class EREscrituraDirecta
  *
  */
-
+struct NodoArchivoBuffer;
+typedef  std::map<size_t,NodoArchivoBuffer*>::iterator PNodoSiguiente;
 
 struct NodoArchivoBuffer{
-	size_t posicionArchivo;
 	size_t posicionBuffer;
-	NodoArchivoBuffer* siguiente;
+	PNodoSiguiente siguiente;
 };
 class AdministradorDeBuffer{
 private:
-	size_t posicionEnTabla;
-	size_t ultimo;
+	PNodoSiguiente posicionEnTabla;
 	size_t capacidad;
-	void promover(NodoArchivoBuffer*promovido);
-	NodoArchivoBuffer* tablaArchivoBuffer;
+	void promover(PNodoSiguiente &promovido);
+	void promoverAprimero(PNodoSiguiente &promovido);
+	std::map<size_t,NodoArchivoBuffer*> tablaArchivoBuffer;
 public:
-	NodoArchivoBuffer* tope;
+	PNodoSiguiente tope;
 	AdministradorDeBuffer(size_t capacidad);
 	virtual ~AdministradorDeBuffer();
 	bool buscar(size_t posicionArchivo);
@@ -31,6 +31,8 @@ public:
 	NodoArchivoBuffer* at(size_t pos);
 	bool acceder(size_t posicionArchivo);
 	void insertar(size_t posicionArchivo);
+	friend void imprimir2(AdministradorDeBuffer &admin);
+	friend void imprimir(AdministradorDeBuffer &admin);
 };
 
 class EREscrituraDirecta : public EstrategiaRecursos{
@@ -43,7 +45,7 @@ private:
 	EstrategiaIndice* indice;
 	Registro*registro;
 	Clave*clave;
-	size_t posicionEnBuffer(size_t posicionArchivo);
+	//size_t posicionEnBuffer(size_t posicionArchivo);
 	void actualizarIndice(Cambio cambio);
 	void actualizarBuffer(Cambio cambio);
 	void insertarEnBuffer(Referencia refArchivo);

@@ -1,5 +1,12 @@
 #include "Registro.h"
 Registro::Registro(){};
+Registro::Registro(const Registro&reg){
+	tamanioBuffer=reg.tamanioBuffer;
+	fijo=reg.fijo;
+	for(Ttamanio i=0;i<reg.atributos.size();i++){
+		atributos.push_back(  reg.atributos.at(i)->clonar()   );
+	}
+};
 Registro::Registro(unsigned int cantidadAtributos, ...):Registro::Componente() {
 	/*locales*/
 	va_list ap;
