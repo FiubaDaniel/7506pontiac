@@ -211,7 +211,7 @@ void NodoHoja::balanceoEspecial(Nodo* nodoPegado,Nodo* nodoAlejado,Nodo* padre,b
 /*
  * Precondicion: el nodo que llame a la funcion dividirce debe ser el izq.
  */
-ElementoNodo* NodoHoja::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMedioE,Nodo* nodoDerE,Nodo* nodoPadreE,Clave clave){
+ElementoNodo* NodoHoja::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMedioE,Nodo* nodoDerE,Nodo* nodoPadreE,Clave* clave){
     NodoHoja* nodoHermano = dynamic_cast<NodoHoja*>(nodoHermanoE);
     NodoHoja* nodoIzq = dynamic_cast<NodoHoja*>(nodoIzqE);
     NodoHoja* nodoMedio = dynamic_cast<NodoHoja*>(nodoMedioE);
@@ -226,9 +226,9 @@ ElementoNodo* NodoHoja::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMe
 	bool encontrado = false;
 	/*busco en padre la clave, será el elemento seteado*/
 	list<ElementoNodo*>::iterator itPadre = nodoPadre->getListaElementos()->begin();
-	while(!encontrado&&itPadre!=nodoPadre->getListaElementos()->end()){
+	while(!encontrado && itPadre!=nodoPadre->getListaElementos()->end()){
 		elementoPadre = *itPadre;
-		if(comparador->Comparar(elementoPadre->getClave(),&clave)==0){
+		if(comparador->Comparar(elementoPadre->getClave(),clave)==0){
 			encontrado=true;
 		}
 		++itPadre;

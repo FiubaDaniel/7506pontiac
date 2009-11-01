@@ -26,7 +26,7 @@ public:
 	     std::list<ElementoNodo*> *getListaElementos();
 	     virtual void balanceo(Nodo* nodoIncompletoE,Nodo* nodoPadreE, bool izq)=0;
 	     virtual void balanceoEspecial(Nodo* nodoPegado,Nodo* nodoAlejado,Nodo* padre,bool Izq)=0;
-	     virtual ElementoNodo* dividirse(Nodo* nodoHermano,Nodo* nodoIzq,Nodo* nodoMedio,Nodo* nodoDer,Nodo* nodoPadreE,Clave clave)=0;
+	     virtual ElementoNodo* dividirse(Nodo* nodoHermano,Nodo* nodoIzq,Nodo* nodoMedio,Nodo* nodoDer,Nodo* nodoPadreE,Clave* clave)=0;
 	     virtual void serializate(std::stringbuf* buffer)=0;
 	     virtual int agregarElemento(ElementoNodo* elemento)=0;
 	     int Eliminar(const Clave* clave);

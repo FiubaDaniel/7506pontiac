@@ -217,7 +217,7 @@ void NodoIntermedio::balanceoEspecialDer(NodoIntermedio* nodoQcede,ElementoNodo*
  /*
   * PreCondicion: el nodo this q llame a la funcion es el nodo Izquierdo, o sea el de claves mas chicas.
   */
-ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMedioE,Nodo* nodoDerE,Nodo* nodoPadreE,Clave clave){
+ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMedioE,Nodo* nodoDerE,Nodo* nodoPadreE,Clave* clave){
 	NodoIntermedio* nodoHermano = dynamic_cast<NodoIntermedio*>(nodoHermanoE);
 	NodoIntermedio* nodoIzq = dynamic_cast<NodoIntermedio*>(nodoIzqE);
 	NodoIntermedio* nodoMedio = dynamic_cast<NodoIntermedio*>(nodoMedioE);
@@ -232,7 +232,7 @@ ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* 
 	bool encontrado = false;
 	while(!encontrado && itPadre!= nodoPadre->getListaElementos()->end()){
 		elem = *itPadre;/*halias 320*/
-		if(comparador->Comparar(elem->getClave(),&clave)==0){
+		if(comparador->Comparar(elem->getClave(),clave)==0){
 			encontrado=true;
 		}
 		++itPadre;
