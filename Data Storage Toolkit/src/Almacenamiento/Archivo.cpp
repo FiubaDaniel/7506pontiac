@@ -45,6 +45,10 @@ void Archivo::cerrar(){
 	archivo.close();
 }
 
+void Archivo::reiniciar(){
+	archivo.clear();
+}
+
 size_t Archivo::posicionActual(){
 	return archivo.tellg();
 };

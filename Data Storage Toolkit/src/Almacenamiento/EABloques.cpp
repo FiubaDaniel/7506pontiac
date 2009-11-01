@@ -22,7 +22,7 @@ EABloques::~EABloques() {
 };
 void EABloques::finalizarAlamcenamiento(){
 	if(archivoEspacioLibre.is_open()){
-		almacen->escribir( (char*)&cantidadBloques , sizeof(cantidadBloques) );
+		almacen->escribir( (char*)&siguienteLibre , sizeof(siguienteLibre) );
 		archivoEspacioLibre.close();
 	}
 };
@@ -37,7 +37,7 @@ Almacenamiento* EABloques::crear(Almacenamiento*almacen,const char*rutaArchivoEs
 	archivoEspacioLibre.get();
 	archivoEspacioLibre.seekg(0);
 	nroRegistro=0;
-	cantidadBloques=0;
+	siguienteLibre=0;
 	return anterior;
 };
 Almacenamiento* EABloques::abrir(Almacenamiento*almacen,const char*rutaArchivoEspacios){
@@ -46,15 +46,16 @@ Almacenamiento* EABloques::abrir(Almacenamiento*almacen,const char*rutaArchivoEs
 	finalizarAlamcenamiento();
 	archivoEspacioLibre.open(rutaArchivoEspacios,std::fstream::binary | std::fstream::in| std::fstream::out );
 	this->almacen->posicionar(0);
-	this->almacen->leer((char*)&cantidadBloques,sizeof(cantidadBloques));
+	this->almacen->leer((char*)&siguienteLibre,sizeof(siguienteLibre));
 	nroRegistro=0;
 	return anterior;
 };
 bool EABloques::posicionarComponente(size_t nroCompuesto){
-	if(nroCompuesto>=cantidadBloques)return false;
-	nroBloque=nroCompuesto;
-	almacen->posicionar(capacBloque*nroBloque+sizeof(cantidadBloques));
-	return true;
+	if(nroCompuesto<siguienteLibre){
+		nroBloque=nroCompuesto;
+		almacen->posicionar(capacBloque*nroBloque+sizeof(siguienteLibre));
+		return true;
+	}return false;
 };
 void EABloques::leer(Bloque*bloque){
 	/*leo el bloque*/
@@ -84,7 +85,7 @@ void EABloques::escribir(Bloque*bloque){
 };
 bool EABloques::escribir(Componente*compuesto){
 	Bloque*bloque=dynamic_cast<Bloque*>(compuesto);
-	if(bloque!=NULL){
+	if(bloque!=NULL&&nroBloque<=siguienteLibre){
 		if(bloque->tamanioSerializado()<=capacBloque){
 			escribir(bloque);
 			if(logActivo){
@@ -101,7 +102,7 @@ bool EABloques::escribir(Componente*compuesto){
 
 bool EABloques::leer(Componente*compuesto){
 	Bloque*bloque=dynamic_cast<Bloque*>(compuesto);
-	if(bloque!=NULL && !almacen->fin()){
+	if(bloque!=NULL &&nroBloque<siguienteLibre){
 		leer(bloque);
 		return true;
 	}
@@ -112,7 +113,7 @@ size_t EABloques::buscarEspacioLibre(Ttamanio espacio,bool& encontrado){
 	libres=capacBloque;
 	archivoEspacioLibre.seekg(0);
 	encontrado=false;
-	while(!encontrado && nroBloque<cantidadBloques && !archivoEspacioLibre.eof()){
+	while(!encontrado && nroBloque<siguienteLibre && !archivoEspacioLibre.eof()){
 		archivoEspacioLibre.read((char*)&libres,sizeof(Ttamanio));
 		Ttamanio disponibles=libres-(1-porcCarga)*capacBloque;
 		encontrado=disponibles>espacio;
@@ -126,23 +127,22 @@ bool EABloques::insertar(Componente*componente){
 	bool encontrado;
 	Registro*registro=dynamic_cast<Registro*>(componente);
 	if(registro!=NULL){
-		Ttamanio espacioNecesario=registro->tamanioSerializado();
-		nroBloque=buscarEspacioLibre(espacioNecesario,encontrado);
+		size_t posInsercion=buscarEspacioLibre(registro->tamanioSerializado(),encontrado);
 		if(encontrado){
-			posicionarComponente(nroBloque);
+			posicionarComponente(posInsercion);
 			leer(bloque);
-			nroBloque--;
 			bloque->agregar(componente);
 		}else{
 			bloque->inicializar(componente);
-			cantidadBloques++;
+			siguienteLibre++;
 		}
+		posicionarComponente(posInsercion);
+		escribir(bloque);
+
 		if(logActivo){
 			clave->set(registro);
 			cambiosLog.push(new Cambio(*clave,nroBloque,Cambio::Alta));
 		}
-		posicionarComponente(nroBloque);
-		escribir(bloque);
 	}
 	return true;
 };
@@ -151,41 +151,43 @@ bool EABloques::insertar(Componente*componente){
 
 bool EABloques::modificar(Componente*componente){
 	size_t posModificado=nroBloque;
-	leer(bloque);
-	Ttamanio nroComponente=0;
-	if(buscarComponente((Registro*)componente,nroComponente)){
-		Ttamanio tamanio;
-		tamanio=bloque->get(nroComponente)->tamanioSerializado()-componente->tamanioSerializado();
-		if(tamanio>libres){
-			bloque->eliminar(nroComponente);
+	if(nroBloque<siguienteLibre){
+		leer(bloque);
+		Ttamanio nroComponente=0;
+		if(buscarComponente((Registro*)componente,nroComponente)){
+			Ttamanio tamanio;
+			tamanio=bloque->get(nroComponente)->tamanioSerializado()-componente->tamanioSerializado();
+			if(tamanio>libres){
+				bloque->eliminar(nroComponente);
 
+				posicionarComponente(posModificado);
+				escribir(bloque);
+				tamanio=componente->tamanioSerializado();
+
+				bool encontrado;
+				posModificado=buscarEspacioLibre(tamanio,encontrado);
+				if(encontrado){
+					posicionarComponente(posModificado);
+					leer(bloque);
+					bloque->agregar(componente);
+				}else{
+					bloque->inicializar(componente);
+					posModificado=siguienteLibre;
+					siguienteLibre++;
+				}
+				if(logActivo){
+					clave->set((Registro*)componente);
+					cambiosLog.push(new Cambio(*clave,posModificado,Cambio::Reubicacion));
+				}
+			}else{
+				Componente* eliminado=bloque->reemplazar(componente,nroComponente);
+				if(eliminado!=NULL)
+					delete eliminado;
+			}
 			posicionarComponente(posModificado);
 			escribir(bloque);
-			tamanio=componente->tamanioSerializado();
-
-			bool encontrado;
-			posModificado=buscarEspacioLibre(tamanio,encontrado);
-			if(encontrado){
-				posicionarComponente(posModificado);
-				leer(bloque);
-				bloque->agregar(componente);
-			}else{
-				bloque->inicializar(componente);
-				posModificado=cantidadBloques;
-				cantidadBloques++;
-			}
-			if(logActivo){
-				clave->set((Registro*)componente);
-				cambiosLog.push(new Cambio(*clave,posModificado,Cambio::Reubicacion));
-			}
-		}else{
-			Componente* eliminado=bloque->reemplazar(componente,nroComponente);
-			if(eliminado!=NULL)
-				delete eliminado;
+			return true;
 		}
-		posicionarComponente(posModificado);
-		escribir(bloque);
-		return true;
 	}
 	return false;
 };
@@ -205,32 +207,34 @@ bool EABloques::buscarComponente(Registro*registro,Ttamanio & posicion){
 };
 bool EABloques::eliminar(Componente*componente){
 	size_t posBorrado=nroBloque;
-	if(nroBloque>=cantidadBloques)return false;
-	leer(bloque);
-	Ttamanio nroComponente;
-	if(!buscarComponente((Registro*)componente,nroComponente))
-		return false;
-	if(logActivo){
-		clave->set((Registro*)componente);
-		cambiosLog.push(new Cambio(*clave,nroBloque,Cambio::Baja));
-	}
-	if(bloque->cantidadComponentes()<=1){
-		if(posBorrado<cantidadBloques-1){
-			posicionarComponente(cantidadBloques-1);
-			leer(bloque);
-			if(logActivo){
-				for(Ttamanio i=0;i<bloque->cantidadComponentes();i++){
-					clave->set((Registro*)bloque->get(i));
-					cambiosLog.push(new Cambio(*clave,nroBloque,Cambio::Reubicacion));
+	if(nroBloque<siguienteLibre){
+		leer(bloque);
+		Ttamanio nroComponente;
+		if(buscarComponente((Registro*)componente,nroComponente)){
+			if(bloque->cantidadComponentes()<=1){
+				if(posBorrado<siguienteLibre-1){
+					posicionarComponente(siguienteLibre-1);
+					leer(bloque);
+					if(logActivo){
+						for(Ttamanio i=0;i<bloque->cantidadComponentes();i++){
+							clave->set((Registro*)bloque->get(i));
+							cambiosLog.push(new Cambio(*clave,nroBloque,Cambio::Reubicacion));
+						}
+					}
 				}
+				siguienteLibre--;
+			}else
+				bloque->eliminar(nroComponente);
+			if(posicionarComponente(posBorrado))
+				escribir(bloque);
+			if(logActivo){
+				clave->set((Registro*)componente);
+				cambiosLog.push(new Cambio(*clave,nroBloque,Cambio::Baja));
 			}
+			return true;
 		}
-		cantidadBloques--;
-	}else
-		bloque->eliminar(nroComponente);
-	if(posicionarComponente(posBorrado))
-		escribir(bloque);
-	return true;
+	}
+	return false;
 };
 bool EABloques::siguiente(Componente*componente){
 	if(nroBloque==0){
@@ -238,7 +242,7 @@ bool EABloques::siguiente(Componente*componente){
 		nroRegistro=0;
 	}
 	if(nroRegistro>= bloque->cantidadComponentes()){
-		if(almacen->fin() || nroBloque>=cantidadBloques){
+		if(almacen->fin() || nroBloque>=siguienteLibre){
 			return false;
 		}
 		leer(bloque);
@@ -260,18 +264,24 @@ Componente *EABloques::getComponente(){
 }
 
 bool EABloques::obtener(Componente*componente){
-	leer(bloque);
-	if(!buscarComponente((Registro*)componente,nroRegistro))
-		return false;
+	if(nroBloque<siguienteLibre){
+		leer(bloque);
+		if(!buscarComponente((Registro*)componente,nroRegistro))
+			return false;
 
-	std::stringbuf buf(std::ios_base::binary | std::ios_base::in | std::ios_base::out );
-	buf.pubsetbuf(bloqueSerializado,capacBloque);
-	buf.pubseekpos(0);
+		std::stringbuf buf(std::ios_base::binary | std::ios_base::in | std::ios_base::out );
+		buf.pubsetbuf(bloqueSerializado,capacBloque);
+		buf.pubseekpos(0);
 
-	bloque->get(nroRegistro)->serializar(buf);
-	buf.pubseekpos(0);
+		bloque->get(nroRegistro)->serializar(buf);
+		buf.pubseekpos(0);
 
-	componente->deserializar(buf);
-	nroRegistro++;
-	return true;
+		componente->deserializar(buf);
+		nroRegistro++;
+		return true;
+	}
+	return false;
+};
+size_t EABloques::posicionComponente(){
+	return nroBloque;
 };

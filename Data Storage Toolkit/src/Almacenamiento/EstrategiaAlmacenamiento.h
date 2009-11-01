@@ -19,6 +19,7 @@ public:
 	virtual void setClave(Clave*unaClave){clave=unaClave->clonarce();};
 	virtual void setComparador(ComparadorClave*unComparador){comparador=unComparador;};
 	virtual bool posicionarComponente(size_t nroComponente)=0;
+	virtual size_t posicionComponente()=0;
 	virtual bool escribir(Componente*componente)=0;
 	virtual bool leer(Componente*componente)=0;
 	virtual bool insertar(Componente*componente)=0;
