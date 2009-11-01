@@ -1,10 +1,6 @@
 #include "Archivo.h"
 
-Archivo::Archivo (const char*ruta){
-	archivo.open(ruta,std::fstream::out|std::fstream::app);
-	archivo.close();
-	archivo.open(ruta,std::fstream::out|std::fstream::binary|std::fstream::in);
-};
+Archivo::Archivo (){};
 Archivo::~Archivo (){
 	archivo.close();
 };
@@ -16,7 +12,6 @@ void Archivo::escribir(const void* unByte){
 };
 void Archivo::leer(void* bytes,size_t cantidad){
 	archivo.read((char*)bytes,cantidad);
-
 };
 void Archivo::leer(void* unBytes){
 	*(char*)unBytes=archivo.get();
@@ -33,6 +28,19 @@ void Archivo::posicionarAlfinal(){
 };
 bool Archivo::fin(){
 	return archivo.eof();
+}
+
+void Archivo::crear(const char *ruta){
+	archivo.open(ruta,std::fstream::out|std::fstream::trunc);
+	archivo.close();
+	archivo.open(ruta,std::fstream::out|std::fstream::binary|std::fstream::in);
+}
+
+void Archivo::abrir(const char *ruta){
+	archivo.open(ruta,std::fstream::out|std::fstream::binary|std::fstream::in);
+}
+void Archivo::cerrar(){
+	archivo.close();
 }
 
 size_t Archivo::posicionActual(){

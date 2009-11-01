@@ -13,95 +13,87 @@
 #include <cstring>
 #include "compuestolib.h"
 using namespace std;
-class AtributoTest {
-	int nroprueba;
+template<typename T>
+class ProvadorAtributoFijo{
+	AtributoFijo<T> at1;
+	AtributoFijo<T> at2;
+	T valor1;
+	T valor2;
 public:
-	AtributoTest(){nroprueba=0;};
-	virtual ~AtributoTest();
-	void runTest(){
-		int a=8;float b=0.1f;
-		testAtributoFijo(a);
-		testAtributoFijo(b);
-		char prueba[10]="123456789";
-		testAtributoFijoCadena(prueba,strlen(prueba));
-		testAtributoVariable(a);
-		testAtributoVariable(b);
-
+	ProvadorAtributoFijo(T valor1,T valor2,string nombre):at1(nombre),at2(nombre+"2"){
+		this->valor1=valor1;
+		this->valor2=valor2;
+		cout<<boolalpha;
+		cout<<"SetGet "<<testgetySet()<<endl;
+		cout<<"Serializacion "<<testserializarDeserializar()<<endl;
+		cout<<"esFijo "<<testEsfijo()<<endl;
+		cout<<"Comparar "<<testcomparar()<<endl;
+		cout<<"ImprimirLeer "<<testimprimirYleer(valor1)<<endl;
+		cout<<"Nombre "<<testNombre()<<endl;
 	};
-	void verificar(bool test,std::string mensaje){
-		nroprueba++;
-		if(!test)
-			std::cerr<<"Error: "<<mensaje<<" nro "<<nroprueba<<endl;
+	~ProvadorAtributoFijo(){};
+	bool testNombre(){
+		return at1.getNombre()+"2"==at2.getNombre();
 	}
-	template<typename T>
-	void testAtributoFijo(T valor){
+	bool testgetySet(){
+		T aux=valor2;
+		at1.set(&valor1);
+		at1.get(&aux);
+		return (aux==valor1)&& (at1.tamanio()==sizeof(T));
+	};
+	bool testserializarDeserializar(){
+		stringbuf str;
+		at1.serializar(str);
+		Ttamanio tamanio=str.str().size();
+		at2.deserializar(str);
 		T aux;
-		AtributoFijo<T> atributo("nombre");
-		atributo.set(&valor);
-		atributo.get(&aux);
-		verificar(valor==aux,"No se guarda correctamente");
-		verificar(atributo.tamanioSerializado()==sizeof(T),"Tamanio Serializacion incorrecto");
-		verificar(atributo.tamanio()==sizeof(T),"Tamanio incorrecto");
-		verificar(atributo.esfijo(),"No es fijo");
-		stringbuf ostrm;
-		atributo.serializar(ostrm);
-		aux*=aux;
-		atributo.set(&aux);
-		atributo.deserializar(ostrm);
-		atributo.get(&aux);
-		verificar(valor==aux,"No se deserializacion.");
-	}
-	void testAtributoFijoCadena(const char* str,Ttamanio n){
-		AtributoFijo<char*> atributo("nombre",n);
-		char aux[n];
-		atributo.set(&str);
-		atributo.get(&aux);
-		verificar(strncmp(str,aux,n),"No se guarda correctamente");
-		verificar(atributo.tamanioSerializado()==n,"Tamanio Serializacion incorrecto");
-		verificar(atributo.tamanio()==n,"Tamanio Serializacion incorrecto");
-		verificar(!atributo.esfijo(),"No es fijo");
-		stringbuf ostrm;
-		atributo.serializar(ostrm);
-		strcpy(aux,"hola");
-		atributo.set(aux);
-		atributo.deserializar(ostrm);
-		atributo.get(&aux);
-		verificar(strncmp(str,aux,n),"No se deserializa correctamente.");
-	}
-	template<typename T>
-	void testAtributoVariable(T valor){
+		at1.get(&valor1);
+		at2.get(&aux);
+		return (valor1==aux)&&(tamanio==at1.tamanioSerializado());
+	};
+	bool testEsfijo(){
+		return at1.esfijo()&& at2.esfijo();
+	};
+	bool testcomparar(){
+		at1.get(&valor1);
+		at2.get(&valor2);
+		return (valor1-valor2)==( at1.comparar(&at2) );
+	};
+	bool testimprimirYleer(T& valor1){
+		stringstream stream;
 		T aux;
-		AtributoVariable<T> atributo("nombre");
-		atributo.set(&valor);
-		atributo.get(&aux);
-		verificar(valor==aux,"No se guarda correctamente");
-		verificar(atributo.tamanioSerializado()==(sizeof(T)+sizeof(Ttamanio)),"Tamanio Serializacion incorrecto");
-		verificar(atributo.tamanio()==sizeof(T),"Tamanio incorrecto");
-		verificar(atributo.esfijo(),"No es fijo");
-		stringbuf ostrm;
-		atributo.serializar(ostrm);
-		aux*=aux;
-		atributo.set(&aux);
-		atributo.deserializar(ostrm);
-		atributo.get(&aux);
-		verificar(valor==aux,"No se deserializacion.");
-	}
-	void testAtributoVariableCadena(const char* str,Ttamanio n){
-		AtributoFijo<char*> atributo("nombre",n);
-		char aux[n];
-		atributo.set(&str);
-		atributo.get(&aux);
-		verificar(strncmp(str,aux,n),"No se guarda correctamente");
-		verificar(atributo.tamanioSerializado()==n,"Tamanio Serializacion incorrecto");
-		verificar(atributo.tamanio()==n,"Tamanio Serializacion incorrecto");
-		verificar(!atributo.esfijo(),"No es fijo");
-		stringbuf ostrm;
-		atributo.serializar(ostrm);
-		strcpy(aux,"hola");
-		atributo.set(aux);
-		atributo.deserializar(ostrm);
-		atributo.get(&aux);
-		verificar(strncmp(str,aux,n),"No se deserializa correctamente.");
+		at1.set(&valor1);
+		at1.imprimir(stream);
+		at2.leer(stream);
+		at2.get(&aux);
+		return aux==valor1;
+	};
+};
+class AtributoTest {
+
+public:
+	AtributoTest(){
+		ProvadorAtributoFijo<int>(111,8,"entero");
+		ProvadorAtributoFijo<short>(2,15,"entero");
+		ProvadorAtributoFijo<long>(7,11,"entero");
+		ProvadorAtributoFijo<float>(0.02,8000,"entero");
+		ProvadorAtributoFijo<char>('a','z',"entero");
+		ProvadorAtributoFijo<double>(0.02548,25489.289,"entero");
+	};
+	virtual ~AtributoTest(){};
+	void CasoEspeacial(){
+		char str1[15]="un string";
+		char str2[15]="123 string";
+		char aux[15];
+		AtributoFijo<char*> at1("string",15);
+		AtributoFijo<char*> at2("string",15);
+		cout<<(at1.tamanioSerializado()==15)<<endl;
+		cout<<(at1.tamanio()==15)<<endl;
+		at1.set(str1);
+		at1.get(aux);
+		cout<<(0==strcmp(aux,str1))<<endl;
+		at2.set(aux);
+
 	}
 };
 

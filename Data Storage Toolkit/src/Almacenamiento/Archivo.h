@@ -8,10 +8,13 @@
 class Archivo : public Almacenamiento{
  std::fstream archivo;
 public:
-  Archivo (const char*ruta);
-  virtual ~Archivo ( );
+  Archivo ();
+  virtual ~Archivo ();
   /*-------------------------------------------------------------------------*/
   /*utilizado por la estrategiaAlmacenamiento*/
+  virtual void crear(const char*ruta);
+  virtual void abrir(const char*ruta);
+  virtual void cerrar();
   virtual void escribir(const void* bytes,size_t cantidad);
   virtual void escribir(const void* unByte);
   virtual void leer(void* bytes,size_t cantidad);

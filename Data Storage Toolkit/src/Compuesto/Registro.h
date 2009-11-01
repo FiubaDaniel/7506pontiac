@@ -15,6 +15,7 @@
 class Registro : public Componente{
 public:
 	Registro(unsigned int cantidadAtributos, ... );
+	Registro(const Registro&reg);
 	virtual ~Registro();
 	Atributo* get(Ttamanio posicion);
 	Atributo* get(std::string nombre);
