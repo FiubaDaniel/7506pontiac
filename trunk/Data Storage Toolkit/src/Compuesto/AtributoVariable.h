@@ -7,6 +7,7 @@
 #ifndef AtributoVariable_H_
 #define AtributoVariable_H_
 #include <string>
+#include <sstream>
 #include <vector>
 #include "Atributo.h"
 
@@ -201,16 +202,17 @@ public:
 	Ttamanio serializar(std::streambuf &salida){
 		char tam=str.size();
 		salida.sputc(tam);
-		salida.sputn(str.c_str(),tam);
-		return str.size()+sizeof(char);
+		salida.sputn(str.data(),tam);
+		return str.size()+1;
 	};
 	Ttamanio deserializar(std::streambuf &entrada){
-		char tam=str.size();
-		tam=entrada.snextc();
-		char buf[tam];
+		char tam=entrada.sbumpc();
+		char *buf=new char[tam];
 		entrada.sgetn(buf,tam);
-		str=tam;
-		return tam;
+		str.clear();
+		str.append(buf,tam);
+		delete buf;
+		return tam+1;
 	};
 	Ttamanio tamanioSerializado(){
 		return str.size()+sizeof(char);
