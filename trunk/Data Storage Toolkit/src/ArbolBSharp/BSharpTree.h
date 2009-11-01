@@ -43,7 +43,7 @@ public:
 	void destrozarLista(std::list<NodoIntermedio*>);
 	void resolverDesborde(Nodo* nodo,list<Referencia>&listaDePadres,Referencia refHijo);
 	void desbordeRaiz();
-	void buscarNodoBalancearODividir(NodoIntermedio* padre,Nodo* hijo,Nodo*& hermano,Referencia refHijo,bool& izq,bool& balancear,Referencia& refHermano,ElementoNodo* elemPadre);
+	void buscarNodoBalancearODividir(NodoIntermedio* padre,Nodo* hijo,Nodo*& hermano,Referencia refHijo,bool& izq,bool& balancear,Referencia& refHermano,ElementoNodo*& elemPadre);
 	void obtenerHermano(Referencia ref,Nodo*& Hermano,unsigned int nivel,bool& balancear);
 	ElementoNodo* ObtenerRaiz();
 	void modificarLista(std::list<Referencia>&listaDePadres,bool esInsertar,Nodo* nodo);
