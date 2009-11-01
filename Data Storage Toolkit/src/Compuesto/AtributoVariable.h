@@ -10,6 +10,8 @@
 #include <sstream>
 #include <vector>
 #include "Atributo.h"
+using namespace std;
+
 
 template<typename T_tipo>
 class AtributoVariable: public Atributo {
@@ -155,9 +157,9 @@ void AtributoVariable<T_tipo>::copiar(const Atributo& att){
 /**/
 /*Especializacion de la clase para cadena de chars*/
 template<>
-class AtributoVariable<std::string>: public Atributo {
+class AtributoVariable<string>: public Atributo {
 private:
-	std::string str;
+	string str;
 public:
 	AtributoVariable(std::string nombreAtributo):Atributo(nombreAtributo){};
 	virtual void set(void* value){
@@ -187,7 +189,7 @@ public:
 
 	void copiar(const Atributo& att){
 		try{
-			AtributoVariable<std::string>& otro=dynamic_cast<AtributoVariable<std::string>&>(const_cast<Atributo&>(att));
+			AtributoVariable<string>& otro=dynamic_cast<AtributoVariable<string>&>(const_cast<Atributo&>(att));
 			str=otro.str;
 		}catch(...){};
 	};
