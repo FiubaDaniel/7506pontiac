@@ -388,7 +388,7 @@ void BSharpTree::resolverDesborde(Nodo* nodo,std::list<Referencia>&listaDePadres
 		 }
 		 int desborde = padre->agregarElemento(elementoAagregarEnPadre);
 	     grabarUnitario(padre,listaDePadres.front());
-		    if(desborde==1){
+		    if(desborde==2){
 		 	   refHijo = listaDePadres.front();
 		 	   listaDePadres.pop_front();
 		 		if(!listaDePadres.empty()){
