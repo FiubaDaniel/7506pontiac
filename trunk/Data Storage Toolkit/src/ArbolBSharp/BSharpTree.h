@@ -35,7 +35,7 @@ public:
 	NodoHoja* buscarHoja(NodoIntermedio nodo,const Clave* clave,Referencia referenciaDeNodoHoja);
 	bool buscarIterativo(NodoIntermedio nodo,const Clave* clave,Referencia* ref,NodoHoja* ultimo);
 	int calcularCantidadElementosPorNodo(unsigned int tamSerializadoClave);
-	void BuscarInsertarOEliminar(Nodo* hoja,std::list<Referencia>&listaDePadres,NodoIntermedio* nodo,const Clave* clave,Referencia refHoja,bool& esRaiz,bool esInsertar);
+	void BuscarInsertarOEliminar(Nodo* &hoja,std::list<Referencia>&listaDePadres,NodoIntermedio* nodo,const Clave* clave,Referencia refHoja,bool& esRaiz,bool esInsertar);
 	Referencia buscarEspacioLibre();
 	void grabado(Nodo* original,Nodo* hermano,Nodo* padre,Referencia refOriginal,Referencia refPadre,Referencia refHermano);
 	void grabar(Nodo* nodoOriginal,Nodo* nodoHermano,Referencia refOriginal,Referencia refHermano);
