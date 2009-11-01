@@ -32,7 +32,7 @@ public:
 		int agregarElemento(ElementoNodo* elemento);
 		void serializate(stringbuf* buffer);
 		int unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre);
-		ElementoNodo* dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMedioE,Nodo* nodoDerE,Nodo* nodoPadreE,Clave clave);
+		ElementoNodo* dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMedioE,Nodo* nodoDerE,Nodo* nodoPadreE,Clave* clave);
 		void balanceo(Nodo* nodoIncompletoE,Nodo* nodoPadreE,bool izq);
 		void balanceoEspecial(Nodo* nodoPegado,Nodo* nodoAlejado,Nodo* padre,bool Izq);
 		int busquedaSecuencial(const Clave* clave,ElementoNodo*& elemento);
