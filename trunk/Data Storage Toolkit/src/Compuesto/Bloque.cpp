@@ -38,13 +38,13 @@ Ttamanio Bloque::deserializar(std::streambuf&entrada){
 		componentes.erase(componentes.begin()+i);
 	}
 	/*le faltan componentes*/
-	Componente* auxiliar=componentes.at(i-1)->clonar();
+	Componente* auxiliar;
 	while(i<nrocomponetes){
+		auxiliar=componentes.at(0)->clonar();
 		offset+=auxiliar->deserializar(entrada);
-		componentes.push_back(auxiliar->clonar());
+		componentes.push_back(auxiliar);
 		i++;
 	}
-	delete auxiliar;
 	return offset;
 };
 Ttamanio Bloque::serializar(std::streambuf&salida){
@@ -79,7 +79,7 @@ bool Bloque::insertar(Componente* nuevo,Ttamanio posicion){
 };
 //intenta insertar detras del registro actual si puede
 bool Bloque::agregar(Componente* nuevo){
-	componentes.push_back(nuevo);
+	componentes.push_back(nuevo->clonar());
 	return true;
 };//intenta insdertar detras del ultimo registro
 Componente* Bloque::reemplazar(Componente*nuevo,Ttamanio posicion){
@@ -94,8 +94,9 @@ Ttamanio Bloque::cantidadComponentes(){
 	return componentes.size();
 };
 void Bloque::inicializar(Componente*componente){
-	for(Ttamanio i=0;i<componentes.size();i++){
-		delete componentes.at(i);
+	while(!componentes.empty()){
+		delete componentes.back();
+		componentes.pop_back();
 	}
 	componentes.push_back(componente->clonar());
 };
