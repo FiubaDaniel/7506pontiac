@@ -62,6 +62,7 @@ public:
 	virtual int comparar(const Atributo*otroAtributo)=0;
 	virtual void imprimir(std::ostream&salida)=0;
 	virtual void leer(std::istream&entrada)=0;
+	virtual void set(const Atributo& att)=0;
 protected:
 	std::string nombre;
 /*	*/
