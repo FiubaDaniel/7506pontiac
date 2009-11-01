@@ -223,8 +223,8 @@ ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* 
 	NodoIntermedio* nodoMedio = dynamic_cast<NodoIntermedio*>(nodoMedioE);
 	NodoIntermedio* nodoDer = dynamic_cast<NodoIntermedio*>(nodoDerE);
 	NodoIntermedio* nodoPadre= dynamic_cast<NodoIntermedio*>(nodoPadreE);
-	int cantElementosIzq = ((this->getCatidadMaximaDeElementos()*2)+1)/3;
-	int cantElementosMedio = ((this->getCatidadMaximaDeElementos()*2)+1)/3;
+	int cantElementosIzq = ((cantidadMaximaDeElementos*2)+1)/3;
+	int cantElementosMedio = ((cantidadMaximaDeElementos*2)+1)/3;
 	ElementoNodo* elem;
 	ElementoNodo* retorno;
 	/*Busco en el padre el elemento de la clave dada*/
@@ -232,7 +232,7 @@ ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* 
 	bool encontrado = false;
 	while(!encontrado){
 		elem = *itPadre;/*halias 320*/
-		if(comparador->Comparar(elem->getClave(),&clave)){
+		if(comparador->Comparar(elem->getClave(),&clave)==0){
 			encontrado=true;
 		}
 	}
@@ -263,7 +263,7 @@ ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* 
 	 * Se debe relocalizar la clave padre, para hacerlo debo usar el elemento q separe
 	 * al nodo intermedio del nodo derecho, entonces se guarda en un elemento auxiliar
 	 * su clave hasta q se pueda setear el elemento padre y el elemento hijo. Para
-	 * tenerlo en cuenta q habra un elementomas resto un valor a cantElementosMedio
+	 * tenerlo en cuenta q habra un elemento mas resto un valor a cantElementosMedio
 	 */
 	cantElementosMedio--;
 	while(itHermano != nodoHermano->getListaElementos()->end()){
@@ -331,7 +331,7 @@ Referencia NodoIntermedio::bucarReferenciaAsiguienteNodo(const Clave* clave){
 int NodoIntermedio::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre){
 	std::list<ElementoNodo*>::reverse_iterator it = Padre->getListaElementos()->rbegin();
 	ElementoNodo* elementoPadre;
-	Clave* clave;
+	ElementoNodo* auxiliarPadre;
 	bool encontrado = false;
 	//Busco el primero menor al primero del nodo DERECHO
 	while(!encontrado && it!=Padre->getListaElementos()->rend()){
@@ -340,35 +340,51 @@ int NodoIntermedio::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre
 			encontrado = true;
 		}
 		++it;
-		//Clave me indicara luego q elemento del padre debe ser eliminado
-		ElementoNodo* aux = *it;
-		clave = aux->getClave();
+		if(encontrado){
+		auxiliarPadre = *it;
+		bool esEste = false;
+		std::list<ElementoNodo*>::iterator itAux=  Padre->getListaElementos()->begin();
+		while(!esEste){
+			ElementoNodo* elem = *itAux;
+			if(comparador->Comparar(elem->getClave(),auxiliarPadre->getClave())==0){
+				esEste = true;
+				Padre->getListaElementos()->erase(itAux);
+				Padre->setEspacioLibre(Padre->getEspacioLibre()-1);
+			}
+			++itAux;
+		    }
+		}
 	}
 	//Almaceno la clave del elemento del padre para poder setear al mismo sin problemas
 	Clave* claveDeElementoPadre = elementoPadre->getClave();
 	//Almaceno la referencia q aloja la ref izq del nodo derecho
 	NodoIntermedio* nodoDerecho = dynamic_cast<NodoIntermedio*>(nodoHermanoDer);
+	auxiliarPadre->setReferencia(referenciaIzq);
+	nodoHermanoIzq->getListaElementos()->push_back(auxiliarPadre);
 	Referencia refIzqDeNodoDer  = nodoDerecho->getReferenciaIzq();
 	unsigned int cantIzq = cantidadMaximaDeElementos- (cantidadMaximaDeElementos - nodoHermanoIzq->getEspacioLibre()) - 1;
 	std::list<ElementoNodo*>::iterator itMedio = listaElementos.begin();
 	while(itMedio != listaElementos.end()){
-		if(cantIzq>0){
+		if(cantIzq>0 ){
 			nodoHermanoIzq->getListaElementos()->push_back(*itMedio);
 		}else{
-		if(cantIzq==0){
+		if(cantIzq == 0){
 					ElementoNodo* elem = *itMedio;
 					nodoDerecho->setRefereciaIzq(elem->getReferencia());
 					elementoPadre->setClave(elem->getClave());
 					elem->setReferencia(refIzqDeNodoDer);
 					elem->setClave(claveDeElementoPadre);
 					nodoHermanoDer->getListaElementos()->push_front(elem);
-					cantIzq--;
 		}else{nodoHermanoDer->getListaElementos()->push_front(*itMedio);}
 	  }
 		++itMedio;
+		cantIzq--;
 	}
 	listaElementos.clear();
-	return Padre->Eliminar(clave);
+	if(Padre->getListaElementos()->size()<(((cantidadMaximaDeElementos)*2)/3)){
+		return 2;
+	}
+	return 1;
 };
 void NodoIntermedio::setearClave(const Clave* claveAeliminar,Clave* claveSetear){
 	std::list<ElementoNodo*>::iterator it = listaElementos.begin();
