@@ -13,6 +13,7 @@ public:
 	bool eliminar(Clave* unaClave);
 	bool modificar(Clave* unaClave,Registro* registro);
 	bool obtener(Clave* unaClave,Registro*registro);
+	void setClave(Registro*reg,Clave*clave);
 private:
 	void actualizarIndice(Cambio cambio);
 	EstrategiaAlmacenamiento* estrategiAlmacenamiento;

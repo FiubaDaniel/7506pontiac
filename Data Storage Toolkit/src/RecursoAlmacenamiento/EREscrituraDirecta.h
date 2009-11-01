@@ -36,6 +36,7 @@ public:
 };
 
 class EREscrituraDirecta : public EstrategiaRecursos{
+
 private:
 	AdministradorDeBuffer admin;
 	Almacenamiento* buffer;
@@ -49,6 +50,7 @@ private:
 	void actualizarIndice(Cambio cambio);
 	void actualizarBuffer(Cambio cambio);
 	void insertarEnBuffer(Referencia refArchivo);
+	void setClave(Registro*reg,Clave*clave);
 public:
 	EREscrituraDirecta(Almacenamiento*buffer);
 	virtual ~EREscrituraDirecta();

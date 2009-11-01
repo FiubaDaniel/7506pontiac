@@ -6,6 +6,7 @@
 #include <string>
 
 class EREscrituraDiferida : public EstrategiaRecursos{
+
 public:
   EREscrituraDiferida ( );
   virtual ~EREscrituraDiferida ( );
