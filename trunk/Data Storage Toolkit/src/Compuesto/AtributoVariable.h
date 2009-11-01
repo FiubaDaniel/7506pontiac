@@ -6,7 +6,7 @@
  */
 #ifndef AtributoVariable_H_
 #define AtributoVariable_H_
-#include <cassert>
+#include <string>
 #include <vector>
 #include "Atributo.h"
 
@@ -154,45 +154,66 @@ void AtributoVariable<T_tipo>::copiar(const Atributo& att){
 /**/
 /*Especializacion de la clase para cadena de chars*/
 template<>
-class AtributoVariable<char*>: public Atributo {
+class AtributoVariable<std::string>: public Atributo {
 private:
 	std::string str;
 public:
-	Ttamanio nrobytes;
-	AtributoVariable(std::string nombreAtributo,Ttamanio inicial):Atributo(nombreAtributo){
-		nrobytes=inicial;
-	};
+	AtributoVariable(std::string nombreAtributo):Atributo(nombreAtributo){};
 	virtual void set(void* value){
-		str="";
-		str.insert(0,(char*)value,nrobytes);
+		std::string* aux=(std::string*)value;
+		str=*aux;
 	};
 	virtual void get(void* value){
-		str.copy((char*)value,nrobytes);
+		std::string* aux=(std::string*)value;
+		*aux=str;
 	};
 	Ttamanio cantidadbytes(){return str.size();};
 	bool esfijo(){
 		return false;
 	};
 	int comparar(const Atributo*otroAtributo){
-		AtributoVariable<char*>* otro=dynamic_cast<AtributoVariable<char*>*>(const_cast<Atributo*>(otroAtributo));
-		if(otro!=NULL){
-			return str.compare(otro->str);
-		}//TODO exception
-		return 0;
+		AtributoVariable<std::string>* otro=dynamic_cast<AtributoVariable<std::string>*>(const_cast<Atributo*>(otroAtributo));
+		return str.compare(otro->str);
 	};
 	void imprimir(std::ostream&salida){
-		salida<<str;
+		salida<<str.c_str();
 
 	};
 	void leer(std::istream&entrada){
 		entrada>>str;
 	};
 	virtual ~AtributoVariable(){};
+
 	void copiar(const Atributo& att){
 		try{
-			AtributoVariable<char*>& otro=dynamic_cast<AtributoVariable<char*>&>(const_cast<Atributo&>(att));
+			AtributoVariable<std::string>& otro=dynamic_cast<AtributoVariable<std::string>&>(const_cast<Atributo&>(att));
 			str=otro.str;
 		}catch(...){};
+	};
+	Ttamanio tamanio(){
+		return str.size();
+	};
+	Atributo* clonar(){
+		AtributoVariable<std::string>*clon=new AtributoVariable<std::string>(nombre);
+		clon->str=str;
+		return clon;
+	};
+	Ttamanio serializar(std::streambuf &salida){
+		char tam=str.size();
+		salida.sputc(tam);
+		salida.sputn(str.c_str(),tam);
+		return str.size()+sizeof(char);
+	};
+	Ttamanio deserializar(std::streambuf &entrada){
+		char tam=str.size();
+		tam=entrada.snextc();
+		char buf[tam];
+		entrada.sgetn(buf,tam);
+		str=tam;
+		return tam;
+	};
+	Ttamanio tamanioSerializado(){
+		return str.size()+sizeof(char);
 	};
 };
 
