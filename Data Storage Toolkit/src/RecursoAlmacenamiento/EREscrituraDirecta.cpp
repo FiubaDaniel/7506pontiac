@@ -18,9 +18,10 @@ bool EREscrituraDirecta::insertar(Registro* registro){
 		return false;
 	estrategiaArchivo->insertar(registro);
 	while(!estrategiaArchivo->cambiosLog.empty()){
-		Cambio cambio=estrategiaArchivo->cambiosLog.front();
-		actualizarBuffer(cambio);
-		actualizarIndice(cambio);
+		Cambio* cambio=estrategiaArchivo->cambiosLog.front();
+		actualizarBuffer(*cambio);
+		actualizarIndice(*cambio);
+		delete cambio;
 		estrategiaArchivo->cambiosLog.pop();
 	};
 	return true;
@@ -34,9 +35,10 @@ bool EREscrituraDirecta::eliminar(Clave* unaClave){
 	estrategiaArchivo->eliminar(registro);
 	indice->eliminar(unaClave);
 	while(!estrategiaArchivo->cambiosLog.empty()){
-		Cambio cambioEnArchivo=estrategiaArchivo->cambiosLog.front();
-		actualizarBuffer(cambioEnArchivo);
-		actualizarIndice(cambioEnArchivo);
+		Cambio *cambioEnArchivo=estrategiaArchivo->cambiosLog.front();
+		actualizarBuffer(*cambioEnArchivo);
+		actualizarIndice(*cambioEnArchivo);
+		delete cambioEnArchivo;
 		estrategiaArchivo->cambiosLog.pop();
 	};
 	return true;
@@ -50,9 +52,10 @@ bool EREscrituraDirecta::modificar(Clave* unaClave,Registro* registro){
 	if(!estrategiaArchivo->modificar(registro))
 		return false;
 	while(!estrategiaArchivo->cambiosLog.empty()){
-		Cambio cambio=estrategiaArchivo->cambiosLog.front();
-		actualizarBuffer(cambio);
-		actualizarIndice(cambio);
+		Cambio *cambio=estrategiaArchivo->cambiosLog.front();
+		actualizarBuffer(*cambio);
+		actualizarIndice(*cambio);
+		delete cambio;
 		estrategiaArchivo->cambiosLog.pop();
 	};
 	return true;

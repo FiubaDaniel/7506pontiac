@@ -12,8 +12,9 @@ bool ERUnAlmacenamiento::insertar(Registro* registro){
 		return false;
 	estrategiAlmacenamiento->insertar(registro);
 	while(!estrategiAlmacenamiento->cambiosLog.empty()){
-		Cambio cambio=estrategiAlmacenamiento->cambiosLog.front();
-		actualizarIndice(cambio);
+		Cambio* cambio=estrategiAlmacenamiento->cambiosLog.front();
+		actualizarIndice(*cambio);
+		delete cambio;
 		estrategiAlmacenamiento->cambiosLog.pop();
 	};
 	return true;
@@ -27,8 +28,9 @@ bool ERUnAlmacenamiento::eliminar(Clave* unaClave){
 	estrategiAlmacenamiento->eliminar(registro);
 	indice->eliminar(unaClave);
 	while(!estrategiAlmacenamiento->cambiosLog.empty()){
-		Cambio cambio=estrategiAlmacenamiento->cambiosLog.front();
-		actualizarIndice(cambio);
+		Cambio* cambio=estrategiAlmacenamiento->cambiosLog.front();
+		actualizarIndice(*cambio);
+		delete cambio;
 		estrategiAlmacenamiento->cambiosLog.pop();
 	};
 	return true;
@@ -42,8 +44,9 @@ bool ERUnAlmacenamiento::modificar(Clave* unaClave,Registro* registro){
 	if(!estrategiAlmacenamiento->modificar(registro))
 		return false;
 	while(!estrategiAlmacenamiento->cambiosLog.empty()){
-		Cambio cambio=estrategiAlmacenamiento->cambiosLog.front();
-		actualizarIndice(cambio);
+		Cambio *cambio=estrategiAlmacenamiento->cambiosLog.front();
+		actualizarIndice(*cambio);
+		delete cambio;
 		estrategiAlmacenamiento->cambiosLog.pop();
 	};
 	return true;
