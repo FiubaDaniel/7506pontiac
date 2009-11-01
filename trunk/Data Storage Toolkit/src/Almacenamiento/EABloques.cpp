@@ -79,8 +79,7 @@ bool EABloques::escribir(Componente*compuesto){
 			if(logActivo){
 				for(Ttamanio i=0;i<bloque->cantidadComponentes();i++){
 					clave->set((Registro*)bloque->get(i));
-					Cambio cambio(clave,nroBloque,Cambio::Alta);
-					cambiosLog.push(cambio);
+					cambiosLog.push(new Cambio(*clave,nroBloque,Cambio::Alta));
 				}
 			}
 			return true;
@@ -125,8 +124,7 @@ bool EABloques::insertar(Componente*componente){
 		}
 		if(logActivo){
 			clave->set(registro);
-			Cambio cambio(clave,nroBloque,Cambio::Alta);
-			cambiosLog.push(cambio);
+			cambiosLog.push(new Cambio(*clave,nroBloque,Cambio::Alta));
 		}
 		posicionarComponente(nroBloque);
 		escribir(bloque);
@@ -160,8 +158,8 @@ bool EABloques::modificar(Componente*componente){
 
 			if(logActivo){
 				clave->set((Registro*)componente);
-				Cambio cambio(clave,nroBloque,Cambio::Reubicacion);
-				cambiosLog.push(cambio);
+
+				cambiosLog.push(new Cambio(*clave,nroBloque,Cambio::Reubicacion));
 			}
 		}else{
 			Componente* eliminado=bloque->reemplazar(componente,nroComponente);
@@ -195,8 +193,7 @@ bool EABloques::eliminar(Componente*componente){
 	bloque->eliminar(nroComponente);
 	if(logActivo){
 		clave->set((Registro*)componente);
-		Cambio cambio(clave,nroBloque,Cambio::Baja);
-		cambiosLog.push(cambio);
+		cambiosLog.push(new Cambio(*clave,nroBloque,Cambio::Baja));
 	}
 	posicionarComponente(nroBloque);
 	escribir(bloque);

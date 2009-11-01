@@ -10,13 +10,13 @@ class Cambio;
 
 class EstrategiaAlmacenamiento {
 protected:
-	Clave*clave;
+	Clave *clave;
 	ComparadorClave*comparador;
 public:
-	EstrategiaAlmacenamiento(){};
-	virtual ~EstrategiaAlmacenamiento(){};
+	EstrategiaAlmacenamiento(){clave=NULL;};
+	virtual ~EstrategiaAlmacenamiento(){if(clave)delete clave;};
 	virtual Componente* getComponente()=0;
-	virtual void setClave(Clave*unaClave){clave=unaClave;};
+	virtual void setClave(Clave*unaClave){clave=unaClave->clonarce();};
 	virtual void setComparador(ComparadorClave*unComparador){comparador=unComparador;};
 	virtual bool posicionarComponente(size_t nroComponente)=0;
 	virtual bool escribir(Componente*componente)=0;
@@ -31,7 +31,7 @@ public:
 	/* Cola que refleja los cambios producidos en la estructura del archivo
 	 * a causa de las operaciones. La cola es exclusivamente para uso externo.
 	 */
-	std::queue<Cambio> cambiosLog;
+	std::queue<Cambio*> cambiosLog;
 };
 
 class Cambio{
@@ -40,13 +40,13 @@ public:
 	Referencia referencia;
 	enum TOperacion{Alta,Baja,Reubicacion,Modificacion} operacion;
 public:
-	Cambio(Clave*clave,Referencia referencia,TOperacion op){
-		this->clave=clave->clonarce();
+	Cambio(Clave&clave,Referencia referencia,TOperacion op){
+		this->clave=clave.clonarce();
 		this->referencia=referencia;
 		this->operacion=op;
 	}
-	virtual ~Cambio(){
+	~Cambio(){
 		delete clave;
-	};
+	}
 };
 #endif /* ESTRATEGIAALMACENAMIENTO_H_ */
