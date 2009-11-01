@@ -239,10 +239,9 @@ bool BSharpTree::insertar(Referencia ref,Clave* clave){
 	Referencia refHoja;
 	Nodo* hoja;
 	bool esRaiz=true;
-	NodoIntermedio* nodo = Raiz;
 	std::list<Referencia>listaDePadres;
 	listaDePadres.push_back(posicionRaiz);
-	BuscarInsertarOEliminar(hoja,listaDePadres,nodo,clave,refHoja,esRaiz,true);
+	BuscarInsertarOEliminar(hoja,listaDePadres,Raiz,clave,refHoja,esRaiz,true);
 	int desborde = hoja->agregarElemento(elemento);
 	if(desborde==0)return false;
 	if(desborde==1){
@@ -278,10 +277,10 @@ void BSharpTree::BuscarInsertarOEliminar(Nodo* &hoja,std::list<Referencia>&lista
 		delete nodo;
 	}else{ esRaiz = false;}
 	if(nivel!=0){//es nodo intermedio
-		nodo = new NodoIntermedio(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
-		modificarLista(listaDePadres,esInsertar,nodo);
+		NodoIntermedio* aux = new NodoIntermedio(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
+		modificarLista(listaDePadres,esInsertar,aux);
 		listaDePadres.push_front(refAux);/*el ultimo lo pongo delante siempre*/
-		BuscarInsertarOEliminar(hoja,listaDePadres,nodo,clave,refHoja,esRaiz,esInsertar);
+		BuscarInsertarOEliminar(hoja,listaDePadres,aux,clave,refHoja,esRaiz,esInsertar);
 	}else{
 		hoja =  new NodoHoja(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
 		refHoja = refAux;
