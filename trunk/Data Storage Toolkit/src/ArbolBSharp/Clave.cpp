@@ -56,16 +56,14 @@ Atributo* Clave::getAtributo(std::string nombre){
 	return NULL;
 };
 void Clave::deserializar(std::streambuf&buf){
-	buf.sgetn((char*)&cantidadAtributos,sizeof(cantidadAtributos));
-		for(Ttamanio i=0;i<cantidadAtributos;i++){
-			atributosDeClave.at(i)->deserializar(buf);
-		}
+	for(Ttamanio i=0;i<atributosDeClave.size();i++){
+		atributosDeClave.at(i)->deserializar(buf);
+	}
 };
 void Clave::serializar(std::streambuf&buf){
-	buf.sputn ((char*)&cantidadAtributos,sizeof(cantidadAtributos));
-		for(Ttamanio i=0;i<atributosDeClave.size();i++){
-		    atributosDeClave.at(i)->serializar(buf);
-		}
+	for(Ttamanio i=0;i<atributosDeClave.size();i++){
+	    atributosDeClave.at(i)->serializar(buf);
+	}
 };
 Ttamanio Clave::tamanioSerializado(){
 	Ttamanio tamanio=0;
