@@ -230,11 +230,12 @@ ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* 
 	/*Busco en el padre el elemento de la clave dada*/
 	std::list<ElementoNodo*>::iterator itPadre = nodoPadre->getListaElementos()->begin();
 	bool encontrado = false;
-	while(!encontrado){
+	while(!encontrado && itPadre!= nodoPadre->getListaElementos()->end()){
 		elem = *itPadre;/*halias 320*/
 		if(comparador->Comparar(elem->getClave(),&clave)==0){
 			encontrado=true;
 		}
+		++itPadre;
 	}
 	nodoIzq->setRefereciaIzq(referenciaIzq);
 	std::list<ElementoNodo*>::iterator itThis = listaElementos.begin();
@@ -247,7 +248,6 @@ ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* 
 		    elemento->setReferencia(0);
 			retorno = elemento;
 			cantElementosIzq = -1;
-			++itThis;
 		}else{
 		if(cantElementosIzq>0){
 	        nodoIzq->agregarElemento(elemento);
@@ -279,7 +279,6 @@ ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* 
 			elemento2->setReferencia(nodoHermano->getReferenciaIzq());
 			nodoMedio->agregarElemento(elemento2);
 			cantElementosMedio=-1;
-			++itHermano;
 		}else{
 			if(cantElementosMedio>0){
 				nodoMedio->agregarElemento(elemento2);

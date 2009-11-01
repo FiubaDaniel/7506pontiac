@@ -16,13 +16,10 @@ NodoHoja::NodoHoja(unsigned int cantElem,Referencia refSiguiente,ComparadorClave
 NodoHoja::NodoHoja(std::stringbuf* buf,unsigned int cantElem,ComparadorClave* comp,Clave* claveEstructural) : NodoHoja ::Nodo(cantElem,0,comp){
 	pos = 0;
 	buf->pubseekpos(0);
-	unsigned int cantElemLibres,nivel;
-	buf->sgetn((char*)&nivel,sizeof(nivel));
-	Nodo::setNumeroNivel(nivel);
-	buf->sgetn((char*)&cantElemLibres,sizeof(cantElemLibres));
-	Nodo::setEspacioLibre(cantElemLibres);
+	buf->sgetn((char*)&numeroNivel,sizeof(numeroNivel));
+	buf->sgetn((char*)&cantidadDeElementosLibre,sizeof(cantidadDeElementosLibre));
 	buf->sgetn((char*)&referenciaSiguiente,sizeof(referenciaSiguiente));
-	int Aux = cantElem - cantElemLibres;
+	int Aux = cantElem - cantidadDeElementosLibre;
 	Referencia ref;
 	while(Aux>0){
 		claveEstructural->deserializar(*buf);
@@ -60,11 +57,8 @@ ElementoNodo* NodoHoja::getPos(){
  */
 void NodoHoja::serializate(stringbuf* buffer){
 	buffer->pubseekpos(0);
-	unsigned int cantElemLibres,nivel;
-	nivel = Nodo::getNumeroNivel();
-	cantElemLibres = Nodo::getEspacioLibre();
-	buffer->sputn ((char*)&nivel,sizeof(nivel));
-	buffer->sputn ((char*)&cantElemLibres,sizeof(cantElemLibres));
+	buffer->sputn ((char*)&numeroNivel,sizeof(numeroNivel));
+	buffer->sputn ((char*)&cantidadDeElementosLibre,sizeof(cantidadDeElementosLibre));
 	buffer->sputn ((char*)&referenciaSiguiente,sizeof(referenciaSiguiente));
 	std::list<ElementoNodo*>::iterator it;
 	it = listaElementos.begin();
@@ -74,7 +68,7 @@ void NodoHoja::serializate(stringbuf* buffer){
 		Clave * clave = elemento->getClave();
 		clave->serializar(*buffer);
 		Referencia ref = elemento->getReferencia();
-		buffer->sputn ((char*)ref,sizeof(ref));
+		buffer->sputn ((char*)&ref,sizeof(ref));
 		++it;
 	   }
 	}
@@ -99,7 +93,7 @@ int NodoHoja::agregarElemento(ElementoNodo* elemento){
 	}
 	std::list<ElementoNodo*>::iterator it = listaElementos.begin();
 	bool ubicado = false;
-	while(!ubicado || it != listaElementos.end()){
+	while(!ubicado && it != listaElementos.end()){
 		ElementoNodo* elementoAux = *it;
 		if(comparador->Comparar(elemento->getClave(),elementoAux->getClave())==0){
 			retorno = 0,
@@ -110,9 +104,8 @@ int NodoHoja::agregarElemento(ElementoNodo* elemento){
 				cantidadDeElementosLibre=cantidadDeElementosLibre-1;
 			}
 			ubicado=true;
-		}else{
-			it++;
 		}
+      ++it;
 	}
 	if(!ubicado){
 		listaElementos.push_back(elemento->clonarce());
@@ -181,7 +174,7 @@ void NodoHoja::balanceoEspecial(Nodo* nodoPegado,Nodo* nodoAlejado,Nodo* padre,b
 		 * Los hermanos estan a izq siendo q el nodo this esta en subflujo, el nodo mas proximo tiene
 		 * la minima cantidad de elementos y el mas alejado tiene al menos un elemento mas del minimo.
 		 */
-		std::list<ElementoNodo*>::iterator itPadre = padre->getListaElementos()->begin();
+		std::list<ElementoNodo*>::reverse_iterator itPadre = padre->getListaElementos()->rbegin();
 		ElementoNodo* elemento = *itPadre;
 		listaElementos.push_front(nodoPegado->getListaElementos()->back());
 		elemento->setClave(nodoPegado->getListaElementos()->back()->getClave()->clonarce());
@@ -225,22 +218,20 @@ ElementoNodo* NodoHoja::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMe
     NodoHoja* nodoDer = dynamic_cast<NodoHoja*>(nodoDerE);
     NodoIntermedio* nodoPadre= dynamic_cast<NodoIntermedio*>(nodoPadreE);
     /*Seteo las referecnias siguienters q pueda, exepto la de nodo izq pq la de medio es indefinido*/
-    nodoMedio->setReferenciaSiguiente(this->getReferenciaSiguiente());
+    nodoMedio->setReferenciaSiguiente(referenciaSiguiente);
     nodoDer->setReferenciaSiguiente(nodoHermano->getReferenciaSiguiente());
-	int cantElem = Nodo::getCatidadMaximaDeElementos();
-	int cantIzq = ((cantElem*2)+1)/3;
-	int cantMedio = ((cantElem*2)+1)/3;
+	int cantIzq = ((cantidadMaximaDeElementos*2)+1)/3;
+	int cantMedio = ((cantidadMaximaDeElementos*2)+1)/3;
 	ElementoNodo* elementoApadre,*elementoPadre;
 	bool encontrado = false;
 	/*busco en padre la clave, será el elemento seteado*/
 	list<ElementoNodo*>::iterator itPadre = nodoPadre->getListaElementos()->begin();
-	while(!encontrado){
+	while(!encontrado&&itPadre!=nodoPadre->getListaElementos()->end()){
 		elementoPadre = *itPadre;
 		if(comparador->Comparar(elementoPadre->getClave(),&clave)==0){
 			encontrado=true;
-		}else{
-			++itPadre;
 		}
+		++itPadre;
 	}
 	list<ElementoNodo*>::iterator it = listaElementos.begin();
 	list<ElementoNodo*>::iterator it2 = nodoHermano->getListaElementos()->begin();
@@ -250,16 +241,14 @@ ElementoNodo* NodoHoja::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMe
 		if(cantIzq==0) {
 		    elementoApadre = new ElementoNodo(0,elemento->getClave()->clonarce());
 		    nodoMedio->agregarElemento(elemento);
-		    nodoMedio->setEspacioLibre(nodoMedio->getEspacioLibre()-1);
+		    cantMedio--;
 			cantIzq=-1;
 		}else{
 		if(cantIzq>0){
         nodoIzq->agregarElemento(elemento);
-        nodoIzq->setEspacioLibre(nodoIzq->getEspacioLibre()-1);
 		cantIzq--;
 		}else{
 			nodoMedio->agregarElemento(elemento);
-			nodoMedio->setEspacioLibre(nodoMedio->getEspacioLibre()-1);
 			cantMedio--;
 			 }
 		  }
@@ -268,18 +257,16 @@ ElementoNodo* NodoHoja::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMe
 	while(it2 != nodoHermano->getListaElementos()->end()){
 		ElementoNodo* elemento = *it2;
 		if(cantMedio==0){
+			delete elementoPadre->getClave();
 			elementoPadre->setClave(elemento->getClave()->clonarce());
 			nodoDer->agregarElemento(elemento);
-			nodoDer->setEspacioLibre(nodoDer->getEspacioLibre()-1);
 			cantMedio=-1;
 		}else{
 			if(cantMedio>0){
 			nodoMedio->agregarElemento(elemento);
-			nodoMedio->setEspacioLibre(nodoMedio->getEspacioLibre()-1);
 			cantMedio--;
 		}else{
 			nodoDer->agregarElemento(elemento);
-			nodoDer->setEspacioLibre(nodoDer->getEspacioLibre()-1);
 		    }
 		}
 		it2++;
@@ -292,7 +279,7 @@ ElementoNodo* NodoHoja::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMe
 /*
  * Retorna un elemento buscado.
  */
-bool NodoHoja::buscar(const Clave* clave,ElementoNodo*elemento){
+bool NodoHoja::buscar(const Clave* clave,ElementoNodo*&elemento){
 	std::list<ElementoNodo*>::iterator it = listaElementos.begin();
 	bool encontrado = false;
 	bool existe = true;
@@ -318,7 +305,7 @@ bool NodoHoja::buscar(const Clave* clave,ElementoNodo*elemento){
  */
 bool NodoHoja::buscarReferenciaDeClaveX(const Clave* clave,Referencia* ref){
    ElementoNodo * elemento;
-   bool encontro= NodoHoja::buscar(clave,elemento);
+   bool encontro= buscar(clave,elemento);
    *ref = elemento->getReferencia();
    return encontro;
 };
@@ -327,8 +314,8 @@ bool NodoHoja::buscarReferenciaDeClaveX(const Clave* clave,Referencia* ref){
  * devuelve false si no encontro la clave o true si la encontro y modifico.
  */
 bool NodoHoja::setReferenciaDeClaveX(const Clave* clave,Referencia refNueva){
-	ElementoNodo* elemento;
-	bool encontro = NodoHoja::buscar(clave,elemento);
+    ElementoNodo* elemento;
+	bool encontro = buscar(clave,elemento);
 	elemento->setReferencia(refNueva);
 	return encontro;
 };
@@ -336,17 +323,17 @@ bool NodoHoja::setReferenciaDeClaveX(const Clave* clave,Referencia refNueva){
  * Devuelve en elemento el elemento buscado o en su defecto si no existe devuelve el sigueite elemento.
  * retorna un valor entero. -1 si no encontro. 0 si es igual al q se buscaba. 1 si es el siguiente.
  */
-int NodoHoja::busquedaSecuencial(Clave clave,ElementoNodo* elemento){
+int NodoHoja::busquedaSecuencial(const Clave* clave,ElementoNodo* &elemento){
 	std::list<ElementoNodo*>::iterator it = listaElementos.begin();
 	bool encontrado = false;
 	int retorno  = -1;
 	while(it != listaElementos.end()&& !encontrado){
-		elemento = *it;
-		if(comparador->Comparar(elemento->getClave(),&clave)==0){
+	    elemento = *it;
+		if(comparador->Comparar(elemento->getClave(),clave)==0){
 			encontrado = true;
 			retorno = 0;
 		}
-        if(comparador->Comparar(elemento->getClave(),&clave)>0){
+        if(comparador->Comparar(elemento->getClave(),clave)>0){
         	encontrado = true;
         	retorno = 1;
         }
@@ -364,13 +351,14 @@ int NodoHoja::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre){
 	bool encontrado = false;
 	while(!encontrado && it!=Padre->getListaElementos()->rend()){
 		elementoPadre = *it;
-		if(comparador->Comparar(elementoPadre->getClave(),nodoHermanoDer->getListaElementos()->front()->getClave())==0||comparador->Comparar(elementoPadre->getClave(),nodoHermanoDer->getListaElementos()->front()->getClave())<0){
+		if(comparador->Comparar(elementoPadre->getClave(),nodoHermanoDer->getListaElementos()->front()->getClave())<0){
 			encontrado = true;
 			/*elemento del padre q tengo q eliminar*/
 			clave = elementoPadre->getClave();
 		}
+
 		if(encontrado){
-			--it;
+            --it;
 			elementoPadre = *it;
 		}
 		++it;
