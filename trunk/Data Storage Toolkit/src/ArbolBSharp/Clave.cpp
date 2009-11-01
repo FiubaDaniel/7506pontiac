@@ -29,7 +29,7 @@ Clave::Clave(){};
 void Clave::set(Registro*reg){
 	for(Ttamanio i=0;i<atributosDeClave.size();i++){
 		Atributo*att=atributosDeClave.at(i);
-		att->set( reg->get(att->getNombre()) );
+		att->copiar(*(Atributo*)reg->get(att->getNombre()) );
 	}
 };
 unsigned int Clave::getCantidadAtributos(){
