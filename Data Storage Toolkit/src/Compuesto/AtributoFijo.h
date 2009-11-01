@@ -27,6 +27,7 @@ public:
 	int comparar(const Atributo*otroAtributo);
 	void imprimir(std::ostream&salida);
 	void leer(std::istream&entrada);
+	void set(const Atributo& att);
 };
 /*----------------------------------------------------------------------------*/
 /*Template Control de tipo*/
@@ -82,6 +83,13 @@ template<typename T_tipo>
 void AtributoFijo<T_tipo>::leer(std::istream&entrada){
 	entrada>>dato;
 };
+template<typename T_tipo>
+void AtributoFijo<T_tipo>::set(const Atributo& att){
+	try{
+		AtributoFijo<T_tipo>& otro=dynamic_cast<AtributoFijo<T_tipo>&>(const_cast<Atributo&>(att));
+		dato=otro.dato;
+	}catch(...){};
+};
 /*----------------------------------------------------------------------------------------------------*/
 /*Especializacion de la clase para cadena de chars*/
 template<>
@@ -133,6 +141,12 @@ public:
 
 	void leer(std::istream&entrada){
 		entrada.getline(datos,longitud);
+	};
+	void set(const Atributo& att){
+		try{
+			AtributoFijo<char*>& otro=dynamic_cast<AtributoFijo<char*>&>(const_cast<Atributo&>(att));
+			strncpy(datos,otro.datos,longitud);
+		}catch(...){};
 	};
 };
 

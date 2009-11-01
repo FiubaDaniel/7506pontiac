@@ -29,6 +29,7 @@ public:
 	int comparar(const Atributo*otroAtributo);
 	void imprimir(std::ostream&salida);
 	void leer(std::istream&entrada);
+	void set(const Atributo& att);
 public:
 	/* metodo propios de la clase permiten iteracion sobre los valores guardados*/
 	void append(void*valor);// se agregan tantos bytes como indica nrobytes
@@ -140,6 +141,14 @@ void AtributoVariable<T_tipo>::leer(std::istream&entrada){
 				entrada>>valores.at(i);
 	}
 };
+template<typename T_tipo>
+void AtributoVariable<T_tipo>::set(const Atributo& att){
+	try{
+		AtributoVariable<T_tipo>& otro=dynamic_cast<AtributoVariable<T_tipo>&>(const_cast<Atributo&>(att));
+		this->valores.clear();
+		this->valores.assign (otro.valores.begin(),otro.valores.end());
+	}catch(...){};
+};
 /*----------------------------------------------------------------------------*/
 /*Templates Especializados contructores*/
 /**/
@@ -179,7 +188,12 @@ public:
 		entrada>>str;
 	};
 	virtual ~AtributoVariable(){};
-
+	void set(const Atributo& att){
+		try{
+			AtributoVariable<char*>& otro=dynamic_cast<AtributoVariable<char*>&>(const_cast<Atributo&>(att));
+			str=otro.str;
+		}catch(...){};
+	};
 };
 
 /*----------------------------------------------------------------------------------------------------*/
