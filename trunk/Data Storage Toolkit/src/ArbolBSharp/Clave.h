@@ -15,9 +15,10 @@ typedef size_t Referencia;
 class Clave {
 
 public:
+	Clave(const Clave & otra);
 	Clave(Registro* registro,unsigned int cantidadAtributosEntrantes,...);
 	Clave();
-	void set(Registro*reg){};
+	void set(Registro*reg);
 	unsigned int getCantidadAtributos();
 	void setCantidadAtributos(unsigned int cant);
 	Atributo* getAtributo(Ttamanio posicion);
