@@ -21,8 +21,8 @@ void BSharpTree::crear(string nombreArch,unsigned int tamanioDeBloque, int taman
 	cantidadMinimaDeElementos = (unsigned int) ((numeroDeElementosXnodo)*2)/3;
 	nombreArchivo = nombreArch+"_Arbol";
 	nombreEspaciosLibres = nombreArch+"_EspaciosLibre";
-	archivoEspaciosLibres.open(nombreEspaciosLibres.c_str(),std::fstream::out);
-	archivoArbol.open(nombreArchivo.c_str(),std::fstream::out);
+	archivoEspaciosLibres.open(nombreEspaciosLibres.c_str(),std::fstream::out | std::fstream::in | std::fstream::binary|std::fstream::trunc);
+	archivoArbol.open(nombreArchivo.c_str(),std::fstream::out | std::fstream::in |std::fstream::binary|std::fstream::trunc);
 	if(archivoArbol.is_open()&&archivoEspaciosLibres.is_open()){
 		std:: stringbuf buffer(ios_base :: in | ios_base :: out | ios_base :: binary);
 		archivoArbol.seekp(0);
@@ -37,15 +37,19 @@ void BSharpTree::crear(string nombreArch,unsigned int tamanioDeBloque, int taman
 		archivoArbol.write(array,tamanio);
 		/*Establezco la raiz y su referencia izq creando la hoja izq vacia*/
 		Raiz = new NodoIntermedio((unsigned int) 1,numeroDeElementosXnodo,comparador);
-		Raiz->setRefereciaIzq(posicionRaiz+tamanioNodo+1);
 		char array2[tamanioNodo];
 		buffer.pubsetbuf(array2,tamanioNodo);
 		buffer.pubseekpos(0);
 		Raiz->serializate(&buffer);
 		archivoArbol.write(array2,tamanioNodo);
+		Raiz->setRefereciaIzq(archivoArbol.tellp());
 		NodoHoja* hoja = new NodoHoja(numeroDeElementosXnodo,0,comparador);
 		buffer.pubseekpos(0);
 		hoja->serializate(&buffer);
+		archivoArbol.write(array2,tamanioNodo);
+		archivoArbol.seekp(posicionRaiz);
+		buffer.pubseekpos(0);
+		Raiz->serializate(&buffer);
 		archivoArbol.write(array2,tamanioNodo);
 		delete hoja;
 		archivoEspaciosLibres.seekp(0);
@@ -57,16 +61,14 @@ void BSharpTree::crear(string nombreArch,unsigned int tamanioDeBloque, int taman
 		buffer.pubseekpos(0);
 		archivoEspaciosLibres.write(array3,sizeof(cero));
 	}
-	archivoArbol.close();
-	archivoEspaciosLibres.close();
 };
 void BSharpTree::abrir(string nombreArch,ComparadorClave* comp){
 	comparador = comp;
 	nombreArchivo = nombreArch+"_Arbol";
     nombreEspaciosLibres = nombreArch+"_EspaciosLibre";
-	archivoEspaciosLibres.open(nombreEspaciosLibres.c_str(),std::fstream::in);
-	archivoArbol.open(nombreArchivo.c_str(),std::fstream::in);
 	archivoArbol.seekg(0);
+	archivoEspaciosLibres.open(nombreEspaciosLibres.c_str(),std::fstream::out|std::fstream::in|std::fstream::binary);
+	archivoArbol.open(nombreArchivo.c_str(),std::fstream::out|std::fstream::in|std::fstream::binary);
 	std:: stringbuf buf(ios_base :: in | ios_base :: out | ios_base :: binary);
 	int tamanio = sizeof(int)*3;
 	char array[tamanio];
@@ -80,8 +82,6 @@ void BSharpTree::abrir(string nombreArch,ComparadorClave* comp){
 	buf.pubsetbuf(array2,tamanioNodo);
 	archivoArbol.read(array2,tamanio);
 	Raiz = new NodoIntermedio(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
-    archivoArbol.close();
-    archivoEspaciosLibres.close();
     cantidadMinimaDeElementos = (unsigned int) ((numeroDeElementosXnodo)*2)/3;
 };
 int BSharpTree::calcularCantidadElementosPorNodo(unsigned int tamSerializadoClave){
@@ -97,7 +97,6 @@ int BSharpTree::calcularCantidadElementosPorNodo(unsigned int tamSerializadoClav
  * Almacena el nodo Hoja de donde obtuvo el elemento para una posible busqueda secuencial.
  */
 bool BSharpTree::Buscar(const Clave* clave,Referencia* referencia){
-	archivoArbol.open(nombreArchivo.c_str(),std::fstream::in);
 	delete ultimoNodo;
 	bool encontrado =  buscarIterativo(*Raiz,clave,referencia,ultimoNodo);
 	archivoArbol.close();
@@ -175,7 +174,6 @@ Referencia BSharpTree::Siguiente(bool ultimo){
  */
 bool BSharpTree::modificar(const Clave* clave,Referencia refNueva){
 	/*primero debo buscar el nodo hoja*/
-	archivoArbol.open(nombreArchivo.c_str(),std::fstream::in|std::fstream::out);
 	Referencia referenciaDeNodoHoja;//es la referencia donde se debe guardar el nodo en el archivo una vez modificado.
 	NodoHoja* nodo = buscarHoja(*Raiz,clave,referenciaDeNodoHoja);
 	bool modificado = nodo->setReferenciaDeClaveX(clave,refNueva);
@@ -212,13 +210,12 @@ NodoHoja* BSharpTree::buscarHoja(NodoIntermedio nodo,const Clave* clave,Referenc
 	return NULL;
 };
 bool BSharpTree::insertar(Referencia ref,Clave* clave){
-	archivoArbol.open(nombreArchivo.c_str(),std::fstream::in|std::fstream::out);
 	std::stringbuf buf(ios_base :: in | ios_base :: out | ios_base :: binary);
 	ElementoNodo* elemento = new ElementoNodo(ref,clave);
 	if(Raiz->getEspacioLibre()==numeroDeElementosXnodo){
 		/*creo el nodo derecho hoja e inserto el elemento en ambos, raiz e hijo*/
 		char array2[tamanioNodo];
-		archivoArbol.seekp(fstream::end);
+		archivoArbol.seekp(0,fstream::end);
 		Referencia refAux  = (Referencia)archivoArbol.tellp();
 		NodoHoja* hoja = new NodoHoja(numeroDeElementosXnodo,0,comparador);
 		hoja->agregarElemento(elemento);
@@ -232,7 +229,7 @@ bool BSharpTree::insertar(Referencia ref,Clave* clave){
 		/*Ahora toma la referencia izquierda q ya existia y le seteo su referencia izq hacia la hoja agregada*/
 		buf.pubsetbuf(array2,tamanioNodo);
 		archivoArbol.read(array2,tamanioNodo);
-		 hoja = new NodoHoja(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
+		hoja = new NodoHoja(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
 		hoja->setReferenciaSiguiente(refAux);
 	    grabarUnitario(hoja,Raiz->getReferenciaIzq());
 	    delete elemento;
@@ -254,11 +251,10 @@ bool BSharpTree::insertar(Referencia ref,Clave* clave){
 		resolverDesborde(hoja,listaDePadres,refHoja);
 	}
 	listaDePadres.clear();
-	archivoArbol.close();
 	delete elemento;
 	return true;
 };
-void BSharpTree::BuscarInsertarOEliminar(Nodo* hoja,std::list<Referencia>&listaDePadres,NodoIntermedio* nodo,const Clave* clave,Referencia refHoja,bool& esRaiz,bool esInsertar){
+void BSharpTree::BuscarInsertarOEliminar(Nodo* &hoja,std::list<Referencia>&listaDePadres,NodoIntermedio* nodo,const Clave* clave,Referencia refHoja,bool& esRaiz,bool esInsertar){
 	int nivel;
 	std::stringbuf buf(ios_base :: in | ios_base :: out | ios_base :: binary);
 	Referencia refAux = nodo->bucarReferenciaAsiguienteNodo(clave);
@@ -358,7 +354,7 @@ void BSharpTree::resolverDesborde(Nodo* nodo,std::list<Referencia>&listaDePadres
 		/*Busco posicion nuevo nodo*/
 		Referencia refMedio = buscarEspacioLibre();
 		if(refMedio==0){
-			archivoArbol.seekp(fstream::end);
+			archivoArbol.seekp(0,fstream::end);
 			refMedio = archivoArbol.tellp();
 		}
 		Nodo* nodoIzq;
@@ -481,10 +477,10 @@ void BSharpTree::desbordeRaiz(){
 	}
 	HijoIzq->setRefereciaIzq(Raiz->getReferenciaIzq());
 	HijoDer->setRefereciaIzq(elementoRaiz->getReferencia());
-	archivoArbol.seekp(fstream::end);
+	archivoArbol.seekp(0,fstream::end);
     Raiz->setRefereciaIzq((Referencia)archivoArbol.tellp());
     grabarUnitario(HijoIzq,archivoArbol.tellp());
-    archivoArbol.seekp(fstream::end);
+    archivoArbol.seekp(0,fstream::end);
     elementoRaiz->setReferencia((Referencia)archivoArbol.tellp());
     grabarUnitario(HijoDer,archivoArbol.tellp());
     Raiz->getListaElementos()->clear();
@@ -493,7 +489,6 @@ void BSharpTree::desbordeRaiz(){
     grabarUnitario(Raiz,posicionRaiz);
 };
 bool BSharpTree::eliminar(const Clave* clave){
-	archivoArbol.open(nombreArchivo.c_str(),std::fstream::in|std::fstream::out);
 	std::stringbuf buf(ios_base :: in | ios_base :: out | ios_base :: binary);
 	Referencia refHoja;
 	Nodo* hoja;
@@ -513,7 +508,6 @@ bool BSharpTree::eliminar(const Clave* clave){
 	    	resolverSubflujo(hoja,listaDePadres,refHoja);
 	}
 	listaDePadres.clear();
-	archivoArbol.close();
 	return true;
 };
 
@@ -755,7 +749,6 @@ void BSharpTree::armarNuevaRaiz(Nodo* nodoIzq,Nodo* nodoDer){
 	delete nodoDerecho;
 }
 void BSharpTree::nuevoEspacioLibre(Referencia ref){
-	archivoEspaciosLibres.open(nombreEspaciosLibres.c_str(),std::fstream::in|std::fstream::out);
 	std::stringbuf buffer(ios_base :: in | ios_base :: out | ios_base :: binary);
 	buffer.pubseekpos(0);
 	archivoEspaciosLibres.seekg(0);
@@ -778,7 +771,6 @@ void BSharpTree::nuevoEspacioLibre(Referencia ref){
 	archivoArbol.write(array,tamanio);
 }
 Referencia BSharpTree::buscarEspacioLibre(){
-	archivoEspaciosLibres.open(nombreEspaciosLibres.c_str(),std::fstream::in|std::fstream::out);
 	std::stringbuf buffer(ios_base :: in | ios_base :: out | ios_base :: binary);
 	buffer.pubseekpos(0);
 	archivoEspaciosLibres.seekg(0);
@@ -808,7 +800,6 @@ Referencia BSharpTree::buscarEspacioLibre(){
 Nodo* BSharpTree::obtenerNodoPorPosiciones(int posInicial){
 	std::stringbuf buffer(ios_base :: in | ios_base :: out | ios_base :: binary);
 	buffer.pubseekpos(0);
-	archivoArbol.open(nombreEspaciosLibres.c_str(),std::fstream::in|std::fstream::out);
 	archivoArbol.seekp(posInicial);
 	char array2[tamanioNodo];
 	buffer.pubsetbuf(array2,tamanioNodo);
@@ -817,5 +808,7 @@ Nodo* BSharpTree::obtenerNodoPorPosiciones(int posInicial){
 };
 BSharpTree::~BSharpTree() {
   delete Raiz;
+  archivoArbol.close();
+  archivoEspaciosLibres.close();
 };
 
