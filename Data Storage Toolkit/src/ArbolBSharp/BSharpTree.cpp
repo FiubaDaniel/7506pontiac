@@ -380,7 +380,6 @@ void BSharpTree::resolverDesborde(Nodo* nodo,std::list<Referencia>&listaDePadres
 			nodoDer =new NodoIntermedio(nodo->getNumeroNivel(),numeroDeElementosXnodo,comparador);
 		}
 		 if(izq){
-
 			 elementoAagregarEnPadre =  hermano->dividirse(nodo,nodoIzq,nodoMedio,nodoDer,padre,elementoPadre->getClave());
 			 grabado(nodoIzq,nodoMedio,nodoDer,refHermano,refMedio,refHijo);
 		 }else{
@@ -402,7 +401,7 @@ void BSharpTree::resolverDesborde(Nodo* nodo,std::list<Referencia>&listaDePadres
 		 }
 
 };
-void BSharpTree::buscarNodoBalancearODividir(NodoIntermedio* padre,Nodo* hijo,Nodo*& hermano,Referencia refHijo,bool& izq,bool& balancear,Referencia& refHermano,ElementoNodo* elemPadre){
+void BSharpTree::buscarNodoBalancearODividir(NodoIntermedio* padre,Nodo* hijo,Nodo*& hermano,Referencia refHijo,bool& izq,bool& balancear,Referencia& refHermano,ElementoNodo*& elemPadre){
 	bool encontrado = false;
 	//Busco si el nodo hijo esta en alguno de los extremos
 	if(refHijo == padre->getReferenciaIzq() || padre->getListaElementos()->back()->getReferencia() == refHijo){
@@ -477,7 +476,7 @@ void BSharpTree::desbordeRaiz(){
 	NodoIntermedio* HijoIzq = new NodoIntermedio(Raiz->getNumeroNivel(),numeroDeElementosXnodo,comparador);
 	NodoIntermedio* HijoDer = new NodoIntermedio(Raiz->getNumeroNivel(),numeroDeElementosXnodo,comparador);
 	std::list<ElementoNodo*>::iterator it = Raiz->getListaElementos()->begin();
-	while(cantIzq>0){
+	while(cantIzq>0&&it!=Raiz->getListaElementos()->end()){
 		ElementoNodo* elem = *it;
 		HijoIzq->agregarElemento(elem);
 		cantIzq=cantIzq-1;
