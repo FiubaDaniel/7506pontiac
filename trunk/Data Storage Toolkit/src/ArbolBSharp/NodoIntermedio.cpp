@@ -302,28 +302,19 @@ ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* 
 Referencia NodoIntermedio::bucarReferenciaAsiguienteNodo(const Clave* clave){
 	    /*primero verifico q la referencia buscada no sea la referencia izq del nodo*/
 	ElementoNodo* elemento;
-	elemento = listaElementos.front();
-	if(comparador->Comparar(clave,elemento->getClave())<0){
+	if (comparador->Comparar(clave,listaElementos.front()->getClave())<0){
 		return referenciaIzq;
 	}
-	std::list<ElementoNodo*>::iterator it = listaElementos.begin();
+	std::list<ElementoNodo*>::reverse_iterator it = listaElementos.rbegin();
     Referencia ref;
 	bool encontrado = false;
-	while(!encontrado){
+	while(!encontrado && it != listaElementos.rend ()){
 		elemento = *it;
-		int comparacion = comparador->Comparar(elemento->getClave(),clave);
-		if(comparacion<0 && it != listaElementos.end ()){
-		      ref = elemento->getReferencia();
+		if(comparador->Comparar(elemento->getClave(),clave)==0 || comparador->Comparar(elemento->getClave(),clave)<0){
+		     return elemento->getReferencia();
+		  }else{
 			  ++it;
-		  }else if (comparacion == 0){
-		      encontrado = true;
-		      ref = elemento->getReferencia();
-		  }else if(comparacion<0 && it == listaElementos.end()){
-		    	encontrado = true;
-		    	ref = elemento->getReferencia();
-		  }else if(comparacion > 0){
-		    	encontrado = true;
-		    }
+		  }
 	}
 		return ref;
 };
