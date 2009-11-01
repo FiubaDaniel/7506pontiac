@@ -84,10 +84,8 @@ bool Bloque::agregar(Componente* nuevo){
 };//intenta insdertar detras del ultimo registro
 Componente* Bloque::reemplazar(Componente*nuevo,Ttamanio posicion){
 	Componente *anterior=componentes.at(posicion);
-	std::vector<Componente*>::iterator iterador=componentes.begin();
-	iterador+=posicion;
-	componentes.erase(iterador);
-	componentes.insert(iterador,nuevo);
+	componentes.erase(componentes.begin()+posicion);
+	componentes.insert(componentes.begin()+posicion,nuevo->clonar());
 	return anterior;
 };
 Ttamanio Bloque::cantidadComponentes(){
