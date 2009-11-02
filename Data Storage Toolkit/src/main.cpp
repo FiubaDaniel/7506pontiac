@@ -299,6 +299,13 @@ int main() {
     arbol2->insertar(ref11,&clave11);
     arbol2->insertar(ref20,&clave20);
     arbol2->insertar(ref21,&clave21);
+    Referencia referencia;
+    arbol2->Buscar(&clave17,&referencia);
+    cout<<referencia<<endl;
+    Referencia referencia2;
+    arbol2->eliminar(&clave17);
+    arbol2->Buscar(&clave17,&referencia2);
+        cout<<referencia<<endl;
         arbol2->insertar(ref22,&clave22);
         arbol2->insertar(ref23,&clave23);
         arbol2->insertar(ref24,&clave24);
