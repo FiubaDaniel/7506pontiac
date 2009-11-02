@@ -248,15 +248,11 @@ bool BSharpTree::insertar(Referencia ref,Clave* clave){
 		grabarUnitario(hoja,refHoja);
 	}else{
 		resolverDesborde(hoja,listaDePadres,refHoja);
-		delete Raiz;
-		char array[tamanioNodo];
-		buf.pubsetbuf(array,tamanioNodo);
-		buf.pubseekpos(0);
-		archivoArbol.seekg(posicionRaiz);
-		archivoArbol.read(array,tamanioNodo);
-		buf.pubseekpos(0);
-		Raiz = new NodoIntermedio(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
-
+		char arrayRaiz[tamanioNodo];
+		buf.pubsetbuf(arrayRaiz,tamanioNodo);
+		Raiz->serializate(&buf);
+		archivoArbol.seekp(posicionRaiz);
+		archivoArbol.write(arrayRaiz,tamanioNodo);
 	}
 	listaDePadres.clear();
 	delete hoja;
@@ -378,15 +374,18 @@ void BSharpTree::resolverDesborde(Nodo* nodo,std::list<Referencia>&listaDePadres
 			nodoMedio = new NodoIntermedio(nodo->getNumeroNivel(),numeroDeElementosXnodo,comparador);
 			nodoDer =new NodoIntermedio(nodo->getNumeroNivel(),numeroDeElementosXnodo,comparador);
 		}
-		 if(izq){
+		 if(izq){//
 			 elementoAagregarEnPadre =  hermano->dividirse(nodo,nodoIzq,nodoMedio,nodoDer,padre,elementoPadre->getClave());
+			 elementoAagregarEnPadre->setReferencia(refMedio);
 			 grabado(nodoIzq,nodoMedio,nodoDer,refHermano,refMedio,refHijo);
 		 }else{
 			 elementoAagregarEnPadre = nodo->dividirse(hermano,nodoIzq,nodoMedio,nodoDer,padre,elementoPadre->getClave());
-			 grabado(nodoIzq,nodoMedio,nodoDer,refHijo,refMedio,refHermano);
+			 elementoAagregarEnPadre->setReferencia(refMedio);
+
+	grabado(nodoIzq,nodoMedio,nodoDer,refHijo,refMedio,refHermano);
 		 }
 		 int desborde = padre->agregarElemento(elementoAagregarEnPadre);
-	     grabarUnitario(padre,listaDePadres.front());
+		grabarUnitario(padre,listaDePadres.front());
 		    if(desborde==2){
 		 	   refHijo = listaDePadres.front();
 		 	   listaDePadres.pop_front();
@@ -513,7 +512,7 @@ bool BSharpTree::eliminar(const Clave* clave){
 	listaDePadres.push_back(posicionRaiz);
 	BuscarInsertarOEliminar(hoja,listaDePadres,nodo,clave,refHoja,esRaiz,false);
 	int subFlujo = hoja->Eliminar(clave);
-	eliminarClaveEnIntermedio(clave,hoja->getListaElementos()->front()->getClave()->clonarce());
+	eliminarClaveEnIntermedio(clave,hoja->getListaElementos()->front()->getClave());
 	if(subFlujo==0){return false;}
 	if(subFlujo==1){
 		grabarUnitario(hoja,refHoja);
