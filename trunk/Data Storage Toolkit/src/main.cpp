@@ -288,7 +288,7 @@ int main() {
     arbol2->insertar(ref9,&clave9);
     arbol2->insertar(ref15,&clave15);
     arbol2->insertar(ref10,&clave10);
-    arbol2->insertar(ref8,&clave8);
+    arbol2->insertar(ref8,&clave8);//
     arbol2->insertar(ref12,&clave12);
     arbol2->insertar(ref13,&clave13);
     arbol2->insertar(ref14,&clave14);
@@ -312,7 +312,9 @@ int main() {
         arbol2->insertar(ref32,&clave32);
         arbol2->insertar(ref33,&clave33);
         arbol2->insertar(ref34,&clave34);
-            arbol2->insertar(ref35,&clave35);
+        arbol2->insertar(ref35,&clave35);
+
+
 
     delete arbol2;
     cout<<"llego"<<endl;
