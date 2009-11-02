@@ -20,7 +20,7 @@ NodoIntermedio::NodoIntermedio(std::stringbuf* buf,unsigned int cantElem,Compara
 	while(Aux>0){
 		claveEstructural->deserializar(*buf);
 		buf->sgetn((char*)&refD,sizeof(Referencia));
-		ElementoNodo* elemento = new ElementoNodo(refD,claveEstructural->clonarce());
+		ElementoNodo* elemento = new ElementoNodo(refD,claveEstructural);
 		listaElementos.push_back(elemento);
 		Aux--;
 	}

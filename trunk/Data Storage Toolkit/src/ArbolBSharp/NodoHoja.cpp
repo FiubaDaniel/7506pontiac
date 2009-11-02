@@ -24,7 +24,7 @@ NodoHoja::NodoHoja(std::stringbuf* buf,unsigned int cantElem,ComparadorClave* co
 	while(Aux>0){
 		claveEstructural->deserializar(*buf);
 		buf->sgetn((char*)&ref,sizeof(Referencia));
-		ElementoNodo* elemento = new ElementoNodo(ref,claveEstructural->clonarce());
+		ElementoNodo* elemento = new ElementoNodo(ref,claveEstructural);
 		listaElementos.push_back(elemento);
 		Aux--;
 	}
@@ -239,7 +239,7 @@ ElementoNodo* NodoHoja::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMe
 	while(it != listaElementos.end ()){
 		ElementoNodo* elemento = *it;
 		if(cantIzq==0) {
-		    elementoApadre = new ElementoNodo(0,elemento->getClave()->clonarce());
+		    elementoApadre = new ElementoNodo(0,elemento->getClave());
 		    nodoMedio->agregarElemento(elemento);
 		    cantMedio--;
 			cantIzq=-1;
