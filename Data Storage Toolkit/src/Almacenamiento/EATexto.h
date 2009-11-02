@@ -14,14 +14,14 @@
 
 class EATexto: public EstrategiaAlmacenamiento {
 	Registro*registro;
+	bool ultimo;
 	Almacenamiento* almacen;
 	size_t posComp;
 	std::string ultimoLeido;
 	void siguiente();
 	std::string registroAstring(Registro*registro);
 	void stringAregistro(Registro*registro,std::string &str);
-	size_t buscar(Registro*registro,bool&encontrado);
-	int comparar(Registro*reg1,Registro*reg2);
+	size_t buscarProximoLibre();
 public:
 	EATexto(Registro*registro);
 	virtual ~EATexto();
