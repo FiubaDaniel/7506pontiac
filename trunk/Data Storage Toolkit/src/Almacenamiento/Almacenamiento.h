@@ -23,7 +23,10 @@ public:
   virtual void posicionarAlfinal()=0;
   virtual size_t posicionActual()=0;
   virtual bool bien()=0;
+  /**/
   virtual bool fin()=0;
+  /*Limpia los flags de fin de archivo y error*/
+  virtual void reiniciar()=0;
 };
 
 #endif // ALMACENAMIENTO_H

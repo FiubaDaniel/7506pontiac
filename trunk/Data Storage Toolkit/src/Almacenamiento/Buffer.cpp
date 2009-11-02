@@ -33,7 +33,9 @@ void Buffer::posicionarAlfinal(){
 bool Buffer::fin(){
 	return archivo->eof();
 }
-
+void Buffer::reiniciar(){
+	archivo->clear();
+};
 size_t Buffer::posicionActual(){
 	return archivo->tellg();
 };
