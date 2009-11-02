@@ -306,7 +306,6 @@ Referencia NodoIntermedio::bucarReferenciaAsiguienteNodo(const Clave* clave){
 		return referenciaIzq;
 	}
 	std::list<ElementoNodo*>::reverse_iterator it = listaElementos.rbegin();
-    Referencia ref;
 	bool encontrado = false;
 	while(!encontrado && it != listaElementos.rend ()){
 		elemento = *it;
@@ -316,7 +315,7 @@ Referencia NodoIntermedio::bucarReferenciaAsiguienteNodo(const Clave* clave){
 			  ++it;
 		  }
 	}
-		return ref;
+		return 0;
 };
 int NodoIntermedio::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre){
 	std::list<ElementoNodo*>::reverse_iterator it = Padre->getListaElementos()->rbegin();
