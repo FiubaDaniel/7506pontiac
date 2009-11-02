@@ -2,96 +2,32 @@
 #ifndef ESTRATEGIABSHARP_H
 #define ESTRATEGIABSHARP_H
 #include "EstrategiaIndice.h"
+#include "../ArbolBSharp/Clave.h"
+#include "../ArbolBSharp/ComparadorClave.h"
+#include "../ArbolBSharp/Clave.h"
+#include "../ArbolBSharp/ElementoNodo.h"
+#include "../ArbolBSharp/Nodo.h"
+#include "../ArbolBSharp/NodoIntermedio.h"
+#include "../ArbolBSharp/NodoHoja.h"
+#include "../ArbolBSharp/TamanioInsuficienteException.h"
 
 #include <string>
-
-/**
-  * class EstrategiaBSharp
-  * 
-  */
 
 class EstrategiaBSharp : virtual public EstrategiaIndice
 {
 public:
 
-  // Constructors/Destructors
-  //  
-
-
-  /**
-   * Empty Constructor
-   */
   EstrategiaBSharp ( );
 
-  /**
-   * Empty Destructor
-   */
   virtual ~EstrategiaBSharp ( );
 
-  // Static Public attributes
-  //  
-
-  // Public attributes
-  //  
-
-
-  // Public attribute accessor methods
-  //  
-
-
-  // Public attribute accessor methods
-  //  
-
-
-protected:
-
-  // Static Protected attributes
-  //  
-
-  // Protected attributes
-  //  
-
-public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
-
-public:
-
-
-  // Protected attribute accessor methods
-  //  
-
-protected:
-
-
-private:
-
-  // Static Private attributes
-  //  
-
-  // Private attributes
-  //  
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
-public:
-
-
-  // Private attribute accessor methods
-  //  
-
-private:
-
+  void crear(std::string nombreArch,unsigned int tamanioBloque,int tamanioSerializadoClave,ComparadorClave* comp);
+  void abrir(std::string nombreArch,ComparadorClave* comp);
+  bool BuscarReferencia(const Clave* clave,Referencia* referencia);
+  Referencia Siguiente(bool ultimo);
+  bool insertar(Referencia ref,Clave* clave);
+  bool eliminar(const Clave* clave);
+  bool modificar(const Clave* clave,Referencia refNueva);
 
 
 };
