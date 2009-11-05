@@ -39,11 +39,12 @@ void Archivo::crear(const char *ruta){
 	archivo.open(ruta,std::fstream::out|std::fstream::trunc|std::fstream::binary);
 	archivo.close();
 	archivo.open(ruta,std::ios_base::out|std::fstream::in|std::fstream::binary);
-
+	nombre=ruta;
 }
 
 void Archivo::abrir(const char *ruta){
 	archivo.open(ruta,std::fstream::out|std::fstream::binary|std::fstream::in);
+	nombre=ruta;
 }
 void Archivo::cerrar(){
 	archivo.close();

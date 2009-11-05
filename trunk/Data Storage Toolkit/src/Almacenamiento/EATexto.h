@@ -33,8 +33,8 @@ class EATexto: public EstrategiaAlmacenamiento {
 public:
 	EATexto(Registro*registro);
 	virtual ~EATexto();
-	void abrir(Almacenamiento*almacen);
-	void crear(Almacenamiento*almacen);
+	Almacenamiento* abrir(Almacenamiento*almacen);
+	Almacenamiento* crear(Almacenamiento*almacen);
 	Componente* getComponente();
 	bool posicionarComponente(size_t nroCompuesto);
 	bool escribir(Componente*componente);

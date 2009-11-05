@@ -30,9 +30,10 @@ private:
 	void escribir(Bloque*bloque);
 public:
 	EABloques(Bloque* tipoBloque,Ttamanio tamanioBloque);
+	EABloques(Registro* tipoRegistro,Ttamanio tamanioBloque);
 	virtual ~EABloques();
-	Almacenamiento* abrir(Almacenamiento*almacen,const char*rutaArchivoEspacios);
-	Almacenamiento* crear(Almacenamiento*almacen,const char*rutaArchivoEspacios);
+	Almacenamiento* abrir(Almacenamiento*almacen);
+	Almacenamiento* crear(Almacenamiento*almacen);
 	Componente* getComponente();
 	bool posicionarComponente(size_t nroCompuesto);
 	bool escribir(Componente*componente);

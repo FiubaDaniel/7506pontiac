@@ -14,6 +14,13 @@ EABloques::EABloques(Bloque* tipoBloque,Ttamanio tamanioBloque) {
 	bloqueSerializado=new char[tamanioBloque];
 	porcCarga=0.8;
 };
+EABloques::EABloques(Registro* tipoRegistro,Ttamanio tamanioBloque){
+	almacen=NULL;
+	this->bloque=new Bloque(tipoRegistro);
+	capacBloque=tamanioBloque;
+	bloqueSerializado=new char[tamanioBloque];
+	porcCarga=0.8;
+};
 
 EABloques::~EABloques() {
 	delete[] bloqueSerializado;
@@ -26,13 +33,14 @@ void EABloques::finalizarAlamcenamiento(){
 		archivoEspacioLibre.close();
 	}
 };
-Almacenamiento* EABloques::crear(Almacenamiento*almacen,const char*rutaArchivoEspacios){
+Almacenamiento* EABloques::crear(Almacenamiento*almacen){
 	Almacenamiento*anterior=this->almacen;
 	this->almacen=almacen;
 	finalizarAlamcenamiento();
-	archivoEspacioLibre.open(rutaArchivoEspacios,std::fstream::binary | std::fstream::out |std::fstream::trunc);
+	std::string ruta=almacen->getNombre()+".bloques";
+	archivoEspacioLibre.open(ruta.c_str(),std::fstream::binary | std::fstream::out |std::fstream::trunc);
 	archivoEspacioLibre.close();
-	archivoEspacioLibre.open(rutaArchivoEspacios,std::fstream::binary | std::fstream::in| std::fstream::out|std::fstream::trunc );
+	archivoEspacioLibre.open(ruta.c_str(),std::fstream::binary | std::fstream::in| std::fstream::out|std::fstream::trunc );
 	//todo archivoEspacioLibre.write((char*)&capacBloque,sizeof(capacBloque));
 	archivoEspacioLibre.get();
 	archivoEspacioLibre.seekg(0);
@@ -40,11 +48,12 @@ Almacenamiento* EABloques::crear(Almacenamiento*almacen,const char*rutaArchivoEs
 	siguienteLibre=0;
 	return anterior;
 };
-Almacenamiento* EABloques::abrir(Almacenamiento*almacen,const char*rutaArchivoEspacios){
+Almacenamiento* EABloques::abrir(Almacenamiento*almacen){
 	Almacenamiento*anterior=this->almacen;
 	this->almacen=almacen;
 	finalizarAlamcenamiento();
-	archivoEspacioLibre.open(rutaArchivoEspacios,std::fstream::binary | std::fstream::in| std::fstream::out );
+	std::string ruta=almacen->getNombre()+".bloques";
+	archivoEspacioLibre.open(ruta.c_str(),std::fstream::binary | std::fstream::in| std::fstream::out );
 	this->almacen->posicionar(0);
 	this->almacen->leer((char*)&siguienteLibre,sizeof(siguienteLibre));
 	nroRegistro=0;

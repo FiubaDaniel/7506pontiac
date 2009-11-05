@@ -10,6 +10,11 @@
 #include "compuestolib.h"
 #include "../../Almacenamiento/Almacenamiento.h"
 #include "../../Almacenamiento/EstrategiaAlmacenamiento.h"
+#include "../../Almacenamiento/EABloques.h"
+#include "../../Almacenamiento/EARegistros.h"
+#include "../../Almacenamiento/EATexto.h"
+#include "../../Almacenamiento/Buffer.h"
+#include "../../Almacenamiento/Archivo.h"
 #include "../../ArbolBSharp/Clave.h"
 #include "../../ArbolBSharp/ComparadorClave.h"
 #include <string>
@@ -28,6 +33,7 @@ public:
 	}
 	~ExcepcionEAA () throw (){};
 };
+
 class ComparadorDni: public ComparadorClave{
 public:
 	ComparadorDni(){};
@@ -46,14 +52,45 @@ class EAAlmacenamientoTest {
 	Registro* registro1;
 	Registro* registro2;
 	Clave*clave;
+	Archivo almacen;
 public:
-	EAAlmacenamientoTest(bool registrofijo,EstrategiaAlmacenamiento* escritor);
+	EAAlmacenamientoTest(int tipo){
+		this->registrofijo=(tipo>1);
+
+		AtributoFijo<int> dni("dni");
+		Atributo* nombre;
+		if(registrofijo){
+			nombre=new AtributoFijo<char*>("nombre",10);
+		}else {
+			nombre=new AtributoVariable<string>("nombre");
+		};
+		registro1=new Registro(2,&dni,nombre);
+		registro2=new Registro(2,&dni,nombre);
+		clave=new Clave(registro1,2,"dni","nombre");
+
+		delete nombre;
+		switch(tipo){
+			case 0:
+				escritor=new EATexto(registro1);
+			break;
+			case 1:
+				escritor=new EABloques(registro1,16);
+			break;
+			default :
+				escritor=new EARegistros(registro1);
+			break;
+		}
+		almacen.crear("salida.txt");
+		escritor->crear(&almacen);
+		escritor->setComparador(&comparador);
+		escritor->setClave(clave);
+	};
 	void run(){
 		try{
 			testInsertar();
+			testObtener();
 			testEliminar();
 			testModificar();
-			testObtener();
 		}catch(exception& e){
 			cout<<e.what()<<endl;
 		};
@@ -71,11 +108,18 @@ public:
 			reg->get("nombre")->set(&nombre);
 		}
 	}
-	void assertIguales(Registro*reg1,Registro*reg2){
+	bool assertIguales(Registro*reg1,Registro*reg2){
 		for(Ttamanio i=0;i<reg1->cantidadAtributos();i++){
-			if(reg1->get(0)->comparar(reg2->get(0))!=0){
-				throw ExcepcionEAA("No son iguales"+reg1->get(0)->getNombre());
-			};
+			if(reg1->get(0)->comparar(reg2->get(0))!=0)
+				return false;
+		}
+		return true;
+	}
+	void setClave(Registro*reg,const Clave*unclave){
+		Clave*clave=const_cast<Clave*>(unclave);
+		for(Ttamanio i=0;i<clave->getCantidadAtributos();i++){
+			Atributo*att=clave->getAtributo(i);
+			reg->get(att->getNombre())->copiar(att);
 		}
 	}
 	virtual ~EAAlmacenamientoTest();
