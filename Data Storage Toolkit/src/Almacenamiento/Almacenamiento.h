@@ -1,6 +1,7 @@
 
 #ifndef ALMACENAMIENTO_H
 #define ALMACENAMIENTO_H
+#include <string>
 #include "../Compuesto/Compuesto.h"
 #include "EstrategiaAlmacenamiento.h"
 /**
@@ -9,10 +10,15 @@
   */
 class EstrategiaAlmacenamiento;
 class Almacenamiento{
-	EstrategiaAlmacenamiento* estrategiaUsada;
+protected:
+	std::string nombre;
 public:
   Almacenamiento (){};
   virtual ~Almacenamiento ( ){};
+  std::string getNombre(){return nombre;};
+  void setNombre(std::string nombre){
+	  this->nombre=nombre;
+  };
   /*-------------------------------------------------------------------------*/
   /*utilizado por la estrategiaAlmacenamiento*/
   virtual void escribir(const void* bytes,size_t cantidad)=0;

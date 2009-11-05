@@ -14,17 +14,22 @@ EATexto::~EATexto() {
 	delete registro;
 };
 
-void EATexto::abrir(Almacenamiento*almacen){
+Almacenamiento* EATexto::abrir(Almacenamiento*almacen){
+
+	Almacenamiento* anterior=this->almacen;
 	this->almacen=almacen;
 	posComp=0;
 	linea.clear();
 	ultimo=false;
+	return anterior;
 };
-void EATexto::crear(Almacenamiento *almacen){
+Almacenamiento* EATexto::crear(Almacenamiento *almacen){
+	Almacenamiento* anterior=this->almacen;
 	this->almacen=almacen;
 	posComp=0;
 	linea.clear();
 	ultimo=false;
+	return anterior;
 };
 
 int EATexto::comparar(Registro*registro,Registro*registro2){
@@ -67,9 +72,10 @@ bool EATexto::insertar(Componente *componente){
 		size_t posicion;
 		// busco posicion de insercion
 		bool encontrado=false;
+		bool fin=false;
 		posicion=almacen->posicionActual();
-		posComp++;
-		while(leerLinea()and not encontrado){
+		while((not fin)and not encontrado){
+			fin=not leerLinea();
 			if(linea.length()>=tamanio){
 				encontrado=(linea[0]==' ');
 			}else posicion=almacen->posicionActual();
@@ -99,7 +105,7 @@ bool EATexto::eliminar(Componente *componente){
 				escribirLinea();
 				if(logActivo){
 					clave->set(eliminado);
-					pushCambio(Cambio(clave,posComp,Cambio::Baja));
+					pushCambio(Cambio(clave,posComp-1,Cambio::Baja));
 				}
 				return true;
 			}
@@ -131,9 +137,10 @@ bool EATexto::modificar(Componente *componente){
 					escribirLinea();
 					/*busco nuevo lugar*/
 					bool encontrado=false;
+					bool fin=false;
 					posicion=almacen->posicionActual();
-					posComp++;
-					while(leerLinea()and not encontrado){
+					while((not fin) and not encontrado){
+						fin=not leerLinea();
 						if(linea.length()>=nuevoTamanio){
 							encontrado=(linea[0]==' ');
 						}else posicion=almacen->posicionActual();
@@ -146,7 +153,7 @@ bool EATexto::modificar(Componente *componente){
 					escribirLinea();
 					if(logActivo){
 						clave->set(modificado);
-						pushCambio(Cambio(clave,posComp,Cambio::Reubicacion));
+						pushCambio(Cambio(clave,posComp-1,Cambio::Reubicacion));
 					}
 				}
 				return true;
@@ -167,15 +174,18 @@ bool EATexto::posicionarComponente(size_t nroCompuesto){
 			posComp=0;
 	}
 	bool ultimo=false;
-	while(!ultimo and nroCompuesto>posComp){
-		ultimo=!leerLinea();
-		posComp++;
+	while((not ultimo) and nroCompuesto>posComp){
+		if(leerLinea()) posComp++;
+		else ultimo=true;
 	}
 	return ultimo;
 };
 bool EATexto::siguiente(Componente *componente){
 	bool encontrado=false;
-	while(leerLinea() && !encontrado){
+	bool fin=false;
+	while((not fin )and not encontrado){
+		if(leerLinea()) posComp++;
+		else fin=true;
 		if(linea.length()>1 && linea.at(0)!=' '){
 			encontrado=true;
 			lineaARegistro((Registro*)componente);

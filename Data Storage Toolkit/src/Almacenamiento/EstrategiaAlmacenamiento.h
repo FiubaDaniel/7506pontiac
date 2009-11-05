@@ -27,7 +27,7 @@ class EstrategiaAlmacenamiento {
 private:
 	std::queue<Cambio*> cambiosLog;
 protected:
-	void pushCambio(Cambio cambio){
+	void pushCambio(const Cambio& cambio){
 		cambiosLog.push(new Cambio(cambio));
 	};
 	Clave *clave;
@@ -44,7 +44,11 @@ public:
 	};
 	virtual Componente* getComponente()=0;
 	virtual void setClave(Clave*unaClave){clave=unaClave->clonarce();};
-	virtual void setComparador(ComparadorClave*unComparador){comparador=unComparador;};
+	virtual void setComparador(ComparadorClave*unComparador){
+		comparador=unComparador;
+	};
+	virtual Almacenamiento* abrir(Almacenamiento*almacen)=0;
+	virtual Almacenamiento* crear(Almacenamiento*almacen)=0;
 	virtual bool posicionarComponente(size_t nroComponente)=0;
 	virtual size_t posicionComponente()=0;
 	virtual bool escribir(Componente*componente)=0;

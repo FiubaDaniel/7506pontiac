@@ -34,7 +34,7 @@ void Clave::set(Registro*reg){
 	}
 };
 unsigned int Clave::getCantidadAtributos(){
-	return cantidadAtributos;
+	return atributosDeClave.size();
 };
 void Clave::setCantidadAtributos(unsigned int cant){
 	cantidadAtributos = cant;
