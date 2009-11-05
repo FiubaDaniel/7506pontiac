@@ -24,13 +24,13 @@ void ElementoNodo::setReferencia(Referencia ref){
 Clave* ElementoNodo::getClave(){
 	return clave;
 };
-void ElementoNodo::setClave(Clave* cla){
-	clave=cla;
+void ElementoNodo::setClave(Clave* nueva){
+     clave = nueva->clonarce();
 };
 ElementoNodo* ElementoNodo::clonarce(){
 	ElementoNodo* clon = new ElementoNodo();
 	clon->setReferencia(referencia);
-	clon->setClave(clave->clonarce());
+	clon->setClave(clave);
 	return clon;
 };
 

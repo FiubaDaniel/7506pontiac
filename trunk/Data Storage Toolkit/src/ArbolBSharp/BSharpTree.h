@@ -20,7 +20,7 @@
 class BSharpTree {
 public:
 	BSharpTree(Clave* clave);
-
+	std::fstream archivoArbol;
 	void crear(string nombreArch,unsigned int tamanioBloque,int tamanioSerializadoClave,ComparadorClave* comp);
 	void abrir(string nombreArch,ComparadorClave* comp);
 	bool Buscar(const Clave* clave,Referencia* referencia);
@@ -31,18 +31,18 @@ public:
 	/*Falta el listar*/
 	virtual ~BSharpTree();
 //private: pongo todo publico para probar
-	NodoHoja* buscarPrimerNodoHoja(NodoIntermedio nodo);
-	NodoHoja* buscarHoja(NodoIntermedio nodo,const Clave* clave,Referencia referenciaDeNodoHoja);
-	bool buscarIterativo(NodoIntermedio nodo,const Clave* clave,Referencia* ref,NodoHoja* ultimo);
+	NodoHoja* buscarPrimerNodoHoja(NodoIntermedio* nodo);
+	NodoHoja* buscarHoja(NodoIntermedio* nodo,Clave* clave,Referencia& referenciaDeNodoHoja);
+	bool buscarIterativo(NodoIntermedio* nodo, Clave* clave,Referencia* ref,NodoHoja* ultimo);
 	int calcularCantidadElementosPorNodo(unsigned int tamSerializadoClave);
-	void BuscarInsertarOEliminar(Nodo* &hoja,std::list<Referencia>&listaDePadres,NodoIntermedio* nodo,const Clave* clave,Referencia& refHoja,bool& esRaiz,bool esInsertar);
+	void BuscarInsertarOEliminar(Nodo* &hoja,std::list<Referencia>&listaDePadres,NodoIntermedio* nodo, Clave* clave,Referencia& refHoja,bool& esRaiz,bool esInsertar);
 	Referencia buscarEspacioLibre();
 	void grabado(Nodo* original,Nodo* hermano,Nodo* padre,Referencia refOriginal,Referencia refPadre,Referencia refHermano);
 	void grabar(Nodo* nodoOriginal,Nodo* nodoHermano,Referencia refOriginal,Referencia refHermano);
 	void grabarUnitario(Nodo* nodo,Referencia ref);
 	void destrozarLista(std::list<NodoIntermedio*>);
 	void resolverDesborde(Nodo* nodo,list<Referencia>&listaDePadres,Referencia refHijo);
-	void desbordeRaiz();
+	void desbordeRaiz(Nodo* RaizE);
 	void buscarNodoBalancearODividir(NodoIntermedio* padre,Nodo* hijo,Nodo*& hermano,Referencia refHijo,bool& izq,bool& balancear,Referencia& refHermano,ElementoNodo*& elemPadre);
 	void obtenerHermano(Referencia ref,Nodo*& Hermano,unsigned int nivel,bool& balancear);
 	ElementoNodo* ObtenerRaiz();
@@ -53,14 +53,14 @@ public:
 	void armarNuevaRaiz(Nodo* nodoIzq,Nodo* nodoDer);
 	void nuevoEspacioLibre(Referencia);
 	void destruirNodos(Nodo* nodo,Nodo* hermanoDer,Nodo* hermanoIzq);
-	void eliminarClaveEnIntermedio(const Clave* claveAeliminar,Clave* claveSetear);
-	NodoIntermedio* buscarIntermedio(const Clave* clave,NodoIntermedio* nodo);
+	void eliminarClaveEnIntermedio(Clave* claveAeliminar,Clave* claveSetear);
+	NodoIntermedio* buscarIntermedio(Clave* clave,NodoIntermedio* nodo,bool esRaiz,Referencia& refAux);
 	void buscarHermanos(Nodo* nodoActual,NodoIntermedio* padre,Nodo* hermanoIzq,Nodo* hermanoDer,Referencia& refHermanoIzq,Referencia& refHermanoDer,Referencia refHijo,vector<bool> &informacion);
-	Referencia obtenerReferenciaHermano(Nodo* padre,Clave clave,bool Izq);
+	Referencia obtenerReferenciaHermano(Nodo* padre,Clave* clave,bool Izq);
 	Nodo* obtenerHermanoXsuBflujo(int nivel,Referencia ref);
 	Nodo* obtenerNodoPorPosiciones(int posInicial);
+	NodoIntermedio* getRaiz();
 	unsigned int numeroDeElementosXnodo,posicionRaiz,tamanioNodo,cantidadMinimaDeElementos;
-	std::fstream archivoArbol;
 	std::fstream archivoEspaciosLibres;
 	string nombreArchivo;
 	string nombreEspaciosLibres;
