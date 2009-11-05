@@ -24,7 +24,7 @@ public:
 	ElementoNodo* dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMedioE,Nodo* nodoDerE,Nodo* nodoPadreE,Clave* clave);
 	Referencia getReferenciaIzq();
 	int unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre);
-	Referencia bucarReferenciaAsiguienteNodo(const Clave* clave);
+	Referencia bucarReferenciaAsiguienteNodo(Clave* clave);
 	void setRefereciaIzq(Referencia ref);
 	void setearClave(const Clave* claveAeliminar,Clave* claveSetear);
 	bool estaClave(const Clave* clave);

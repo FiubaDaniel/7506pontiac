@@ -299,7 +299,7 @@ ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* 
  * a la buscada, sin embargo la informacion solo se encuentra en Nodos Hoja, con lo cual
  * hay q segir la busqueda, por lo q la referencia entregada es la ref derecha de ese elemento.
  */
-Referencia NodoIntermedio::bucarReferenciaAsiguienteNodo(const Clave* clave){
+Referencia NodoIntermedio::bucarReferenciaAsiguienteNodo(Clave* clave){
 	    /*primero verifico q la referencia buscada no sea la referencia izq del nodo*/
 	ElementoNodo* elemento;
 	if (comparador->Comparar(clave,listaElementos.front()->getClave())<0){

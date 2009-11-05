@@ -18,7 +18,7 @@ class NodoHoja: public Nodo{
 private:
 		Referencia referenciaSiguiente;
 		bool buscar(const Clave* clave,ElementoNodo*& elemento);
-		int pos;
+		unsigned int pos;
 public:
 	/*
 	 * Los nodos hojas deben poder crearce de dos formas, una mediante una tira de bytes
@@ -41,5 +41,6 @@ public:
 		void setPos();
 		void avanzarPos();
 		ElementoNodo* getPos();
+		unsigned int numeroPos();
 };
 #endif /* NODOHOJA_H_ */

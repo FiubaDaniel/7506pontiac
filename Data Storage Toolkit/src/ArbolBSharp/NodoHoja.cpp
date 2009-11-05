@@ -44,12 +44,15 @@ void NodoHoja::avanzarPos(){
 };
 ElementoNodo* NodoHoja::getPos(){
 	std::list<ElementoNodo*>::iterator it = listaElementos.begin();
-	int aux=0;
+	unsigned int aux=0;
 	while(aux < pos){
 		++it;
 		aux++;
 	}
 	return *it;
+};
+unsigned int NodoHoja::numeroPos(){
+	return pos;
 };
 /*
  * El tamaño de la clave ya fue serializado al igual q la cantidad de elementos por nodo
@@ -258,7 +261,7 @@ ElementoNodo* NodoHoja::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMe
 		ElementoNodo* elemento = *it2;
 		if(cantMedio==0){
 			delete elementoPadre->getClave();
-			elementoPadre->setClave(elemento->getClave()->clonarce());
+			elementoPadre->setClave(elemento->getClave());
 			nodoDer->agregarElemento(elemento);
 			cantMedio=-1;
 		}else{
