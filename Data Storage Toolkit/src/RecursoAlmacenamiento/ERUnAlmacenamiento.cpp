@@ -11,11 +11,10 @@ bool ERUnAlmacenamiento::insertar(Registro* registro){
 	if(indice->BuscarReferencia(clave,&referencia))
 		return false;
 	estrategiAlmacenamiento->insertar(registro);
-	while(!estrategiAlmacenamiento->cambiosLog.empty()){
-		Cambio* cambio=estrategiAlmacenamiento->cambiosLog.front();
+	while(!estrategiAlmacenamiento->hayMasCambios()){
+		const Cambio* cambio=estrategiAlmacenamiento->siguienteCambio();
 		actualizarIndice(*cambio);
-		delete cambio;
-		estrategiAlmacenamiento->cambiosLog.pop();
+		estrategiAlmacenamiento->pop();
 	};
 	return true;
 };
@@ -27,11 +26,10 @@ bool ERUnAlmacenamiento::eliminar(Clave* unaClave){
 	setClave(registro,clave);
 	estrategiAlmacenamiento->eliminar(registro);
 	indice->eliminar(unaClave);
-	while(!estrategiAlmacenamiento->cambiosLog.empty()){
-		Cambio* cambio=estrategiAlmacenamiento->cambiosLog.front();
+	while(!estrategiAlmacenamiento->hayMasCambios()){
+		const Cambio* cambio=estrategiAlmacenamiento->siguienteCambio();
 		actualizarIndice(*cambio);
-		delete cambio;
-		estrategiAlmacenamiento->cambiosLog.pop();
+		estrategiAlmacenamiento->pop();
 	};
 	return true;
 };
@@ -43,11 +41,10 @@ bool ERUnAlmacenamiento::modificar(Clave* unaClave,Registro* registro){
 	estrategiAlmacenamiento->posicionarComponente(referencia);
 	if(!estrategiAlmacenamiento->modificar(registro))
 		return false;
-	while(!estrategiAlmacenamiento->cambiosLog.empty()){
-		Cambio *cambio=estrategiAlmacenamiento->cambiosLog.front();
+	while(!estrategiAlmacenamiento->hayMasCambios()){
+		const Cambio* cambio=estrategiAlmacenamiento->siguienteCambio();
 		actualizarIndice(*cambio);
-		delete cambio;
-		estrategiAlmacenamiento->cambiosLog.pop();
+		estrategiAlmacenamiento->pop();
 	};
 	return true;
 };
@@ -61,9 +58,9 @@ bool ERUnAlmacenamiento::obtener(Clave* unaClave,Registro*registro){
 
 void ERUnAlmacenamiento::actualizarIndice(Cambio cambio){
 	switch(cambio.operacion){
-		case Cambio::Alta : indice->insertar(cambio.referencia,cambio.clave); break;
-		case Cambio::Baja : indice->eliminar(cambio.clave); break;
-		case Cambio::Reubicacion : indice->modificar(cambio.clave,cambio.referencia); break;
+		case Cambio::Alta : indice->insertar(cambio.referencia,&cambio.clave); break;
+		case Cambio::Baja : indice->eliminar(&cambio.clave); break;
+		case Cambio::Reubicacion : indice->modificar(&cambio.clave,cambio.referencia); break;
 	}
 }
 void ERUnAlmacenamiento::setClave(Registro*reg,Clave*clave){

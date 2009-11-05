@@ -8,6 +8,7 @@ Recurso::Recurso (Almacenamiento* archivo,EstrategiaIndice* indice,EstrategiaRec
 	this->indice=indice;
 	this->estrategiaUsada=estrategiaUsada;
 	this->estrategiaAlmacenamiento=estretegiaAlmacenamiento;
+
 }
 
 Recurso::~Recurso () {}
