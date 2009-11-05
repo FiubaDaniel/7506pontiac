@@ -27,7 +27,7 @@ public:
 	int comparar(const Atributo*otroAtributo);
 	void imprimir(std::ostream&salida);
 	void leer(std::istream&entrada);
-	void copiar(const Atributo& att);
+	void copiar(const Atributo* att);
 };
 /*----------------------------------------------------------------------------*/
 /*Template Control de tipo*/
@@ -84,11 +84,11 @@ void AtributoFijo<T_tipo>::leer(std::istream&entrada){
 	entrada>>dato;
 };
 template<typename T_tipo>
-void AtributoFijo<T_tipo>::copiar(const Atributo& att){
-	try{
-		AtributoFijo<T_tipo>& otro=dynamic_cast<AtributoFijo<T_tipo>&>(const_cast<Atributo&>(att));
-		dato=otro.dato;
-	}catch(...){};
+void AtributoFijo<T_tipo>::copiar(const Atributo* att){
+
+		AtributoFijo<T_tipo>* otro=dynamic_cast<AtributoFijo<T_tipo>*>(const_cast<Atributo*>(att));
+		dato=otro->dato;
+
 };
 /*----------------------------------------------------------------------------------------------------*/
 /*Especializacion de la clase para cadena de chars*/
@@ -142,10 +142,10 @@ public:
 	void leer(std::istream&entrada){
 		entrada.getline(datos,longitud);
 	};
-	void copiar(const Atributo& att){
+	void copiar(const Atributo* att){
 		try{
-			AtributoFijo<char*>& otro=dynamic_cast<AtributoFijo<char*>&>(const_cast<Atributo&>(att));
-			strncpy(datos,otro.datos,longitud);
+			AtributoFijo<char*>* otro=dynamic_cast<AtributoFijo<char*>*>(const_cast<Atributo*>(att));
+			strncpy(datos,otro->datos,longitud);
 		}catch(...){};
 	};
 };

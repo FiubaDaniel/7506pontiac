@@ -22,6 +22,7 @@ void EARegistros::finalizarAlmacenamiento(){
 int EARegistros::comparar(Registro*reg1,Registro*reg2){
 	clave->set(reg1);
 	Clave*clave2=clave->clonarce();
+	clave2->set(reg2);
 	int resultado=comparador->Comparar(clave,clave2);
 	delete clave2;
 	return resultado;
@@ -82,7 +83,7 @@ bool EARegistros::escribir(Componente *componente){
 	if(registro!=NULL&&nroRegistro<=siguienteRegLibre){
 		if(logActivo){
 			clave->set(registro);
-			cambiosLog.push(new Cambio(*clave,nroRegistro,Cambio::Alta));
+			pushCambio(Cambio(clave,nroRegistro,Cambio::Alta));
 		}
 		escribir(registro);
 		return true;
@@ -116,7 +117,7 @@ bool EARegistros::modificar(Componente *componente){
 			nroRegistro--;
 			if(logActivo){
 				clave->set(nuevo);
-				cambiosLog.push(new Cambio(*clave,nroRegistro,Cambio::Modificacion));
+				pushCambio(Cambio(clave,nroRegistro,Cambio::Modificacion));
 			}
 			posicionarComponente(nroRegistro);
 			escribir(nuevo);
@@ -138,9 +139,9 @@ bool EARegistros::eliminar(Componente *componente){
 			leer(registro);
 			if(logActivo){
 				clave->set(eliminado);
-				cambiosLog.push(new Cambio(*clave,borrado,Cambio::Baja));
+				pushCambio(Cambio(clave,borrado,Cambio::Baja));
 				clave->set(registro);
-				cambiosLog.push(new Cambio(*clave,borrado,Cambio::Reubicacion));
+				pushCambio(Cambio(clave,borrado,Cambio::Reubicacion));
 			}
 			posicionarComponente(borrado);
 			escribir(registro);

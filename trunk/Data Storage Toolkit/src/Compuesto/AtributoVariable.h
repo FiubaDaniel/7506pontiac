@@ -32,7 +32,7 @@ public:
 	int comparar(const Atributo*otroAtributo);
 	void imprimir(std::ostream&salida);
 	void leer(std::istream&entrada);
-	void copiar(const Atributo& att);
+	void copiar(const Atributo* att);
 public:
 	/* metodo propios de la clase permiten iteracion sobre los valores guardados*/
 	void append(void*valor);// se agregan tantos bytes como indica nrobytes
@@ -145,12 +145,10 @@ void AtributoVariable<T_tipo>::leer(std::istream&entrada){
 	}
 };
 template<typename T_tipo>
-void AtributoVariable<T_tipo>::copiar(const Atributo& att){
-	try{
-		AtributoVariable<T_tipo>& otro=dynamic_cast<AtributoVariable<T_tipo>&>(const_cast<Atributo&>(att));
+void AtributoVariable<T_tipo>::copiar(const Atributo* att){
+		AtributoVariable<T_tipo>* otro=dynamic_cast<AtributoVariable<T_tipo>*>(const_cast<Atributo&>(att));
 		this->valores.clear();
-		this->valores.assign (otro.valores.begin(),otro.valores.end());
-	}catch(...){};
+		this->valores.assign(otro->valores.begin(),otro->valores.end());
 };
 /*----------------------------------------------------------------------------*/
 /*Templates Especializados contructores*/
@@ -187,11 +185,9 @@ public:
 	};
 	virtual ~AtributoVariable(){};
 
-	void copiar(const Atributo& att){
-		try{
-			AtributoVariable<string>& otro=dynamic_cast<AtributoVariable<string>&>(const_cast<Atributo&>(att));
-			str=otro.str;
-		}catch(...){};
+	void copiar(const Atributo* att){
+			AtributoVariable<string>* otro=dynamic_cast<AtributoVariable<string>*>(const_cast<Atributo*>(att));
+			str=otro->str;
 	};
 	Ttamanio tamanio(){
 		return str.size();

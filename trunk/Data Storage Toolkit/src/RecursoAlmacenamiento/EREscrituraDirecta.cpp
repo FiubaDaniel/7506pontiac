@@ -17,12 +17,11 @@ bool EREscrituraDirecta::insertar(Registro* registro){
 	if(indice->BuscarReferencia(clave,&referencia))
 		return false;
 	estrategiaArchivo->insertar(registro);
-	while(!estrategiaArchivo->cambiosLog.empty()){
-		Cambio* cambio=estrategiaArchivo->cambiosLog.front();
+	while(!estrategiaArchivo->hayMasCambios()){
+		const Cambio* cambio=estrategiaArchivo->siguienteCambio();
 		actualizarBuffer(*cambio);
 		actualizarIndice(*cambio);
-		delete cambio;
-		estrategiaArchivo->cambiosLog.pop();
+		estrategiaArchivo->pop();
 	};
 	return true;
 };
@@ -34,12 +33,11 @@ bool EREscrituraDirecta::eliminar(Clave* unaClave){
 	setClave(registro,clave);
 	estrategiaArchivo->eliminar(registro);
 	indice->eliminar(unaClave);
-	while(!estrategiaArchivo->cambiosLog.empty()){
-		Cambio *cambioEnArchivo=estrategiaArchivo->cambiosLog.front();
-		actualizarBuffer(*cambioEnArchivo);
-		actualizarIndice(*cambioEnArchivo);
-		delete cambioEnArchivo;
-		estrategiaArchivo->cambiosLog.pop();
+	while(!estrategiaArchivo->hayMasCambios()){
+		const Cambio* cambio=estrategiaArchivo->siguienteCambio();
+		actualizarBuffer(*cambio);
+		actualizarIndice(*cambio);
+		estrategiaArchivo->pop();
 	};
 	return true;
 };
@@ -51,12 +49,11 @@ bool EREscrituraDirecta::modificar(Clave* unaClave,Registro* registro){
 	estrategiaArchivo->posicionarComponente(referencia);
 	if(!estrategiaArchivo->modificar(registro))
 		return false;
-	while(!estrategiaArchivo->cambiosLog.empty()){
-		Cambio *cambio=estrategiaArchivo->cambiosLog.front();
+	while(!estrategiaArchivo->hayMasCambios()){
+		const Cambio* cambio=estrategiaArchivo->siguienteCambio();
 		actualizarBuffer(*cambio);
 		actualizarIndice(*cambio);
-		delete cambio;
-		estrategiaArchivo->cambiosLog.pop();
+		estrategiaArchivo->pop();
 	};
 	return true;
 };
@@ -88,9 +85,9 @@ void EREscrituraDirecta::insertarEnBuffer(Referencia refArchivo){
 };
 void EREscrituraDirecta::actualizarIndice(Cambio cambio){
 	switch(cambio.operacion){
-		case Cambio::Alta : indice->insertar(cambio.referencia,cambio.clave); break;
-		case Cambio::Baja : indice->eliminar(cambio.clave); break;
-		case Cambio::Reubicacion : indice->modificar(cambio.clave,cambio.referencia); break;
+		case Cambio::Alta : indice->insertar(cambio.referencia,&cambio.clave); break;
+		case Cambio::Baja : indice->eliminar(&cambio.clave); break;
+		case Cambio::Reubicacion : indice->modificar(&cambio.clave,cambio.referencia); break;
 	}
 };
 void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
@@ -114,7 +111,7 @@ void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 			break;
 		case Cambio::Reubicacion :
 			Referencia posicionAnterior;
-			indice->BuscarReferencia(cambio.clave,&posicionAnterior);
+			indice->BuscarReferencia(&cambio.clave,&posicionAnterior);
 			/* si el Componente de la posicoin previa esta en el buffer la actualizo*/
 			if(admin.acceder(posicionAnterior)){
 				posicionBuffer=admin.getPosicionEnBuffer();

@@ -5,9 +5,12 @@ Archivo::~Archivo (){
 	archivo.close();
 };
 void Archivo::escribir(const void* bytes,size_t cantidad){
+
 	archivo.write((char*)bytes,cantidad);
+
 };
 void Archivo::escribir(const void* unByte){
+
 	archivo.put(*(char*)unByte);
 };
 void Archivo::leer(void* bytes,size_t cantidad){
@@ -36,6 +39,7 @@ void Archivo::crear(const char *ruta){
 	archivo.open(ruta,std::fstream::out|std::fstream::trunc|std::fstream::binary);
 	archivo.close();
 	archivo.open(ruta,std::ios_base::out|std::fstream::in|std::fstream::binary);
+
 }
 
 void Archivo::abrir(const char *ruta){

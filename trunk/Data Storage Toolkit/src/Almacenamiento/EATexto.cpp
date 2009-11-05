@@ -4,201 +4,218 @@
  *  Created on: 13/10/2009
  *      Author: paulo
  */
-
 #include "EATexto.h"
 
 EATexto::EATexto(Registro*registro) {
-	this->registro=registro;
+	this->registro=(Registro*)registro->clonar();
 };
 
-EATexto::~EATexto() {};
+EATexto::~EATexto() {
+	delete registro;
+};
 
 void EATexto::abrir(Almacenamiento*almacen){
 	this->almacen=almacen;
 	posComp=0;
+	linea.clear();
 	ultimo=false;
 };
 void EATexto::crear(Almacenamiento *almacen){
 	this->almacen=almacen;
 	posComp=0;
-	ultimoLeido="";
+	linea.clear();
 	ultimo=false;
 };
-bool EATexto::leer(Componente *componente){
-	Registro* registro=dynamic_cast<Registro*>(componente);
-	if(registro){
-		siguiente();
-		posComp++;
-		stringAregistro(registro,ultimoLeido);
-		return true;
-	}
-	return false;
-};
 
+int EATexto::comparar(Registro*registro,Registro*registro2){
+		clave->set(registro);
+		Clave*clave2=clave->clonarce();
+		clave2->set(registro2);
+		int resultado=comparador->Comparar(clave,clave2);
+		delete clave2;
+		return resultado;
+};
+Componente *EATexto::getComponente(){
+	return registro;
+}
 bool EATexto::escribir(Componente *componente){
 	Registro* registro=dynamic_cast<Registro*>(componente);
 	if(registro){
-		std::string str=registroAstring(registro);
-		str.push_back('\n');
-		almacen->escribir(str.c_str(),str.size());
-		if(logActivo){
-			clave->set(registro);
-			cambiosLog.push(new Cambio(*clave,posComp,Cambio::Alta));
-		}
+		this->registroALinea(registro);
+		escribirLinea();
 		posComp++;
 		return true;
 	}
 	return false;
+}
+bool EATexto::leer(Componente *componente){
+	Registro* registro=dynamic_cast<Registro*>(componente);
+	if(registro){
+		posComp++;
+		if(leerLinea() and linea[0]!=' '){
+			lineaARegistro(registro);
+			return true;
+		}
+	}
+	return false;
+}
+bool EATexto::insertar(Componente *componente){
+	Registro* nuevo=dynamic_cast<Registro*>(componente);
+	if(nuevo){
+		registroALinea(nuevo);
+		size_t tamanio=linea.length();
+		size_t posicion;
+		// busco posicion de insercion
+		bool encontrado=false;
+		posicion=almacen->posicionActual();
+		posComp++;
+		while(leerLinea()and not encontrado){
+			if(linea.length()>=tamanio){
+				encontrado=(linea[0]==' ');
+			}else posicion=almacen->posicionActual();
+			posComp++;
+			//encontrado=verdadero si es el ultimo lugar o si la linea tiene espacio suficiente
+		};
+		if(encontrado)
+			almacen->posicionar(posicion);
+		registroALinea(nuevo);
+		escribirLinea();
+		if(logActivo){
+			clave->set(nuevo);
+			pushCambio(Cambio(clave,posComp-1,Cambio::Alta));
+		}
+		return true;
+	}
+	return false;
+}
+bool EATexto::eliminar(Componente *componente){
+	Registro* eliminado=dynamic_cast<Registro*>(componente);
+	if(eliminado){
+		size_t posicion=almacen->posicionActual();
+		if(leer(registro)){
+			if(comparar(registro,eliminado)==0){
+				linea.replace(linea.begin(),linea.end(),linea.length()-1,' ');
+				almacen->posicionar(posicion);
+				escribirLinea();
+				if(logActivo){
+					clave->set(eliminado);
+					pushCambio(Cambio(clave,posComp,Cambio::Baja));
+				}
+				return true;
+			}
+		}
+	}
+	return false;
+}
+bool EATexto::modificar(Componente *componente){
+	Registro* modificado=dynamic_cast<Registro*>(componente);// no elimina el ultimo
+	if(modificado){
+		size_t posicion=almacen->posicionActual();
+		if(leer(registro)){
+			if(comparar(registro,modificado)==0){
+				size_t tamanioAnterior=linea.length();
+				registroALinea(modificado);
+				if(linea.length()<=tamanioAnterior){
+					/*si el tamanio del modificado es menor o igual se escribe en la posicion actual*/
+					almacen->posicionar(posicion);
+					escribirLinea();
+					if(logActivo){
+						clave->set(modificado);
+						pushCambio(Cambio(clave,posComp-1,Cambio::Modificacion));
+					}
+				}else{
+					size_t nuevoTamanio=linea.length();
+					linea.clear();
+					linea.resize(tamanioAnterior,' ');
+					almacen->posicionar(posicion);
+					escribirLinea();
+					/*busco nuevo lugar*/
+					bool encontrado=false;
+					posicion=almacen->posicionActual();
+					posComp++;
+					while(leerLinea()and not encontrado){
+						if(linea.length()>=nuevoTamanio){
+							encontrado=(linea[0]==' ');
+						}else posicion=almacen->posicionActual();
+						posComp++;
+						//encontrado=verdadero si es el ultimo lugar o si la linea tiene espacio suficiente
+					};
+					if(encontrado)
+						almacen->posicionar(posicion);
+					registroALinea(modificado);
+					escribirLinea();
+					if(logActivo){
+						clave->set(modificado);
+						pushCambio(Cambio(clave,posComp,Cambio::Reubicacion));
+					}
+				}
+				return true;
+			}
+		}
+	}
+	return false;
 };
-
+bool EATexto::obtener(Componente *componente){
+	return siguiente(componente);
+};
+size_t EATexto::posicionComponente(){
+	return posComp;
+};
 bool EATexto::posicionarComponente(size_t nroCompuesto){
 	if(nroCompuesto<posComp){
-		almacen->posicionar(0);
-		posComp=0;
+			almacen->posicionar(0);
+			posComp=0;
 	}
-	while(nroCompuesto>posComp&&!almacen->fin()){
-		siguiente();
+	bool ultimo=false;
+	while(!ultimo and nroCompuesto>posComp){
+		ultimo=!leerLinea();
 		posComp++;
 	}
-	return true;
+	return ultimo;
 };
-
-bool EATexto::insertar(Componente *componente){
-	Registro* registro=dynamic_cast<Registro*>(componente);
-	if(registro){
-		std::string strRegistro=registroAstring(registro);
-		size_t posicion;
-		do{
-			posicion=buscarProximoLibre();
-		}while(!almacen->fin() && strRegistro.size() > ultimoLeido.size());
-
-		almacen->reiniciar();
-		almacen->posicionar(posicion);
-
-		almacen->escribir(strRegistro.c_str(),strRegistro.size());
-
-		if(logActivo){
-			clave->set(registro);
-			cambiosLog.push(new Cambio(*clave,posComp-1,Cambio::Alta));
+bool EATexto::siguiente(Componente *componente){
+	bool encontrado=false;
+	while(leerLinea() && !encontrado){
+		if(linea.length()>1 && linea.at(0)!=' '){
+			encontrado=true;
+			lineaARegistro((Registro*)componente);
 		}
-
-		return true;
-	}
-	return false;
+	};
+	return encontrado;
 };
-
-bool EATexto::eliminar(Componente *componente){
-	Registro* registro=dynamic_cast<Registro*>(componente);
-	if(registro){
-			size_t posicion=almacen->posicionActual();
-			siguiente();
-			almacen->reiniciar();
-			stringAregistro(registro,ultimoLeido);
-			std::string str=ultimoLeido;
-			std::cout<<str<<endl;
-			str.replace(str.begin(),str.end()-1,str.size(),' ');
-			str.at(str.size()-1)='\n';
-			std::cout<<str<<endl;
-			almacen->posicionar(posicion);
-			almacen->escribir(str.c_str(),str.size());
-			if(logActivo){
-				clave->set(registro);
-				cambiosLog.push(new Cambio(*clave,posComp,Cambio::Baja));
-			}
-			posComp++;
-			return true;
-	}
-	return false;
-};
-bool EATexto::modificar(Componente *componente){
-	Registro* registro=dynamic_cast<Registro*>(componente);
-	if(registro){
-		std::string str=registroAstring(registro);
-		str.append(ultimoLeido.size()-str.size()-1,' ');
-		str.push_back('\n');
-		almacen->escribir(str.c_str(),str.size());
-		posComp++;
-		if(str.size()<ultimoLeido.size()){
-			if(logActivo){
-				clave->set(registro);
-				cambiosLog.push(new Cambio(*clave,posComp-1,Cambio::Modificacion));
-			}
-		}else{
-			size_t posicion;
-			do{
-				posicion=buscarProximoLibre();
-			}while(!almacen->fin() && str.size() > ultimoLeido.size());
-			if(almacen->fin())
-				almacen->reiniciar();
-			almacen->posicionar(posicion);
-			almacen->escribir(str.c_str(),str.size());
-			posComp++;
-			if(logActivo){
-				clave->set(registro);
-				cambiosLog.push(new Cambio(*clave,posComp,Cambio::Reubicacion));
-			}
-		};
-		return true;
-	}
-	return false;
-}
-
-void EATexto::siguiente(){
-	ultimoLeido.clear();
-	char chr;
-	do{
-		almacen->leer(&chr);
-		ultimoLeido.push_back(chr);
-	}while(chr!='\n' && !almacen->fin());
-	ultimoLeido.push_back(chr);
-};
-
-void EATexto::stringAregistro(Registro*registro,std::string &str){
-	std::stringstream strs(str);
+void EATexto::lineaARegistro(Registro *registro){
+	std::stringstream strs(linea);
 	for(Ttamanio i=0;i<registro->cantidadAtributos();i++){
 		registro->get(i)->leer(strs);
-	}
+		strs<<" ";
+	};
 }
-std::string EATexto::registroAstring(Registro*registro){
+void EATexto::registroALinea(Registro *registro){
 	std::stringstream strs;
 	for(Ttamanio i=0;i<registro->cantidadAtributos();i++){
 		registro->get(i)->imprimir(strs);
 		strs<<" ";
 	}
-	strs.put('\n');
-	return strs.str();
-};
-
-Componente *EATexto::getComponente(){
-	return registro;
+	linea=strs.str();
 }
-size_t EATexto::buscarProximoLibre(){
-	/*busco un espacio libre donde entre el texto*/
-	bool encontrado=false;
-	size_t posicion;
-	do{
-		posicion=almacen->posicionActual();
-		siguiente();
-		if(ultimoLeido.at(0)==' '){
-			encontrado=true;
-		}else posComp++;
-	}while(!encontrado && !almacen->fin());
-
-	return posicion;
-};
-bool EATexto::obtener(Componente*componente){
-	return siguiente(componente);
-};
-bool EATexto::siguiente(Componente *componente){
-	Registro* registro=dynamic_cast<Registro*>(componente);
-	if(!almacen->fin()&& !ultimo ){
-		siguiente();
-		stringAregistro(registro,ultimoLeido);
-		return true;
-	}else if(!ultimo){
+bool EATexto::leerLinea(){
+	char chr=0;
+	linea.clear();
+	almacen->leer(&chr);
+	while(!almacen->fin()&& chr!='\n'){
+		linea.push_back(chr);
+		almacen->leer(&chr);
+	};
+	if(chr!='\n'){
 		almacen->reiniciar();
-		ultimo=true;
+		return false;
 	}
-	return false;
+	return true;
 };
-size_t EATexto::posicionComponente(){return this->posComp;};
+void EATexto::escribirLinea(){
+	linea.push_back('\n');
+	almacen->escribir(linea.c_str(),linea.length());
+};
+
+
+

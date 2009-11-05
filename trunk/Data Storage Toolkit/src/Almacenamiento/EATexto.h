@@ -17,11 +17,19 @@ class EATexto: public EstrategiaAlmacenamiento {
 	bool ultimo;
 	Almacenamiento* almacen;
 	size_t posComp;
-	std::string ultimoLeido;
-	void siguiente();
-	std::string registroAstring(Registro*registro);
-	void stringAregistro(Registro*registro,std::string &str);
-	size_t buscarProximoLibre();
+	std::string linea;
+	int comparar(Registro*registro,Registro*registro2);
+	/* intenta leer la siguiente linea del archivo, devuelve false,
+	 * si tras intentar, encuentra el fin de archivo
+	 */
+	bool leerLinea();
+	/*
+	 * escribe linea en la posicion actual del archivo.
+	 */
+	void escribirLinea();
+	/*carga en linea el contenido de un registro no vacio*/
+	void registroALinea(Registro*registro);
+	void lineaARegistro(Registro*registro);
 public:
 	EATexto(Registro*registro);
 	virtual ~EATexto();
