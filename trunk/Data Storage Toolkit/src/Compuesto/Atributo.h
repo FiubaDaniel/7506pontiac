@@ -9,7 +9,19 @@
 #define ATRIBUTO_H_
 #include <streambuf>
 #include <iostream>
+#include <exception>
 typedef unsigned int Ttamanio;
+
+class ErrorSerializacionExcepcion : public std::exception {
+	std::string mensaje;
+public:
+	ErrorSerializacionExcepcion(std::string detalle) throw(){
+		mensaje=detalle;
+	};
+	const char* what() const throw(){ return mensaje.c_str();};
+	~ErrorSerializacionExcepcion() throw(){};
+};
+
 class Atributo {
 public:
 	Atributo(std::string nombreAtributo){nombre=nombreAtributo;};
@@ -45,11 +57,11 @@ public:
 	/*
 	 *
 	 */
-	virtual Ttamanio serializar(std::streambuf&salida)=0;
+	virtual Ttamanio serializar(std::streambuf&salida) throw(ErrorSerializacionExcepcion)=0;
 	/*
 	 *
 	 */
-	virtual Ttamanio deserializar(std::streambuf&entrada)=0;
+	virtual Ttamanio deserializar(std::streambuf&entrada) throw(ErrorSerializacionExcepcion) =0;
 	/*
 	 *
 	 */

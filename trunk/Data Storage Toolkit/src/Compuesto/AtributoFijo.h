@@ -20,8 +20,8 @@ public:
 	void get(void* valor);
 	Ttamanio tamanio();
 	Atributo* clonar();
-	Ttamanio serializar(std::streambuf&salida);
-	Ttamanio deserializar(std::streambuf&entrada);
+	Ttamanio serializar(std::streambuf&salida)throw(ErrorSerializacionExcepcion);
+	Ttamanio deserializar(std::streambuf&entrada)throw(ErrorSerializacionExcepcion);
 	Ttamanio tamanioSerializado();
 	bool esfijo();
 	int comparar(const Atributo*otroAtributo);
@@ -53,15 +53,16 @@ Atributo* AtributoFijo<T_tipo>::clonar(){
 	return clon;
 };
 template<typename T_tipo>
-Ttamanio AtributoFijo<T_tipo>::serializar(std::streambuf&salida){
+Ttamanio AtributoFijo<T_tipo>::serializar(std::streambuf&salida)throw(ErrorSerializacionExcepcion){
 	Ttamanio tamanioDato=sizeof(dato);
 	salida.sputn((char*)&dato,tamanioDato);
 	return tamanioDato;
 };
 template<typename T_tipo>
-Ttamanio AtributoFijo<T_tipo>::deserializar(std::streambuf&entrada){
+Ttamanio AtributoFijo<T_tipo>::deserializar(std::streambuf&entrada)throw(ErrorSerializacionExcepcion){
 	Ttamanio tamanioDato=sizeof(dato);
-	entrada.sgetn((char*)&dato,tamanioDato);
+	if(entrada.sgetn((char*)&dato,tamanioDato)!=tamanioDato)
+		throw ErrorSerializacionExcepcion("Excepcion:AtributoFijo "+nombre+" no fue deserializado");//TODO
 	return tamanioDato;
 };
 template<typename T_tipo>
@@ -117,13 +118,14 @@ public:
 		strncpy(clon->datos,datos,longitud);
 		return clon;
 	};
-	Ttamanio serializar(std::streambuf&salida){
+	Ttamanio serializar(std::streambuf&salida)throw(ErrorSerializacionExcepcion){
 		salida.sputn(datos,longitud);
 		return longitud;
 
 	};
-	Ttamanio deserializar(std::streambuf&entrada){
-		entrada.sgetn(datos,longitud);
+	Ttamanio deserializar(std::streambuf&entrada)throw(ErrorSerializacionExcepcion){
+		if(entrada.sgetn(datos,longitud)!=longitud)
+			throw ErrorSerializacionExcepcion("Excepcion:AtributoFijo "+nombre+" no fue deserializado");//TODO
 		return longitud;
 	};
 	Ttamanio tamanioSerializado(){return longitud;};

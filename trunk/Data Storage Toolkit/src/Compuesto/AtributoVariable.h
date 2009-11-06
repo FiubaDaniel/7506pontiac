@@ -25,8 +25,8 @@ public:
 	void get(void* value);
 	Ttamanio tamanio();
 	Atributo* clonar();
-	Ttamanio serializar(std::streambuf &salida);
-	Ttamanio deserializar(std::streambuf &entrada);
+	Ttamanio serializar(std::streambuf &salida)throw(ErrorSerializacionExcepcion);
+	Ttamanio deserializar(std::streambuf &entrada)throw(ErrorSerializacionExcepcion);
 	Ttamanio tamanioSerializado();
 	bool esfijo();
 	int comparar(const Atributo*otroAtributo);
@@ -71,7 +71,7 @@ Atributo* AtributoVariable<T_tipo>::clonar(){
 	return clon;
 };
 template<typename T_tipo>
-Ttamanio AtributoVariable<T_tipo>::serializar(std::streambuf &salida){
+Ttamanio AtributoVariable<T_tipo>::serializar(std::streambuf &salida)throw(ErrorSerializacionExcepcion){
 	Ttamanio offset=sizeof(Ttamanio);
 	Ttamanio aux=valores.size();
 	salida.sputn((char*)&aux,offset);
@@ -82,14 +82,16 @@ Ttamanio AtributoVariable<T_tipo>::serializar(std::streambuf &salida){
 	return offset;
 };
 template<typename T_tipo>
-Ttamanio AtributoVariable<T_tipo>::deserializar(std::streambuf &entrada){
+Ttamanio AtributoVariable<T_tipo>::deserializar(std::streambuf &entrada)throw(ErrorSerializacionExcepcion){
 	Ttamanio offset=sizeof(Ttamanio);
 	Ttamanio nroValores=valores.size();
-	entrada.sgetn((char*)&nroValores,offset);
+	if(entrada.sgetn((char*)&nroValores,offset)!=offset)
+		throw ErrorSerializacionExcepcion("Excepcion:AtributoVariable "+nombre+" no fue deserializado");
 	Ttamanio i=0;
 	T_tipo aux;
 	while(i< nroValores and i<valores.size() ){
-		entrada.sgetn((char*)&aux,sizeof(T_tipo));
+		if( entrada.sgetn((char*)&aux,sizeof(T_tipo))!=sizeof(T_tipo))
+			ErrorSerializacionExcepcion("Excepcion:AtributoVariable "+nombre+" no fue deserializado");;//TODO
 		valores.at(i)=aux;
 		offset+=sizeof(T_tipo);
 		i++;
@@ -98,7 +100,8 @@ Ttamanio AtributoVariable<T_tipo>::deserializar(std::streambuf &entrada){
 		valores.erase(valores.begin()+i);
 	}
 	while(i<nroValores){
-		entrada.sgetn((char*)&aux,sizeof(T_tipo));
+		if(entrada.sgetn((char*)&aux,sizeof(T_tipo))!=sizeof(T_tipo))
+			throw ErrorSerializacionExcepcion("Excepcion:AtributoVariable "+nombre+" no fue deserializado");;//TODO
 		valores.at(i)=aux;
 		offset+=sizeof(T_tipo);
 		i++;
@@ -197,16 +200,19 @@ public:
 		clon->str=str;
 		return clon;
 	};
-	Ttamanio serializar(std::streambuf &salida){
+	Ttamanio serializar(std::streambuf &salida)throw(ErrorSerializacionExcepcion){
 		char tam=str.size();
 		salida.sputc(tam);
 		salida.sputn(str.data(),tam);
 		return str.size()+1;
 	};
-	Ttamanio deserializar(std::streambuf &entrada){
-		char tam=entrada.sbumpc();
+	Ttamanio deserializar(std::streambuf &entrada)throw(ErrorSerializacionExcepcion){
+		std::streambuf::int_type tam=entrada.sbumpc();
+		if(tam==std::streambuf::traits_type::eof())
+			throw ErrorSerializacionExcepcion("Excepcion:AtributoVariable "+nombre+" no fue deserializado, no se puede leer el tamanio");;//TODO
 		char *buf=new char[tam];
-		entrada.sgetn(buf,tam);
+		if(entrada.sgetn(buf,tam)!=tam)
+			throw ErrorSerializacionExcepcion("Excepcion:AtributoVariable "+nombre+" no fue deserializado");;//TODO
 		str.clear();
 		str.append(buf,tam);
 		delete buf;
