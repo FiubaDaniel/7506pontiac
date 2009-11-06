@@ -23,6 +23,7 @@ void Archivo::leer(void* unBytes){
 void Archivo::posicionar(size_t posicion){
 	archivo.seekp(posicion,std::fstream::beg);
 	archivo.seekg(posicion,std::fstream::beg);
+	archivo.clear();
 };
 bool Archivo::bien(){
 	return archivo.good() && archivo.is_open();

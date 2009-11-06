@@ -100,7 +100,9 @@ bool EATexto::eliminar(Componente *componente){
 		size_t posicion=almacen->posicionActual();
 		if(leer(registro)){
 			if(comparar(registro,eliminado)==0){
-				linea.replace(linea.begin(),linea.end(),linea.length()-1,' ');
+				size_t tamanio=linea.length();
+				linea.clear();
+				linea.resize(tamanio,' ');
 				almacen->posicionar(posicion);
 				escribirLinea();
 				if(logActivo){
@@ -224,7 +226,9 @@ bool EATexto::leerLinea(){
 };
 void EATexto::escribirLinea(){
 	linea.push_back('\n');
-	almacen->escribir(linea.c_str(),linea.length());
+	almacen->reiniciar();
+	almacen->escribir(linea.c_str(),linea.size());
+
 };
 
 

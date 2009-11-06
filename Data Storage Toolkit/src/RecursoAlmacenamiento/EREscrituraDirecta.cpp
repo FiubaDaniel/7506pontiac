@@ -88,6 +88,7 @@ void EREscrituraDirecta::actualizarIndice(Cambio cambio){
 		case Cambio::Alta : indice->insertar(cambio.referencia,&cambio.clave); break;
 		case Cambio::Baja : indice->eliminar(&cambio.clave); break;
 		case Cambio::Reubicacion : indice->modificar(&cambio.clave,cambio.referencia); break;
+		default:break;
 	}
 };
 void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
@@ -131,6 +132,7 @@ void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 			estrategiaBuffer->posicionarComponente(posicionBuffer);
 			estrategiaBuffer->escribir(componente);
 			break;
+		default:break;
 	}
 };
 /*---------------------------------------------------------------------------------------------------------------*/
@@ -150,10 +152,7 @@ size_t AdministradorDeBuffer::getPosicionEnBuffer(){
 bool AdministradorDeBuffer::buscar(size_t posicionArchivo){
 	posicionEnTabla=tablaArchivoBuffer.find(posicionArchivo);
 	return posicionEnTabla!=tablaArchivoBuffer.end();
-
-}
-
-
+};
 NodoArchivoBuffer* AdministradorDeBuffer::at(size_t pos){
 	if(pos<capacidad){
 		return tablaArchivoBuffer.at(pos);
@@ -216,6 +215,41 @@ bool AdministradorDeBuffer::acceder(size_t posicionArchivo){
 	}
 	return false;
 }
+
+EstrategiaIndice *EREscrituraDirecta::getIndice() const{
+	return indice;
+}
+
+
+
+EstrategiaAlmacenamiento *EREscrituraDirecta::getEstrategiAlmacenamiento() const{
+	return estrategiaArchivo;
+}
+
+
+
+void EREscrituraDirecta::setIndice(EstrategiaIndice *indice){
+	this->indice=indice;
+}
+
+
+
+void EREscrituraDirecta::setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategiAlmacenamiento){
+	this->estrategiaArchivo=estrategiAlmacenamiento;
+}
+
+
+
+Registro *EREscrituraDirecta::getRegistro() const{
+	return NULL;//TODO
+}
+
+
+
+void EREscrituraDirecta::setRegistro(Registro *registro){
+}
+
+
 
 
 

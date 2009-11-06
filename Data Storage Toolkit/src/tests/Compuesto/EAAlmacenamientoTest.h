@@ -72,15 +72,18 @@ public:
 		switch(tipo){
 			case 0:
 				escritor=new EATexto(registro1);
+				almacen.crear("salida.txt");
 			break;
 			case 1:
-				escritor=new EABloques(registro1,16);
+				escritor=new EABloques(registro1,32);
+				almacen.crear("salida.bloq");
 			break;
 			default :
 				escritor=new EARegistros(registro1);
+				almacen.crear("salida.reg");
 			break;
 		}
-		almacen.crear("salida.txt");
+
 		escritor->crear(&almacen);
 		escritor->setComparador(&comparador);
 		escritor->setClave(clave);
@@ -99,7 +102,7 @@ public:
 	void testEliminar();
 	void testModificar();
 	void testObtener();
-
+	void run2();
 	void set(Registro*reg,int dni,string nombre){
 		reg->get("dni")->set(&dni);
 		if(registrofijo){
@@ -110,7 +113,7 @@ public:
 	}
 	bool assertIguales(Registro*reg1,Registro*reg2){
 		for(Ttamanio i=0;i<reg1->cantidadAtributos();i++){
-			if(reg1->get(0)->comparar(reg2->get(0))!=0)
+			if(reg1->get(i)->comparar(reg2->get(i))!=0)
 				return false;
 		}
 		return true;

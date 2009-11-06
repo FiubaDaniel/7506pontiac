@@ -26,8 +26,8 @@ private:
 	size_t buscarEspacioLibre(Ttamanio espacio,bool& encontrado);
 	bool buscarComponente(Registro*registro,Ttamanio&posicion);
 	void finalizarAlamcenamiento();
-	void leer(Bloque*bloque);
-	void escribir(Bloque*bloque);
+	bool leerBloque(Bloque*bloque);
+	bool escribirBloque(Bloque*bloque);
 public:
 	EABloques(Bloque* tipoBloque,Ttamanio tamanioBloque);
 	EABloques(Registro* tipoRegistro,Ttamanio tamanioBloque);

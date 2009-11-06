@@ -14,6 +14,13 @@ public:
 	bool modificar(Clave* unaClave,Registro* registro);
 	bool obtener(Clave* unaClave,Registro*registro);
 	void setClave(Registro*reg,Clave*clave);
+    Clave *getClave() const;
+    EstrategiaAlmacenamiento *getEstrategiAlmacenamiento() const;
+    EstrategiaIndice *getIndice() const;
+    Registro *getRegistro() const;
+    void setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategiAlmacenamiento);
+    void setIndice(EstrategiaIndice *indice);
+    void setRegistro(Registro *registro);
 private:
 	void actualizarIndice(Cambio cambio);
 	EstrategiaAlmacenamiento* estrategiAlmacenamiento;
