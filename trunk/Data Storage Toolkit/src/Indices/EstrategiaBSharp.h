@@ -13,11 +13,10 @@
 
 #include <string>
 
-class EstrategiaBSharp : virtual public EstrategiaIndice
-{
+class EstrategiaBSharp : virtual public EstrategiaIndice{
 public:
 
-  EstrategiaBSharp ( );
+  EstrategiaBSharp (Clave* clave);
 
   virtual ~EstrategiaBSharp ( );
 
@@ -29,7 +28,8 @@ public:
   bool eliminar(const Clave* clave);
   bool modificar(const Clave* clave,Referencia refNueva);
 
-
+private:
+  BSharpTree* arbol;
 };
 
 #endif // ESTRATEGIABSHARP_H
