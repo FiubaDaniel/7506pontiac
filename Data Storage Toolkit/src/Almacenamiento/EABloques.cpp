@@ -7,6 +7,17 @@
 #include "EABloques.h"
 #include <iostream>
 
+EABloques::EABloques(){
+	bloque=NULL;
+	almacen=NULL;
+	nroRegistro=0;
+	siguienteLibre=0;
+	nroBloque=0;
+	libres=0;
+	capacBloque=0;
+	bloqueSerializado=0;
+	porcCarga=0;
+};
 EABloques::EABloques(Bloque* tipoBloque,Ttamanio tamanioBloque) {
 	almacen=NULL;
 	this->bloque=(Bloque*)tipoBloque->clonar();

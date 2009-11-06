@@ -29,6 +29,7 @@ private:
 	bool leerBloque(Bloque*bloque);
 	bool escribirBloque(Bloque*bloque);
 public:
+	EABloques();
 	EABloques(Bloque* tipoBloque,Ttamanio tamanioBloque);
 	EABloques(Registro* tipoRegistro,Ttamanio tamanioBloque);
 	virtual ~EABloques();
@@ -44,6 +45,17 @@ public:
 	bool siguiente(Componente*componente);
 	bool obtener(Componente*componente);
 	size_t posicionComponente();
+    /*------------------------------------------------------------*/
+	Almacenamiento *getAlmacen() const{
+        return almacen;
+    }
+    Ttamanio getCapacBloque() const{
+        return capacBloque;
+    }
+    double getPorcCarga() const{
+        return porcCarga;
+    }
+    /*------------------------------------------------------------*/
 };
 
 #endif /* EABLOQUES_H_ */
