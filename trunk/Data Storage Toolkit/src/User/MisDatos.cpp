@@ -10,16 +10,23 @@ MisDatos::~MisDatos(){};
  */
  void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool tieneBuffer,
 		 int longitudBuffer, bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice) throw (ExcepcionMisDatos)
-	{
-
-	 Archivo* archivo= new Archivo();
+{
+	 Archivo* archivo=new Archivo();
+	 EABloques * estrategiaBloques=new EABloques();
 	 if(!archivo->abrir(path.c_str())){
-		 if(!archivo->crear(path.c_str()))
-			 throw miexcepcion;
+		 archivo->crear(path.c_str());
+		 estrategiaBloques->crear(archivo);
 	 }else{
-		 EABloques * estrategiaBloques;
-
+		 estrategiaBloques->abrir(archivo);
+		 if(estrategiaBloques->getCapacBloque()!=longitudBloque){
+			 //estrategiaBloques->cerrar();
+			 archivo->cerrar();
+			 throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
+		 }
 	 }
+	 /*incializar indice*/
+	 /*armar recurso1*/
+
 
  };
  /*

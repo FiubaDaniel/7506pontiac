@@ -23,6 +23,8 @@
 #include "ExcepcionMisDatos.h"
 
 #include "../RecursoAlmacenamiento/Recurso.h"
+#include "../Almacenamiento/Archivo.h"
+#include "../Almacenamiento/EABloques.h"
 
 enum TipoIndice {ARBOL, HASH};
 
