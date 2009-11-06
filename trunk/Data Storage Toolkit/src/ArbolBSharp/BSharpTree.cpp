@@ -850,9 +850,6 @@ Nodo* BSharpTree::obtenerNodoPorPosiciones(int posInicial){
 	archivoArbol.read(array2,tamanioNodo);
 	return NULL;
 };
-NodoIntermedio* BSharpTree::getRaiz(){
-	return Raiz;
-};
 
 BSharpTree::~BSharpTree() {
   delete Raiz;
