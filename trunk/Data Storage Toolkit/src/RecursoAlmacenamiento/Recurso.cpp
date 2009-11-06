@@ -8,22 +8,9 @@ Recurso::Recurso (Almacenamiento* archivo,EstrategiaIndice* indice,EstrategiaRec
 	this->indice=indice;
 	this->estrategiaUsada=estrategiaUsada;
 	this->estrategiaAlmacenamiento=estretegiaAlmacenamiento;
-
 }
 
 Recurso::~Recurso () {}
-
-/*
- * Delega la inicializacion segun la estrategia recurso.
- * Referencia a archivo/buffer y los dimensiona en función de la relación
- * Compuesto/Componente.
- * Si el file no existe, lo crea, si existe solo lo abre para RW.
- */
-
-/*bool Recurso::inicializar() {
-
-}*/
-
 
 bool Recurso::insertar(Registro* registro){
 	return estrategiaUsada->insertar(registro);
@@ -56,7 +43,9 @@ bool Recurso::obtener(Clave* unaClave,Registro*registro){
  * del buffer sin escribir, en tal caso los baja a disco y cierra.
  */
 
-void Recurso::cerrarArchivo(){}
+void Recurso::cerrarArchivo(){
+
+}
 
 void Recurso::mostrarIndice(){}
 void Recurso::mostrarDatos(){}

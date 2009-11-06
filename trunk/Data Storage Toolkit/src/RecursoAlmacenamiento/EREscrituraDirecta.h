@@ -58,6 +58,12 @@ public:
 	virtual bool eliminar(Clave* unaClave);
 	virtual bool modificar(Clave* unaClave,Registro* registro);
 	virtual bool obtener(Clave* unaClave,Registro*registro);
+	virtual EstrategiaAlmacenamiento *getEstrategiAlmacenamiento() const;
+	virtual EstrategiaIndice *getIndice() const;
+	virtual Registro *getRegistro() const;
+	virtual void setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategiAlmacenamiento);
+	virtual void setIndice(EstrategiaIndice *indice);
+	virtual void setRegistro(Registro *registro);
 };
 
 #endif // ESTRATEGIARECURSOSESCRITURADIRECTA_H
