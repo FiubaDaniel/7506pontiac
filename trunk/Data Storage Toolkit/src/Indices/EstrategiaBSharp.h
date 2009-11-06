@@ -2,6 +2,7 @@
 #ifndef ESTRATEGIABSHARP_H
 #define ESTRATEGIABSHARP_H
 #include "EstrategiaIndice.h"
+#include "../ArbolBSharp/BSharpTree.h"
 #include "../ArbolBSharp/Clave.h"
 #include "../ArbolBSharp/ComparadorClave.h"
 #include "../ArbolBSharp/Clave.h"
