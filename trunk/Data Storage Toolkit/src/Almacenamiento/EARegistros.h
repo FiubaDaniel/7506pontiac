@@ -28,6 +28,7 @@ class EARegistros: public EstrategiaAlmacenamiento {
 	void leer(Registro*registro);
 public:
 	EARegistros(Registro*registro);
+	EARegistros(){};
 	virtual ~EARegistros();
 	bool abrir(Almacenamiento*almacen);
 	bool crear(Almacenamiento*almacenamiento);
