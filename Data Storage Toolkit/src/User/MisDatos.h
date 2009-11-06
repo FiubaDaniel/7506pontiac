@@ -25,6 +25,8 @@
 #include "../RecursoAlmacenamiento/Recurso.h"
 #include "../Almacenamiento/Archivo.h"
 #include "../Almacenamiento/EABloques.h"
+#include "../Almacenamiento/EARegistros.h"
+#include "../Almacenamiento/EATexto.h"
 
 enum TipoIndice {ARBOL, HASH};
 

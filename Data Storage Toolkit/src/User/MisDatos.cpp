@@ -52,7 +52,7 @@ MisDatos::~MisDatos(){};
   */
  void MisDatos::inicializarArchivo3(std::string path) throw (ExcepcionMisDatos){
 	 Archivo* archivo=new Archivo();
-	 EARegistros * estrategiaTexto=new EATexto();
+	 EATexto * estrategiaTexto=new EATexto();
 	 if(!archivo->abrir(path.c_str())){
 		 archivo->crear(path.c_str());
 		 estrategiaTexto->crear(archivo);
@@ -60,3 +60,115 @@ MisDatos::~MisDatos(){};
 		 estrategiaTexto->abrir(archivo);
 	 }
  };
+ /*
+  * Pre: Archivo inicializado.
+  * Agrega un registro al archivo1. Si ya existe un registro con ese id, lanza una excepcion
+  * con el mensaje de error correspondiente.
+  */
+ void MisDatos::agregarRegistroArchivo1(MiRegistroVariable registro) throw (ExcepcionMisDatos){};
+ /*
+  * Pre: Archivo inicializado.
+  * Agrega un registro al archivo2. Si ya existe un registro con ese id, lanza una excepcion
+  * con el mensaje de error correspondiente.
+  */
+ void MisDatos::agregarRegistroArchivo2(MiRegistroFijo registro) throw (ExcepcionMisDatos){};
+ /*
+  * Pre: Archivo inicializado.
+  * Agrega un registro al final del archivo3.
+  */
+ void MisDatos::agregarRegistroArchivo3(MiRegistroTexto registro) throw (ExcepcionMisDatos){};
+ /*
+  * Pre: Archivo inicializado.
+  * Elimina el registro correspondiente a la clave indicada. Si no existiera el registro con esa
+  * clave, lanza una excepcion con el mensaje de error correspondiente.
+  */
+ void MisDatos::eliminarRegistroArchivo1(std::string clave) throw (ExcepcionMisDatos){};
+ /*
+  * Pre: Archivo inicializado.
+  * Elimina el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
+  *  lanza una excepcion con el mensaje de error correspondiente.
+  */
+ void MisDatos::eliminarRegistroArchivo2(int claveInt, char claveChar) throw (ExcepcionMisDatos){};
+ /*
+  * Pre: Archivo inicializado.
+  * Modifica el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
+  *  lanza una excepcion con el mensaje de error correspondiente.
+  */
+ void MisDatos::modificarRegistroArchivo1(MiRegistroVariable registro) throw (ExcepcionMisDatos){};
+ /*
+  * Pre: Archivo inicializado.
+  * Modifica el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
+  * lanza una excepcion con el mensaje de error correspondiente.
+  */
+ void MisDatos::modificarRegistroArchivo2(MiRegistroFijo registro) throw (ExcepcionMisDatos){};
+ /*
+  * Pre: Archivo inicializado.
+  * Retorna el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
+  *  lanza una excepcion con el mensaje de error correspondiente.
+  */
+ MiRegistroVariable MisDatos::obtenerRegistroArchivo1(std::string clave) throw (ExcepcionMisDatos){
+	 return MiRegistroVariable("",0,0,0);
+ };
+ /*
+  * Pre: Archivo inicializado.
+  * Retorna el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
+  * lanza una excepcion con el mensaje de error correspondiente.
+  */
+ MiRegistroFijo MisDatos::obtenerRegistroArchivo2(int claveInt, char claveChar) throw (ExcepcionMisDatos){
+	 return MiRegistroFijo(0,0,0);
+ };
+ /*
+  * Pre: Archivo inicializado.
+  * Muestra por salida standard toda la metadata del buffer, de los bloques y sus registros, asi como
+  *  los datos contenidos en estos ultimos.
+  * Si el archivo no tiene buffer asociado, muestra un mensaje que lo especifique.
+  */
+ void MisDatos::mostrarContenidoBufferArchivo1(){};
+ /*
+  * Pre: Archivo inicializado.
+  * Muestra por salida standard toda la metadata del buffer y sus registros, asi como los datos
+  * contenidos en estos ultimos.
+  * Si el archivo no tiene buffer asociado, muestra un mensaje que lo especifique.
+  */
+ void MisDatos::mostrarContenidoBufferArchivo2(){};
+ /*
+  * Pre: Archivo inicializado.
+  * Muestra por salida standard toda la metadata del indice, de sus bloques y sus registros, asi como
+  * los datos contenidos en estos ultimos.
+  * Si el archivo no tiene indice asociado, muestra un mensaje que lo especifique.
+  */
+ void MisDatos::mostrarIndiceArchivo1(){};
+ /*
+  * Pre: Archivo inicializado.
+  * Muestra por salida standard toda la metadata del indice, de sus bloques y sus registros, asi como
+  * los datos contenidos en estos ultimos.
+  * Si el archivo no tiene indice asociado, muestra un mensaje que lo especifique.
+  */
+ void MisDatos::mostrarIndiceArchivo2(){};
+ /*
+  * Pre: Archivo inicializado.
+  * Muestra por salida standard toda la metadata de los bloques y sus registros, asi como los datos
+  * contenidos en estos ultimos.
+  */
+ void MisDatos::mostrarDatosArchivo1(){};
+ /*
+  * Pre: Archivo inicializado.
+  * Muestra por salida standard toda la metadata de los registros, asi como los datos contenidos
+  *  en los mismos.
+  */
+ void MisDatos::mostrarDatosArchivo2(){};
+ /*
+  * Pre: Archivo inicializado.
+  * Cierra el archivo correspondiente.
+  */
+ void MisDatos::cerrarArchivo1(){};
+ /*
+  * Pre: Archivo inicializado.
+  * Cierra el archivo correspondiente.
+  */
+ void MisDatos::cerrarArchivo2(){};
+ /*
+  * Pre: Archivo inicializado.
+  * Cierra el archivo correspondiente.
+  */
+ void MisDatos::cerrarArchivo3(){};
