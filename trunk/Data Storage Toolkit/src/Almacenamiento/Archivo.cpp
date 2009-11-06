@@ -43,9 +43,10 @@ void Archivo::crear(const char *ruta){
 	nombre=ruta;
 }
 
-void Archivo::abrir(const char *ruta){
+bool Archivo::abrir(const char *ruta){
 	archivo.open(ruta,std::fstream::out|std::fstream::binary|std::fstream::in);
 	nombre=ruta;
+	return archivo.is_open();
 }
 void Archivo::cerrar(){
 	archivo.close();

@@ -22,22 +22,33 @@
 #include "MiRegistroTexto.h"
 #include "ExcepcionMisDatos.h"
 
+#include "../RecursoAlmacenamiento/Recurso.h"
+
 enum TipoIndice {ARBOL, HASH};
 
 class MisDatos {
+	Recurso *recurso1;
+	Recurso *recurso2;
+	Recurso *recurso3;
 public:
 	MisDatos();
 	virtual ~MisDatos();
 	/*
-	 * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe, lo crea. Si existe previamente, verifica que se correspondan los parametros de longitud de bloque, tipo y longitud de bloque indice (si es que tiene), que si no correspondieran, lanza una excepcion.
+	 * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe, lo crea.
+	 * Si existe previamente, verifica que se correspondan los parametros de longitud de bloque, tipo y
+	 * longitud de bloque indice (si es que tiene), que si no correspondieran, lanza una excepcion.
 	 * En caso de fallar la inicializacion, se lanza una ExcepcionMisDatos con el mensaje de error.
 	 */
-	 void inicializarArchivo1(std::string path, int longitudBloque, bool tieneBuffer, int longitudBuffer, bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice) throw (ExcepcionMisDatos);
+	 void inicializarArchivo1(std::string path, int longitudBloque, bool tieneBuffer, int longitudBuffer,
+			 bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice) throw (ExcepcionMisDatos);
 	 /*
-	  * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe, lo crea. Si existe previamente, verifica que se correspondan los parametros de tipo y longitud de bloque indice (si es que tiene), que si no correspondieran, lanza una excepcion.
+	  * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe, lo crea.
+	  * Si existe previamente, verifica que se correspondan los parametros de tipo y longitud de bloque
+	  * indice (si es que tiene), que si no correspondieran, lanza una excepcion.
 	  * En caso de fallar la inicializacion, se lanza una ExcepcionMisDatos con el mensaje de error.
 	  */
-	 void inicializarArchivo2(std::string path, bool tieneBuffer, int longitudBuffer, bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice) throw (ExcepcionMisDatos);
+	 void inicializarArchivo2(std::string path, bool tieneBuffer, int longitudBuffer, bool tieneIndice,
+			 TipoIndice tipo, int longitudBloqueIndice) throw (ExcepcionMisDatos);
 	 /*
 	  * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe, lo crea.
 	  * En caso de fallar la inicializacion, se lanza una ExcepcionMisDatos con el mensaje de error.
@@ -45,12 +56,14 @@ public:
 	 void inicializarArchivo3(std::string path) throw (ExcepcionMisDatos);
 	 /*
 	  * Pre: Archivo inicializado.
-	  * Agrega un registro al archivo1. Si ya existe un registro con ese id, lanza una excepcion con el mensaje de error correspondiente.
+	  * Agrega un registro al archivo1. Si ya existe un registro con ese id, lanza una excepcion
+	  * con el mensaje de error correspondiente.
 	  */
 	 void agregarRegistroArchivo1(MiRegistroVariable registro) throw (ExcepcionMisDatos);
 	 /*
 	  * Pre: Archivo inicializado.
-	  * Agrega un registro al archivo2. Si ya existe un registro con ese id, lanza una excepcion con el mensaje de error correspondiente.
+	  * Agrega un registro al archivo2. Si ya existe un registro con ese id, lanza una excepcion
+	  * con el mensaje de error correspondiente.
 	  */
 	 void agregarRegistroArchivo2(MiRegistroFijo registro) throw (ExcepcionMisDatos);
 	 /*
@@ -60,66 +73,78 @@ public:
 	 void agregarRegistroArchivo3(MiRegistroTexto registro) throw (ExcepcionMisDatos);
 	 /*
 	  * Pre: Archivo inicializado.
-	  * Elimina el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave, lanza una excepcion con el mensaje de error correspondiente.
+	  * Elimina el registro correspondiente a la clave indicada. Si no existiera el registro con esa
+	  * clave, lanza una excepcion con el mensaje de error correspondiente.
 	  */
 	 void eliminarRegistroArchivo1(std::string clave) throw (ExcepcionMisDatos);
 	 /*
 	  * Pre: Archivo inicializado.
-	  * Elimina el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave, lanza una excepcion con el mensaje de error correspondiente.
+	  * Elimina el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
+	  *  lanza una excepcion con el mensaje de error correspondiente.
 	  */
 	 void eliminarRegistroArchivo2(int claveInt, char claveChar) throw (ExcepcionMisDatos);
 	 /*
 	  * Pre: Archivo inicializado.
-	  * Modifica el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave, lanza una excepcion con el mensaje de error correspondiente.
+	  * Modifica el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
+	  *  lanza una excepcion con el mensaje de error correspondiente.
 	  */
 	 void modificarRegistroArchivo1(MiRegistroVariable registro) throw (ExcepcionMisDatos);
 	 /*
 	  * Pre: Archivo inicializado.
-	  * Modifica el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave, lanza una excepcion con el mensaje de error correspondiente.
+	  * Modifica el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
+	  * lanza una excepcion con el mensaje de error correspondiente.
 	  */
 	 void modificarRegistroArchivo2(MiRegistroFijo registro) throw (ExcepcionMisDatos);
 	 /*
 	  * Pre: Archivo inicializado.
-	  * Retorna el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave, lanza una excepcion con el mensaje de error correspondiente.
+	  * Retorna el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
+	  *  lanza una excepcion con el mensaje de error correspondiente.
 	  */
 	 MiRegistroVariable obtenerRegistroArchivo1(std::string clave) throw (ExcepcionMisDatos);
 	 /*
 	  * Pre: Archivo inicializado.
-	  * Retorna el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave, lanza una excepcion con el mensaje de error correspondiente.
+	  * Retorna el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
+	  * lanza una excepcion con el mensaje de error correspondiente.
 	  */
 	 MiRegistroFijo obtenerRegistroArchivo2(int claveInt, char claveChar) throw (ExcepcionMisDatos);
 	 /*
 	  * Pre: Archivo inicializado.
-	  * Muestra por salida standard toda la metadata del buffer, de los bloques y sus registros, asi como los datos contenidos en estos ultimos.
+	  * Muestra por salida standard toda la metadata del buffer, de los bloques y sus registros, asi como
+	  *  los datos contenidos en estos ultimos.
 	  * Si el archivo no tiene buffer asociado, muestra un mensaje que lo especifique.
 	  */
 	 void mostrarContenidoBufferArchivo1();
 	 /*
 	  * Pre: Archivo inicializado.
-	  * Muestra por salida standard toda la metadata del buffer y sus registros, asi como los datos contenidos en estos ultimos.
+	  * Muestra por salida standard toda la metadata del buffer y sus registros, asi como los datos
+	  * contenidos en estos ultimos.
 	  * Si el archivo no tiene buffer asociado, muestra un mensaje que lo especifique.
 	  */
 	 void mostrarContenidoBufferArchivo2();
 	 /*
 	  * Pre: Archivo inicializado.
-	  * Muestra por salida standard toda la metadata del indice, de sus bloques y sus registros, asi como los datos contenidos en estos ultimos.
+	  * Muestra por salida standard toda la metadata del indice, de sus bloques y sus registros, asi como
+	  * los datos contenidos en estos ultimos.
 	  * Si el archivo no tiene indice asociado, muestra un mensaje que lo especifique.
 	  */
 	 void mostrarIndiceArchivo1();
 	 /*
 	  * Pre: Archivo inicializado.
-	  * Muestra por salida standard toda la metadata del indice, de sus bloques y sus registros, asi como los datos contenidos en estos ultimos.
+	  * Muestra por salida standard toda la metadata del indice, de sus bloques y sus registros, asi como
+	  * los datos contenidos en estos ultimos.
 	  * Si el archivo no tiene indice asociado, muestra un mensaje que lo especifique.
 	  */
 	 void mostrarIndiceArchivo2();
 	 /*
 	  * Pre: Archivo inicializado.
-	  * Muestra por salida standard toda la metadata de los bloques y sus registros, asi como los datos contenidos en estos ultimos.
+	  * Muestra por salida standard toda la metadata de los bloques y sus registros, asi como los datos
+	  * contenidos en estos ultimos.
 	  */
 	 void mostrarDatosArchivo1();
 	 /*
 	  * Pre: Archivo inicializado.
-	  * Muestra por salida standard toda la metadata de los registros, asi como los datos contenidos en los mismos.
+	  * Muestra por salida standard toda la metadata de los registros, asi como los datos contenidos
+	  *  en los mismos.
 	  */
 	 void mostrarDatosArchivo2();
 	 /*
