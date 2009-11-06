@@ -166,28 +166,37 @@ void NodoIntermedio::balanceo(Nodo* nodoHermanoE,Nodo* nodoPadreE, bool izq){
 		    listaElementos.pop_back();
 		}
 };
+/*
+ * Izq debe determinar que los hermanos estan a izq
+ */
 void NodoIntermedio::balanceoEspecial(Nodo* nodoPegadoE,Nodo* nodoAlejadoE,Nodo* padre,bool Izq){
 	NodoIntermedio* nodoPegado = dynamic_cast<NodoIntermedio*>(nodoPegadoE);
 	NodoIntermedio* nodoAlejado = dynamic_cast<NodoIntermedio*>(nodoAlejadoE);
 	if(Izq){
-		std::list<ElementoNodo*>::iterator itPadre = padre->getListaElementos()->begin();
-		ElementoNodo* elemPadre = *itPadre;
-		balanceoEspecialIzq(nodoPegado,elemPadre,&listaElementos);
-		++itPadre;
-		elemPadre = *itPadre;
-		balanceoEspecialIzq(nodoAlejado,elemPadre,nodoPegado->getListaElementos());
-	}else{
 		std::list<ElementoNodo*>::reverse_iterator itPadre = padre->getListaElementos()->rbegin();
 		ElementoNodo* elemPadre = *itPadre;
-		balanceoEspecialDer(nodoPegado,elemPadre,&listaElementos,referenciaIzq);
+		balanceoEspecialHermanosIzq(nodoPegado,elemPadre,&listaElementos,referenciaIzq);
 		++itPadre;
 		elemPadre = *itPadre;
 		Referencia refIzq=nodoPegado->getReferenciaIzq();
-		balanceoEspecialDer(nodoAlejado,elemPadre,nodoPegado->getListaElementos(),refIzq);
+		balanceoEspecialHermanosIzq(nodoAlejado,elemPadre,nodoPegado->getListaElementos(),refIzq);
 		nodoPegado->setRefereciaIzq(refIzq);
+		nodoAlejado->setEspacioLibre(nodoAlejado->getEspacioLibre()+1);
+		cantidadDeElementosLibre = cantidadDeElementosLibre-1;
+	}else{
+		std::list<ElementoNodo*>::iterator itPadre = padre->getListaElementos()->begin();
+		ElementoNodo* elemPadre = *itPadre;
+		balanceoEspecialHermanosDer(nodoPegado,elemPadre,&listaElementos);
+		++itPadre;
+		elemPadre = *itPadre;
+		Referencia refIzq=nodoPegado->getReferenciaIzq();
+		balanceoEspecialHermanosDer(nodoAlejado,elemPadre,nodoPegado->getListaElementos());
+		nodoPegado->setRefereciaIzq(refIzq);
+		nodoAlejado->setEspacioLibre(nodoAlejado->getEspacioLibre()+1);
+		cantidadDeElementosLibre = cantidadDeElementosLibre-1;
 	}
 };
-void NodoIntermedio::balanceoEspecialIzq(NodoIntermedio* nodoQcede,ElementoNodo* elemPadre,std::list<ElementoNodo*> *listaQrecibe){
+void NodoIntermedio::balanceoEspecialHermanosDer(NodoIntermedio* nodoQcede,ElementoNodo* elemPadre,std::list<ElementoNodo*> *listaQrecibe){
 	Referencia refElemHijo = nodoQcede->getListaElementos()->front()->getReferencia();
 	Clave* claveElemHijo = nodoQcede->getListaElementos()->front()->getClave();
 	listaQrecibe->push_back(nodoQcede->getListaElementos()->front());
@@ -197,7 +206,7 @@ void NodoIntermedio::balanceoEspecialIzq(NodoIntermedio* nodoQcede,ElementoNodo*
 	nodoQcede->setRefereciaIzq(refElemHijo);
 	elemPadre->setClave(claveElemHijo);
 };
-void NodoIntermedio::balanceoEspecialDer(NodoIntermedio* nodoQcede,ElementoNodo* elemPadre,std::list<ElementoNodo*> *listaQrecibe,Referencia& refIzq){
+void NodoIntermedio::balanceoEspecialHermanosIzq(NodoIntermedio* nodoQcede,ElementoNodo* elemPadre,std::list<ElementoNodo*> *listaQrecibe,Referencia& refIzq){
 	Referencia refElemHijo = nodoQcede->getListaElementos()->back()->getReferencia();
 	Clave* claveElemHijo = nodoQcede->getListaElementos()->back()->getClave();
 	listaQrecibe->push_front(nodoQcede->getListaElementos()->back());
@@ -338,7 +347,7 @@ int NodoIntermedio::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre
 			if(comparador->Comparar(elem->getClave(),auxiliarPadre->getClave())==0){
 				esEste = true;
 				Padre->getListaElementos()->erase(itAux);
-				Padre->setEspacioLibre(Padre->getEspacioLibre()-1);
+				Padre->setEspacioLibre(Padre->getEspacioLibre()+1);
 			}
 			++itAux;
 		    }
@@ -349,28 +358,28 @@ int NodoIntermedio::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre
 	//Almaceno la referencia q aloja la ref izq del nodo derecho
 	NodoIntermedio* nodoDerecho = dynamic_cast<NodoIntermedio*>(nodoHermanoDer);
 	auxiliarPadre->setReferencia(referenciaIzq);
-	nodoHermanoIzq->getListaElementos()->push_back(auxiliarPadre);
+	nodoHermanoIzq->agregarElemento(auxiliarPadre);
 	Referencia refIzqDeNodoDer  = nodoDerecho->getReferenciaIzq();
 	unsigned int cantIzq = cantidadMaximaDeElementos- (cantidadMaximaDeElementos - nodoHermanoIzq->getEspacioLibre()) - 1;
 	std::list<ElementoNodo*>::iterator itMedio = listaElementos.begin();
 	while(itMedio != listaElementos.end()){
+		ElementoNodo* elem = *itMedio;
 		if(cantIzq>0 ){
-			nodoHermanoIzq->getListaElementos()->push_back(*itMedio);
+			nodoHermanoIzq->agregarElemento(elem);
 		}else{
 		if(cantIzq == 0){
-					ElementoNodo* elem = *itMedio;
 					nodoDerecho->setRefereciaIzq(elem->getReferencia());
 					elementoPadre->setClave(elem->getClave());
 					elem->setReferencia(refIzqDeNodoDer);
 					elem->setClave(claveDeElementoPadre);
-					nodoHermanoDer->getListaElementos()->push_front(elem);
-		}else{nodoHermanoDer->getListaElementos()->push_front(*itMedio);}
+					nodoHermanoDer->agregarElemento(elem);
+		}else{nodoHermanoDer->agregarElemento(elem);}
 	  }
 		++itMedio;
 		cantIzq--;
 	}
 	listaElementos.clear();
-	if(Padre->getListaElementos()->size()<(((cantidadMaximaDeElementos)*2)/3)){
+	if(Padre->getListaElementos()->size() < ((cantidadMaximaDeElementos*2)/3)){
 		return 2;
 	}
 	return 1;

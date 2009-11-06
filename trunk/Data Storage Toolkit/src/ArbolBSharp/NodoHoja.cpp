@@ -187,6 +187,8 @@ void NodoHoja::balanceoEspecial(Nodo* nodoPegado,Nodo* nodoAlejado,Nodo* padre,b
 		nodoPegado->getListaElementos()->push_front(nodoAlejado->getListaElementos()->back());
 		elemento->setClave(nodoAlejado->getListaElementos()->back()->getClave()->clonarce());
 		nodoAlejado->getListaElementos()->pop_back();
+		cantidadDeElementosLibre = cantidadDeElementosLibre-1;
+		nodoAlejado->setEspacioLibre(nodoAlejado->getEspacioLibre()+1);
 	}else{
          /*
           * Los hermanos estan a derecha siendo q el nodo this esta en subflujo, el nodo mas proximo tiene
@@ -203,6 +205,8 @@ void NodoHoja::balanceoEspecial(Nodo* nodoPegado,Nodo* nodoAlejado,Nodo* padre,b
 		listaElementos.push_back(nodoPegado->getListaElementos()->front());
 		nodoPegado->getListaElementos()->pop_front();
 		elemento->setClave(nodoPegado->getListaElementos()->front()->getClave()->clonarce());
+		cantidadDeElementosLibre = cantidadDeElementosLibre-1;
+		nodoAlejado->setEspacioLibre(nodoAlejado->getEspacioLibre()+1);
 	}
 };
 /*
@@ -369,11 +373,12 @@ int NodoHoja::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre){
 	unsigned int cantIzq = cantidadMaximaDeElementos- (cantidadMaximaDeElementos - nodoHermanoIzq->getEspacioLibre()) - 1;
 	std::list<ElementoNodo*>::iterator itMedio = listaElementos.begin();
 	while(itMedio != listaElementos.end()){
+		ElementoNodo* elem = *itMedio;
 		if(cantIzq>0){
-			nodoHermanoIzq->getListaElementos()->push_back(*itMedio);
+			nodoHermanoIzq->agregarElemento(elem);
 			cantIzq--;
 		}else {
-			nodoHermanoDer->getListaElementos()->push_front(*itMedio);
+			nodoHermanoDer->agregarElemento(elem);
 		}
 	 ++itMedio;
 	}

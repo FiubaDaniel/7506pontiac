@@ -55,11 +55,12 @@ public:
 	void destruirNodos(Nodo* nodo,Nodo* hermanoDer,Nodo* hermanoIzq);
 	void eliminarClaveEnIntermedio(Clave* claveAeliminar,Clave* claveSetear);
 	NodoIntermedio* buscarIntermedio(Clave* clave,NodoIntermedio* nodo,bool esRaiz,Referencia& refAux);
-	void buscarHermanos(Nodo* nodoActual,NodoIntermedio* padre,Nodo* hermanoIzq,Nodo* hermanoDer,Referencia& refHermanoIzq,Referencia& refHermanoDer,Referencia refHijo,vector<bool> &informacion);
+	void buscarHermanos(Nodo* nodoActual,NodoIntermedio* padre,Nodo* &hermanoIzq,Nodo* &hermanoDer,Referencia& refHermanoIzq,Referencia& refHermanoDer,Referencia refHijo,vector<bool> &informacion);
 	Referencia obtenerReferenciaHermano(Nodo* padre,Clave* clave,bool Izq);
 	Nodo* obtenerHermanoXsuBflujo(int nivel,Referencia ref);
 	Nodo* obtenerNodoPorPosiciones(int posInicial);
 	NodoIntermedio* getRaiz();
+	void recomponerRaiz();
 	unsigned int numeroDeElementosXnodo,posicionRaiz,tamanioNodo,cantidadMinimaDeElementos;
 	std::fstream archivoEspaciosLibres;
 	string nombreArchivo;
