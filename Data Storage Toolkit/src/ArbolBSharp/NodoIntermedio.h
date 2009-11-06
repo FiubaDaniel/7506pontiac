@@ -18,8 +18,8 @@ public:
 	void serializate(std::stringbuf* buf);
 	void balanceo(Nodo* nodoIncompletoE,Nodo* nodoPadre, bool izq);
 	void balanceoEspecial(Nodo* nodoPegado,Nodo* nodoAlejado,Nodo* padre,bool Izq);
-	void balanceoEspecialIzq(NodoIntermedio* nodoQcede,ElementoNodo* elemPadre,std::list<ElementoNodo*> *listaQrecibe);
-	void balanceoEspecialDer(NodoIntermedio* nodoQcede,ElementoNodo* elemPadre,std::list<ElementoNodo*> *listaQrecibe,Referencia& refIzq);
+	void balanceoEspecialHermanosDer(NodoIntermedio* nodoQcede,ElementoNodo* elemPadre,std::list<ElementoNodo*> *listaQrecibe);
+	void balanceoEspecialHermanosIzq(NodoIntermedio* nodoQcede,ElementoNodo* elemPadre,std::list<ElementoNodo*> *listaQrecibe,Referencia& refIzq);
 	int agregarElemento(ElementoNodo* elemento);
 	ElementoNodo* dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMedioE,Nodo* nodoDerE,Nodo* nodoPadreE,Clave* clave);
 	Referencia getReferenciaIzq();
