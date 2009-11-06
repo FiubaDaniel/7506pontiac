@@ -20,7 +20,6 @@
 class BSharpTree {
 public:
 	BSharpTree(Clave* clave);
-	std::fstream archivoArbol;
 	void crear(string nombreArch,unsigned int tamanioBloque,int tamanioSerializadoClave,ComparadorClave* comp);
 	void abrir(string nombreArch,ComparadorClave* comp);
 	bool Buscar(const Clave* clave,Referencia* referencia);
@@ -30,7 +29,7 @@ public:
 	bool modificar(const Clave* clave,Referencia refNueva);
 	/*Falta el listar*/
 	virtual ~BSharpTree();
-//private: pongo todo publico para probar
+private:
 	NodoHoja* buscarPrimerNodoHoja(NodoIntermedio* nodo);
 	NodoHoja* buscarHoja(NodoIntermedio* nodo,Clave* clave,Referencia& referenciaDeNodoHoja);
 	bool buscarIterativo(NodoIntermedio* nodo, Clave* clave,Referencia* ref,NodoHoja* ultimo);
@@ -59,9 +58,9 @@ public:
 	Referencia obtenerReferenciaHermano(Nodo* padre,Clave* clave,bool Izq);
 	Nodo* obtenerHermanoXsuBflujo(int nivel,Referencia ref);
 	Nodo* obtenerNodoPorPosiciones(int posInicial);
-	NodoIntermedio* getRaiz();
 	void recomponerRaiz();
 	unsigned int numeroDeElementosXnodo,posicionRaiz,tamanioNodo,cantidadMinimaDeElementos;
+	std::fstream archivoArbol;
 	std::fstream archivoEspaciosLibres;
 	string nombreArchivo;
 	string nombreEspaciosLibres;
