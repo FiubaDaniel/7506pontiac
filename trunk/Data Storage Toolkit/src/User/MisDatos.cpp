@@ -3,7 +3,7 @@
 MisDatos::MisDatos(){};
 MisDatos::~MisDatos(){};
 /*
- * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe, lo crea.
+ * ACACACACACA Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe, lo crea.
  * Si existe previamente, verifica que se correspondan los parametros de longitud de bloque,
  * tipo y longitud de bloque indice (si es que tiene), que si no correspondieran, lanza una excepcion.
  * En caso de fallar la inicializacion, se lanza una ExcepcionMisDatos con el mensaje de error.
