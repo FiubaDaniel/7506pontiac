@@ -37,7 +37,8 @@ MisDatos::~MisDatos(){};
   */
  void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer, int longitudBuffer,
 		 bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice) throw (ExcepcionMisDatos){
-
+	 /*probando merge*/
+	 path="";
  };
  /*
   * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe, lo crea.
