@@ -32,9 +32,8 @@ EARegistros::~EARegistros() {
 	delete[] registroSerializado;
 	delete registro;
 }
-Almacenamiento* EARegistros::abrir(Almacenamiento*almacen){
+bool EARegistros::abrir(Almacenamiento*almacen){
 	finalizarAlmacenamiento();
-	Almacenamiento* anterior=this->almacen;
 	this->almacen=almacen;
 	almacen->posicionar(0);
 	Ttamanio tamRegistro=0;
@@ -46,9 +45,9 @@ Almacenamiento* EARegistros::abrir(Almacenamiento*almacen){
 	}
 	almacen->leer((char*)siguienteRegLibre,sizeof(siguienteRegLibre));
 	posicionarComponente(0);
-	return anterior;
+	return true;
 };
-Almacenamiento* EARegistros::crear(Almacenamiento*almacenamiento){
+bool EARegistros::crear(Almacenamiento*almacenamiento){
 	finalizarAlmacenamiento();
 	Almacenamiento* anterior=almacen;
 	almacen=almacenamiento;
@@ -57,7 +56,7 @@ Almacenamiento* EARegistros::crear(Almacenamiento*almacenamiento){
 	siguienteRegLibre=0;
 	this->almacen->posicionar(0);
 	this->almacen->escribir(&siguienteRegLibre,sizeof(siguienteRegLibre));
-	return anterior;
+	return true;
 }
 void EARegistros::escribir(Registro*registro){
 	if(!almacen->fin()){

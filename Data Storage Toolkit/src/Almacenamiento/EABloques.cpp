@@ -33,8 +33,7 @@ void EABloques::finalizarAlamcenamiento(){
 		archivoEspacioLibre.close();
 	}
 };
-Almacenamiento* EABloques::crear(Almacenamiento*almacen){
-	Almacenamiento*anterior=this->almacen;
+bool EABloques::crear(Almacenamiento*almacen){
 	this->almacen=almacen;
 	finalizarAlamcenamiento();
 	std::string ruta=almacen->getNombre()+".bloques";
@@ -45,10 +44,9 @@ Almacenamiento* EABloques::crear(Almacenamiento*almacen){
 	nroRegistro=0;
 	nroBloque=0;
 	siguienteLibre=0;
-	return anterior;
+	return archivoEspacioLibre.is_open();
 };
-Almacenamiento* EABloques::abrir(Almacenamiento*almacen){
-	Almacenamiento*anterior=this->almacen;
+bool EABloques::abrir(Almacenamiento*almacen){
 	this->almacen=almacen;
 	finalizarAlamcenamiento();
 	std::string ruta=almacen->getNombre()+".bloques";
@@ -56,7 +54,7 @@ Almacenamiento* EABloques::abrir(Almacenamiento*almacen){
 	this->almacen->posicionar(0);
 	this->almacen->leer((char*)&siguienteLibre,sizeof(siguienteLibre));
 	nroRegistro=0;
-	return anterior;
+	return archivoEspacioLibre.is_open();
 };
 bool EABloques::posicionarComponente(size_t nroCompuesto){
 	if(nroCompuesto<siguienteLibre){

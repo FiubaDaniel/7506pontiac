@@ -14,22 +14,19 @@ EATexto::~EATexto() {
 	delete registro;
 };
 
-Almacenamiento* EATexto::abrir(Almacenamiento*almacen){
-
-	Almacenamiento* anterior=this->almacen;
+bool EATexto::abrir(Almacenamiento*almacen){
 	this->almacen=almacen;
 	posComp=0;
 	linea.clear();
 	ultimo=false;
-	return anterior;
+	return true;
 };
-Almacenamiento* EATexto::crear(Almacenamiento *almacen){
-	Almacenamiento* anterior=this->almacen;
+bool EATexto::crear(Almacenamiento *almacen){
 	this->almacen=almacen;
 	posComp=0;
 	linea.clear();
 	ultimo=false;
-	return anterior;
+	return true;
 };
 
 int EATexto::comparar(Registro*registro,Registro*registro2){

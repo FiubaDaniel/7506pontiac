@@ -29,8 +29,8 @@ class EARegistros: public EstrategiaAlmacenamiento {
 public:
 	EARegistros(Registro*registro);
 	virtual ~EARegistros();
-	Almacenamiento* abrir(Almacenamiento*almacen);
-	Almacenamiento* crear(Almacenamiento*almacenamiento);
+	bool abrir(Almacenamiento*almacen);
+	bool crear(Almacenamiento*almacenamiento);
 	Componente* getComponente();
 	bool posicionarComponente(size_t nroCompuesto);
 	bool escribir(Componente*componente);

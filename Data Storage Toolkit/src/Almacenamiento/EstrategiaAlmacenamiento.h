@@ -47,8 +47,8 @@ public:
 	virtual void setComparador(ComparadorClave*unComparador){
 		comparador=unComparador;
 	};
-	virtual Almacenamiento* abrir(Almacenamiento*almacen)=0;
-	virtual Almacenamiento* crear(Almacenamiento*almacen)=0;
+	virtual bool abrir(Almacenamiento*almacen)=0;
+	virtual bool crear(Almacenamiento*almacen)=0;
 	virtual bool posicionarComponente(size_t nroComponente)=0;
 	virtual size_t posicionComponente()=0;
 	virtual bool escribir(Componente*componente)=0;

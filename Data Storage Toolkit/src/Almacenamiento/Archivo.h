@@ -13,7 +13,7 @@ public:
   /*-------------------------------------------------------------------------*/
   /*utilizado por la estrategiaAlmacenamiento*/
   virtual void crear(const char*ruta);
-  virtual void abrir(const char*ruta);
+  virtual bool abrir(const char*ruta);
   virtual void cerrar();
   virtual void escribir(const void* bytes,size_t cantidad);
   virtual void escribir(const void* unByte);
