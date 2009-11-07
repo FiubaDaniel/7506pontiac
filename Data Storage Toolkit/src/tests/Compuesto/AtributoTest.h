@@ -26,7 +26,6 @@ public:
 		cout<<boolalpha;
 		cout<<"SetGet "<<testgetySet()<<endl;
 		cout<<"Serializacion "<<testserializarDeserializar()<<endl;
-		cout<<"esFijo "<<testEsfijo()<<endl;
 		cout<<"Comparar "<<testcomparar()<<endl;
 		cout<<"ImprimirLeer "<<testimprimirYleer(valor1)<<endl;
 		cout<<"Nombre "<<testNombre()<<endl;
@@ -51,9 +50,7 @@ public:
 		at2.get(&aux);
 		return (valor1==aux)&&(tamanio==at1.tamanioSerializado());
 	};
-	bool testEsfijo(){
-		return at1.esfijo()&& at2.esfijo();
-	};
+
 	bool testcomparar(){
 		at1.get(&valor1);
 		at2.get(&valor2);

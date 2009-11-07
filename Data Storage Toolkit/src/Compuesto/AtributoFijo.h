@@ -7,8 +7,10 @@
 #ifndef ATRIBUTOFIJO_H_
 #define ATRIBUTOFIJO_H_
 #include <cstring>
+#include <string>
 #include <iostream>
 #include "Atributo.h"
+using namespace std;
 template<typename T_tipo>
 class AtributoFijo : public Atributo{
 private:
@@ -18,6 +20,11 @@ public:
 
 	~AtributoFijo(){};
 
+	Atributo& operator=(const Atributo& att){
+			AtributoFijo<T_tipo>& otro=dynamic_cast<AtributoFijo<T_tipo>&>(const_cast<Atributo&>(att));
+			dato=otro.dato;
+			return *this;
+	};
 	AtributoFijo<T_tipo>& operator=(const T_tipo & valor){
 		dato=valor;
 		return *this;
@@ -69,7 +76,6 @@ public:
 		return sizeof(T_tipo);
 	};
 
-	bool esfijo(){ return true;};
 
 	int comparar(const Atributo*otroAtributo){
 		AtributoFijo<T_tipo>* otro=dynamic_cast<AtributoFijo<T_tipo>*>(const_cast<Atributo*>(otroAtributo));
@@ -84,14 +90,16 @@ public:
 		entrada>>dato;
 	};
 
-	void copiar(const Atributo* att){
 
-			AtributoFijo<T_tipo>* otro=dynamic_cast<AtributoFijo<T_tipo>*>(const_cast<Atributo*>(att));
-			dato=otro->dato;
-
-	};
 };
-
+/*----------------------------------------------------------------------------------------------------*/
+/*Especializacion punteros*/
+template<typename T_tipo>
+class AtributoFijo<T_tipo*> : public Atributo {
+private:
+	AtributoFijo();
+	virtual void dummy()=0;
+};
 /*----------------------------------------------------------------------------------------------------*/
 /*Especializacion de la clase para cadena de chars*/
 template<>
@@ -106,7 +114,27 @@ public:
 		datos=new char[longitud+1];
 		datos[longitud]=0;
 	};
-	virtual ~AtributoFijo(){delete[]datos;};
+	Atributo& operator=(const Atributo& att){
+		AtributoFijo<char*>& otro=dynamic_cast<AtributoFijo<char*>&>(const_cast<Atributo&>(att));
+		strncpy(datos,otro.datos,longitud);
+		return *this;
+	};
+	AtributoFijo<char*>& operator=(const char* &valor){
+		strncpy(datos,valor,longitud);
+		return *this;
+	};
+
+	AtributoFijo<char*>& operator=(const string & valor){
+		strncpy(datos,valor.c_str(),longitud);
+		return *this;
+	};
+	operator char*(){
+		return datos;
+	}
+
+	virtual ~AtributoFijo(){
+		delete[]datos;
+	};
 	void set(void* valor){
 		strncpy(datos,(char*)valor,longitud);
 	};
@@ -130,9 +158,6 @@ public:
 		return longitud;
 	};
 	Ttamanio tamanioSerializado(){return longitud;};
-	bool esfijo(){
-		return true;
-	};
 	int comparar(const Atributo*otroAtributo){
 		const AtributoFijo<char*>* otro=dynamic_cast<AtributoFijo<char*>*>(const_cast<Atributo*>(otroAtributo));
 
@@ -145,17 +170,11 @@ public:
 	void leer(std::istream&entrada){
 		entrada.getline(datos,longitud);
 	};
-	void copiar(const Atributo* att){
-		try{
-			AtributoFijo<char*>* otro=dynamic_cast<AtributoFijo<char*>*>(const_cast<Atributo*>(att));
-			strncpy(datos,otro->datos,longitud);
-		}catch(...){};
-	};
+
+
+
 };
-/*----------------------------------------------------------------------------------------------------*/
-/*Especializacion punteros*/
-template<typename T_tipo>
-class AtributoFijo<T_tipo*>{};
+
 /*----------------------------------------------------------------------------*/
 #endif /* ATRIBUTOFIJO_H_ */
 

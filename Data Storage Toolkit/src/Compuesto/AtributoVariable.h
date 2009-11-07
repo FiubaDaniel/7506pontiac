@@ -25,6 +25,14 @@ public:
 		valorActual=0;
 	};
 	~AtributoVariable(){};
+
+	Atributo& operator=(const Atributo& att){
+		AtributoVariable<T_tipo>& otro=dynamic_cast<AtributoVariable<T_tipo>&>(const_cast<Atributo&>(att));
+		valores.clear();
+		valores.assign(otro.valores.begin(),otro.valores.end());
+		return *this;
+	};
+
 	void set(void* value){
 		valores.at(valorActual)=*(T_tipo*)value;
 	};
@@ -84,14 +92,9 @@ public:
 	Ttamanio tamanioSerializado(){
 		return valores.size()*sizeof(T_tipo)+sizeof(Ttamanio);
 	};
-
-	bool esfijo(){
-		return false;
-	};
 public:
-	void append(void*valor){
-		T_tipo aux=*(T_tipo*)valor;
-		valores.push_back(aux);
+	void append(const T_tipo& valor){
+		valores.push_back(valor);
 	};
 
 	void apuntar(Ttamanio nroValor){valorActual=nroValor;};
@@ -119,11 +122,6 @@ public:
 		}
 	};
 
-	void copiar(const Atributo* att){
-			AtributoVariable<T_tipo>* otro=dynamic_cast<AtributoVariable<T_tipo>*>(const_cast<Atributo*>(att));
-			this->valores.clear();
-			this->valores.assign(otro->valores.begin(),otro->valores.end());
-	};
 };
 
 /*----------------------------------------------------------------------------*/
@@ -153,9 +151,7 @@ public:
 		*aux=str;
 	};
 	Ttamanio cantidadbytes(){return str.size();};
-	bool esfijo(){
-		return false;
-	};
+
 	int comparar(const Atributo*otroAtributo){
 		AtributoVariable<std::string>* otro=dynamic_cast<AtributoVariable<std::string>*>(const_cast<Atributo*>(otroAtributo));
 		return str.compare(otro->str);
@@ -169,9 +165,10 @@ public:
 	};
 	virtual ~AtributoVariable(){};
 
-	void copiar(const Atributo* att){
-			AtributoVariable<string>* otro=dynamic_cast<AtributoVariable<string>*>(const_cast<Atributo*>(att));
-			str=otro->str;
+	Atributo& operator=(const Atributo& att){
+		AtributoVariable<string>& otro=dynamic_cast<AtributoVariable<string>&>(const_cast<Atributo&>(att));
+		str=otro.str;
+		return *this;
 	};
 	Ttamanio tamanio(){
 		return str.size();
