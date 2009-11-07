@@ -20,7 +20,7 @@ public:
 
 	~AtributoFijo(){};
 
-	Atributo& operator=(const Atributo& att){
+	Atributo& operator=(const Atributo& att) throw(std::bad_cast){
 			AtributoFijo<T_tipo>& otro=dynamic_cast<AtributoFijo<T_tipo>&>(const_cast<Atributo&>(att));
 			dato=otro.dato;
 			return *this;
@@ -66,10 +66,10 @@ public:
 	};
 
 	Ttamanio deserializar(std::streambuf&entrada)throw(ErrorSerializacionExcepcion){
-		Ttamanio tamanioDato=sizeof(dato);
-		if(entrada.sgetn((char*)&dato,tamanioDato)!=tamanioDato)
+		long leidos=entrada.sgetn((char*)&dato,sizeof(dato));
+		if(leidos!=sizeof(dato))
 			throw ErrorSerializacionExcepcion("Excepcion:AtributoFijo "+nombre+" no fue deserializado");//TODO
-		return tamanioDato;
+		return sizeof(dato);
 	};
 
 	Ttamanio tamanioSerializado(){
@@ -77,9 +77,9 @@ public:
 	};
 
 
-	int comparar(const Atributo*otroAtributo){
-		AtributoFijo<T_tipo>* otro=dynamic_cast<AtributoFijo<T_tipo>*>(const_cast<Atributo*>(otroAtributo));
-		return (this->dato)-(otro->dato);
+	int comparar(const Atributo *otroAtributo)throw(std::bad_cast){
+		AtributoFijo<T_tipo>& otro=dynamic_cast<AtributoFijo<T_tipo>&>(*const_cast<Atributo*>(otroAtributo));
+		return (this->dato)-(otro.dato);
 	};
 
 	void imprimir(std::ostream&salida){
@@ -114,7 +114,7 @@ public:
 		datos=new char[longitud+1];
 		datos[longitud]=0;
 	};
-	Atributo& operator=(const Atributo& att){
+	Atributo& operator=(const Atributo& att)throw(std::bad_cast){
 		AtributoFijo<char*>& otro=dynamic_cast<AtributoFijo<char*>&>(const_cast<Atributo&>(att));
 		strncpy(datos,otro.datos,longitud);
 		return *this;
@@ -153,15 +153,18 @@ public:
 
 	};
 	Ttamanio deserializar(std::streambuf&entrada)throw(ErrorSerializacionExcepcion){
-		if(entrada.sgetn(datos,longitud)!=longitud)
+		long leidos=entrada.sgetn(datos,longitud);
+		if(leidos!=longitud)
 			throw ErrorSerializacionExcepcion("Excepcion:AtributoFijo "+nombre+" no fue deserializado");//TODO
 		return longitud;
 	};
-	Ttamanio tamanioSerializado(){return longitud;};
-	int comparar(const Atributo*otroAtributo){
-		const AtributoFijo<char*>* otro=dynamic_cast<AtributoFijo<char*>*>(const_cast<Atributo*>(otroAtributo));
+	Ttamanio tamanioSerializado(){
+		return longitud;
+	};
 
-		return strcmp(this->datos,otro->datos);
+	int comparar(const Atributo*otroAtributo)throw(std::bad_cast){
+		const AtributoFijo<char*>& otro=dynamic_cast<AtributoFijo<char*>&>(*const_cast<Atributo*>(otroAtributo));
+		return strcmp(this->datos,otro.datos);
 	}
 	void imprimir(std::ostream&salida){
 		salida<<datos;
