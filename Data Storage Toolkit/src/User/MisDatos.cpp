@@ -17,7 +17,8 @@ MisDatos::~MisDatos(){};
 		 estrategiaBloques->crear(archivo);
 	 }else{
 		 estrategiaBloques->abrir(archivo);
-		 if(estrategiaBloques->getCapacBloque()!=longitudBloque){
+		 long longitud=longitudBloque;
+		 if(estrategiaBloques->getCapacBloque()!=longitud){
 			 //estrategiaBloques->cerrar();
 			 archivo->cerrar();
 			 throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
