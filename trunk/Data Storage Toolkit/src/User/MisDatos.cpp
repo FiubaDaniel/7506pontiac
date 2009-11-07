@@ -311,7 +311,15 @@ MisDatos::~MisDatos(){}
   * Muestra por salida standard toda la metadata de los registros, asi como los datos contenidos
   *  en los mismos.
   */
- void MisDatos::mostrarDatosArchivo2(){}
+ void MisDatos::mostrarDatosArchivo2(){
+	EstrategiaAlmacenamiento *estrategia;//TODO =recurso2->archivo;
+	estrategia->posicionarComponente(0);
+	while( estrategia->siguiente(registro2) ){
+		cout<<estrategia->posicionComponente()<<" ";
+		imprimir(registro2);
+	}
+	cout<<endl;
+ }
  /*
   * Pre: Archivo inicializado.
   * Cierra el archivo correspondiente.

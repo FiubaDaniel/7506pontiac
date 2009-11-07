@@ -83,7 +83,6 @@ public:
 	virtual ~AtributoTest(){};
 	void CasoEspeacial(){
 		char str1[15]="un string";
-		char str2[15]="123 string";
 		char aux[15];
 		AtributoFijo<char*> at1("string",15);
 		AtributoFijo<char*> at2("string",15);

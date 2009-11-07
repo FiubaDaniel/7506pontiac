@@ -8,7 +8,7 @@
 NodoHoja::NodoHoja(unsigned int cantElem,Referencia refSiguiente,ComparadorClave* comparador) : NodoHoja ::Nodo(cantElem,0,comparador){
     referenciaSiguiente = refSiguiente;
 	pos = 0;
-};
+}
 /*
  * Se cre el  nodo hoja a partir de un buffer, la cantidad de elementos, el tamaño de
  * la hoja y el tamaño de la clave  son parametros ya q se guardan solo una vez.
@@ -28,20 +28,20 @@ NodoHoja::NodoHoja(std::stringbuf* buf,unsigned int cantElem,ComparadorClave* co
 		listaElementos.push_back(elemento);
 		Aux--;
 	}
-};
+}
 Referencia NodoHoja::getReferenciaSiguiente(){
 	return referenciaSiguiente;
-};
+}
 
 void NodoHoja::setReferenciaSiguiente(Referencia ref){
 	referenciaSiguiente = ref;
-};
+}
 void NodoHoja::setPos(){
 	pos=0;
-};
+}
 void NodoHoja::avanzarPos(){
 	pos++;
-};
+}
 ElementoNodo* NodoHoja::getPos(){
 	std::list<ElementoNodo*>::iterator it = listaElementos.begin();
 	unsigned int aux=0;
@@ -50,10 +50,10 @@ ElementoNodo* NodoHoja::getPos(){
 		aux++;
 	}
 	return *it;
-};
+}
 unsigned int NodoHoja::numeroPos(){
 	return pos;
-};
+}
 /*
  * El tamaño de la clave ya fue serializado al igual q la cantidad de elementos por nodo
  * al princio del archivo.
@@ -75,7 +75,7 @@ void NodoHoja::serializate(stringbuf* buffer){
 		++it;
 	   }
 	}
-};
+}
 /*
  * Devuelve 1 si ubico el elemento o devuelve 0 si ya existia
  * En caso de estar lleno devuelve 2, indicando q el nodo ya tiene todos
@@ -117,7 +117,7 @@ int NodoHoja::agregarElemento(ElementoNodo* elemento){
 		}
 	}
     return retorno;
-};
+}
 /*
  * Situacion de desborde: El nodo this contiene un elemento mas del permitido, siendo q el nodoHermano q
  * pasa por parametro tiene al menos una posicion libre para poder alojar ese elemento
@@ -167,7 +167,7 @@ void NodoHoja::balanceo(Nodo* nodoHermanoE,Nodo* nodoPadreE,bool izq){
 		elem->setClave(elemento->getClave());
 		listaElementos.pop_back();
 	}
-};
+}
 /*
  * Izq determina que los hermanos estan a Izq
  */
@@ -208,7 +208,7 @@ void NodoHoja::balanceoEspecial(Nodo* nodoPegado,Nodo* nodoAlejado,Nodo* padre,b
 		cantidadDeElementosLibre = cantidadDeElementosLibre-1;
 		nodoAlejado->setEspacioLibre(nodoAlejado->getEspacioLibre()+1);
 	}
-};
+}
 /*
  * Se reacomodan los elementos y las referencias q los unen, el nuevo nodo seria el medio, como concecuencia las referencias a es seran
  * indefinidas y se estableceran fuera del metodo.
@@ -281,7 +281,7 @@ ElementoNodo* NodoHoja::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMe
 	listaElementos.clear();
 	nodoHermano->getListaElementos()->clear();
 	return elementoApadre;
-};
+}
 
 /*
  * Retorna un elemento buscado.
@@ -305,7 +305,7 @@ bool NodoHoja::buscar(const Clave* clave,ElementoNodo*&elemento){
 	}
 	if(!encontrado || !existe)return false;
 	    return true;;
-};
+}
 /*
  * Bucas la clave dentro del nodo Hoja, y si la encuentra la retorna la referencia
  * al archivo de esa clave.En caso de no existir retorna el valor -1.
@@ -315,7 +315,7 @@ bool NodoHoja::buscarReferenciaDeClaveX(const Clave* clave,Referencia* ref){
    bool encontro= buscar(clave,elemento);
    *ref = elemento->getReferencia();
    return encontro;
-};
+}
 /*
  * Busca una clave determinada y modifica la referencia al archivo que le corresponde
  * devuelve false si no encontro la clave o true si la encontro y modifico.
@@ -325,7 +325,7 @@ bool NodoHoja::setReferenciaDeClaveX(const Clave* clave,Referencia refNueva){
 	bool encontro = buscar(clave,elemento);
 	elemento->setReferencia(refNueva);
 	return encontro;
-};
+}
 /*
  * Devuelve en elemento el elemento buscado o en su defecto si no existe devuelve el sigueite elemento.
  * retorna un valor entero. -1 si no encontro. 0 si es igual al q se buscaba. 1 si es el siguiente.
@@ -347,7 +347,7 @@ int NodoHoja::busquedaSecuencial(const Clave* clave,ElementoNodo* &elemento){
         ++it;
 	}
 	return retorno;
-};
+}
 /*
  * El elemento ya se elimino antes, se llega a esta funcion por un subflujo sin posibilidad de balanceo.
  */
@@ -385,7 +385,7 @@ int NodoHoja::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre){
 	this->getListaElementos()->clear();
 	elementoPadre->setClave(nodoHermanoDer->getListaElementos()->front()->getClave());
 	return Padre->Eliminar(clave);
-};
+}
 NodoHoja::~NodoHoja() {
 
-};
+}

@@ -7,7 +7,7 @@
 
 #include "ComparadorPrueba.h"
 
-ComparadorPrueba::ComparadorPrueba(){};
+ComparadorPrueba::ComparadorPrueba(){}
 int ComparadorPrueba::Comparar(const Clave* clave1,const Clave* clave2){
 	Clave* aux1 = const_cast<Clave*>(clave1);
 	Clave* aux2 = const_cast<Clave*>(clave2);
@@ -15,5 +15,5 @@ int ComparadorPrueba::Comparar(const Clave* clave1,const Clave* clave2){
 	      if(c>0) return 1;
 	else if (c<0) return -1;
 	else return aux1->getAtributo("dni")->comparar(aux2->getAtributo("dni"));
-};
-ComparadorPrueba::~ComparadorPrueba(){};
+}
+ComparadorPrueba::~ComparadorPrueba(){}

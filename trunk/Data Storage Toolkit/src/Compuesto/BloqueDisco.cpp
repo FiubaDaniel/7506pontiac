@@ -12,11 +12,11 @@ BloqueDisco::BloqueDisco(Bloque* bloque):BloqueDisco::Bloque(){
 			this->componentes.push_back( aux->clonar());
 	}
 };
-BloqueDisco::~BloqueDisco(){};
-void BloqueDisco::setBorrado(bool valor){borrado=valor;};
+BloqueDisco::~BloqueDisco(){}
+void BloqueDisco::setBorrado(bool valor){borrado=valor;}
 bool BloqueDisco::estaBorrado(){
 	return borrado;
-};
+}
 Ttamanio BloqueDisco::deserializar(std::streambuf&entrada){
 	Ttamanio offset=sizeof(bool);
 	entrada.sgetn((char*)&borrado,offset);
@@ -24,21 +24,21 @@ Ttamanio BloqueDisco::deserializar(std::streambuf&entrada){
 		offset=Bloque::deserializar(entrada);
 	}
 	return offset;
-};
+}
 Ttamanio BloqueDisco::serializar(std::streambuf&salida){
 	Ttamanio offset=sizeof(bool);
 	salida.sputn((char*)&borrado,offset);
 	if(!borrado){
 		offset=Bloque::serializar(salida);
-	};
+	}
 	return offset+sizeof(bool);
-};
+}
 Ttamanio BloqueDisco::tamanioSerializado(){
 	if(estaBorrado()) return 0;
 	return Bloque::tamanioSerializado()+sizeof(bool);
-};
+}
 Componente* BloqueDisco::clonar(){
 	BloqueDisco* clon=new BloqueDisco(this);
 	clon->borrado=borrado;
 	return clon;
-};
+}
