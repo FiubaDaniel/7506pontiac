@@ -104,9 +104,6 @@ void NodoIntermedio::balanceo(Nodo* nodoHermanoE,Nodo* nodoPadreE, bool izq){
 	ElementoNodo* referenciaDeBusqueda;
 	bool encontrado;
 	if(izq){
-		    /* Si es izq quiere decir q se balancea con un nodo a la izq, como concecuencia debo buscar en el
-		     * padre a partir del primer elemento del nodo completo.
-		     */
 		    encontrado = false;
 		    referenciaDeBusqueda = listaElementos.front();
 		    std::list<ElementoNodo*>::reverse_iterator itReversa = nodoPadre->getListaElementos()->rbegin();
@@ -118,29 +115,19 @@ void NodoIntermedio::balanceo(Nodo* nodoHermanoE,Nodo* nodoPadreE, bool izq){
 		    		encontrado = true;
 		    	}
 		    }
-		    /*
-		     * En referenciaDeBusqueda tengo al elemento a cambiar de nodo y en elemento padre
-		     * el nodo q se modifica del padre.
-		     */
 		    Referencia refIzqNodoDer;
 		    refIzqNodoDer = referenciaDeBusqueda->getReferencia();
 		    Clave* claveAux = referenciaDeBusqueda->getClave();
-			/*agrega en el nodo izq el elemento q corresponde*/
 		    referenciaDeBusqueda->setClave(elementoPadre->getClave());//para elemento q cambia de nodo, y la clave será la del elemento del padre
 		    referenciaDeBusqueda->setReferencia(referenciaIzq);
 		    nodoHermano->getListaElementos()->push_back(referenciaDeBusqueda);
 		    nodoHermano->setEspacioLibre(nodoHermano->getEspacioLibre()-1);
-			/*Se modifica el elemento del padre,su clave*/
 		    elementoPadre->setClave(claveAux);
-			/* modifico la referencia izq del nodo q estaba sobrebordado*/
 		    referenciaIzq = refIzqNodoDer;
-		    /*elimino el elemento del nodo desbordado que paso al padre*/
 		    listaElementos.pop_front();
 		}else{
-			/*El nodo con el q se balancea esta a la derecha*/
 			encontrado = false;
 			referenciaDeBusqueda = listaElementos.back();
-			/*busco el elemento del padre afectado*/
 			std::list<ElementoNodo*>::iterator it = nodoPadre->getListaElementos()->begin();
 			while(!encontrado && it != nodoPadre->getListaElementos()->end()){
 		          elementoPadre = *it;
@@ -153,16 +140,12 @@ void NodoIntermedio::balanceo(Nodo* nodoHermanoE,Nodo* nodoPadreE, bool izq){
 			Referencia refIzqNodoDer;
 			refIzqNodoDer = referenciaDeBusqueda->getReferencia();
 			Clave* clave = referenciaDeBusqueda->getClave();
-			/*agrega en el nodo der el elemento q corresponde*/
 			referenciaDeBusqueda->setClave(elementoPadre->getClave());
 			referenciaDeBusqueda->setReferencia(nodoHermano->getReferenciaIzq());
 			nodoHermano->getListaElementos()->push_front(referenciaDeBusqueda);
 			nodoHermano->setEspacioLibre(nodoHermano->getEspacioLibre()-1);
-			/*Se modifica el elemento del padre, su referencia y su clave*/
 		    elementoPadre->setClave(clave);
-		    /* modifico la referencia izq del nodo derecho*/
 		    nodoHermano->setRefereciaIzq(refIzqNodoDer);
-		    /*elimino el elemento del nodo desbordado que paso al padre*/
 		    listaElementos.pop_back();
 		}
 }
@@ -236,11 +219,10 @@ ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* 
 	int cantElementosMedio = ((cantidadMaximaDeElementos*2)+1)/3;
 	ElementoNodo* elem;
 	ElementoNodo* retorno;
-	/*Busco en el padre el elemento de la clave dada*/
 	std::list<ElementoNodo*>::iterator itPadre = nodoPadre->getListaElementos()->begin();
 	bool encontrado = false;
 	while(!encontrado && itPadre!= nodoPadre->getListaElementos()->end()){
-		elem = *itPadre;/*halias 320*/
+		elem = *itPadre;
 		if(comparador->Comparar(elem->getClave(),clave)==0){
 			encontrado=true;
 		}
@@ -251,8 +233,7 @@ ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* 
 	std::list<ElementoNodo*>::iterator itHermano = nodoHermano->getListaElementos()->begin();
 	while(itThis != listaElementos.end ()){
 		ElementoNodo* elemento = *itThis;
-		if(cantElementosIzq==0) {//encontre a halias 309
-			/*este elemento es el q debe agregarce a nodo padre. su referencia derecha es indefinida*/
+		if(cantElementosIzq==0) {
 			nodoMedio->setRefereciaIzq(elemento->getReferencia());
 		    elemento->setReferencia(0);
 			retorno = elemento;
@@ -268,19 +249,10 @@ ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* 
 		}
 	  ++itThis;
 	}
-	/*
-	 * Se debe relocalizar la clave padre, para hacerlo debo usar el elemento q separe
-	 * al nodo intermedio del nodo derecho, entonces se guarda en un elemento auxiliar
-	 * su clave hasta q se pueda setear el elemento padre y el elemento hijo. Para
-	 * tenerlo en cuenta q habra un elemento mas resto un valor a cantElementosMedio
-	 */
 	cantElementosMedio--;
 	while(itHermano != nodoHermano->getListaElementos()->end()){
 		ElementoNodo* elemento2 = *itHermano;
-		if(cantElementosMedio==0){//halias 340
-			/*este elemento es el q debe hacer cambio con padre. ademas la referencia de este elemento debe
-			 * ser la referencia izq de nodo Derecho.
-			 */
+		if(cantElementosMedio==0){
 			nodoDer->setRefereciaIzq(elemento2->getReferencia());
 			Clave* claveAux = elem->getClave();
 			elem->setClave(elemento2->getClave());
@@ -309,7 +281,6 @@ ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* 
  * hay q segir la busqueda, por lo q la referencia entregada es la ref derecha de ese elemento.
  */
 Referencia NodoIntermedio::bucarReferenciaAsiguienteNodo(Clave* clave){
-	    /*primero verifico q la referencia buscada no sea la referencia izq del nodo*/
 	ElementoNodo* elemento;
 	if (comparador->Comparar(clave,listaElementos.front()->getClave())<0){
 		return referenciaIzq;
@@ -331,7 +302,6 @@ int NodoIntermedio::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre
 	ElementoNodo* elementoPadre;
 	ElementoNodo* auxiliarPadre;
 	bool encontrado = false;
-	//Busco el primero menor al primero del nodo DERECHO
 	while(!encontrado && it!=Padre->getListaElementos()->rend()){
 		elementoPadre = *it;
 		if(comparador->Comparar(elementoPadre->getClave(),nodoHermanoDer->getListaElementos()->front()->getClave())<0){
@@ -353,9 +323,7 @@ int NodoIntermedio::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre
 		    }
 		}
 	}
-	//Almaceno la clave del elemento del padre para poder setear al mismo sin problemas
 	Clave* claveDeElementoPadre = elementoPadre->getClave();
-	//Almaceno la referencia q aloja la ref izq del nodo derecho
 	NodoIntermedio* nodoDerecho = dynamic_cast<NodoIntermedio*>(nodoHermanoDer);
 	auxiliarPadre->setReferencia(referenciaIzq);
 	nodoHermanoIzq->agregarElemento(auxiliarPadre);
@@ -414,7 +382,9 @@ void NodoIntermedio::limpiar(){
 			 delete elemento;
 		}
 }
-NodoIntermedio::~NodoIntermedio() {
+NodoIntermedio::~NodoIntermedio() {}
 
-}
+
+
+
 
