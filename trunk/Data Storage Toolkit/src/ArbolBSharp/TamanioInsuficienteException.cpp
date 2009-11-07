@@ -7,20 +7,17 @@
 
 #include "TamanioInsuficienteException.h"
 
-TamanioInsuficienteException::TamanioInsuficienteException() {
-	// TODO Auto-generated constructor stub
+TamanioInsuficienteException::TamanioInsuficienteException() throw(){
+	mensaje=" Error : Tamanio Insuficiente ";
 
 }
 
-TamanioInsuficienteException::~TamanioInsuficienteException() {
+TamanioInsuficienteException::~TamanioInsuficienteException() throw(){
 	// TODO Auto-generated destructor stub
 }
 
-char* what(){
-   char cadena[40]="Error: Tamanio Insuficiente";
-   char* lanzamiento;
-   strcpy(lanzamiento,cadena);
-   return lanzamiento;
+const char* TamanioInsuficienteException::what() const throw(){
+   return mensaje.c_str();
 }
 
 

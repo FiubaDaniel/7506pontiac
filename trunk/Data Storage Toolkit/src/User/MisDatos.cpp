@@ -278,14 +278,50 @@ MisDatos::~MisDatos(){}
   *  los datos contenidos en estos ultimos.
   * Si el archivo no tiene buffer asociado, muestra un mensaje que lo especifique.
   */
- void MisDatos::mostrarContenidoBufferArchivo1(){}
+ void MisDatos::mostrarContenidoBufferArchivo1(){
+	 EstrategiaAlmacenamiento *estrategiaBuffer=NULL;//TODO =recurso2->archivo;
+
+	 AtributoVariable<string> mistringid("miStringID");
+	 AtributoFijo<int> miInt("miInt");
+	 AtributoVariable<int> miListaInt("miListaInt");
+	 Registro registro(3,&mistringid,&miInt,&miListaInt);
+
+	 estrategiaBuffer->posicionarComponente(0);
+	 while( estrategiaBuffer->siguiente(&registro) ){
+		 cout<<"Posicion : "<<estrategiaBuffer->posicionComponente()<<" ";
+		 for(unsigned i=0;i<registro.cantidadAtributos();i++){
+			 cout<<registro.get(i)->getNombre()<<" : ";
+			 registro.get(i)->imprimir(cout);
+		 }
+		 cout<<endl;
+	 }
+	 cout<<endl;
+ }
  /*
   * Pre: Archivo inicializado.
   * Muestra por salida standard toda la metadata del buffer y sus registros, asi como los datos
   * contenidos en estos ultimos.
   * Si el archivo no tiene buffer asociado, muestra un mensaje que lo especifique.
   */
- void MisDatos::mostrarContenidoBufferArchivo2(){}
+ void MisDatos::mostrarContenidoBufferArchivo2(){
+	 EstrategiaAlmacenamiento *estrategia=NULL;//TODO =recurso2->archivo;
+
+	 AtributoFijo<int> miIntID("claveIntId");
+	 AtributoFijo<char> miCharID("claveCharId");
+	 AtributoFijo<int> miInt("miInt");
+	 Registro registro(3,&miIntID,&miCharID,&miInt);
+
+	 estrategia->posicionarComponente(0);
+	 while( estrategia->siguiente(&registro) ){
+		 cout<<"Posicion : "<<estrategia->posicionComponente()<<" ";
+		 for(unsigned i=0;i<registro.cantidadAtributos();i++){
+			 cout<<registro.get(i)->getNombre()<<" : ";
+			 registro.get(i)->imprimir(cout);
+		 }
+		 cout<<endl;
+	 }
+	 cout<<endl;
+ }
  /*
   * Pre: Archivo inicializado.
   * Muestra por salida standard toda la metadata del indice, de sus bloques y sus registros, asi como
@@ -305,20 +341,48 @@ MisDatos::~MisDatos(){}
   * Muestra por salida standard toda la metadata de los bloques y sus registros, asi como los datos
   * contenidos en estos ultimos.
   */
- void MisDatos::mostrarDatosArchivo1(){}
+ void MisDatos::mostrarDatosArchivo1(){
+	 EstrategiaAlmacenamiento *estrategia=NULL;//TODO =recurso2->archivo;
+
+	 AtributoVariable<string> mistringid("miStringID");
+	 AtributoFijo<int> miInt("miInt");
+	 AtributoVariable<int> miListaInt("miListaInt");
+	 Registro registro(3,&mistringid,&miInt,&miListaInt);
+
+	 estrategia->posicionarComponente(0);
+	 while( estrategia->siguiente(&registro) ){
+		 cout<<"Posicion : "<<estrategia->posicionComponente()<<" ";
+		 for(unsigned i=0;i<registro.cantidadAtributos();i++){
+			 cout<<registro.get(i)->getNombre()<<" : ";
+			 registro.get(i)->imprimir(cout);
+		 }
+		 cout<<endl;
+	 }
+	 cout<<endl;
+ }
  /*
   * Pre: Archivo inicializado.
   * Muestra por salida standard toda la metadata de los registros, asi como los datos contenidos
   *  en los mismos.
   */
  void MisDatos::mostrarDatosArchivo2(){
-	EstrategiaAlmacenamiento *estrategia;//TODO =recurso2->archivo;
-	estrategia->posicionarComponente(0);
-	while( estrategia->siguiente(NULL) ){
-		cout<<estrategia->posicionComponente()<<" ";
-		//imprimir(r);
-	}
-	cout<<endl;
+	 EstrategiaAlmacenamiento *estrategia=NULL;//TODO =recurso2->archivo;
+
+	 AtributoFijo<int> miIntID("claveIntId");
+	 AtributoFijo<char> miCharID("claveCharId");
+	 AtributoFijo<int> miInt("miInt");
+	 Registro registro(3,&miIntID,&miCharID,&miInt);
+
+	 estrategia->posicionarComponente(0);
+	 while( estrategia->siguiente(&registro) ){
+		 cout<<"Posicion : "<<estrategia->posicionComponente()<<" ";
+		 for(unsigned i=0;i<registro.cantidadAtributos();i++){
+			 cout<<registro.get(i)->getNombre()<<" : ";
+			 registro.get(i)->imprimir(cout);
+		 }
+		 cout<<endl;
+	 }
+	 cout<<endl;
  }
  /*
   * Pre: Archivo inicializado.

@@ -8,11 +8,12 @@
 #ifndef TAMANIOINSUFICIENTEEXCEPTION_H_
 #define TAMANIOINSUFICIENTEEXCEPTION_H_
 #include <exception>
-#include <string.h>
-class TamanioInsuficienteException {
+#include <string>
+class TamanioInsuficienteException : public std::exception {
+	std::string mensaje;
 public:
-	TamanioInsuficienteException();
-	virtual ~TamanioInsuficienteException();
+	TamanioInsuficienteException()throw();
+	virtual ~TamanioInsuficienteException()throw();
 	const char* what() const throw();
 };
 
