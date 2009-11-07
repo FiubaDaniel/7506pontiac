@@ -14,83 +14,76 @@ class AtributoFijo : public Atributo{
 private:
 	T_tipo dato;
 public:
-	AtributoFijo(std::string nombreAtributo);
-	virtual ~AtributoFijo();
-	void set(void* valor);
-	void get(void* valor);
-	Ttamanio tamanio();
-	Atributo* clonar();
-	Ttamanio serializar(std::streambuf&salida)throw(ErrorSerializacionExcepcion);
-	Ttamanio deserializar(std::streambuf&entrada)throw(ErrorSerializacionExcepcion);
-	Ttamanio tamanioSerializado();
-	bool esfijo();
-	int comparar(const Atributo*otroAtributo);
-	void imprimir(std::ostream&salida);
-	void leer(std::istream&entrada);
-	void copiar(const Atributo* att);
-};
-/*----------------------------------------------------------------------------*/
-/*Template Control de tipo*/
-template<typename T_tipo>
-AtributoFijo<T_tipo>::AtributoFijo(std::string nombreAtributo): AtributoFijo::Atributo(nombreAtributo)
-{};
-template<typename T_tipo>
-AtributoFijo<T_tipo>::~AtributoFijo(){};
-/*----------------------------------------------------------------------------*/
-/*Templates sin especializacion*/
-template<typename T_tipo>
-void AtributoFijo<T_tipo>::set(void* valor){
-	dato=*(T_tipo*)valor;
-};
-template<typename T_tipo>
-void AtributoFijo<T_tipo>::get(void* valor){*(T_tipo*)valor=dato;};
-template<typename T_tipo>
-Ttamanio AtributoFijo<T_tipo>::tamanio(){ return sizeof(T_tipo);};
-template<typename T_tipo>
-Atributo* AtributoFijo<T_tipo>::clonar(){
-	AtributoFijo<T_tipo>*clon=new AtributoFijo<T_tipo>(nombre);
-	clon->dato=dato;
-	return clon;
-};
-template<typename T_tipo>
-Ttamanio AtributoFijo<T_tipo>::serializar(std::streambuf&salida)throw(ErrorSerializacionExcepcion){
-	Ttamanio tamanioDato=sizeof(dato);
-	salida.sputn((char*)&dato,tamanioDato);
-	return tamanioDato;
-};
-template<typename T_tipo>
-Ttamanio AtributoFijo<T_tipo>::deserializar(std::streambuf&entrada)throw(ErrorSerializacionExcepcion){
-	Ttamanio tamanioDato=sizeof(dato);
-	if(entrada.sgetn((char*)&dato,tamanioDato)!=tamanioDato)
-		throw ErrorSerializacionExcepcion("Excepcion:AtributoFijo "+nombre+" no fue deserializado");//TODO
-	return tamanioDato;
-};
-template<typename T_tipo>
-Ttamanio AtributoFijo<T_tipo>::tamanioSerializado(){
-	return sizeof(T_tipo);
-};
-template<typename T_tipo>
-bool AtributoFijo<T_tipo>::esfijo(){ return true;};
-template<typename T_tipo>
-int AtributoFijo<T_tipo>::comparar(const Atributo*otroAtributo){
-	AtributoFijo<T_tipo>* otro=dynamic_cast<AtributoFijo<T_tipo>*>(const_cast<Atributo*>(otroAtributo));
-	return (this->dato)-(otro->dato);
-};
-template<typename T_tipo>
-void AtributoFijo<T_tipo>::imprimir(std::ostream&salida){
-	salida<<dato;
-};
-template<typename T_tipo>
-void AtributoFijo<T_tipo>::leer(std::istream&entrada){
-	entrada>>dato;
-};
-template<typename T_tipo>
-void AtributoFijo<T_tipo>::copiar(const Atributo* att){
+	AtributoFijo(std::string nombreAtributo): AtributoFijo::Atributo(nombreAtributo){};
 
-		AtributoFijo<T_tipo>* otro=dynamic_cast<AtributoFijo<T_tipo>*>(const_cast<Atributo*>(att));
-		dato=otro->dato;
+	~AtributoFijo(){};
 
+	void set(const T_tipo valor){
+		dato=valor;
+	};
+
+	void get(T_tipo& valor)const{
+		valor=dato;
+	};
+
+	void set(void* valor){
+		dato=*(T_tipo*)valor;
+	};
+
+	void get(void* valor){
+		*(T_tipo*)valor=dato;
+	};
+
+	Ttamanio tamanio(){
+		return sizeof(T_tipo);
+	};
+
+	Atributo* clonar(){
+		AtributoFijo<T_tipo>*clon=new AtributoFijo<T_tipo>(nombre);
+		clon->dato=dato;
+		return clon;
+	};
+
+	Ttamanio serializar(std::streambuf&salida)throw(ErrorSerializacionExcepcion){
+		Ttamanio tamanioDato=sizeof(dato);
+		salida.sputn((char*)&dato,tamanioDato);
+		return tamanioDato;
+	};
+
+	Ttamanio deserializar(std::streambuf&entrada)throw(ErrorSerializacionExcepcion){
+		Ttamanio tamanioDato=sizeof(dato);
+		if(entrada.sgetn((char*)&dato,tamanioDato)!=tamanioDato)
+			throw ErrorSerializacionExcepcion("Excepcion:AtributoFijo "+nombre+" no fue deserializado");//TODO
+		return tamanioDato;
+	};
+
+	Ttamanio tamanioSerializado(){
+		return sizeof(T_tipo);
+	};
+
+	bool esfijo(){ return true;};
+
+	int comparar(const Atributo*otroAtributo){
+		AtributoFijo<T_tipo>* otro=dynamic_cast<AtributoFijo<T_tipo>*>(const_cast<Atributo*>(otroAtributo));
+		return (this->dato)-(otro->dato);
+	};
+
+	void imprimir(std::ostream&salida){
+		salida<<dato;
+	};
+
+	void leer(std::istream&entrada){
+		entrada>>dato;
+	};
+
+	void copiar(const Atributo* att){
+
+			AtributoFijo<T_tipo>* otro=dynamic_cast<AtributoFijo<T_tipo>*>(const_cast<Atributo*>(att));
+			dato=otro->dato;
+
+	};
 };
+
 /*----------------------------------------------------------------------------------------------------*/
 /*Especializacion de la clase para cadena de chars*/
 template<>
