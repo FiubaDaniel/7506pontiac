@@ -21,8 +21,8 @@ public:
 
   virtual ~EstrategiaBSharp ( );
 
-  void crear(std::string nombreArch,unsigned int tamanioBloque,int tamanioSerializadoClave,ComparadorClave* comp);
-  void abrir(std::string nombreArch,ComparadorClave* comp);
+  void crear(std::string nombreArch,unsigned int tamanioBloque,Clave* clave,ComparadorClave* comp);
+  bool abrir(std::string nombreArch,ComparadorClave* comp);
   bool BuscarReferencia(const Clave* clave,Referencia* referencia);
   Referencia Siguiente(bool ultimo);
   bool insertar(Referencia ref,Clave* clave);

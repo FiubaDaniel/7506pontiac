@@ -9,10 +9,10 @@ EstrategiaBSharp::~EstrategiaBSharp ( ){
 };
 
 void EstrategiaBSharp::crear(std::string nombreArch,unsigned int tamanioBloque,int tamanioSerializadoClave,ComparadorClave* comp){
-	return arbol->crear(nombreArch,tamanioBloque,tamanioSerializadoClave,comp);
+	arbol->crear(nombreArch,tamanioBloque,tamanioSerializadoClave,comp);
 };
 
-void EstrategiaBSharp::abrir(std::string nombreArch,ComparadorClave* comp){
+bool EstrategiaBSharp::abrir(std::string nombreArch,ComparadorClave* comp){
 	return arbol->abrir(nombreArch,comp);
 };
 
