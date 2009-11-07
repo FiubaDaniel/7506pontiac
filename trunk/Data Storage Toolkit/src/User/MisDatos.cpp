@@ -108,7 +108,12 @@ MisDatos::~MisDatos(){};
   * Agrega un registro al final del archivo3.
   */
  void MisDatos::agregarRegistroArchivo3(MiRegistroTexto registro) throw (ExcepcionMisDatos){
-
+	 AtributoFijo<int> mistring("claveIntId");
+	 string str=registro.getTexto();
+	 mistring(&str);
+	 Registro registroRecurso(1,&mistring);
+	 if(not recurso2->insertar(&registroRecurso))
+		 throw ExcepcionMisDatos("No se pudo Insertar el registro en Archivo3");
  };
  /*
   * Pre: Archivo inicializado.
