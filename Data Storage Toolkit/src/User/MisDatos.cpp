@@ -1,5 +1,4 @@
 #include "MisDatos.h"
-
 MisDatos::MisDatos(){};
 MisDatos::~MisDatos(){};
 /*
@@ -71,7 +70,24 @@ MisDatos::~MisDatos(){};
   * Agrega un registro al archivo2. Si ya existe un registro con ese id, lanza una excepcion
   * con el mensaje de error correspondiente.
   */
- void MisDatos::agregarRegistroArchivo2(MiRegistroFijo registro) throw (ExcepcionMisDatos){};
+ void MisDatos::agregarRegistroArchivo2(MiRegistroFijo registro) throw (ExcepcionMisDatos){
+	 AtributoFijo<int> miIntID("claveIntId");
+	 AtributoFijo<char> miCharID("claveCharId");
+	 AtributoFijo<int> miInt("miInt");
+
+	 int miIntid=registro.getMiIntID();
+	 miIntID.set(&miIntid);
+	 char micharId=registro.getMiCharID();
+	 miCharID.set(&micharId);
+	 int miint=registro.getMiInt();
+	 miInt.set(&miint);
+
+	 Registro registroRecurso(3,&miIntID,&miCharID,&miInt);
+	 Clave clave(&registroRecurso,2,"claveIntId","claveCharId");
+
+	 if(not recurso2->insertar(&registroRecurso))
+		 throw ExcepcionMisDatos("No se pudo Modificar el registro en Archivo2");
+ };
  /*
   * Pre: Archivo inicializado.
   * Agrega un registro al final del archivo3.
@@ -82,13 +98,29 @@ MisDatos::~MisDatos(){};
   * Elimina el registro correspondiente a la clave indicada. Si no existiera el registro con esa
   * clave, lanza una excepcion con el mensaje de error correspondiente.
   */
- void MisDatos::eliminarRegistroArchivo1(std::string clave) throw (ExcepcionMisDatos){};
+ void MisDatos::eliminarRegistroArchivo1(std::string clave) throw (ExcepcionMisDatos){
+
+
+	 // miStringID    miIntID  miCharID
+ };
  /*
   * Pre: Archivo inicializado.
   * Elimina el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
   *  lanza una excepcion con el mensaje de error correspondiente.
   */
- void MisDatos::eliminarRegistroArchivo2(int claveInt, char claveChar) throw (ExcepcionMisDatos){};
+ void MisDatos::eliminarRegistroArchivo2(int claveInt, char claveChar) throw (ExcepcionMisDatos){
+	 AtributoFijo<int> miIntID("claveIntId");
+	 AtributoFijo<char> miCharID("claveCharId");
+	 AtributoFijo<int> miInt("miInt");
+
+	 miIntID.set(&claveInt);
+	 miCharID.set(&claveChar);
+	 Registro registro(3,&miIntID,&miCharID,&miInt);
+	 Clave clave(&registro,2,"claveIntId","claveCharId");
+
+	 if(not recurso2->eliminar(&clave))
+		 throw ExcepcionMisDatos("No se pudo eliminar el registro en Archivo2");
+ };
  /*
   * Pre: Archivo inicializado.
   * Modifica el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
@@ -100,7 +132,24 @@ MisDatos::~MisDatos(){};
   * Modifica el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
   * lanza una excepcion con el mensaje de error correspondiente.
   */
- void MisDatos::modificarRegistroArchivo2(MiRegistroFijo registro) throw (ExcepcionMisDatos){};
+ void MisDatos::modificarRegistroArchivo2(MiRegistroFijo registro) throw (ExcepcionMisDatos){
+	 AtributoFijo<int> miIntID("claveIntId");
+	 AtributoFijo<char> miCharID("claveCharId");
+	 AtributoFijo<int> miInt("miInt");
+
+	 int miIntid=registro.getMiIntID();
+	 miIntID.set(&miIntid);
+	 char micharId=registro.getMiCharID();
+	 miCharID.set(&micharId);
+	 int miint=registro.getMiInt();
+	 miInt.set(&miint);
+
+	 Registro registroRecurso(3,&miIntID,&miCharID,&miInt);
+	 Clave clave(&registroRecurso,2,"claveIntId","claveCharId");
+
+	 if(not recurso2->modificar(&clave,&registroRecurso))
+		 throw ExcepcionMisDatos("No se pudo Modificar el registro en Archivo2");
+ };
  /*
   * Pre: Archivo inicializado.
   * Retorna el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
@@ -115,7 +164,20 @@ MisDatos::~MisDatos(){};
   * lanza una excepcion con el mensaje de error correspondiente.
   */
  MiRegistroFijo MisDatos::obtenerRegistroArchivo2(int claveInt, char claveChar) throw (ExcepcionMisDatos){
-	 return MiRegistroFijo(0,0,0);
+	 AtributoFijo<int> miIntID("claveIntId");
+	 AtributoFijo<char> miCharID("claveCharId");
+	 AtributoFijo<int> miInt("miInt");
+	 Registro registro(3,&miIntID,&miCharID,&miInt);
+	 Clave clave(&registro,2,"claveIntId","claveCharId");
+	 /*obtengo*/
+	 if(not recurso2->obtener(&clave,&registro))
+		 throw ExcepcionMisDatos("No pudo obtener el registro en Archivo2");
+	 /**/
+	 int miIntReg;
+	 registro.get("claveIntId")->get(&claveInt);
+	 registro.get("claveCharId")->get(&claveChar);
+	 registro.get("claveInt")->get(&miIntReg);
+	 return MiRegistroFijo(claveInt,claveChar,miIntReg);
  };
  /*
   * Pre: Archivo inicializado.
