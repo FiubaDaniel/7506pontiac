@@ -21,6 +21,6 @@ char* what(){
    char* lanzamiento;
    strcpy(lanzamiento,cadena);
    return lanzamiento;
-};
+}
 
 
