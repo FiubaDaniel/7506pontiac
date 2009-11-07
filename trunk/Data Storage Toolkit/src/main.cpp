@@ -18,7 +18,7 @@
 using namespace std;
 
 int main() {
-	cout << "BSharpTree" << endl;
+	/*cout << "BSharpTree" << endl;
 	ComparadorClave* comparador = new ComparadorPrueba();
 	int numero=1;
 	char unNombre[15]="a";
@@ -38,9 +38,9 @@ int main() {
     delete arbol;
     BSharpTree* arbol2 = new BSharpTree(&clave1);
     arbol2->abrir(nombreArchivo,comparador);
-    Referencia ref1 = 1;
+    Referencia ref1 = 1;*/
     /*-------------claves y reg------------------*/
-    numero=2;
+    /*numero=2;
     strncpy(unNombre,"b",15);
     nombre.set(unNombre);
     dni.set(&numero);
@@ -277,8 +277,8 @@ int main() {
        Referencia ref32= 32;
        Referencia ref33= 33;
        Referencia ref34= 34;
-       Referencia ref35= 35;
-    arbol2->insertar(ref6,&clave6);
+       Referencia ref35= 35;*/
+   /* arbol2->insertar(ref6,&clave6);
     arbol2->insertar(ref1,&clave1);
     arbol2->insertar(ref3,&clave3);
     arbol2->insertar(ref5,&clave5);
@@ -324,7 +324,7 @@ int main() {
 
 
     delete arbol2;
-    cout<<"llego"<<endl;
+    cout<<"llego"<<endl;*/
 
 
    /*

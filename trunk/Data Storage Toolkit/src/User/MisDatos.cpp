@@ -35,11 +35,12 @@ MisDatos::~MisDatos(){}
 	      EstrategiaIndice* Indice;
 	      if(tipo==0){
 	        	   Indice = new EstrategiaBSharp(&claveEstructural);
+
 	      }else{
 	               Indice = new HashingExt();
 	      }
 	      if(!Indice->abrir(path,comparador)){
-	    	  Indice->crear(path,longitudBloqueIndice,claveEstructural,comparador);
+	    	  Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 	      }
 	 }
  }
@@ -73,7 +74,7 @@ MisDatos::~MisDatos(){}
 	 	               Indice = new HashingExt();
 	 	      }
 	 	      if(!Indice->abrir(path,comparador)){
-	 	    	  Indice->crear(path,longitudBloqueIndice,claveEstructural,comparador);
+	 	    	 Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 	 	      }
 	 	 }
  }

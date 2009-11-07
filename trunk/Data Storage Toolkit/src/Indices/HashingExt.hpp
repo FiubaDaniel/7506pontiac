@@ -199,8 +199,9 @@ class HashingExt: public EstrategiaIndice
                 */
               	bool modificar(Clave *clave, Referencia refNueva);
 
-                virtual ~HashingExt()
-                {};
+                virtual ~HashingExt(){};
+
+                bool abrir(std::string nombreArch,ComparadorClave* comp);
 
 	         //Referencia Siguiente(bool ultimo);
 };
