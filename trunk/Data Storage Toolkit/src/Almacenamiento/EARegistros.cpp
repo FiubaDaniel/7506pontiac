@@ -49,7 +49,6 @@ bool EARegistros::abrir(Almacenamiento*almacen){
 };
 bool EARegistros::crear(Almacenamiento*almacenamiento){
 	finalizarAlmacenamiento();
-	Almacenamiento* anterior=almacen;
 	almacen=almacenamiento;
 	registroSerializado=new char[tamanioRegistro];
 	tamanioEncabezado=sizeof(siguienteRegLibre);
@@ -58,6 +57,7 @@ bool EARegistros::crear(Almacenamiento*almacenamiento){
 	this->almacen->escribir(&siguienteRegLibre,sizeof(siguienteRegLibre));
 	return true;
 }
+
 void EARegistros::escribir(Registro*registro){
 	if(!almacen->fin()){
 		std::stringbuf buf(std::ios_base::binary | std::ios_base::out );

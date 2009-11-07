@@ -11,7 +11,7 @@ void imprimir(Registro*reg){
 	cout<<" \t : \t ";
 	reg->get(1)->imprimir(cout);
 	cout<<endl;
-};
+}
 EAAlmacenamientoTest::~EAAlmacenamientoTest() {
 	delete registro1;
 	delete registro2;
@@ -228,4 +228,4 @@ void EAAlmacenamientoTest::testModificar(){
 void EAAlmacenamientoTest::run2(){
 
 
-};
+}
