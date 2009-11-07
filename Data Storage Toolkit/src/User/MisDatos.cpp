@@ -314,9 +314,9 @@ MisDatos::~MisDatos(){}
  void MisDatos::mostrarDatosArchivo2(){
 	EstrategiaAlmacenamiento *estrategia;//TODO =recurso2->archivo;
 	estrategia->posicionarComponente(0);
-	while( estrategia->siguiente(registro2) ){
+	while( estrategia->siguiente(NULL) ){
 		cout<<estrategia->posicionComponente()<<" ";
-		imprimir(registro2);
+		//imprimir(r);
 	}
 	cout<<endl;
  }
