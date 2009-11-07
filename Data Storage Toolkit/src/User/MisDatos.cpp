@@ -1,6 +1,6 @@
 #include "MisDatos.h"
-MisDatos::MisDatos(){};
-MisDatos::~MisDatos(){};
+MisDatos::MisDatos(){}
+MisDatos::~MisDatos(){}
 /*
  * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe, lo crea.
  * Si existe previamente, verifica que se correspondan los parametros de longitud de bloque,
@@ -42,7 +42,7 @@ MisDatos::~MisDatos(){};
 	    	  Indice->crear(path,longitudBloqueIndice,claveEstructural,comparador);
 	      }
 	 }
- };
+ }
  /*
   * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe,
   * lo crea. Si existe previamente, verifica que se correspondan los parametros de tipo y
@@ -76,7 +76,7 @@ MisDatos::~MisDatos(){};
 	 	    	  Indice->crear(path,longitudBloqueIndice,claveEstructural,comparador);
 	 	      }
 	 	 }
- };
+ }
  /*
   * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe, lo crea.
   * En caso de fallar la inicializacion, se lanza una ExcepcionMisDatos con el mensaje de error.
@@ -90,7 +90,7 @@ MisDatos::~MisDatos(){};
 	 }else{
 		 estrategiaTexto->abrir(archivo);
 	 }
- };
+ }
  /*
   * Pre: Archivo inicializado.
   * Agrega un registro al archivo1. Si ya existe un registro con ese id, lanza una excepcion
@@ -111,7 +111,7 @@ MisDatos::~MisDatos(){};
 	 Registro registroRecurso(3,&mistringid,&miInt,&miListaInt);
 	 if(not recurso1->insertar(&registroRecurso))
 		 throw ExcepcionMisDatos("No se pudo Insertar el registro en Archivo1");
- };
+ }
  /*
   * Pre: Archivo inicializado.
   * Agrega un registro al archivo2. Si ya existe un registro con ese id, lanza una excepcion
@@ -134,7 +134,7 @@ MisDatos::~MisDatos(){};
 
 	 if(not recurso2->insertar(&registroRecurso))
 		 throw ExcepcionMisDatos("No se pudo Insertar el registro en Archivo2");
- };
+ }
  /*
   * Pre: Archivo inicializado.
   * Agrega un registro al final del archivo3.
@@ -146,7 +146,7 @@ MisDatos::~MisDatos(){};
 	 Registro registroRecurso(1,&mistring);
 	 if(not recurso2->insertar(&registroRecurso))
 		 throw ExcepcionMisDatos("No se pudo Insertar el registro en Archivo3");
- };
+ }
  /*
   * Pre: Archivo inicializado.
   * Elimina el registro correspondiente a la clave indicada. Si no existiera el registro con esa
@@ -161,7 +161,7 @@ MisDatos::~MisDatos(){};
 	 if(not recurso1->eliminar(&claveRecurso))
 		 throw ExcepcionMisDatos("No se pudo Eliminar el registro en Archivo1");
 
- };
+ }
  /*
   * Pre: Archivo inicializado.
   * Elimina el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
@@ -179,7 +179,7 @@ MisDatos::~MisDatos(){};
 
 	 if(not recurso2->eliminar(&clave))
 		 throw ExcepcionMisDatos("No se pudo eliminar el registro en Archivo2");
- };
+ }
  /*
   * Pre: Archivo inicializado.
   * Modifica el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
@@ -201,7 +201,7 @@ MisDatos::~MisDatos(){};
 	 Clave claveRecurso(&registroRecurso,1,"miStringID");
 	 if(not recurso1->modificar(&claveRecurso,&registroRecurso))
 	 	throw ExcepcionMisDatos("No se pudo Modificar el registro en Archivo1");
- };
+ }
  /*
   * Pre: Archivo inicializado.
   * Modifica el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
@@ -224,7 +224,7 @@ MisDatos::~MisDatos(){};
 
 	 if(not recurso2->modificar(&clave,&registroRecurso))
 		 throw ExcepcionMisDatos("No se pudo Modificar el registro en Archivo2");
- };
+ }
  /*
   * Pre: Archivo inicializado.
   * Retorna el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
@@ -249,7 +249,7 @@ MisDatos::~MisDatos(){};
 		 miListaIntResultado->get(&pLista[i]);
 	 }
 	 return MiRegistroVariable(str,unint,pLista,miListaIntResultado->cantidadValores());
- };
+ }
  /*
   * Pre: Archivo inicializado.
   * Retorna el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
@@ -270,61 +270,61 @@ MisDatos::~MisDatos(){};
 	 registro.get("claveCharId")->get(&claveChar);
 	 registro.get("claveInt")->get(&miIntReg);
 	 return MiRegistroFijo(claveInt,claveChar,miIntReg);
- };
+ }
  /*
   * Pre: Archivo inicializado.
   * Muestra por salida standard toda la metadata del buffer, de los bloques y sus registros, asi como
   *  los datos contenidos en estos ultimos.
   * Si el archivo no tiene buffer asociado, muestra un mensaje que lo especifique.
   */
- void MisDatos::mostrarContenidoBufferArchivo1(){};
+ void MisDatos::mostrarContenidoBufferArchivo1(){}
  /*
   * Pre: Archivo inicializado.
   * Muestra por salida standard toda la metadata del buffer y sus registros, asi como los datos
   * contenidos en estos ultimos.
   * Si el archivo no tiene buffer asociado, muestra un mensaje que lo especifique.
   */
- void MisDatos::mostrarContenidoBufferArchivo2(){};
+ void MisDatos::mostrarContenidoBufferArchivo2(){}
  /*
   * Pre: Archivo inicializado.
   * Muestra por salida standard toda la metadata del indice, de sus bloques y sus registros, asi como
   * los datos contenidos en estos ultimos.
   * Si el archivo no tiene indice asociado, muestra un mensaje que lo especifique.
   */
- void MisDatos::mostrarIndiceArchivo1(){};
+ void MisDatos::mostrarIndiceArchivo1(){}
  /*
   * Pre: Archivo inicializado.
   * Muestra por salida standard toda la metadata del indice, de sus bloques y sus registros, asi como
   * los datos contenidos en estos ultimos.
   * Si el archivo no tiene indice asociado, muestra un mensaje que lo especifique.
   */
- void MisDatos::mostrarIndiceArchivo2(){};
+ void MisDatos::mostrarIndiceArchivo2(){}
  /*
   * Pre: Archivo inicializado.
   * Muestra por salida standard toda la metadata de los bloques y sus registros, asi como los datos
   * contenidos en estos ultimos.
   */
- void MisDatos::mostrarDatosArchivo1(){};
+ void MisDatos::mostrarDatosArchivo1(){}
  /*
   * Pre: Archivo inicializado.
   * Muestra por salida standard toda la metadata de los registros, asi como los datos contenidos
   *  en los mismos.
   */
- void MisDatos::mostrarDatosArchivo2(){};
+ void MisDatos::mostrarDatosArchivo2(){}
  /*
   * Pre: Archivo inicializado.
   * Cierra el archivo correspondiente.
   */
- void MisDatos::cerrarArchivo1(){};
+ void MisDatos::cerrarArchivo1(){}
  /*
   * Pre: Archivo inicializado.
   * Cierra el archivo correspondiente.
   */
- void MisDatos::cerrarArchivo2(){};
+ void MisDatos::cerrarArchivo2(){}
  /*
   * Pre: Archivo inicializado.
   * Cierra el archivo correspondiente.
   */
- void MisDatos::cerrarArchivo3(){};
+ void MisDatos::cerrarArchivo3(){}
 
 
