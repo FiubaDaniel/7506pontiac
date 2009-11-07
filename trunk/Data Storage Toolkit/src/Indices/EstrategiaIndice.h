@@ -23,7 +23,8 @@ EstrategiaIndice does not have any pure virtual methods, but its author
 *****************************************************************************/
 class EstrategiaIndice{
 public:
-
+	virtual void crear(std::string nombreArch,unsigned int tamanioBloque,Clave* clave,ComparadorClave* comp);
+	virtual bool abrir(std::string nombreArch,ComparadorClave* comp);
 	virtual bool BuscarReferencia(const Clave* clave,Referencia* referencia)=0;
 	virtual bool insertar(Referencia ref,Clave* clave)=0;
     virtual bool eliminar(const Clave* clave)=0;
