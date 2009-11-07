@@ -66,13 +66,14 @@ void Clave::serializar(std::streambuf&buf){
 	    atributosDeClave.at(i)->serializar(buf);
 	}
 };
-Ttamanio Clave::tamanioSerializado(){
+int Clave::tamanioSerializado(){
 	Ttamanio tamanio=0;
 	for(Ttamanio i=0;i<atributosDeClave.size();i++){
 		tamanio+=atributosDeClave.at(i)->tamanioSerializado();
 	}
 	tamanio= tamanio+sizeof(cantidadAtributos);
-	return tamanio;
+	int retorno = (int)tamanio;
+	return retorno;
 };
 Clave::~Clave(){
 	for(Ttamanio i=0;i<atributosDeClave.size();i++){
