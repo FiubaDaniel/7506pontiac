@@ -27,6 +27,9 @@
 #include "../Almacenamiento/EABloques.h"
 #include "../Almacenamiento/EARegistros.h"
 #include "../Almacenamiento/EATexto.h"
+#include "../Indices/EstrategiaBSharp.h"
+#include "../Indices/EstrategiaIndice.h"
+#include "../Indices/HashingExt.hpp"
 
 enum TipoIndice {ARBOL, HASH};
 

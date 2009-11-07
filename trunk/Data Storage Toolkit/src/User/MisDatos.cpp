@@ -25,8 +25,22 @@ MisDatos::~MisDatos(){};
 	 }
 	 /*incializar indice*/
 	 /*armar recurso1*/
-
-
+	 if(tieneIndice){
+		 ComparadorClave* comparador = new ComparadorRegistroVariable();
+	           /*creo una clave estructural*/
+	      AtributoVariable<std::string> nombre("miStringID");
+	      Registro reg(1,&nombre);
+	      Clave claveEstructural(&reg,1,"miStringID");
+	      EstrategiaIndice* Indice;
+	      if(tipo==0){
+	        	   Indice = new EstrategiaBSharp(&claveEstructural);
+	      }else{
+	               Indice = new HashingExt();
+	      }
+	      if(!Indice->abrir(path,comparador)){
+	    	  Indice->crear(path,longitudBloqueIndice,claveEstructural,comparador);
+	      }
+	 }
  };
  /*
   * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe,
@@ -44,6 +58,23 @@ MisDatos::~MisDatos(){};
 	 }else{
 		 estrategiaRegistros->abrir(archivo);
 	 }
+	 if(tieneIndice){
+	 		 ComparadorClave* comparador = new ComparadorRegistroFijo();
+	 	           /*creo una clave estructural*/
+	 	      AtributoVariable<char> miChar("miCharID");
+	 	      AtributoVariable<int> miInt("miIntID");
+	 	      Registro reg(2,&miChar,&miInt);
+	 	      Clave claveEstructural(&reg,2,"miCharID","miIntId");
+	 	      EstrategiaIndice* Indice;
+	 	      if(tipo==0){
+	 	        	   Indice = new EstrategiaBSharp(&claveEstructural);
+	 	      }else{
+	 	               Indice = new HashingExt();
+	 	      }
+	 	      if(!Indice->abrir(path,comparador)){
+	 	    	  Indice->crear(path,longitudBloqueIndice,claveEstructural,comparador);
+	 	      }
+	 	 }
  };
  /*
   * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe, lo crea.
