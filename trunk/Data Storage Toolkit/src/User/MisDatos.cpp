@@ -64,7 +64,17 @@ MisDatos::~MisDatos(){};
   * Agrega un registro al archivo1. Si ya existe un registro con ese id, lanza una excepcion
   * con el mensaje de error correspondiente.
   */
- void MisDatos::agregarRegistroArchivo1(MiRegistroVariable registro) throw (ExcepcionMisDatos){};
+ void MisDatos::agregarRegistroArchivo1(MiRegistroVariable registro) throw (ExcepcionMisDatos){
+	 AtributoVariable<string> mistringid("miStringID");
+	 AtributoFijo<int> miInt("miInt");
+/*	 AtributoVariable<char> miListaInt("miListaInt");
+	 Registro registroRecurso(3,&miIntID,&miCharID,&miInt);
+	 Clave clave(&registroRecurso,2,"claveIntId","claveCharId");
+
+	 if(not recurso2->insertar(&registroRecurso))
+		 throw ExcepcionMisDatos("No se pudo Insertar el registro en Archivo2");*/
+
+ };
  /*
   * Pre: Archivo inicializado.
   * Agrega un registro al archivo2. Si ya existe un registro con ese id, lanza una excepcion
@@ -86,7 +96,7 @@ MisDatos::~MisDatos(){};
 	 Clave clave(&registroRecurso,2,"claveIntId","claveCharId");
 
 	 if(not recurso2->insertar(&registroRecurso))
-		 throw ExcepcionMisDatos("No se pudo Modificar el registro en Archivo2");
+		 throw ExcepcionMisDatos("No se pudo Insertar el registro en Archivo2");
  };
  /*
   * Pre: Archivo inicializado.
@@ -100,8 +110,9 @@ MisDatos::~MisDatos(){};
   */
  void MisDatos::eliminarRegistroArchivo1(std::string clave) throw (ExcepcionMisDatos){
 
+	// miStringID
+	 // miInt  miIntList
 
-	 // miStringID    miIntID  miCharID
  };
  /*
   * Pre: Archivo inicializado.
@@ -234,3 +245,21 @@ MisDatos::~MisDatos(){};
   * Cierra el archivo correspondiente.
   */
  void MisDatos::cerrarArchivo3(){};
+
+
+ Registro* crearRegistroVariable(){
+	 AtributoVariable<string> mistringid("miStringID");
+	 AtributoFijo<int> miInt("miInt");
+	 AtributoVariable<int> miListaInt("miListaInt");
+	 return new Registro(3,&mistringid,&miInt,&miListaInt);
+ }
+ void setRegistro(Registro*registro,MiRegistroVariable & resgitroVariable){
+	 string  str=resgitroVariable.getMiStringID();
+	 registro->get("miStringID")->set(&str);
+	 registro->get("miInt");
+	 registro->get("miListaInt");
+ }
+ void setRegistroVariable(const Registro*registro,MiRegistroVariable & resgitroVariable){
+
+ }
+
