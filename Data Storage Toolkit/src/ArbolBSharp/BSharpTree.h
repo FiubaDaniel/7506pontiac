@@ -21,7 +21,7 @@ class BSharpTree {
 public:
 	BSharpTree(Clave* clave);
 	void crear(string nombreArch,unsigned int tamanioBloque,int tamanioSerializadoClave,ComparadorClave* comp);
-	void abrir(string nombreArch,ComparadorClave* comp);
+	bool abrir(string nombreArch,ComparadorClave* comp);
 	bool Buscar(const Clave* clave,Referencia* referencia);
 	Referencia Siguiente(bool ultimo);
 	bool insertar(Referencia ref,Clave* clave);

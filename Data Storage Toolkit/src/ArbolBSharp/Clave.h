@@ -25,7 +25,7 @@ public:
 	Atributo* getAtributo(std::string nombre);
 	void deserializar(std::streambuf&buf);
     void serializar(std::streambuf&buf);
-    Ttamanio tamanioSerializado();
+    int tamanioSerializado();
     Clave* clonarce();
 	virtual ~Clave();
 private:

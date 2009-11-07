@@ -14,13 +14,17 @@ using namespace std;
 BSharpTree::BSharpTree(Clave* clave){
 	 claveEstructural = clave->clonarce();
 }
-void BSharpTree::crear(string nombreArch,unsigned int tamanioDeBloque, int tamanioSerializadoClave,ComparadorClave* comp) {
-	 comparador = comp;
-	 tamanioNodo = tamanioDeBloque;
-	numeroDeElementosXnodo = calcularCantidadElementosPorNodo(tamanioSerializadoClave);
+void BSharpTree::crear(string nombreArch,unsigned int tamanioDeBloque, Clave* clave,ComparadorClave* comp) {
+	comparador = comp;
+	tamanioNodo = tamanioDeBloque;
+	numeroDeElementosXnodo = calcularCantidadElementosPorNodo(clave->tamanioSerializado());
 	cantidadMinimaDeElementos = (unsigned int) ((numeroDeElementosXnodo)*2)/3;
 	nombreArchivo = nombreArch+"_Arbol";
 	nombreEspaciosLibres = nombreArch+"_EspaciosLibre";
+	archivoEspaciosLibres.open(nombreEspaciosLibres.c_str(),std::fstream::out |std::fstream::binary|std::fstream::trunc);
+	archivoArbol.open(nombreArchivo.c_str(),std::fstream::out |std::fstream::binary|std::fstream::trunc);
+	archivoEspaciosLibres.close();
+	archivoArbol.close();
 	archivoEspaciosLibres.open(nombreEspaciosLibres.c_str(),std::fstream::out | std::fstream::in | std::fstream::binary|std::fstream::trunc);
 	archivoArbol.open(nombreArchivo.c_str(),std::fstream::out | std::fstream::in |std::fstream::binary|std::fstream::trunc);
 	if(archivoArbol.is_open()&&archivoEspaciosLibres.is_open()){
@@ -62,13 +66,16 @@ void BSharpTree::crear(string nombreArch,unsigned int tamanioDeBloque, int taman
 		archivoEspaciosLibres.write(array3,sizeof(cero));
 	}
 };
-void BSharpTree::abrir(string nombreArch,ComparadorClave* comp){
+bool BSharpTree::abrir(string nombreArch,ComparadorClave* comp){
 	comparador = comp;
 	nombreArchivo = nombreArch+"_Arbol";
     nombreEspaciosLibres = nombreArch+"_EspaciosLibre";
 	archivoArbol.seekg(0);
 	archivoEspaciosLibres.open(nombreEspaciosLibres.c_str(),std::fstream::out|std::fstream::in|std::fstream::binary);
 	archivoArbol.open(nombreArchivo.c_str(),std::fstream::out|std::fstream::in|std::fstream::binary);
+	if(!archivoArbol.is_open()||!archivoEspaciosLibres.is_open()){
+		return false;
+	}
 	std:: stringbuf buf(ios_base :: in | ios_base :: out | ios_base :: binary);
 	int tamanio = sizeof(int)*3;
 	char array[tamanio];
@@ -83,6 +90,7 @@ void BSharpTree::abrir(string nombreArch,ComparadorClave* comp){
 	archivoArbol.read(array2,tamanio);
 	Raiz = new NodoIntermedio(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
     cantidadMinimaDeElementos = (unsigned int) ((numeroDeElementosXnodo)*2)/3;
+    return true;
 };
 int BSharpTree::calcularCantidadElementosPorNodo(unsigned int tamSerializadoClave){
 	 unsigned int resultado = tamanioNodo - 2 * sizeof(int) - sizeof(Referencia);
