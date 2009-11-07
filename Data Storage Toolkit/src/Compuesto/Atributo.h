@@ -9,6 +9,7 @@
 #define ATRIBUTO_H_
 #include <streambuf>
 #include <iostream>
+#include <typeinfo>
 #include <exception>
 typedef unsigned int Ttamanio;
 
@@ -26,6 +27,10 @@ class Atributo {
 public:
 	Atributo(std::string nombreAtributo){nombre=nombreAtributo;};
 	virtual ~Atributo(){};
+	/* Asignacion los datos al atributo a partir de otro atributo.
+	 * Arroja una Excepcion std::bad_cast en caso de que los atributos no sean del mismo tipo.
+	 */
+	virtual Atributo& operator=(const Atributo& att)throw(std::bad_cast) =0;
 	/*
 	 *Devuelve un string con el nombre del atributo.
 	 */
@@ -45,7 +50,7 @@ public:
 	 */
 	virtual Ttamanio tamanio()=0;
 	/*
-	 * Devuelve una copia instanciada mediante new del atributo.
+	 * Devuelve una copia alocada mediante new del atributo.
 	 * Debe aplicarsele delete al finalizar el uso del clon.
 	 * Ej:
 	 * Atributo* clon=atributo.clonar();
@@ -55,25 +60,36 @@ public:
 	 */
 	virtual Atributo* clonar()=0;
 	/*
-	 *
+	 * Escribe los bytes forman el dato del atributo en salida.
+	 * devuelve la cantidad de bytes escritos en salida.
 	 */
 	virtual Ttamanio serializar(std::streambuf&salida) throw(ErrorSerializacionExcepcion)=0;
-	/*
-	 *
+	/* Carga el atributo a partir de los bytes leido de entrada.
+	 * si la entrada se agota antes de que se hayan leidos los bytes necesario,
+	 * arroja una excepcion  ErrorSerializacionExcepcion
+	 * @return la cantidad de bytes leidos.
 	 */
 	virtual Ttamanio deserializar(std::streambuf&entrada) throw(ErrorSerializacionExcepcion) =0;
 	/*
-	 *
+	 * @return devuelve la cantidad de bytes que conforma la forma serializada del dato
+	 * contenido en atributo.
 	 */
 	virtual Ttamanio tamanioSerializado()=0;
+	/* Compara con otroAtributo.
+	 * @return : >0  si el atributo es mayor que otroAtributo
+	 * 			 ==0  si el atributo es igual que otroAtributo
+	 * 			 <0  si el atributo es menor que otroAtributo
+	 *
+	 * la implementacion puede variar.
+	 * Arroja una excepcion: std::bad_cast si los atributos no son del mismo tipo.
+	 */
+	virtual int comparar(const Atributo*otroAtributo)throw(std::bad_cast) =0;
 	/*
 	 *
-	 *
 	 */
-	virtual int comparar(const Atributo*otroAtributo)=0;
 	virtual void imprimir(std::ostream&salida)=0;
 	virtual void leer(std::istream&entrada)=0;
-	virtual Atributo& operator=(const Atributo& att)=0;
+
 protected:
 	std::string nombre;
 /*	*/

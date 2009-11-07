@@ -26,7 +26,7 @@ public:
 	};
 	~AtributoVariable(){};
 
-	Atributo& operator=(const Atributo& att){
+	Atributo& operator=(const Atributo& att)throw(std::bad_cast){
 		AtributoVariable<T_tipo>& otro=dynamic_cast<AtributoVariable<T_tipo>&>(const_cast<Atributo&>(att));
 		valores.clear();
 		valores.assign(otro.valores.begin(),otro.valores.end());
@@ -65,12 +65,14 @@ public:
 	Ttamanio deserializar(std::streambuf &entrada)throw(ErrorSerializacionExcepcion){
 		Ttamanio offset=sizeof(Ttamanio);
 		Ttamanio nroValores=valores.size();
-		if(entrada.sgetn((char*)&nroValores,offset)!=offset)
+		long leidos=entrada.sgetn((char*)&nroValores,offset);
+		if(leidos!=offset)
 			throw ErrorSerializacionExcepcion("Excepcion:AtributoVariable "+nombre+" no fue deserializado");
 		Ttamanio i=0;
 		T_tipo aux;
 		while(i< nroValores and i<valores.size() ){
-			if( entrada.sgetn((char*)&aux,sizeof(T_tipo))!=sizeof(T_tipo))
+			leidos=entrada.sgetn((char*)&aux,sizeof(T_tipo));
+			if(leidos !=sizeof(T_tipo))
 				ErrorSerializacionExcepcion("Excepcion:AtributoVariable "+nombre+" no fue deserializado");;//TODO
 			valores.at(i)=aux;
 			offset+=sizeof(T_tipo);
@@ -80,7 +82,8 @@ public:
 			valores.erase(valores.begin()+i);
 		}
 		while(i<nroValores){
-			if(entrada.sgetn((char*)&aux,sizeof(T_tipo))!=sizeof(T_tipo))
+			leidos=entrada.sgetn((char*)&aux,sizeof(T_tipo));
+			if(leidos!=sizeof(T_tipo))
 				throw ErrorSerializacionExcepcion("Excepcion:AtributoVariable "+nombre+" no fue deserializado");;//TODO
 			valores.at(i)=aux;
 			offset+=sizeof(T_tipo);
@@ -103,12 +106,9 @@ public:
 
 	Ttamanio cantidadValores(){return valores.size();};
 
-	int comparar(const Atributo*otroAtributo){
-		AtributoVariable<T_tipo>* otro=dynamic_cast<AtributoVariable<T_tipo>*>(const_cast<Atributo*>(otroAtributo));
-		if(otro!=NULL){
-			return this->valores.at(valorActual)-otro->valores.at(otro->valorActual);
-		}//TODO exception
-		return 0;
+	int comparar(const Atributo*otroAtributo)throw(std::bad_cast){
+		AtributoVariable<T_tipo>& otro=dynamic_cast<AtributoVariable<T_tipo> &>(*const_cast<Atributo*>(otroAtributo));
+		return this->valores.at(valorActual)- otro.valores.at(otro.valorActual);
 	};
 
 	void imprimir(std::ostream&salida){
@@ -152,9 +152,9 @@ public:
 	};
 	Ttamanio cantidadbytes(){return str.size();};
 
-	int comparar(const Atributo*otroAtributo){
-		AtributoVariable<std::string>* otro=dynamic_cast<AtributoVariable<std::string>*>(const_cast<Atributo*>(otroAtributo));
-		return str.compare(otro->str);
+	int comparar(const Atributo*otroAtributo)throw(std::bad_cast){
+		AtributoVariable<std::string>& otro=dynamic_cast<AtributoVariable<std::string> &>(*const_cast<Atributo*>(otroAtributo));
+		return str.compare(otro.str);
 	};
 	void imprimir(std::ostream&salida){
 		salida<<str.c_str();
@@ -165,7 +165,7 @@ public:
 	};
 	virtual ~AtributoVariable(){};
 
-	Atributo& operator=(const Atributo& att){
+	Atributo& operator=(const Atributo& att)throw(std::bad_cast){
 		AtributoVariable<string>& otro=dynamic_cast<AtributoVariable<string>&>(const_cast<Atributo&>(att));
 		str=otro.str;
 		return *this;
