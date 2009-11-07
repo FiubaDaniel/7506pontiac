@@ -5,6 +5,8 @@
 #include "../ArbolBSharp/BSharpTree.h"
 #include "../ArbolBSharp/Clave.h"
 #include "../ArbolBSharp/ComparadorClave.h"
+#include "../ArbolBSharp/ComparadorRegistroVariable.h"
+#include "../ArbolBSharp/ComparadorRegistroFijo.h"
 #include "../ArbolBSharp/Clave.h"
 #include "../ArbolBSharp/ElementoNodo.h"
 #include "../ArbolBSharp/Nodo.h"
