@@ -8,8 +8,8 @@ EstrategiaBSharp::~EstrategiaBSharp ( ){
 	delete arbol;
 }
 
-void EstrategiaBSharp::crear(std::string nombreArch,unsigned int tamanioBloque,int tamanioSerializadoClave,ComparadorClave* comp){
-	arbol->crear(nombreArch,tamanioBloque,tamanioSerializadoClave,comp);
+void EstrategiaBSharp::crear(std::string nombreArch,unsigned int tamanioBloque,Clave* clave,ComparadorClave* comp){
+	arbol->crear(nombreArch,tamanioBloque,clave,comp);
 }
 
 bool EstrategiaBSharp::abrir(std::string nombreArch,ComparadorClave* comp){
