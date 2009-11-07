@@ -18,11 +18,11 @@ public:
 
 	~AtributoFijo(){};
 
-	AtributoFijo<T_tipo>& operator=(T_tipo & var){
-		dato=var;
+	AtributoFijo<T_tipo>& operator=(const T_tipo & valor){
+		dato=valor;
 		return *this;
 	};
-	operator T_tipo(){
+	operator T_tipo()const{
 		return dato;
 	}
 

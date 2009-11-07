@@ -99,11 +99,9 @@ MisDatos::~MisDatos(){}
   */
  void MisDatos::agregarRegistroArchivo1(MiRegistroVariable registro) throw (ExcepcionMisDatos){
 	 AtributoVariable<string> mistringid("miStringID");
-	 string str=registro.getMiStringID();
-	 mistringid.set(&str);
+	 mistringid=registro.getMiStringID();
 	 AtributoFijo<int> miInt("miInt");
-	 int unint=registro.getMiInt();
-	 miInt.set(&unint);
+	 miInt=registro.getMiInt();
 	 AtributoVariable<int> miListaInt("miListaInt");
 	 int * pLista=registro.getMiLista();
 	 for(int i=0;i<registro.getCantidadElementosLista();i++){
@@ -123,12 +121,9 @@ MisDatos::~MisDatos(){}
 	 AtributoFijo<char> miCharID("claveCharId");
 	 AtributoFijo<int> miInt("miInt");
 
-	 int miIntid=registro.getMiIntID();
-	 miIntID.set(&miIntid);
-	 char micharId=registro.getMiCharID();
-	 miCharID.set(&micharId);
-	 int miint=registro.getMiInt();
-	 miInt.set(&miint);
+	 miIntID=registro.getMiIntID();
+	 miCharID=registro.getMiCharID();
+	 miInt=registro.getMiInt();
 
 	 Registro registroRecurso(3,&miIntID,&miCharID,&miInt);
 	 Clave clave(&registroRecurso,2,"claveIntId","claveCharId");
@@ -142,8 +137,7 @@ MisDatos::~MisDatos(){}
   */
  void MisDatos::agregarRegistroArchivo3(MiRegistroTexto registro) throw (ExcepcionMisDatos){
 	 AtributoVariable<string> mistring("claveIntId");
-	 string str=registro.getTexto();
-	 mistring.set(&str);
+	 mistring=registro.getTexto();
 	 Registro registroRecurso(1,&mistring);
 	 if(not recurso2->insertar(&registroRecurso))
 		 throw ExcepcionMisDatos("No se pudo Insertar el registro en Archivo3");
@@ -155,8 +149,10 @@ MisDatos::~MisDatos(){}
   */
  void MisDatos::eliminarRegistroArchivo1(std::string clave) throw (ExcepcionMisDatos){
 	 AtributoVariable<string> mistringid("miStringID");
+	 mistringid=clave;
 	 AtributoFijo<int> miInt("miInt");
 	 AtributoVariable<int> miListaInt("miListaInt");
+
 	 Registro registroRecurso(3,&mistringid,&miInt,&miListaInt);
 	 Clave claveRecurso(&registroRecurso,1,"miStringID");
 	 if(not recurso1->eliminar(&claveRecurso))
@@ -173,8 +169,9 @@ MisDatos::~MisDatos(){}
 	 AtributoFijo<char> miCharID("claveCharId");
 	 AtributoFijo<int> miInt("miInt");
 
-	 miIntID.set(&claveInt);
-	 miCharID.set(&claveChar);
+	 miIntID=claveInt;
+	 miCharID=claveChar;
+
 	 Registro registro(3,&miIntID,&miCharID,&miInt);
 	 Clave clave(&registro,2,"claveIntId","claveCharId");
 
@@ -188,11 +185,9 @@ MisDatos::~MisDatos(){}
   */
  void MisDatos::modificarRegistroArchivo1(MiRegistroVariable registro) throw (ExcepcionMisDatos){
 	 AtributoVariable<string> mistringid("miStringID");
-	 string str=registro.getMiStringID();
-	 mistringid.set(&str);
+	 mistringid=registro.getMiStringID();
 	 AtributoFijo<int> miInt("miInt");
-	 int unint=registro.getMiInt();
-	 miInt.set(&unint);
+	 miInt=registro.getMiInt();
 	 AtributoVariable<int> miListaInt("miListaInt");
 	 int * pLista=registro.getMiLista();
 	 for(int i=0;i<registro.getCantidadElementosLista();i++){
@@ -213,12 +208,9 @@ MisDatos::~MisDatos(){}
 	 AtributoFijo<char> miCharID("claveCharId");
 	 AtributoFijo<int> miInt("miInt");
 
-	 int miIntid=registro.getMiIntID();
-	 miIntID.set(&miIntid);
-	 char micharId=registro.getMiCharID();
-	 miCharID.set(&micharId);
-	 int miint=registro.getMiInt();
-	 miInt.set(&miint);
+	 miIntID=registro.getMiIntID();
+	 miCharID=registro.getMiCharID();
+	 miInt=registro.getMiInt();
 
 	 Registro registroRecurso(3,&miIntID,&miCharID,&miInt);
 	 Clave clave(&registroRecurso,2,"claveIntId","claveCharId");
@@ -233,16 +225,16 @@ MisDatos::~MisDatos(){}
   */
  MiRegistroVariable MisDatos::obtenerRegistroArchivo1(std::string clave) throw (ExcepcionMisDatos){
 	 AtributoVariable<string> mistringid("miStringID");
-	 string str=clave;
-	 mistringid.set(&str);
+	 mistringid=clave;
 	 AtributoFijo<int> miInt("miInt");
 	 AtributoVariable<int> miListaInt("miListaInt");
 	 Registro registroRecurso(3,&mistringid,&miInt,&miListaInt);
 	 Clave claveRecurso(&registroRecurso,1,"miStringID");
 	 if(not recurso1->obtener(&claveRecurso,&registroRecurso))
 	 	throw ExcepcionMisDatos("No se pudo Modificar el registro en Archivo1");
-	 int unint;
-	 registroRecurso.get("miInt")->get(&unint);
+
+	 int unint=*(AtributoFijo<int>*)registroRecurso.get("miInt");
+
 	 AtributoVariable<int>* miListaIntResultado=(AtributoVariable<int>*)registroRecurso.get("miListaInt");
 	 int * pLista=new int[miListaIntResultado->cantidadValores()];
 	 for(unsigned int i=0;i < miListaIntResultado->cantidadValores();i++){

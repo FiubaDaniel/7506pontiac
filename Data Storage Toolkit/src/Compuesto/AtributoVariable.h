@@ -136,6 +136,14 @@ private:
 	string str;
 public:
 	AtributoVariable(std::string nombreAtributo):Atributo(nombreAtributo){};
+
+	AtributoVariable<string>& operator=(const string & valor){
+		str=valor;
+		return *this;
+	};
+	operator string()const{
+		return str;
+	}
 	virtual void set(void* value){
 		std::string* aux=(std::string*)value;
 		str=*aux;
