@@ -38,7 +38,7 @@ public:
 	void append(void*valor);// se agregan tantos bytes como indica nrobytes
 	void apuntar(Ttamanio nroValor);
 	void eliminarApuntado();
-	void cantidadValores();
+	Ttamanio cantidadValores();
 };
 /*----------------------------------------------------------------------------*/
 /*Template Control de tipo*/
@@ -126,7 +126,7 @@ void AtributoVariable<T_tipo>::apuntar(Ttamanio nroValor){valorActual=nroValor;}
 template<typename T_tipo>
 void AtributoVariable<T_tipo>::eliminarApuntado(){valores.erase(valores.begin()+valorActual);};
 template<typename T_tipo>
-void AtributoVariable<T_tipo>::cantidadValores(){return valores.size();};
+Ttamanio AtributoVariable<T_tipo>::cantidadValores(){return valores.size();};
 template<typename T_tipo>
 int AtributoVariable<T_tipo>::comparar(const Atributo*otroAtributo){
 	AtributoVariable<T_tipo>* otro=dynamic_cast<AtributoVariable<T_tipo>*>(const_cast<Atributo*>(otroAtributo));
@@ -149,7 +149,7 @@ void AtributoVariable<T_tipo>::leer(std::istream&entrada){
 };
 template<typename T_tipo>
 void AtributoVariable<T_tipo>::copiar(const Atributo* att){
-		AtributoVariable<T_tipo>* otro=dynamic_cast<AtributoVariable<T_tipo>*>(const_cast<Atributo&>(att));
+		AtributoVariable<T_tipo>* otro=dynamic_cast<AtributoVariable<T_tipo>*>(const_cast<Atributo*>(att));
 		this->valores.clear();
 		this->valores.assign(otro->valores.begin(),otro->valores.end());
 };
