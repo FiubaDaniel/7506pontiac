@@ -11,7 +11,7 @@ BloqueDisco::BloqueDisco(Bloque* bloque):BloqueDisco::Bloque(){
 			Componente* aux=bloque->get(i);
 			this->componentes.push_back( aux->clonar());
 	}
-};
+}
 BloqueDisco::~BloqueDisco(){}
 void BloqueDisco::setBorrado(bool valor){borrado=valor;}
 bool BloqueDisco::estaBorrado(){
