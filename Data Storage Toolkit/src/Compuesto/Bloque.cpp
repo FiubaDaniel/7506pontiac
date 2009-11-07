@@ -7,7 +7,7 @@
 
 #include "Bloque.h"
 /*------------------------------------------------------------------------------------*/
-Bloque::Bloque(){};
+Bloque::Bloque(){}
 Bloque::Bloque(Componente*componente) : Bloque::Componente(){
 	componentes.push_back(componente->clonar());
 }
