@@ -17,7 +17,6 @@ Registro::Registro(unsigned int cantidadAtributos, ...):Registro::Componente() {
 	while(cantidadAtributos>0){
 		atributo = va_arg(ap, Atributo*);
 		atributos.push_back(atributo->clonar());
-		if(atributo->esfijo()) fijo=false;
 		cantidadAtributos--;
 	}
 	va_end(ap);

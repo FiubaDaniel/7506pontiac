@@ -36,7 +36,7 @@ void EAAlmacenamientoTest::testInsertar(){
 		const Cambio* cambio=escritor->siguienteCambio();
 		escritor->posicionarComponente(cambio->referencia);
 		Atributo*att=(const_cast<Cambio*>(cambio))->clave.getAtributo("dni");
-		registro2->get("dni")->copiar(att);
+		*registro2->get("dni")=*att;
 		escritor->obtener(registro2);
 		setClave(registro1,&cambio->clave);
 		if(!assertIguales(registro1,registro2)){

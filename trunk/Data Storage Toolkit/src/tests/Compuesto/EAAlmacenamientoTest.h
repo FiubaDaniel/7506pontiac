@@ -122,7 +122,7 @@ public:
 		Clave*clave=const_cast<Clave*>(unclave);
 		for(Ttamanio i=0;i<clave->getCantidadAtributos();i++){
 			Atributo*att=clave->getAtributo(i);
-			reg->get(att->getNombre())->copiar(att);
+			*reg->get(att->getNombre())=*att;
 		}
 	}
 	virtual ~EAAlmacenamientoTest();
