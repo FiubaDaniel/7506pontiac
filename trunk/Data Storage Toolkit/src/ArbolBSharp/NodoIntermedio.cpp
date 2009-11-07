@@ -9,7 +9,7 @@
 
 NodoIntermedio::NodoIntermedio(unsigned int nivelNodo,unsigned int cantElem,ComparadorClave* comp): NodoIntermedio ::Nodo(cantElem,nivelNodo,comp){
 	referenciaIzq = 0;
-};
+}
 NodoIntermedio::NodoIntermedio(std::stringbuf* buf,unsigned int cantElem,ComparadorClave* comp,Clave* claveEstructural): NodoIntermedio ::Nodo(cantElem,0,comp){
 	buf->pubseekpos(0);
 	buf->sgetn((char*)&numeroNivel,sizeof(numeroNivel));
@@ -24,13 +24,13 @@ NodoIntermedio::NodoIntermedio(std::stringbuf* buf,unsigned int cantElem,Compara
 		listaElementos.push_back(elemento);
 		Aux--;
 	}
-};
+}
 Referencia NodoIntermedio::getReferenciaIzq(){
 	return referenciaIzq;
-};
+}
 void NodoIntermedio::setRefereciaIzq(Referencia ref){
 	referenciaIzq = ref;
-};
+}
 void NodoIntermedio::serializate(std::stringbuf* buffer){
 	    buffer->pubseekpos(0);
 		buffer->sputn ((char*)&numeroNivel,sizeof(numeroNivel));
@@ -47,7 +47,7 @@ void NodoIntermedio::serializate(std::stringbuf* buffer){
 			    ++it;
 			}
 		}
-};
+}
 /*
  * Devuelve 1 si agrego el elemento o devuelve 0 si ya existia
  * En caso de estar lleno devuelve 2, indicando q el nodo ya tiene todos
@@ -90,7 +90,7 @@ int NodoIntermedio::agregarElemento(ElementoNodo* elemento){
 		}
 	}
 	    return retorno;
-};
+}
 /*
  * Izq determina si el hermano con el q se valancea esta a la izq o esta a la derecha.
  * Primero se busca el elemento del padre q será modificado, que será el elemento mas grande
@@ -165,7 +165,7 @@ void NodoIntermedio::balanceo(Nodo* nodoHermanoE,Nodo* nodoPadreE, bool izq){
 		    /*elimino el elemento del nodo desbordado que paso al padre*/
 		    listaElementos.pop_back();
 		}
-};
+}
 /*
  * Izq debe determinar que los hermanos estan a izq
  */
@@ -195,7 +195,7 @@ void NodoIntermedio::balanceoEspecial(Nodo* nodoPegadoE,Nodo* nodoAlejadoE,Nodo*
 		nodoAlejado->setEspacioLibre(nodoAlejado->getEspacioLibre()+1);
 		cantidadDeElementosLibre = cantidadDeElementosLibre-1;
 	}
-};
+}
 void NodoIntermedio::balanceoEspecialHermanosDer(NodoIntermedio* nodoQcede,ElementoNodo* elemPadre,std::list<ElementoNodo*> *listaQrecibe){
 	Referencia refElemHijo = nodoQcede->getListaElementos()->front()->getReferencia();
 	Clave* claveElemHijo = nodoQcede->getListaElementos()->front()->getClave();
@@ -205,7 +205,7 @@ void NodoIntermedio::balanceoEspecialHermanosDer(NodoIntermedio* nodoQcede,Eleme
 	nodoQcede->getListaElementos()->pop_front();
 	nodoQcede->setRefereciaIzq(refElemHijo);
 	elemPadre->setClave(claveElemHijo);
-};
+}
 void NodoIntermedio::balanceoEspecialHermanosIzq(NodoIntermedio* nodoQcede,ElementoNodo* elemPadre,std::list<ElementoNodo*> *listaQrecibe,Referencia& refIzq){
 	Referencia refElemHijo = nodoQcede->getListaElementos()->back()->getReferencia();
 	Clave* claveElemHijo = nodoQcede->getListaElementos()->back()->getClave();
@@ -215,7 +215,7 @@ void NodoIntermedio::balanceoEspecialHermanosIzq(NodoIntermedio* nodoQcede,Eleme
 	nodoQcede->getListaElementos()->pop_back();
     refIzq = refElemHijo;
     elemPadre->setClave(claveElemHijo);
-};
+}
 /*
  * Dos nodos uno sobrebordado y el otro completo, entonces se dividen en nodos en tres nodos nuevos,
  * dos de ellos se almacenaran el la posicion de los nodos existentes y otro en una nueva posicion
@@ -301,7 +301,7 @@ ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* 
 	listaElementos.clear();
 	nodoHermano->getListaElementos()->clear();
 	return retorno;
-};
+}
 
 /*
  * Segun el orden establecido, al ser un nodo intermedio una clave puede ser igual
@@ -325,7 +325,7 @@ Referencia NodoIntermedio::bucarReferenciaAsiguienteNodo(Clave* clave){
 		  }
 	}
 		return 0;
-};
+}
 int NodoIntermedio::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre){
 	std::list<ElementoNodo*>::reverse_iterator it = Padre->getListaElementos()->rbegin();
 	ElementoNodo* elementoPadre;
@@ -383,7 +383,7 @@ int NodoIntermedio::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre
 		return 2;
 	}
 	return 1;
-};
+}
 void NodoIntermedio::setearClave(const Clave* claveAeliminar,Clave* claveSetear){
 	std::list<ElementoNodo*>::iterator it = listaElementos.begin();
 	bool encontrado = false;
@@ -395,7 +395,7 @@ void NodoIntermedio::setearClave(const Clave* claveAeliminar,Clave* claveSetear)
 		}
 		++it;
 	}
-};
+}
 bool NodoIntermedio::estaClave(const Clave* clave){
 	std::list<ElementoNodo*>::iterator it = listaElementos.begin();
 	while(it != listaElementos.end()){
@@ -406,15 +406,15 @@ bool NodoIntermedio::estaClave(const Clave* clave){
 			++it;
 		}
     return false;
-};
+}
 void NodoIntermedio::limpiar(){
 	std::list<ElementoNodo*>::iterator it;
 		for(it = listaElementos.begin();it != listaElementos.end();++it){
 			 ElementoNodo* elemento = *it;
 			 delete elemento;
 		}
-};
+}
 NodoIntermedio::~NodoIntermedio() {
 
-};
+}
 

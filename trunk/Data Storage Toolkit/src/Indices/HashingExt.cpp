@@ -656,7 +656,7 @@ bool HashingExt::crear(string nombre_arch, unsigned tam_cubo_bytes, Clave *clave
 
         return true;
 
-};
+}
 
 bool HashingExt::BuscarReferencia(Clave *clave, Referencia* referencia)
 {
@@ -674,4 +674,4 @@ bool HashingExt::eliminar(Clave* clave)
         return this->buscar_clave(clave, NULL, BUSCAR_PARA_ELIMINAR);
 }
 
-bool abrir(std::string nombreArch,ComparadorClave* comp){};
+bool abrir(std::string nombreArch,ComparadorClave* comp){}
