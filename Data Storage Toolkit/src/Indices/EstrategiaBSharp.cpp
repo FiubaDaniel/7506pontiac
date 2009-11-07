@@ -9,7 +9,7 @@ EstrategiaBSharp::~EstrategiaBSharp ( ){
 }
 
 void EstrategiaBSharp::crear(std::string nombreArch,unsigned int tamanioBloque,Clave* clave,ComparadorClave* comp){
-	arbol->crear(nombreArch,tamanioBloque,clave,comp);
+	//arbol->crear(nombreArch,tamanioBloque,clave,comp);
 }
 
 bool EstrategiaBSharp::abrir(std::string nombreArch,ComparadorClave* comp){
