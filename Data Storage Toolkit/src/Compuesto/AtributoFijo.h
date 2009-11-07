@@ -18,6 +18,14 @@ public:
 
 	~AtributoFijo(){};
 
+	AtributoFijo<T_tipo>& operator=(T_tipo & var){
+		dato=var;
+		return *this;
+	};
+	operator T_tipo(){
+		return dato;
+	}
+
 	void set(const T_tipo valor){
 		dato=valor;
 	};
@@ -144,7 +152,10 @@ public:
 		}catch(...){};
 	};
 };
-
+/*----------------------------------------------------------------------------------------------------*/
+/*Especializacion punteros*/
+template<typename T_tipo>
+class AtributoFijo<T_tipo*>{};
 /*----------------------------------------------------------------------------*/
 #endif /* ATRIBUTOFIJO_H_ */
 
