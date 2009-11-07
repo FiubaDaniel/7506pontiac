@@ -27,6 +27,7 @@ public:
 	bool insertar(Referencia ref,Clave* clave);
 	bool eliminar(const Clave* clave);
 	bool modificar(const Clave* clave,Referencia refNueva);
+	void imprimir();
 	/*Falta el listar*/
 	virtual ~BSharpTree();
 private:
@@ -57,8 +58,9 @@ private:
 	void buscarHermanos(Nodo* nodoActual,NodoIntermedio* padre,Nodo* &hermanoIzq,Nodo* &hermanoDer,Referencia& refHermanoIzq,Referencia& refHermanoDer,Referencia refHijo,vector<bool> &informacion);
 	Referencia obtenerReferenciaHermano(Nodo* padre,Clave* clave,bool Izq);
 	Nodo* obtenerHermanoXsuBflujo(int nivel,Referencia ref);
-	Nodo* obtenerNodoPorPosiciones(int posInicial);
+	Nodo* obtenerNodoPorPosiciones(Referencia posInicial);
 	void recomponerRaiz();
+	void imprimirIterativo(Nodo* nodo,unsigned int nivelRaiz);
 	unsigned int numeroDeElementosXnodo,posicionRaiz,tamanioNodo,cantidadMinimaDeElementos;
 	std::fstream archivoArbol;
 	std::fstream archivoEspaciosLibres;
