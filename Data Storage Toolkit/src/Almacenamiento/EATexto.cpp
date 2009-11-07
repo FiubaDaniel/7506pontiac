@@ -8,11 +8,11 @@
 
 EATexto::EATexto(Registro*registro) {
 	this->registro=(Registro*)registro->clonar();
-};
+}
 
 EATexto::~EATexto() {
 	delete registro;
-};
+}
 
 bool EATexto::abrir(Almacenamiento*almacen){
 	this->almacen=almacen;
@@ -20,14 +20,14 @@ bool EATexto::abrir(Almacenamiento*almacen){
 	linea.clear();
 	ultimo=false;
 	return true;
-};
+}
 bool EATexto::crear(Almacenamiento *almacen){
 	this->almacen=almacen;
 	posComp=0;
 	linea.clear();
 	ultimo=false;
 	return true;
-};
+}
 
 int EATexto::comparar(Registro*registro,Registro*registro2){
 		clave->set(registro);
@@ -36,7 +36,7 @@ int EATexto::comparar(Registro*registro,Registro*registro2){
 		int resultado=comparador->Comparar(clave,clave2);
 		delete clave2;
 		return resultado;
-};
+}
 Componente *EATexto::getComponente(){
 	return registro;
 }
@@ -78,7 +78,7 @@ bool EATexto::insertar(Componente *componente){
 			}else posicion=almacen->posicionActual();
 			posComp++;
 			//encontrado=verdadero si es el ultimo lugar o si la linea tiene espacio suficiente
-		};
+		}
 		if(encontrado)
 			almacen->posicionar(posicion);
 		registroALinea(nuevo);
@@ -145,7 +145,7 @@ bool EATexto::modificar(Componente *componente){
 						}else posicion=almacen->posicionActual();
 						posComp++;
 						//encontrado=verdadero si es el ultimo lugar o si la linea tiene espacio suficiente
-					};
+					}
 					if(encontrado)
 						almacen->posicionar(posicion);
 					registroALinea(modificado);
@@ -160,13 +160,13 @@ bool EATexto::modificar(Componente *componente){
 		}
 	}
 	return false;
-};
+}
 bool EATexto::obtener(Componente *componente){
 	return siguiente(componente);
-};
+}
 size_t EATexto::posicionComponente(){
 	return posComp;
-};
+}
 bool EATexto::posicionarComponente(size_t nroCompuesto){
 	if(nroCompuesto<posComp){
 			almacen->posicionar(0);
@@ -178,7 +178,7 @@ bool EATexto::posicionarComponente(size_t nroCompuesto){
 		else ultimo=true;
 	}
 	return ultimo;
-};
+}
 bool EATexto::siguiente(Componente *componente){
 	bool encontrado=false;
 	bool fin=false;
@@ -189,15 +189,15 @@ bool EATexto::siguiente(Componente *componente){
 			encontrado=true;
 			lineaARegistro((Registro*)componente);
 		}
-	};
+	}
 	return encontrado;
-};
+}
 void EATexto::lineaARegistro(Registro *registro){
 	std::stringstream strs(linea);
 	for(Ttamanio i=0;i<registro->cantidadAtributos();i++){
 		registro->get(i)->leer(strs);
 		strs<<" ";
-	};
+	}
 }
 void EATexto::registroALinea(Registro *registro){
 	std::stringstream strs;
@@ -214,19 +214,19 @@ bool EATexto::leerLinea(){
 	while(!almacen->fin()&& chr!='\n'){
 		linea.push_back(chr);
 		almacen->leer(&chr);
-	};
+	}
 	if(chr!='\n'){
 		almacen->reiniciar();
 		return false;
 	}
 	return true;
-};
+}
 void EATexto::escribirLinea(){
 	linea.push_back('\n');
 	almacen->reiniciar();
 	almacen->escribir(linea.c_str(),linea.size());
 
-};
+}
 
 
 

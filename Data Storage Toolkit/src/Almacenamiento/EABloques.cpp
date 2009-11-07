@@ -17,33 +17,33 @@ EABloques::EABloques(){
 	capacBloque=0;
 	bloqueSerializado=0;
 	porcCarga=0;
-};
+}
 EABloques::EABloques(Bloque* tipoBloque,Ttamanio tamanioBloque) {
 	almacen=NULL;
 	this->bloque=(Bloque*)tipoBloque->clonar();
 	capacBloque=tamanioBloque;
 	bloqueSerializado=new char[tamanioBloque];
 	porcCarga=0.8;
-};
+}
 EABloques::EABloques(Registro* tipoRegistro,Ttamanio tamanioBloque){
 	almacen=NULL;
 	this->bloque=new Bloque(tipoRegistro);
 	capacBloque=tamanioBloque;
 	bloqueSerializado=new char[tamanioBloque];
 	porcCarga=0.8;
-};
+}
 
 EABloques::~EABloques() {
 	delete[] bloqueSerializado;
 	delete bloque;
 	archivoEspacioLibre.close();
-};
+}
 void EABloques::finalizarAlamcenamiento(){
 	if(archivoEspacioLibre.is_open()){
 		almacen->escribir( (char*)&siguienteLibre , sizeof(siguienteLibre) );
 		archivoEspacioLibre.close();
 	}
-};
+}
 bool EABloques::crear(Almacenamiento*almacen){
 	this->almacen=almacen;
 	finalizarAlamcenamiento();
@@ -56,7 +56,7 @@ bool EABloques::crear(Almacenamiento*almacen){
 	nroBloque=0;
 	siguienteLibre=0;
 	return archivoEspacioLibre.is_open();
-};
+}
 bool EABloques::abrir(Almacenamiento*almacen){
 	this->almacen=almacen;
 	finalizarAlamcenamiento();
@@ -66,7 +66,7 @@ bool EABloques::abrir(Almacenamiento*almacen){
 	this->almacen->leer((char*)&siguienteLibre,sizeof(siguienteLibre));
 	nroRegistro=0;
 	return archivoEspacioLibre.is_open();
-};
+}
 bool EABloques::posicionarComponente(size_t nroCompuesto){
 	if(nroCompuesto<siguienteLibre){
 		nroBloque=nroCompuesto;
@@ -75,7 +75,7 @@ bool EABloques::posicionarComponente(size_t nroCompuesto){
 		nroRegistro=0;
 		return true;
 	}return false;
-};
+}
 bool EABloques::leerBloque(Bloque*bloque){
 	/*leo el bloque*/
 	almacen->leer(bloqueSerializado,capacBloque);
@@ -93,7 +93,7 @@ bool EABloques::leerBloque(Bloque*bloque){
 	bloque->deserializar(buf);
 	nroBloque++;
 	return true;
-};
+}
 bool EABloques::escribirBloque(Bloque*bloque){
 	/*Serializo*/
 	std::stringbuf buf(std::ios_base::binary | std::ios_base::out );
@@ -107,7 +107,7 @@ bool EABloques::escribirBloque(Bloque*bloque){
 	almacen->escribir(bloqueSerializado,capacBloque);
 	nroBloque++;
 	return true;
-};
+}
 bool EABloques::escribir(Componente*compuesto){
 	Bloque*bloque=dynamic_cast<Bloque*>(compuesto);
 	if(bloque!=NULL&&nroBloque<=siguienteLibre){
@@ -120,10 +120,10 @@ bool EABloques::escribir(Componente*compuesto){
 				}
 			}
 			return true;
-		};
-	};
+		}
+	}
 	return false;
-};
+}
 
 bool EABloques::leer(Componente*compuesto){
 	Bloque*bloque=dynamic_cast<Bloque*>(compuesto);
@@ -131,7 +131,7 @@ bool EABloques::leer(Componente*compuesto){
 		return leerBloque(bloque);
 	}
 	return false;
-};
+}
 size_t EABloques::buscarEspacioLibre(Ttamanio espacio,bool& encontrado){
 	size_t nroBloque=0;
 	libres=capacBloque;
@@ -142,10 +142,10 @@ size_t EABloques::buscarEspacioLibre(Ttamanio espacio,bool& encontrado){
 		Ttamanio disponibles=libres-(1-porcCarga)*capacBloque;
 		encontrado=disponibles>espacio and capacBloque>disponibles;
 		if(!encontrado)nroBloque++;
-	};
+	}
 	archivoEspacioLibre.clear();
 	return nroBloque;
-};
+}
 
 bool EABloques::insertar(Componente*componente){
 	bool encontrado;
@@ -169,7 +169,7 @@ bool EABloques::insertar(Componente*componente){
 		}
 	}
 	return true;
-};
+}
 
 
 
@@ -222,7 +222,7 @@ bool EABloques::modificar(Componente*componente){
 		}
 	}
 	return false;
-};
+}
 bool EABloques::buscarComponente(Registro*registro,Ttamanio & posicion){
 	clave->set(registro);
 	Clave*aux=clave->clonarce();
@@ -236,7 +236,7 @@ bool EABloques::buscarComponente(Registro*registro,Ttamanio & posicion){
 	}
 	delete aux;
 	return false;
-};
+}
 bool EABloques::eliminar(Componente*componente){
 	size_t posBorrado=nroBloque;
 	if(nroBloque<siguienteLibre){
@@ -270,7 +270,7 @@ bool EABloques::eliminar(Componente*componente){
 		}
 	}
 	return false;
-};
+}
 bool EABloques::siguiente(Componente*componente){
 	if(nroBloque==0 and nroRegistro==0){
 		leerBloque(bloque);
@@ -293,7 +293,7 @@ bool EABloques::siguiente(Componente*componente){
 	componente->deserializar(buf);
 	nroRegistro++;
 	return true;
-};
+}
 Componente *EABloques::getComponente(){
 	return bloque;
 }
@@ -316,7 +316,7 @@ bool EABloques::obtener(Componente*componente){
 		return true;
 	}
 	return false;
-};
+}
 size_t EABloques::posicionComponente(){
 	return nroBloque;
-};
+}

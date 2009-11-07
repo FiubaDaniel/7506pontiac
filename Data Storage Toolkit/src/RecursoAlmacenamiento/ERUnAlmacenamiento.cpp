@@ -23,7 +23,7 @@ bool ERUnAlmacenamiento::insertar(Registro* registro){
 		estrategiAlmacenamiento->pop();
 	};
 	return true;
-};
+}
 bool ERUnAlmacenamiento::eliminar(Clave* unaClave){
 	Referencia referencia;
 	if(!indice->BuscarReferencia(unaClave,&referencia))
@@ -38,7 +38,7 @@ bool ERUnAlmacenamiento::eliminar(Clave* unaClave){
 		estrategiAlmacenamiento->pop();
 	};
 	return true;
-};
+}
 bool ERUnAlmacenamiento::modificar(Clave* unaClave,Registro* registro){
 	clave->set(registro);
 	Referencia referencia;
@@ -53,14 +53,14 @@ bool ERUnAlmacenamiento::modificar(Clave* unaClave,Registro* registro){
 		estrategiAlmacenamiento->pop();
 	};
 	return true;
-};
+}
 bool ERUnAlmacenamiento::obtener(Clave* unaClave,Registro*registro){
 	Referencia referencia;
 	if(!indice->BuscarReferencia(clave,&referencia))
 		return false;
 	estrategiAlmacenamiento->posicionarComponente(referencia);
 	return estrategiAlmacenamiento->obtener(registro);
-};
+}
 
 void ERUnAlmacenamiento::actualizarIndice(Cambio cambio){
 	switch(cambio.operacion){
@@ -75,7 +75,7 @@ void ERUnAlmacenamiento::setClave(Registro*reg,Clave*clave){
 		Atributo*att=clave->getAtributo(i);
 		reg->get(att->getNombre())->set(att);
 	}
-};
+}
 
 Clave *ERUnAlmacenamiento::getClave() const{
     return clave;

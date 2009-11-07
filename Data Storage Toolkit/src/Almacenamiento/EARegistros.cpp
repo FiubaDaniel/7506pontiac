@@ -26,7 +26,7 @@ int EARegistros::comparar(Registro*reg1,Registro*reg2){
 	int resultado=comparador->Comparar(clave,clave2);
 	delete clave2;
 	return resultado;
-};
+}
 EARegistros::~EARegistros() {
 	finalizarAlmacenamiento();
 	delete[] registroSerializado;
@@ -46,7 +46,7 @@ bool EARegistros::abrir(Almacenamiento*almacen){
 	almacen->leer((char*)siguienteRegLibre,sizeof(siguienteRegLibre));
 	posicionarComponente(0);
 	return true;
-};
+}
 bool EARegistros::crear(Almacenamiento*almacenamiento){
 	finalizarAlmacenamiento();
 	almacen=almacenamiento;
@@ -75,7 +75,7 @@ void EARegistros::leer(Registro*registro){
 		buf.pubsetbuf(registroSerializado,tamanioRegistro);
 		registro->deserializar(buf);
 		nroRegistro++;
-	};
+	}
 }
 bool EARegistros::escribir(Componente *componente){
 	Registro*registro=dynamic_cast<Registro*>(componente);
@@ -158,12 +158,12 @@ bool EARegistros::siguiente(Componente *componente){
 	if(!almacen->fin() && nroRegistro < siguienteRegLibre)
 		return leer(componente);
 	return false;
-};
+}
 Componente *EARegistros::getComponente(){
 	return registro;
-};
+}
 
 bool EARegistros::obtener(Componente*componente){
 	return leer(componente);
-};
-size_t EARegistros::posicionComponente(){return nroRegistro;};
+}
+size_t EARegistros::posicionComponente(){return nroRegistro;}

@@ -13,25 +13,25 @@ Nodo::Nodo(unsigned int cantElem,unsigned int nNivel,ComparadorClave* comp) {
 	cantidadDeElementosLibre = cantElem;
 	numeroNivel = nNivel;
 	comparador = comp;
-};
+}
 std::list<ElementoNodo*>* Nodo::getListaElementos(){
 	return &listaElementos;
-};
+}
 unsigned int Nodo::getEspacioLibre(){
 	return cantidadDeElementosLibre;
-};
+}
 unsigned int Nodo::getCatidadMaximaDeElementos(){
 	return cantidadMaximaDeElementos;
-};
+}
 void Nodo::setEspacioLibre(int esp){
 	cantidadDeElementosLibre = esp;
-};
+}
 unsigned int Nodo::getNumeroNivel(){
 	return numeroNivel;
-};
+}
 void Nodo::setNumeroNivel(unsigned int num){
 	numeroNivel = num;
-};
+}
 int Nodo::Eliminar(const Clave* clave){
 	std::list<ElementoNodo*>::iterator it = listaElementos.begin();
     bool encontrado = false;
@@ -56,11 +56,11 @@ int Nodo::Eliminar(const Clave* clave){
 	}
 	if(noExiste || !encontrado){retorno = 0;}
 	return retorno;
-};
+}
 Nodo::~Nodo() {	 std::list<ElementoNodo*>::iterator it = listaElementos.begin();
 while(it!=listaElementos.end()){
 	ElementoNodo* elemento = *it;
 	delete elemento;
 	++it;
 }
-listaElementos.clear();};
+listaElementos.clear();}

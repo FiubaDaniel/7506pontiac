@@ -7,7 +7,7 @@
 
 #include "ComparadorRegistroFijo.h"
 
-ComparadorRegistroFijo::ComparadorRegistroFijo() {};
+ComparadorRegistroFijo::ComparadorRegistroFijo() {}
 int ComparadorRegistroFijo::Comparar(const Clave* clave1,const Clave* clave2){
 	Clave* aux1 = const_cast<Clave*>(clave1);
 	Clave* aux2 = const_cast<Clave*>(clave2);
@@ -15,5 +15,5 @@ int ComparadorRegistroFijo::Comparar(const Clave* clave1,const Clave* clave2){
 	      if(c>0) return 1;
 	else if (c<0) return -1;
 	else return aux1->getAtributo("miIntID")->comparar(aux2->getAtributo("miIntID"));
-};
-ComparadorRegistroFijo::~ComparadorRegistroFijo() {};
+}
+ComparadorRegistroFijo::~ComparadorRegistroFijo() {}
