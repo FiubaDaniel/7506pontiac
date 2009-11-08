@@ -117,6 +117,8 @@ MisDatos::~MisDatos(){}
 	 }else{
 		 estrategiaTexto->abrir(archivo);
 	 }
+	 EstrategiaRecursos *estrategiaRecurso=new ERUnAlmacenamiento();
+	 recurso2=new Recurso(archivo,NULL,estrategiaRecurso,estrategiaTexto);
  }
  /*
   * Pre: Archivo inicializado.
@@ -349,10 +351,10 @@ MisDatos::~MisDatos(){}
   */
  void MisDatos::mostrarIndiceArchivo1(){
 
-        EstrategiaIndice *indice=recurso1.getIndice();
+        EstrategiaIndice *indice=recurso1->getEstrategia()->getIndice();
         if(indice!=NULL){
         //tiene indice
-                indice.mostrarEstado();
+                indice->mostrarEstado();
 
         }else{
                 cout<< "El archivo1 no tiene indice asociado" << endl;
@@ -367,10 +369,10 @@ MisDatos::~MisDatos(){}
   */
  void MisDatos::mostrarIndiceArchivo2(){
 
-        EstrategiaIndice *indice=recurso2.getIndice();
+        EstrategiaIndice *indice=recurso2->getEstrategia()->getIndice();
         if(indice!=NULL){
         //tiene indice
-                indice.mostrarEstado();
+                indice->mostrarEstado();
         }else{
                 cout<< "El archivo2 no tiene indice asociado" << endl;
         }
