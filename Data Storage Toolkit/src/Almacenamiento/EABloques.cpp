@@ -32,6 +32,11 @@ EABloques::~EABloques() {
 	delete bloque;
 	archivoEspacioLibre.close();
 }
+void EABloques::setRegistro(Registro*registro){
+	if(bloque!=NULL){
+		bloque->inicializar(registro);
+	}else bloque=new Bloque(registro);
+};
 void EABloques::finalizarAlamcenamiento(){
 	archivoEspacioLibre.close();
 	almacen->escribir( (char*)&capacBloque , sizeof(capacBloque) );

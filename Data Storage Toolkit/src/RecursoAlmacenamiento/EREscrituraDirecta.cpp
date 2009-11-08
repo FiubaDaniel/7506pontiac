@@ -282,6 +282,7 @@ void EREscrituraDirecta::setIndice(EstrategiaIndice *indice){
 
 void EREscrituraDirecta::setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategiAlmacenamiento){
 	this->estrategiaArchivo=estrategiAlmacenamiento;
+	clave=estrategiaArchivo->getClave();
 }
 
 
