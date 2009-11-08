@@ -103,6 +103,7 @@ void HashingExt::dec_circular_a_saltos(unsigned *pos_tabla, int salto)
         (*pos_tabla) = pos_aux;
 }
 
+
 void HashingExt::resolver_sobreflujo(char *p_cubo, char *clave_mem, Referencia *referencia, const int ref_cubos, unsigned pos_tabla)
 {
         unsigned pos_recorrido=pos_tabla; //para recorrer circularmente la tabla de dispersión
@@ -150,7 +151,7 @@ void HashingExt::resolver_sobreflujo(char *p_cubo, char *clave_mem, Referencia *
                 this->tabla_dispersion.seekg(0, ios_base::beg); //posicionarse al principio
                 this->tabla_dispersion.read( (char*) contenido_tabla, (this->tam_tabla) * sizeof(int) ); //leer todo el contenido de la tabla
 
-                this->tabla_dispersion.seekp(this->tam_tabla, ios_base::beg); // posicionarse al final
+                this->tabla_dispersion.seekp((this->tam_tabla)*sizeof(int), ios_base::beg); // posicionarse al final
                 this->tabla_dispersion.write( (char*) contenido_tabla, (this->tam_tabla) * sizeof(int) );
 
                 (this->tam_tabla) *= 2; // se duplica el tamaño de dispersión de la tabla
@@ -171,7 +172,12 @@ void HashingExt::resolver_sobreflujo(char *p_cubo, char *clave_mem, Referencia *
                 {
                         //En caso de que no hayan habido cubos libres para reusar
                         this->crear_cubo_vacio(this->tam_tabla);
+
                 }
+
+                //Se consigna al nuevo cubo en la tabla en la posición en dónde ocurrió el overflow ( en "pos_tabla")
+                this->tabla_dispersion.seekp( pos_tabla * sizeof(int), ios_base::beg);
+                this->tabla_dispersion.write( (char*) &(this->contador_cubos), sizeof(int));
 
                 /**************************Se redispersan los registros*******************************/
                 //Los del cubo desbordado (aún  están en p_cubo)
@@ -249,6 +255,7 @@ bool HashingExt::agregar_registro(char *clave_mem, Referencia *referencia, const
 
 
         /******* Se verifica que la clave no exista en el cubo ******/
+        /**Esto evita que cuando se llame a "resolver_sobreflujo" se tenga que estar verificando si se puede insertar o no**/
         for ( int i = 0; i < cant_regi; i++)
         {
                 memcpy(un_registro, p_cubo + sizeof(Tcant_reg) + sizeof(Ttam_disp) + i*(this->tam_clave_ref), this->tam_clave_ref);
@@ -295,7 +302,6 @@ bool HashingExt::agregar_registro(char *clave_mem, Referencia *referencia, const
         delete [] una_clave;
         return true;
 }
-
 
 void HashingExt::serializar_clave(char *clave_mem, Clave *clave)
 {
@@ -870,7 +876,7 @@ bool HashingExt::eliminar(const Clave* clave)
 void HashingExt::mostrarEstado()
 {
         int ref_cubo; //variable auxiliar
-        char *p_cubo = new char[this->tam_cubo];
+        char *p_cubo = new char[this->bytes_cubo];
         Tcant_reg cant_reg;
         Ttam_disp tam_disp;
         char *un_registro = new char[this->tam_clave_ref]; //variable auxiliar
@@ -880,6 +886,7 @@ void HashingExt::mostrarEstado()
         Referencia una_ref;
 
         cout<<"***************************   Tabla de dispersion   ******************************"<<endl;
+        this->tabla_dispersion.seekg(0, ios_base::beg);
         for(int i=0; i < (this->tam_tabla)-1; i++)
         {
                 this->tabla_dispersion.read( (char*) &ref_cubo, sizeof(ref_cubo));
@@ -888,10 +895,12 @@ void HashingExt::mostrarEstado()
         this->tabla_dispersion.read( (char*) &ref_cubo, sizeof(ref_cubo));
         cout << ref_cubo <<endl;
 
-        cout<<"*****************  Cubos  (cantidad de registros, tamanio de dispersion)  *****************"<<endl;
+        cout<<"*************  Cubos  (cantidad de registros, tamanio de dispersion)  *************"<<endl;
+        cout<<"****************En cada cubo el formato es (clave, referencia) *******************"<<endl;
+        this->cubos.seekg(0, ios_base::beg);
         for(int j=0; j < (this->contador_cubos + 1); j++)
         {
-                this->cubos.read( (char*) p_cubo, this->tam_cubo);
+                this->cubos.read( (char*) p_cubo, this->bytes_cubo);
                 memcpy( &cant_reg, p_cubo, sizeof(Tcant_reg) );
                 memcpy( &tam_disp, p_cubo + sizeof(Tcant_reg), sizeof(Ttam_disp) );
 
@@ -902,7 +911,7 @@ void HashingExt::mostrarEstado()
                         memcpy(un_registro, p_cubo + sizeof(Tcant_reg) + sizeof(Ttam_disp) + k*(this->tam_clave_ref), this->tam_clave_ref );
                         memcpy(una_clave, un_registro, this->tam_clave);
                         memcpy(&una_ref, un_registro + this->tam_clave, sizeof(Referencia));
-                        offset = this->tam_clave - sizeof(numero_a_dispersar);
+                        offset = (this->tam_clave) - sizeof(numero_a_dispersar);
                         memcpy(&numero_a_dispersar, una_clave  + offset, sizeof(numero_a_dispersar));
                         cout << numero_a_dispersar << ", " << una_ref << " || ";
                 }
@@ -915,16 +924,19 @@ void HashingExt::mostrarEstado()
         }
 
         cout<< "***********************  Cubos libres   *****************************"<<endl;
-        for(int u = 0; u < (this->cant_cubos_libres -1); u++)
-        {
-                this->cubos_libres.read( (char*) &ref_cubo, sizeof(ref_cubo));
-                cout << ref_cubo<< ", ";
-        }
-        this->cubos_libres.read( (char*) &ref_cubo, sizeof(ref_cubo));
-        cout << ref_cubo<< endl;
+
         if(!(this->cant_cubos_libres))
         {
-                cout<< " - "<<endl;
+                cout<< " -  "<<endl;
+        }else{
+                this->cubos_libres.seekg(0, ios_base::beg);
+                for(int u = 0; u < (this->cant_cubos_libres-1); u++)
+                {
+                        this->cubos_libres.read( (char*) &ref_cubo, sizeof(ref_cubo));
+                        cout << ref_cubo<< ", ";
+                }
+                this->cubos_libres.read( (char*) &ref_cubo, sizeof(ref_cubo));
+                cout << ref_cubo<< endl;
         }
 
         delete [] p_cubo;
