@@ -125,9 +125,10 @@ MisDatos::~MisDatos(){}
 	 /*inicializar el estrategia Recurso*/
 	 EstrategiaRecursos* estrategiaRecurso=NULL;
 	 if(tieneBuffer){
-		 Almacenamiento* buffer=new Buffer(longitudBuffer);
-		 EABloques * estrategiaBuffer=new EABloques();//TODO delete
-		 estrategiaBuffer->abrir(buffer);
+		 EARegistros * estrategiaBuffer=new EARegistros();//TODO delete
+		 Buffer* buffer=new Buffer(longitudBuffer);
+		 buffer->setNombre("buffer");
+		 estrategiaBuffer->crear(buffer);
 		 estrategiaRecurso=new EREscrituraDirecta(estrategiaBuffer,buffer,longitudBuffer/reg.tamanioSerializado());
 	 }else{
 		 estrategiaRecurso=new ERUnAlmacenamiento();
