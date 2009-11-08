@@ -170,3 +170,24 @@ bool EARegistros::obtener(Componente*componente){
 	return leer(componente);
 }
 size_t EARegistros::posicionComponente(){return nroRegistro;}
+bool EARegistros::buscar(Componente*componente){
+	bool encontrado=false;
+	bool fin=false;
+	posicionarComponente(0);
+	do{
+		size_t pos=posicionComponente();
+		fin=leer((Componente*)registro);
+		if(comparar(registro,(Registro*)componente)==0){
+			std::stringbuf buf;
+			buf.pubseekpos(0,std::ios_base::binary | std::ios_base::in );
+			buf.pubsetbuf(registroSerializado,tamanioRegistro);
+			componente->deserializar(buf);
+			encontrado=true;
+			if(logActivo){
+				clave->set((Registro*)componente);
+				pushCambio(Cambio(clave,pos,Cambio::Reubicacion));
+			}
+		}
+	}while((not fin )and not encontrado);
+	return encontrado;
+}

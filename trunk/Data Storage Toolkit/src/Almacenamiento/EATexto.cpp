@@ -229,6 +229,22 @@ void EATexto::escribirLinea(){
 	almacen->escribir(linea.c_str(),linea.size());
 
 }
-
+bool EATexto::buscar(Componente*componente){
+	bool encontrado=false;
+	bool fin;
+	do{
+		size_t pos=posicionComponente();
+		fin=siguiente(registro);
+		if(comparar(registro,(Registro*)componente)==0){
+			lineaARegistro( (Registro*)componente);
+			encontrado=true;
+			if(logActivo){
+				clave->set((Registro*)componente);
+				pushCambio(Cambio(clave,pos,Cambio::Reubicacion));
+			}
+		}
+	}while((not fin)and not encontrado);
+	return encontrado;
+}
 
 
