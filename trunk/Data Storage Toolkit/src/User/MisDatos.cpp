@@ -347,14 +347,35 @@ MisDatos::~MisDatos(){}
   * los datos contenidos en estos ultimos.
   * Si el archivo no tiene indice asociado, muestra un mensaje que lo especifique.
   */
- void MisDatos::mostrarIndiceArchivo1(){}
+ void MisDatos::mostrarIndiceArchivo1(){
+
+        EstrategiaIndice *indice=recurso1.getIndice();
+        if(indice!=NULL){
+        //tiene indice
+                indice.mostrarEstado();
+
+        }else{
+                cout<< "El archivo1 no tiene indice asociado" << endl;
+        }
+
+}
  /*
   * Pre: Archivo inicializado.
   * Muestra por salida standard toda la metadata del indice, de sus bloques y sus registros, asi como
   * los datos contenidos en estos ultimos.
   * Si el archivo no tiene indice asociado, muestra un mensaje que lo especifique.
   */
- void MisDatos::mostrarIndiceArchivo2(){}
+ void MisDatos::mostrarIndiceArchivo2(){
+
+        EstrategiaIndice *indice=recurso2.getIndice();
+        if(indice!=NULL){
+        //tiene indice
+                indice.mostrarEstado();
+        }else{
+                cout<< "El archivo2 no tiene indice asociado" << endl;
+        }
+
+}
  /*
   * Pre: Archivo inicializado.
   * Muestra por salida standard toda la metadata de los bloques y sus registros, asi como los datos
