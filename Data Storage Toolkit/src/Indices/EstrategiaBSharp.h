@@ -30,6 +30,9 @@ public:
   bool insertar(Referencia ref,Clave* clave);
   bool eliminar(const Clave* clave);
   bool modificar(const Clave* clave,Referencia refNueva);
+  void cerrar();
+  int tamanioBloque();
+  void mostrarEstado();
 
 private:
   BSharpTree* arbol;
