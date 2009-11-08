@@ -63,6 +63,10 @@ public:
 	 */
 	void imprimir();
 
+	void cerrar();
+
+	int tamanioBloque();
+
 	virtual ~BSharpTree();
 private:
 
@@ -106,6 +110,7 @@ private:
 
 	void armarNuevaRaiz(Nodo* nodoIzq,Nodo* nodoDer);
 
+    int tamanioBloque();
 
 	void nuevoEspacioLibre(Referencia);
 
