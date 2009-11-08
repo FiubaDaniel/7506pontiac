@@ -3,6 +3,9 @@
 Buffer::Buffer(){
 	archivo =new std::stringstream(std::ios_base::out|std::ios_base::binary|std::ios_base::in);
 }
+Buffer::Buffer(int longitudBuffer){
+	archivo =new std::stringstream(std::ios_base::out|std::ios_base::binary|std::ios_base::in);
+}
 Buffer::~Buffer (){
 	delete archivo;
 }
