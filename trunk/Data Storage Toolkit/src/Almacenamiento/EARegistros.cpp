@@ -191,3 +191,6 @@ bool EARegistros::buscar(Componente*componente){
 	}while((not fin )and not encontrado);
 	return encontrado;
 }
+Almacenamiento* EARegistros::getAlmacenamiento(){
+	return almacen;
+}

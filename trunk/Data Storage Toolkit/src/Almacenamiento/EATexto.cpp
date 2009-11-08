@@ -246,5 +246,7 @@ bool EATexto::buscar(Componente*componente){
 	}while((not fin)and not encontrado);
 	return encontrado;
 }
-
+Almacenamiento* EATexto::getAlmacenamiento(){
+	return almacen;
+}
 
