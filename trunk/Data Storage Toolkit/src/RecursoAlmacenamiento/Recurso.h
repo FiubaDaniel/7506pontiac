@@ -38,6 +38,7 @@ public:
     * return:
     * true, si pudo eliminar, false sino el registro no existe.
     */
+   EstrategiaRecursos* getEstrategia();
    bool obtener(Clave*unaClave,Registro*registro);
    void mostrarIndice();
    void mostrarDatos();

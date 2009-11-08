@@ -174,6 +174,9 @@ void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 			break;
 		default:break;
 	}
+	Almacenamiento* EREscrituraDirecta::getBuffer(){
+		return buffer;
+	}
 }
 /*---------------------------------------------------------------------------------------------------------------*/
 AdministradorDeBuffer::AdministradorDeBuffer(size_t maximo){
@@ -283,7 +286,6 @@ void EREscrituraDirecta::setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *es
 Registro *EREscrituraDirecta::getRegistro() const{
 	return (Registro*)estrategiaArchivo->getRegistro();
 }
-
 
 
 void EREscrituraDirecta::setRegistro(Registro *registro){
