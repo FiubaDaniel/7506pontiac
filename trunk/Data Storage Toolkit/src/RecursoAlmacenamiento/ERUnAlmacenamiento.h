@@ -15,7 +15,7 @@ public:
 	bool obtener(Clave* unaClave,Registro*registro);
 	void setClave(Registro*reg,Clave*clave);
     Clave *getClave() const;
-    EstrategiaAlmacenamiento *getEstrategiAlmacenamiento() const;
+    EstrategiaAlmacenamiento *getEstrategiaAlmacenamiento() const;
     EstrategiaIndice *getIndice() const;
     Registro *getRegistro() const;
     void setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategiAlmacenamiento);

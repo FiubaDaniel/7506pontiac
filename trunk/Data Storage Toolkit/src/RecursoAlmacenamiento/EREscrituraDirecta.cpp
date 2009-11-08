@@ -266,10 +266,12 @@ EstrategiaIndice *EREscrituraDirecta::getIndice() const{
 
 
 
-EstrategiaAlmacenamiento *EREscrituraDirecta::getEstrategiAlmacenamiento() const{
+EstrategiaAlmacenamiento *EREscrituraDirecta::getEstrategiaAlmacenamiento() const{
 	return estrategiaArchivo;
 }
-
+EstrategiaAlmacenamiento *EREscrituraDirecta::getEstrategiaBuffer() const{
+	return estrategiaBuffer;
+}
 
 
 void EREscrituraDirecta::setIndice(EstrategiaIndice *indice){

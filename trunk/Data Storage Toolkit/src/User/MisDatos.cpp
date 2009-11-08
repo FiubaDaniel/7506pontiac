@@ -305,7 +305,7 @@ MisDatos::~MisDatos(){}
 		 cout<<"NO tieneBuffer";
 		 return;
 	 }
-	 EstrategiaAlmacenamiento *estrategia=estrategiaDirecta->getBuffer();
+	 EstrategiaAlmacenamiento *estrategiaBuffer=estrategiaDirecta->getEstrategiaBuffer();
 	 AtributoVariable<string> mistringid("miStringID");
 	 AtributoFijo<int> miInt("miInt");
 	 AtributoVariable<int> miListaInt("miListaInt");
@@ -334,7 +334,7 @@ MisDatos::~MisDatos(){}
 		 cout<<"NO tieneBuffer";
 		 return;
 	 }
-	 EstrategiaAlmacenamiento *estrategia=estrategiaDirecta->getBuffer();
+	 EstrategiaAlmacenamiento *estrategia=estrategiaDirecta->getEstrategiaBuffer();
 	 AtributoFijo<int> miIntID("claveIntId");
 	 AtributoFijo<char> miCharID("claveCharId");
 	 AtributoFijo<int> miInt("miInt");
@@ -392,7 +392,7 @@ MisDatos::~MisDatos(){}
   * contenidos en estos ultimos.
   */
  void MisDatos::mostrarDatosArchivo1(){
-	 EstrategiaAlmacenamiento *estrategia=const_cast<EstrategiaAlmacenamiento *>(recurso2->getEstrategia()->getEstrategiAlmacenamiento());
+	 EstrategiaAlmacenamiento *estrategia=const_cast<EstrategiaAlmacenamiento *>(recurso2->getEstrategia()->getEstrategiaAlmacenamiento());
 
 	 AtributoVariable<string> mistringid("miStringID");
 	 AtributoFijo<int> miInt("miInt");
@@ -416,7 +416,7 @@ MisDatos::~MisDatos(){}
   *  en los mismos.
   */
  void MisDatos::mostrarDatosArchivo2(){
-	 EstrategiaAlmacenamiento *estrategia=const_cast<EstrategiaAlmacenamiento*>(recurso2->getEstrategia()->getEstrategiAlmacenamiento());
+	 EstrategiaAlmacenamiento *estrategia=const_cast<EstrategiaAlmacenamiento*>(recurso2->getEstrategia()->getEstrategiaAlmacenamiento());
 
 	 AtributoFijo<int> miIntID("claveIntId");
 	 AtributoFijo<char> miCharID("claveCharId");
@@ -444,7 +444,7 @@ MisDatos::~MisDatos(){}
 	 if(estrategiaDirecta!=NULL){
 		 delete estrategiaDirecta->getBuffer();
 	 }
-	 delete estrategia->getEstrategiAlmacenamiento();
+	 delete estrategia->getEstrategiaAlmacenamiento();
 	 delete estrategia->getIndice();
 	 //delete comparador;
 	 delete recurso1->getAlmacenamiento();
@@ -460,7 +460,7 @@ MisDatos::~MisDatos(){}
 	if(estrategiaDirecta!=NULL){
 	 		 delete estrategiaDirecta->getBuffer();
 	 	 }
-	delete estrategia->getEstrategiAlmacenamiento();
+	delete estrategia->getEstrategiaAlmacenamiento();
 	delete estrategia->getIndice();
 	delete recurso2->getAlmacenamiento();
 	//delete comparador;
@@ -471,7 +471,7 @@ MisDatos::~MisDatos(){}
   * Cierra el archivo correspondiente.
   */
  void MisDatos::cerrarArchivo3(){
-	 delete recurso3->getEstrategia()->getEstrategiAlmacenamiento();
+	 delete recurso3->getEstrategia()->getEstrategiaAlmacenamiento();
      delete recurso3->getEstrategia();
      delete recurso3->getAlmacenamiento();
      delete recurso3;
