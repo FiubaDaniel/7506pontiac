@@ -66,7 +66,7 @@ void BSharpTree::crear(string nombreArch,unsigned int tamanioDeBloque, Clave* cl
 		archivoEspaciosLibres.write(array3,sizeof(cero));
 	}
 }
-
+/*Abre un arbol ya existente*/
 bool BSharpTree::abrir(string nombreArch,ComparadorClave* comp){
 	comparador = comp;
 	nombreArchivo = nombreArch+"_Arbol";
