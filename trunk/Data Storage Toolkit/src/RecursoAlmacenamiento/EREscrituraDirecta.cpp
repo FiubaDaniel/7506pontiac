@@ -1,7 +1,8 @@
 #include "EREscrituraDirecta.h"
 
-EREscrituraDirecta::EREscrituraDirecta(Almacenamiento *buffer,size_t cantidadElementoBuffer){
+EREscrituraDirecta::EREscrituraDirecta(EstrategiaAlmacenamiento*estrategiaBuffer,Almacenamiento *buffer,size_t cantidadElementoBuffer){
 	this->buffer=buffer;
+	this->estrategiaBuffer=estrategiaBuffer;
 	estrategiaBuffer->logActivo=false;
 	admin.setCapacidad(cantidadElementoBuffer);
 }
