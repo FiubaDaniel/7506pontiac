@@ -92,21 +92,23 @@ class HashingExt: public EstrategiaIndice
                 */
                 void crear_cubo_ini(char* clave_mem, Referencia *referencia);
 
+
                 /*
-                        Agrega el par (clave, referencia) en el cubo que se encuentra en la posici�n "ref_cubos" del archivo de cubos
-                        Si el cubo referenciado est� lleno, entonces se delega la resoluci�n del overflow al m�todo "resolver_sobreflujo()"
+                        Agrega el par (clave, referencia) en el cubo que se encuentra en la posición "ref_cubos" del archivo de cubos
+                        Si el cubo referenciado está lleno, entonces se delega la resolución del overflow al método "resolver_sobreflujo()"
                         sino, se escribe el registro(clave, ref) en el cubo
 
                 (Agrega en un cubo existente)
                 Recibe:
                                 -ref_cubos: es la referencia al cubo en el archivo de cubos
-                                -pos_tabla: la posici�n en la tabla en d�nde se encontr� la referencia al cubo
+                                -pos_tabla: la posición en la tabla en dónde se encontró la referencia al cubo
                 pre-condiciones:
                                         -tabla_dispersion y cubos, deben estar abiertos
                                         -el cubo debe existir en el archivo de cubos
-                */
-                void agregar_registro(char *clave_mem, Referencia *referencia, const int ref_cubos, unsigned pos_tabla);
 
+                        Devuelve false si no se puedo agregar el registro porque ya existía otro con = clave
+                */
+                bool agregar_registro(char *clave_mem, Referencia *referencia, const int ref_cubos, unsigned pos_tabla);
 
                 /*
                         pre-condici�n: clave_mem debe apuntar a un �rea de memoria con espacio suficiente, es decir this->tam_clave
@@ -116,8 +118,9 @@ class HashingExt: public EstrategiaIndice
                 /*
                         Pre-condici�n: -ARCHIVOS DE TABLA Y CUBOS ABIERTOS
                                                 -clave_mem, contiene la clave en memoria
+                        Devuelve true si se pudo agregar, false sino
                 */
-                void resolver_insercion( char *clave_mem, Referencia referencia);
+                bool resolver_insercion( char *clave_mem, Referencia referencia);
 
                 /*
                         Crea un cubo vac�o, y lo escribe en el archivo de cubos
