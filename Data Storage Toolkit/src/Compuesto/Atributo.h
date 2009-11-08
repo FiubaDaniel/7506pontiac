@@ -13,14 +13,14 @@
 #include <exception>
 typedef unsigned int Ttamanio;
 
-class ErrorSerializacionExcepcion : public std::exception {
+class IOSerializacionExcepcion : public std::exception {
 	std::string mensaje;
 public:
-	ErrorSerializacionExcepcion(std::string detalle) throw(){
+	IOSerializacionExcepcion(std::string detalle) throw(){
 		mensaje=detalle;
 	};
 	const char* what() const throw(){ return mensaje.c_str();};
-	~ErrorSerializacionExcepcion() throw(){};
+	~IOSerializacionExcepcion() throw(){};
 };
 
 class Atributo {
@@ -63,13 +63,13 @@ public:
 	 * Escribe los bytes forman el dato del atributo en salida.
 	 * devuelve la cantidad de bytes escritos en salida.
 	 */
-	virtual Ttamanio serializar(std::streambuf&salida) throw(ErrorSerializacionExcepcion)=0;
+	virtual Ttamanio serializar(std::streambuf&salida) throw(IOSerializacionExcepcion)=0;
 	/* Carga el atributo a partir de los bytes leido de entrada.
 	 * si la entrada se agota antes de que se hayan leidos los bytes necesario,
 	 * arroja una excepcion  ErrorSerializacionExcepcion
 	 * @return la cantidad de bytes leidos.
 	 */
-	virtual Ttamanio deserializar(std::streambuf&entrada) throw(ErrorSerializacionExcepcion) =0;
+	virtual Ttamanio deserializar(std::streambuf&entrada) throw(IOSerializacionExcepcion) =0;
 	/*
 	 * @return devuelve la cantidad de bytes que conforma la forma serializada del dato
 	 * contenido en atributo.
@@ -85,14 +85,15 @@ public:
 	 */
 	virtual int comparar(const Atributo*otroAtributo)throw(std::bad_cast) =0;
 	/*
-	 *
+	 *imprimi a salida el atributo en formato texto
 	 */
 	virtual void imprimir(std::ostream&salida)=0;
+	/*
+	 * lee de entrada el atributo en formato texto.
+	 */
 	virtual void leer(std::istream&entrada)=0;
-
 protected:
 	std::string nombre;
-/*	*/
 };
 
 /*----------------------------------------------------------------------------*/
