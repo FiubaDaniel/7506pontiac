@@ -55,7 +55,7 @@ private:
 	void insertarEnBuffer(Referencia refArchivo);
 	void setClave(Registro*reg,Clave*clave);
 public:
-	EREscrituraDirecta(Almacenamiento*buffer,size_t cantidadElementoBuffer);
+	EREscrituraDirecta(EstrategiaAlmacenamiento*estrategiaBuffer,Almacenamiento*buffer,size_t cantidadElementoBuffer);
 	virtual ~EREscrituraDirecta();
 	virtual bool insertar(Registro* registro);
 	virtual bool eliminar(Clave* unaClave);

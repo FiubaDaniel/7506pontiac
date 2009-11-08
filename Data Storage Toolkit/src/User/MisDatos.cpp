@@ -66,8 +66,9 @@ MisDatos::~MisDatos(){}
 	 /*inicializar el estrategia Recurso*/
 	 EstrategiaRecursos* estrategiaRecurso=NULL;
 	 if(tieneBuffer){
+		 EABloques * estrategiaBuffer=new EABloques();//TODO delete
 		 Almacenamiento* buffer=new Buffer(longitudBuffer);
-		 estrategiaRecurso=new EREscrituraDirecta(buffer,longitudBuffer/longitudBloque);
+		 estrategiaRecurso=new EREscrituraDirecta(estrategiaBuffer,buffer,longitudBuffer/longitudBloque);
 	 }else{
 		 estrategiaRecurso=new ERUnAlmacenamiento();
 	 };
@@ -122,7 +123,8 @@ MisDatos::~MisDatos(){}
 	 EstrategiaRecursos* estrategiaRecurso=NULL;
 	 if(tieneBuffer){
 		 Almacenamiento* buffer=new Buffer(longitudBuffer);
-		 estrategiaRecurso=new EREscrituraDirecta(buffer,longitudBuffer/reg.tamanioSerializado());
+		 EABloques * estrategiaBuffer=new EABloques();
+		 estrategiaRecurso=new EREscrituraDirecta(estrategiaBuffer,buffer,longitudBuffer/reg.tamanioSerializado());
 	 }else{
 		 estrategiaRecurso=new ERUnAlmacenamiento();
 	 };
