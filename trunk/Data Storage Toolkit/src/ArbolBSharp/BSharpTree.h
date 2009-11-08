@@ -61,7 +61,8 @@ private:
 	Nodo* obtenerNodoPorPosiciones(Referencia posInicial);
 	void recomponerRaiz();
 	void imprimirIterativo(Nodo* nodo,unsigned int nivelRaiz);
-	unsigned int numeroDeElementosXnodo,posicionRaiz,tamanioNodo,cantidadMinimaDeElementos;
+	unsigned int numeroDeElementosXnodo,posicionRaiz,cantidadMinimaDeElementos;
+	unsigned int tamanioNodo;
 	std::fstream archivoArbol;
 	std::fstream archivoEspaciosLibres;
 	string nombreArchivo;
