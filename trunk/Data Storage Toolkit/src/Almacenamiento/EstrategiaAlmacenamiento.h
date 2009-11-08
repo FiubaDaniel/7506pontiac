@@ -42,13 +42,14 @@ public:
 			cambiosLog.pop();
 		}
 	};
-	virtual Componente* getComponente()=0;
+	virtual Componente* getRegistro()=0;
 	virtual void setClave(Clave*unaClave){clave=unaClave->clonarce();};
 	virtual void setComparador(ComparadorClave*unComparador){
 		comparador=unComparador;
 	};
 	virtual bool abrir(Almacenamiento*almacen)=0;
 	virtual bool crear(Almacenamiento*almacen)=0;
+	virtual void cerrar()=0;
 	virtual bool posicionarComponente(size_t nroComponente)=0;
 	virtual size_t posicionComponente()=0;
 	virtual bool escribir(Componente*componente)=0;

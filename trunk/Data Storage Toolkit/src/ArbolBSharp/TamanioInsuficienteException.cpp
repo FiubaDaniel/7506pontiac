@@ -13,7 +13,7 @@ TamanioInsuficienteException::TamanioInsuficienteException() throw(){
 }
 
 TamanioInsuficienteException::~TamanioInsuficienteException() throw(){
-	// TODO Auto-generated destructor stub
+
 }
 
 const char* TamanioInsuficienteException::what() const throw(){

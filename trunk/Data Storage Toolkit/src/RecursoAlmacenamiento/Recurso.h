@@ -13,7 +13,8 @@ class EstrategiaRecursos;
 class Recurso{
 public:
    Recurso(Almacenamiento* archivo,EstrategiaIndice* indice,EstrategiaRecursos* estrategiaUsada,EstrategiaAlmacenamiento*estretegiaAlmacenamiento);
-   virtual ~Recurso ( );
+
+   virtual ~Recurso ();
    /*
     * Agrega un Registro.
     * return :

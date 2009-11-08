@@ -57,7 +57,10 @@ bool EARegistros::crear(Almacenamiento*almacenamiento){
 	this->almacen->escribir(&siguienteRegLibre,sizeof(siguienteRegLibre));
 	return true;
 }
-
+void EARegistros::cerrar(){
+	finalizarAlmacenamiento();
+	almacen->cerrar();
+}
 void EARegistros::escribir(Registro*registro){
 	if(!almacen->fin()){
 		std::stringbuf buf(std::ios_base::binary | std::ios_base::out );
@@ -159,7 +162,7 @@ bool EARegistros::siguiente(Componente *componente){
 		return leer(componente);
 	return false;
 }
-Componente *EARegistros::getComponente(){
+Componente *EARegistros::getRegistro(){
 	return registro;
 }
 

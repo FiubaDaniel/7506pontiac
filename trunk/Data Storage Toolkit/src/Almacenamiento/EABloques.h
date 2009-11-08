@@ -30,12 +30,12 @@ private:
 	bool escribirBloque(Bloque*bloque);
 public:
 	EABloques();
-	EABloques(Bloque* tipoBloque,Ttamanio tamanioBloque);
-	EABloques(Registro* tipoRegistro,Ttamanio tamanioBloque);
+	EABloques(Registro* tipoRegistro,Ttamanio tamanioBloque,double porcCarga=0.8);
 	virtual ~EABloques();
 	bool abrir(Almacenamiento*almacen);
 	bool crear(Almacenamiento*almacen);
-	Componente* getComponente();
+	void cerrar();
+	Componente* getRegistro();
 	bool posicionarComponente(size_t nroCompuesto);
 	bool escribir(Componente*componente);
 	bool leer(Componente*componente);

@@ -39,3 +39,6 @@ void Buffer::reiniciar(){
 size_t Buffer::posicionActual(){
 	return archivo->tellg();
 }
+void Buffer::cerrar(){
+
+}

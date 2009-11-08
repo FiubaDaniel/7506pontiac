@@ -102,7 +102,7 @@ public:
 		while(i< nroValores and i<valores.size() ){
 			leidos=entrada.sgetn((char*)&aux,sizeof(T_tipo));
 			if(leidos !=sizeof(T_tipo))
-				IOSerializacionExcepcion("Excepcion:AtributoVariable "+nombre+" no fue deserializado");;//TODO
+				IOSerializacionExcepcion("Excepcion:AtributoVariable "+nombre+" no fue deserializado");
 			valores.at(i)=aux;
 			offset+=sizeof(T_tipo);
 			i++;
@@ -113,7 +113,7 @@ public:
 		while(i<nroValores){
 			leidos=entrada.sgetn((char*)&aux,sizeof(T_tipo));
 			if(leidos!=sizeof(T_tipo))
-				throw IOSerializacionExcepcion("Excepcion:AtributoVariable "+nombre+" no fue deserializado");;//TODO
+				throw IOSerializacionExcepcion("Excepcion:AtributoVariable "+nombre+" no fue deserializado");
 			valores.push_back(aux);
 			offset+=sizeof(T_tipo);
 			i++;
@@ -212,10 +212,10 @@ public:
 	Ttamanio deserializar(std::streambuf &entrada)throw(IOSerializacionExcepcion){
 		std::streambuf::int_type tam=entrada.sbumpc();
 		if(tam==std::streambuf::traits_type::eof())
-			throw IOSerializacionExcepcion("Excepcion:AtributoVariable "+nombre+" no fue deserializado, no se puede leer el tamanio");;//TODO
+			throw IOSerializacionExcepcion("Excepcion:AtributoVariable "+nombre+" no fue deserializado, no se puede leer el tamanio");
 		char *buf=new char[tam];
 		if(entrada.sgetn(buf,tam)!=tam)
-			throw IOSerializacionExcepcion("Excepcion:AtributoVariable "+nombre+" no fue deserializado");;//TODO
+			throw IOSerializacionExcepcion("Excepcion:AtributoVariable "+nombre+" no fue deserializado");
 		str.clear();
 		str.append(buf,tam);
 		delete buf;

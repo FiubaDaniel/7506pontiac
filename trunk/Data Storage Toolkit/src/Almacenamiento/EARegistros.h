@@ -32,7 +32,8 @@ public:
 	virtual ~EARegistros();
 	bool abrir(Almacenamiento*almacen);
 	bool crear(Almacenamiento*almacenamiento);
-	Componente* getComponente();
+	void cerrar();
+	Componente* getRegistro();
 	bool posicionarComponente(size_t nroCompuesto);
 	bool escribir(Componente*componente);
 	bool leer(Componente*componente);
