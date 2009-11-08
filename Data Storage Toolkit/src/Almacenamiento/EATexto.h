@@ -36,7 +36,8 @@ public:
 	virtual ~EATexto();
 	bool abrir(Almacenamiento*almacen);
 	bool crear(Almacenamiento*almacen);
-	Componente* getComponente();
+	void cerrar();
+	Componente* getRegistro();
 	bool posicionarComponente(size_t nroCompuesto);
 	bool escribir(Componente*componente);
 	bool leer(Componente*componente);

@@ -14,6 +14,7 @@ class Buffer : public Almacenamiento{
 	std::stringstream *archivo;
 public:
 	Buffer();
+	Buffer(int longitudBuffer){};
 	~Buffer();
 	/*-------------------------------------------------------------------------*/
 	/*utilizado por la estrategiaAlmacenamiento*/
@@ -27,5 +28,6 @@ public:
 	virtual void reiniciar();
 	virtual void posicionarAlfinal();
 	virtual size_t posicionActual();
+	virtual void cerrar();
 };
 #endif // BUFFER_H

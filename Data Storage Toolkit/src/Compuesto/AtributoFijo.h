@@ -74,7 +74,7 @@ public:
 	Ttamanio deserializar(std::streambuf&entrada)throw(IOSerializacionExcepcion){
 		long leidos=entrada.sgetn((char*)&dato,sizeof(dato));
 		if(leidos!=sizeof(dato))
-			throw IOSerializacionExcepcion("Excepcion:AtributoFijo "+nombre+" no fue deserializado");//TODO
+			throw IOSerializacionExcepcion("Excepcion:AtributoFijo "+nombre+" no fue deserializado");
 		return sizeof(dato);
 	};
 
@@ -167,7 +167,7 @@ public:
 	Ttamanio deserializar(std::streambuf&entrada)throw(IOSerializacionExcepcion){
 		long leidos=entrada.sgetn(datos,longitud);
 		if(leidos!=longitud)
-			throw IOSerializacionExcepcion("Excepcion:AtributoFijo "+nombre+" no fue deserializado");//TODO
+			throw IOSerializacionExcepcion("Excepcion:AtributoFijo "+nombre+" no fue deserializado");
 		return longitud;
 	};
 	Ttamanio tamanioSerializado(){

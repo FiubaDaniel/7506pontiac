@@ -18,19 +18,13 @@ EABloques::EABloques(){
 	bloqueSerializado=0;
 	porcCarga=0;
 }
-EABloques::EABloques(Bloque* tipoBloque,Ttamanio tamanioBloque) {
-	almacen=NULL;
-	this->bloque=(Bloque*)tipoBloque->clonar();
-	capacBloque=tamanioBloque;
-	bloqueSerializado=new char[tamanioBloque];
-	porcCarga=0.8;
-}
-EABloques::EABloques(Registro* tipoRegistro,Ttamanio tamanioBloque){
+
+EABloques::EABloques(Registro* tipoRegistro,Ttamanio tamanioBloque,double porcCarga){
 	almacen=NULL;
 	this->bloque=new Bloque(tipoRegistro);
 	capacBloque=tamanioBloque;
 	bloqueSerializado=new char[tamanioBloque];
-	porcCarga=0.8;
+	this->porcCarga=porcCarga;
 }
 
 EABloques::~EABloques() {
@@ -56,6 +50,10 @@ bool EABloques::crear(Almacenamiento*almacen){
 	nroBloque=0;
 	siguienteLibre=0;
 	return archivoEspacioLibre.is_open();
+}
+void EABloques::cerrar(){
+	finalizarAlamcenamiento();
+	almacen->cerrar();
 }
 bool EABloques::abrir(Almacenamiento*almacen){
 	this->almacen=almacen;
@@ -294,8 +292,8 @@ bool EABloques::siguiente(Componente*componente){
 	nroRegistro++;
 	return true;
 }
-Componente *EABloques::getComponente(){
-	return bloque;
+Componente *EABloques::getRegistro(){
+	return bloque->get(0);
 }
 
 bool EABloques::obtener(Componente*componente){

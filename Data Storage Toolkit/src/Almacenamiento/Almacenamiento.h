@@ -33,6 +33,7 @@ public:
   virtual bool fin()=0;
   /*Limpia los flags de fin de archivo y error*/
   virtual void reiniciar()=0;
+  virtual void cerrar()=0;
 };
 
 #endif // ALMACENAMIENTO_H

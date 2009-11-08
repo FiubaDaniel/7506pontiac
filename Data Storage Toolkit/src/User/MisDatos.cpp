@@ -10,6 +10,7 @@ MisDatos::~MisDatos(){}
  void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool tieneBuffer,
 		 int longitudBuffer, bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice) throw (ExcepcionMisDatos)
 {
+	 /*inicializo el archivo y la estrategia*/
 	 Archivo* archivo=new Archivo();
 	 EABloques * estrategiaBloques=new EABloques();
 	 if(!archivo->abrir(path.c_str())){
@@ -19,20 +20,20 @@ MisDatos::~MisDatos(){}
 		 estrategiaBloques->abrir(archivo);
 		 long longitud=longitudBloque;
 		 if(estrategiaBloques->getCapacBloque()!=longitud){
-			 //estrategiaBloques->cerrar();
+			 estrategiaBloques->cerrar();
 			 archivo->cerrar();
 			 throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
 		 }
 	 }
 	 /*incializar indice*/
-	 /*armar recurso1*/
+	 EstrategiaIndice* Indice=NULL;
 	 if(tieneIndice){
 		 ComparadorClave* comparador = new ComparadorRegistroVariable();
 	           /*creo una clave estructural*/
 	      AtributoVariable<std::string> nombre("miStringID");
 	      Registro reg(1,&nombre);
 	      Clave claveEstructural(&reg,1,"miStringID");
-	      EstrategiaIndice* Indice;
+
 	      if(tipo==0){
 	        	   Indice = new EstrategiaBSharp(&claveEstructural);
 
@@ -43,6 +44,16 @@ MisDatos::~MisDatos(){}
 	    	  Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 	      }
 	 }
+	 /*inicializar el estrategia Recurso*/
+	 EstrategiaRecursos* estrategiaRecurso=NULL;
+	 if(tieneBuffer){
+		 Almacenamiento* buffer=new Buffer(longitudBuffer);
+		 estrategiaRecurso=new EREscrituraDirecta(buffer);
+	 }else{
+		 estrategiaRecurso=new ERUnAlmacenamiento();
+	 };
+
+	 recurso1=new Recurso(archivo,Indice,estrategiaRecurso,estrategiaBloques);
  }
  /*
   * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe,
@@ -51,7 +62,8 @@ MisDatos::~MisDatos(){}
   * En caso de fallar la inicializacion, se lanza una ExcepcionMisDatos con el mensaje de error.
   */
  void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer, int longitudBuffer,
-	bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice) throw (ExcepcionMisDatos){
+		 bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice) throw (ExcepcionMisDatos)
+{
 	 Archivo* archivo=new Archivo();
 	 EARegistros * estrategiaRegistros=new EARegistros();
 	 if(!archivo->abrir(path.c_str())){
@@ -60,23 +72,33 @@ MisDatos::~MisDatos(){}
 	 }else{
 		 estrategiaRegistros->abrir(archivo);
 	 }
+	 EstrategiaIndice* Indice=NULL;
 	 if(tieneIndice){
-	 		 ComparadorClave* comparador = new ComparadorRegistroFijo();
-	 	           /*creo una clave estructural*/
-	 	      AtributoVariable<char> miChar("miCharID");
-	 	      AtributoVariable<int> miInt("miIntID");
-	 	      Registro reg(2,&miChar,&miInt);
-	 	      Clave claveEstructural(&reg,2,"miCharID","miIntId");
-	 	      EstrategiaIndice* Indice;
-	 	      if(tipo==0){
-	 	        	   Indice = new EstrategiaBSharp(&claveEstructural);
-	 	      }else{
-	 	               //Indice = new HashingExt();
-	 	      }
-	 	      if(!Indice->abrir(path,comparador)){
-	 	    	 Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
-	 	      }
-	 	 }
+		 ComparadorClave* comparador = new ComparadorRegistroFijo();
+		 /*creo una clave estructural*/
+		 AtributoVariable<char> miChar("miCharID");
+		 AtributoVariable<int> miInt("miIntID");
+		 Registro reg(2,&miChar,&miInt);
+		 Clave claveEstructural(&reg,2,"miCharID","miIntId");
+		 if(tipo==0){
+			 Indice = new EstrategiaBSharp(&claveEstructural);
+		 }else{
+			 //Indice = new HashingExt();
+		 }
+		 if(!Indice->abrir(path,comparador)){
+			 Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
+		 }
+	 }
+	 /*inicializar el estrategia Recurso*/
+	 EstrategiaRecursos* estrategiaRecurso=NULL;
+	 if(tieneBuffer){
+		 Almacenamiento* buffer=new Buffer(longitudBuffer);
+		 estrategiaRecurso=new EREscrituraDirecta(buffer);
+	 }else{
+		 estrategiaRecurso=new ERUnAlmacenamiento();
+	 };
+
+	 recurso2=new Recurso(archivo,Indice,estrategiaRecurso,estrategiaRegistros);
  }
  /*
   * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe, lo crea.

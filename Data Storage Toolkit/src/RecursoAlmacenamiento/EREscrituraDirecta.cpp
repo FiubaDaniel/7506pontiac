@@ -75,10 +75,10 @@ bool EREscrituraDirecta::obtener(Clave* unaClave,Registro*registro){
 	return false;
 }
 void EREscrituraDirecta::insertarEnBuffer(Referencia refArchivo){
-	//TODO admin.insertar(refArchivo);
+	admin.insertar(refArchivo);
 	size_t posicionBuffer=admin.getPosicionEnBuffer();
 	estrategiaArchivo->posicionarComponente(refArchivo);
-	Componente *componente=estrategiaArchivo->getComponente();
+	Componente *componente=estrategiaArchivo->getRegistro();
 	estrategiaArchivo->leer(componente);
 	estrategiaBuffer->posicionarComponente(posicionBuffer);
 	estrategiaBuffer->escribir(componente);
@@ -104,7 +104,7 @@ void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 			if(admin.acceder(cambio.referencia)){
 				posicionBuffer=admin.getPosicionEnBuffer();
 				estrategiaArchivo->posicionarComponente(cambio.referencia);
-				componente=estrategiaArchivo->getComponente();
+				componente=estrategiaArchivo->getRegistro();
 				estrategiaArchivo->leer(componente);
 				estrategiaBuffer->posicionarComponente(posicionBuffer);
 				estrategiaBuffer->escribir(componente);
@@ -117,7 +117,7 @@ void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 			if(admin.acceder(posicionAnterior)){
 				posicionBuffer=admin.getPosicionEnBuffer();
 				estrategiaArchivo->posicionarComponente(posicionAnterior);
-				componente=estrategiaArchivo->getComponente();
+				componente=estrategiaArchivo->getRegistro();
 				estrategiaArchivo->leer(componente);
 				estrategiaBuffer->posicionarComponente(posicionBuffer);
 				estrategiaBuffer->escribir(componente);
@@ -127,7 +127,7 @@ void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 				admin.insertar(cambio.referencia);
 			posicionBuffer=admin.getPosicionEnBuffer();
 			estrategiaArchivo->posicionarComponente(cambio.referencia);
-			componente=estrategiaArchivo->getComponente();
+			componente=estrategiaArchivo->getRegistro();
 			estrategiaArchivo->leer(componente);
 			estrategiaBuffer->posicionarComponente(posicionBuffer);
 			estrategiaBuffer->escribir(componente);
@@ -241,7 +241,7 @@ void EREscrituraDirecta::setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *es
 
 
 Registro *EREscrituraDirecta::getRegistro() const{
-	return NULL;//TODO
+	return (Registro*)estrategiaArchivo->getRegistro();
 }
 
 

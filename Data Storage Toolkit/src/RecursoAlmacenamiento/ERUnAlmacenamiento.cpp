@@ -7,9 +7,7 @@ ERUnAlmacenamiento::ERUnAlmacenamiento(){
 	clave=NULL;
 }
 
-ERUnAlmacenamiento::~ERUnAlmacenamiento(){
-
-}
+ERUnAlmacenamiento::~ERUnAlmacenamiento(){}
 
 bool ERUnAlmacenamiento::insertar(Registro* registro){
 	clave->set(registro);

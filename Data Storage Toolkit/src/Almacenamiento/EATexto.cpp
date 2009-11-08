@@ -28,7 +28,9 @@ bool EATexto::crear(Almacenamiento *almacen){
 	ultimo=false;
 	return true;
 }
-
+void EATexto::cerrar(){
+	almacen->cerrar();
+}
 int EATexto::comparar(Registro*registro,Registro*registro2){
 		clave->set(registro);
 		Clave*clave2=clave->clonarce();
@@ -37,7 +39,7 @@ int EATexto::comparar(Registro*registro,Registro*registro2){
 		delete clave2;
 		return resultado;
 }
-Componente *EATexto::getComponente(){
+Componente *EATexto::getRegistro(){
 	return registro;
 }
 bool EATexto::escribir(Componente *componente){
