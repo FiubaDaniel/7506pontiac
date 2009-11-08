@@ -110,7 +110,6 @@ private:
 
 	void armarNuevaRaiz(Nodo* nodoIzq,Nodo* nodoDer);
 
-    int tamanioBloque();
 
 	void nuevoEspacioLibre(Referencia);
 
