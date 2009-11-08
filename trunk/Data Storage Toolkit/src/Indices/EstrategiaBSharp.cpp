@@ -40,7 +40,7 @@ void EstrategiaBSharp::cerrar(){
 	arbol->cerrar();
 }
 int EstrategiaBSharp::tamanioBloque(){
-	arbol->tamanioBloque();
+	return arbol->tamanioBloque();
 }
 void EstrategiaBSharp::mostrarEstado(){
 	arbol->imprimir();
