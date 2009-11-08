@@ -37,7 +37,7 @@ MisDatos::~MisDatos(){}
 	        	   Indice = new EstrategiaBSharp(&claveEstructural);
 
 	      }else{
-	               Indice = new HashingExt();
+	               //Indice = new HashingExt();
 	      }
 	      if(!Indice->abrir(path,comparador)){
 	    	  Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
@@ -71,7 +71,7 @@ MisDatos::~MisDatos(){}
 	 	      if(tipo==0){
 	 	        	   Indice = new EstrategiaBSharp(&claveEstructural);
 	 	      }else{
-	 	               Indice = new HashingExt();
+	 	               //Indice = new HashingExt();
 	 	      }
 	 	      if(!Indice->abrir(path,comparador)){
 	 	    	 Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
@@ -105,7 +105,7 @@ MisDatos::~MisDatos(){}
 	 AtributoVariable<int> miListaInt("miListaInt");
 	 int * pLista=registro.getMiLista();
 	 for(int i=0;i<registro.getCantidadElementosLista();i++){
-		 miListaInt.append(&pLista[i]);
+		 miListaInt.getVector().push_back(pLista[i]);
 	 }
 	 Registro registroRecurso(3,&mistringid,&miInt,&miListaInt);
 	 if(not recurso1->insertar(&registroRecurso))
@@ -191,7 +191,7 @@ MisDatos::~MisDatos(){}
 	 AtributoVariable<int> miListaInt("miListaInt");
 	 int * pLista=registro.getMiLista();
 	 for(int i=0;i<registro.getCantidadElementosLista();i++){
-	 	miListaInt.append(&pLista[i]);
+	 	miListaInt.getVector().push_back(pLista[i]);
 	 }
 	 Registro registroRecurso(3,&mistringid,&miInt,&miListaInt);
 	 Clave claveRecurso(&registroRecurso,1,"miStringID");
@@ -225,23 +225,25 @@ MisDatos::~MisDatos(){}
   */
  MiRegistroVariable MisDatos::obtenerRegistroArchivo1(std::string clave) throw (ExcepcionMisDatos){
 	 AtributoVariable<string> mistringid("miStringID");
-	 mistringid=clave;
 	 AtributoFijo<int> miInt("miInt");
 	 AtributoVariable<int> miListaInt("miListaInt");
+	 mistringid=clave;
+
 	 Registro registroRecurso(3,&mistringid,&miInt,&miListaInt);
 	 Clave claveRecurso(&registroRecurso,1,"miStringID");
+
 	 if(not recurso1->obtener(&claveRecurso,&registroRecurso))
 	 	throw ExcepcionMisDatos("No se pudo Modificar el registro en Archivo1");
 
-	 int unint=*(AtributoFijo<int>*)registroRecurso.get("miInt");
+	 miListaInt=*registroRecurso.get("miListaInt");
+	 miInt=*registroRecurso.get("miInt");
 
-	 AtributoVariable<int>* miListaIntResultado=(AtributoVariable<int>*)registroRecurso.get("miListaInt");
-	 int * pLista=new int[miListaIntResultado->cantidadValores()];
-	 for(unsigned int i=0;i < miListaIntResultado->cantidadValores();i++){
-		 miListaIntResultado->apuntar(i);
-		 miListaIntResultado->get(&pLista[i]);
+	 int * pLista=new int[miListaInt.getVector().size()];
+	 for(unsigned int i=0;i < miListaInt.getVector().size();i++){
+		 pLista[i]=miListaInt.getVector().at(i);
 	 }
-	 return MiRegistroVariable(str,unint,pLista,miListaIntResultado->cantidadValores());
+
+	 return MiRegistroVariable(mistringid,miInt,pLista,miListaInt.getVector().size());
  }
  /*
   * Pre: Archivo inicializado.
@@ -258,11 +260,10 @@ MisDatos::~MisDatos(){}
 	 if(not recurso2->obtener(&clave,&registro))
 		 throw ExcepcionMisDatos("No pudo obtener el registro en Archivo2");
 	 /**/
-	 int miIntReg;
-	 registro.get("claveIntId")->get(&claveInt);
-	 registro.get("claveCharId")->get(&claveChar);
-	 registro.get("claveInt")->get(&miIntReg);
-	 return MiRegistroFijo(claveInt,claveChar,miIntReg);
+	 miIntID=*registro.get("claveIntId");
+	 miCharID=*registro.get("claveCharId");
+	 miInt=*registro.get("claveInt");
+	 return MiRegistroFijo(miIntID,miCharID,miInt);
  }
  /*
   * Pre: Archivo inicializado.
