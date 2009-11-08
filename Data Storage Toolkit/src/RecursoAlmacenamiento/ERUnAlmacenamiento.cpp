@@ -112,7 +112,7 @@ Clave *ERUnAlmacenamiento::getClave() const{
     return clave;
 }
 
-EstrategiaAlmacenamiento *ERUnAlmacenamiento::getEstrategiAlmacenamiento() const{
+EstrategiaAlmacenamiento *ERUnAlmacenamiento::getEstrategiaAlmacenamiento() const{
     return estrategiAlmacenamiento;
 }
 

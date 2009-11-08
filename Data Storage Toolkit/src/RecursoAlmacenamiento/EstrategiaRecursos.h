@@ -10,7 +10,7 @@ class Recurso;
 class EstrategiaRecursos{
 public:
 	/*getters de los elementos que la estrategia esta utilizando*/
-	virtual const EstrategiaAlmacenamiento *getEstrategiAlmacenamiento() const=0;
+	virtual const EstrategiaAlmacenamiento *getEstrategiaAlmacenamiento() const=0;
 	/**/
 	virtual const EstrategiaIndice *getIndice() const=0;
 	/**/
