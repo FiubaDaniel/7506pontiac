@@ -90,7 +90,7 @@ MisDatos::~MisDatos(){}
 	 AtributoVariable<char> miChar("miCharID");
 	 AtributoVariable<int> miInt("miIntID");
 	 Registro reg(2,&miChar,&miInt);
-	 Clave claveEstructural(&reg,2,"miCharID","miIntId");
+	 Clave claveEstructural(&reg,2,"miCharID","miIntID");
 
 
 	 Archivo* archivo=new Archivo();
