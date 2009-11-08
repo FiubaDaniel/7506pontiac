@@ -90,8 +90,8 @@ MisDatos::~MisDatos(){}
 	 ComparadorClave* comparador = new ComparadorRegistroFijo();
 	 AtributoVariable<char> miChar("miCharID");
 	 AtributoVariable<int> miInt("miIntID");
-	 Registro reg(2,&miInt,&miChar);
-	 Clave claveEstructural(&reg,2,"miIntID","miCharID");
+	 Registro reg(2,&miChar,&miInt);
+	 Clave claveEstructural(&reg,2,"miCharID","miIntID");
 
 
 	 Archivo* archivo=new Archivo();
@@ -126,7 +126,7 @@ MisDatos::~MisDatos(){}
 	 /*inicializar el estrategia Recurso*/
 	 EstrategiaRecursos* estrategiaRecurso=NULL;
 	 if(tieneBuffer){
-		 EARegistros * estrategiaBuffer=new EARegistros();//TODO delete
+		 EARegistros * estrategiaBuffer=new EARegistros(&reg);//TODO delete
 		 Buffer* buffer=new Buffer(longitudBuffer);
 		 buffer->setNombre("buffer");
 		 estrategiaBuffer->crear(buffer);
@@ -141,8 +141,10 @@ MisDatos::~MisDatos(){}
   * En caso de fallar la inicializacion, se lanza una ExcepcionMisDatos con el mensaje de error.
   */
  void MisDatos::inicializarArchivo3(std::string path) throw (ExcepcionMisDatos){
+	 AtributoVariable<string> mistring("claveIntId");
+	 Registro registro(1,&mistring);
 	 Archivo* archivo=new Archivo();
-	 EATexto * estrategiaTexto=new EATexto();
+	 EATexto * estrategiaTexto=new EATexto(&registro);
 	 if(!archivo->abrir(path.c_str())){
 		 archivo->crear(path.c_str());
 		 estrategiaTexto->crear(archivo);
@@ -505,5 +507,6 @@ MisDatos::~MisDatos(){}
      delete recurso3->getEstrategia();
      delete recurso3;
  }
+
 
 
