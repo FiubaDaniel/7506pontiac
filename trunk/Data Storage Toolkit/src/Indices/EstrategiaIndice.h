@@ -13,7 +13,7 @@
 #include "../ArbolBSharp/TamanioInsuficienteException.h"
 /**
   * class EstrategiaIndice
-  * 
+  *
   */
 
 /******************************* Abstract Class ****************************
@@ -31,5 +31,6 @@ public:
 	virtual bool modificar(const Clave* clave,Referencia refNueva)=0;
 	virtual void cerrar()=0;
 	virtual int tamanioBloque()=0;
+	virtual void mostrarEstado()=0;
 };
 #endif // ESTRATEGIAINDICE_H
