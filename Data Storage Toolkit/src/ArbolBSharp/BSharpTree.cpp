@@ -911,6 +911,10 @@ void BSharpTree::imprimirIterativo(Nodo* nodoE,unsigned int nivelRaiz){
 		cout <<" Nodo Hoja: ";
 		cout <<" Nivel: " << nodo->getNumeroNivel();
 		cout <<" Referencia Siguente: " << nodo->getReferenciaSiguiente();
+		if(nodo->getListaElementos()->empty()){
+			cout << " Hoja Vacia ";
+			cout <<" "<<endl;
+		}else{
 		cout <<" Elementos: ";
 		std::list<ElementoNodo*>::iterator it = nodo->getListaElementos()->begin();
 		while(it!=nodo->getListaElementos()->end()){
@@ -924,6 +928,7 @@ void BSharpTree::imprimirIterativo(Nodo* nodoE,unsigned int nivelRaiz){
 		cout<<" "<<endl;
 		++it;
 		 }
+		}
 	}
 }
 
