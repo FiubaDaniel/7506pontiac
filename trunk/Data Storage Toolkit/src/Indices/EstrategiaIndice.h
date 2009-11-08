@@ -29,5 +29,7 @@ public:
 	virtual bool insertar(Referencia ref,Clave* clave)=0;
     virtual bool eliminar(const Clave* clave)=0;
 	virtual bool modificar(const Clave* clave,Referencia refNueva)=0;
+	virtual void cerrar()=0;
+	virtual int tamanioBloque()=0;
 };
 #endif // ESTRATEGIAINDICE_H
