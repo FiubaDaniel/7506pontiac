@@ -106,6 +106,7 @@ int BSharpTree::calcularCantidadElementosPorNodo(unsigned int tamSerializadoClav
 bool BSharpTree::Buscar(const Clave* clave,Referencia* referencia){
 	Referencia referenciaDeNodoHoja;
 	Clave* aux = const_cast<Clave*>(clave);
+	if(this->estaVacio())return false;
 	NodoHoja* hoja = buscarHoja(Raiz,aux,referenciaDeNodoHoja);
 	return hoja->buscarReferenciaDeClaveX(clave,referencia);
 }
@@ -924,6 +925,11 @@ void BSharpTree::imprimirIterativo(Nodo* nodoE,unsigned int nivelRaiz){
 		++it;
 		 }
 	}
+}
+
+bool BSharpTree::estaVacio(){
+	if(Raiz->getListaElementos()->empty())return true;
+	return false;
 }
 
 int BSharpTree::tamanioBloque(){

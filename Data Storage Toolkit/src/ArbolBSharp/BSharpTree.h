@@ -62,6 +62,10 @@ public:
 	 * Imprime el arbol en panatalla
 	 */
 	void imprimir();
+	/*
+	 * deuelve verdadero si esta vacio.
+	 */
+	bool estaVacio();
 
 	void cerrar();
 
