@@ -202,7 +202,7 @@ bool AdministradorDeBuffer::buscar(size_t posicionArchivo){
 }
 NodoArchivoBuffer* AdministradorDeBuffer::at(size_t pos){
 	if(pos<capacidad){
-		return tablaArchivoBuffer.at(pos);
+		return tablaArchivoBuffer[pos];
 	}
 	return NULL;
 }
