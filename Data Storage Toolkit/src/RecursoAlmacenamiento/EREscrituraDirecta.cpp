@@ -174,9 +174,10 @@ void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 			break;
 		default:break;
 	}
-	Almacenamiento* EREscrituraDirecta::getBuffer(){
-		return buffer;
-	}
+
+}
+Almacenamiento* EREscrituraDirecta::getBuffer(){
+	return buffer;
 }
 /*---------------------------------------------------------------------------------------------------------------*/
 AdministradorDeBuffer::AdministradorDeBuffer(size_t maximo){

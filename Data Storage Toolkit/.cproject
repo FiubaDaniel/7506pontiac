@@ -55,6 +55,7 @@
 </folderInfo>
 <sourceEntries>
 <entry excluding="User|ArbolBSharp|tests|Compuesto|RecursoAlmacenamiento|Almacenamiento|Indices" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Indices"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/User"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/ArbolBSharp"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests/Compuesto"/>
@@ -62,7 +63,6 @@
 <entry excluding="Compuesto" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/RecursoAlmacenamiento"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Almacenamiento"/>
-<entry excluding="HashingExt.hpp|HashingExt.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Indices"/>
 </sourceEntries>
 </configuration>
 </storageModule>
