@@ -12,8 +12,14 @@ ERUnAlmacenamiento::~ERUnAlmacenamiento(){}
 bool ERUnAlmacenamiento::insertar(Registro* registro){
 	clave->set(registro);
 	Referencia referencia;
-	if(indice->BuscarReferencia(clave,&referencia))
-		return false;
+	if(indice!=NULL){
+		if(indice->BuscarReferencia(clave,&referencia))
+			return false;
+	}else {
+		estrategiAlmacenamiento->logActivo=false;
+		if(estrategiAlmacenamiento->buscar(registro))
+			return false;
+	}
 	estrategiAlmacenamiento->insertar(registro);
 	while(!estrategiAlmacenamiento->hayMasCambios()){
 		const Cambio* cambio=estrategiAlmacenamiento->siguienteCambio();
@@ -24,12 +30,23 @@ bool ERUnAlmacenamiento::insertar(Registro* registro){
 }
 bool ERUnAlmacenamiento::eliminar(Clave* unaClave){
 	Referencia referencia;
-	if(!indice->BuscarReferencia(unaClave,&referencia))
-		return false;
+	if(indice!=NULL){
+		if(!indice->BuscarReferencia(unaClave,&referencia))
+			return false;
+	}else {
+		estrategiAlmacenamiento->logActivo=true;
+		setClave(registro,clave);
+		if(!estrategiAlmacenamiento->buscar(registro))
+			return false;
+		referencia=estrategiAlmacenamiento->siguienteCambio()->referencia;
+		estrategiAlmacenamiento->pop();
+		estrategiAlmacenamiento->logActivo=false;
+	}
 	estrategiAlmacenamiento->posicionarComponente(referencia);
 	setClave(registro,clave);
 	estrategiAlmacenamiento->eliminar(registro);
-	indice->eliminar(unaClave);
+	if(indice!=NULL)
+		indice->eliminar(unaClave);
 	while(!estrategiAlmacenamiento->hayMasCambios()){
 		const Cambio* cambio=estrategiAlmacenamiento->siguienteCambio();
 		actualizarIndice(*cambio);
@@ -40,8 +57,18 @@ bool ERUnAlmacenamiento::eliminar(Clave* unaClave){
 bool ERUnAlmacenamiento::modificar(Clave* unaClave,Registro* registro){
 	clave->set(registro);
 	Referencia referencia;
-	if(!indice->BuscarReferencia(unaClave,&referencia))
-		return false;
+	if(indice!=NULL){
+		if(!indice->BuscarReferencia(unaClave,&referencia))
+			return false;
+	}else {
+		estrategiAlmacenamiento->logActivo=true;
+		setClave(registro,clave);
+		if(!estrategiAlmacenamiento->buscar(registro))
+			return false;
+		referencia=estrategiAlmacenamiento->siguienteCambio()->referencia;
+		estrategiAlmacenamiento->pop();
+		estrategiAlmacenamiento->logActivo=false;
+	}
 	estrategiAlmacenamiento->posicionarComponente(referencia);
 	if(!estrategiAlmacenamiento->modificar(registro))
 		return false;
@@ -54,10 +81,16 @@ bool ERUnAlmacenamiento::modificar(Clave* unaClave,Registro* registro){
 }
 bool ERUnAlmacenamiento::obtener(Clave* unaClave,Registro*registro){
 	Referencia referencia;
-	if(!indice->BuscarReferencia(clave,&referencia))
-		return false;
-	estrategiAlmacenamiento->posicionarComponente(referencia);
-	return estrategiAlmacenamiento->obtener(registro);
+	if(indice!=NULL){
+		if(!indice->BuscarReferencia(clave,&referencia))
+			return false;
+		estrategiAlmacenamiento->posicionarComponente(referencia);
+		return estrategiAlmacenamiento->obtener(registro);
+	}else{
+		estrategiAlmacenamiento->logActivo=false;
+		setClave(registro,clave);
+		return estrategiAlmacenamiento->buscar(registro);
+	}
 }
 
 void ERUnAlmacenamiento::actualizarIndice(Cambio cambio){

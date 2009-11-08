@@ -318,3 +318,31 @@ bool EABloques::obtener(Componente*componente){
 size_t EABloques::posicionComponente(){
 	return nroBloque;
 }
+bool EABloques::buscar(Componente*componente){
+	bool encontrado=false;
+	bool fin=false;
+
+	posicionarComponente(0);
+	while( (not fin) and not encontrado ){
+		Ttamanio pos;
+		size_t posComp=posicionComponente();
+		fin=leer(bloque);
+		if(buscarComponente((Registro*)componente,pos)){
+			encontrado=true;
+			std::stringbuf buf(std::ios_base::binary | std::ios_base::in | std::ios_base::out );
+			buf.pubsetbuf(bloqueSerializado,capacBloque);
+			buf.pubseekpos(0);
+
+			bloque->get(pos)->serializar(buf);
+			buf.pubseekpos(0);
+
+			componente->deserializar(buf);
+			if(logActivo){
+				clave->set((Registro*)componente);
+				pushCambio(Cambio(clave,posComp,Cambio::Reubicacion));
+			}
+
+		}
+	}
+	return encontrado;
+}

@@ -43,6 +43,7 @@ public:
 	bool siguiente(Componente*componente);
 	bool obtener(Componente*componente);
 	size_t posicionComponente();
+	bool buscar(Componente*componente);
 };
 
 #endif /* EAREGISTROS_H_ */

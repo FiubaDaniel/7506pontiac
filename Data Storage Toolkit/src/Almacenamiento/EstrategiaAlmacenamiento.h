@@ -59,6 +59,7 @@ public:
 	virtual bool eliminar(Componente*componente)=0;
 	virtual bool siguiente(Componente*componente)=0;
 	virtual bool obtener(Componente*componente)=0;
+	virtual bool buscar(Componente*componente)=0;
 	bool logActivo;
 	/* Cola que refleja los cambios producidos en la estructura del archivo
 	 * a causa de las operaciones. La cola es exclusivamente para uso externo.

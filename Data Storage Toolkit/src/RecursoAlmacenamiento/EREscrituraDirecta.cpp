@@ -2,6 +2,7 @@
 
 EREscrituraDirecta::EREscrituraDirecta(Almacenamiento *buffer): admin(10){
 	this->buffer=buffer;
+	estrategiaBuffer->logActivo=false;
 }
 
 EREscrituraDirecta::~EREscrituraDirecta(){}
@@ -14,8 +15,17 @@ void EREscrituraDirecta::setClave(Registro*reg,Clave*clave){
 bool EREscrituraDirecta::insertar(Registro* registro){
 	clave->set(registro);
 	Referencia referencia;
-	if(indice->BuscarReferencia(clave,&referencia))
-		return false;
+	if(indice!=NULL){
+		if(indice->BuscarReferencia(clave,&referencia))
+			return false;
+	}else {
+		if(!estrategiaBuffer->buscar(registro)){
+			estrategiaArchivo->logActivo=false;
+			if(estrategiaArchivo->buscar(registro))
+				return false;
+			estrategiaArchivo->logActivo=true;
+		}else return false;
+	}
 	estrategiaArchivo->insertar(registro);
 	while(!estrategiaArchivo->hayMasCambios()){
 		const Cambio* cambio=estrategiaArchivo->siguienteCambio();
@@ -27,8 +37,18 @@ bool EREscrituraDirecta::insertar(Registro* registro){
 }
 bool EREscrituraDirecta::eliminar(Clave* unaClave){
 	Referencia referencia;
-	if(!indice->BuscarReferencia(unaClave,&referencia))
-		return false;
+	if(indice!=NULL){
+		if(!indice->BuscarReferencia(unaClave,&referencia))
+			return false;
+	}else {
+		estrategiaArchivo->logActivo=true;
+		setClave(registro,clave);
+		if(!estrategiaArchivo->buscar(registro))
+			return false;
+		referencia=estrategiaArchivo->siguienteCambio()->referencia;
+		estrategiaArchivo->pop();
+		estrategiaArchivo->logActivo=false;
+	}
 	estrategiaArchivo->posicionarComponente(referencia);
 	setClave(registro,clave);
 	estrategiaArchivo->eliminar(registro);
@@ -44,8 +64,18 @@ bool EREscrituraDirecta::eliminar(Clave* unaClave){
 bool EREscrituraDirecta::modificar(Clave* unaClave,Registro* registro){
 	clave->set(registro);
 	Referencia referencia;
-	if(!indice->BuscarReferencia(clave,&referencia))
-		return false;
+	if(indice!=NULL){
+		if(!indice->BuscarReferencia(clave,&referencia))
+			return false;
+	}else {
+		estrategiaArchivo->logActivo=true;
+		setClave(registro,clave);
+		if(!estrategiaArchivo->buscar(registro))
+			return false;
+		referencia=estrategiaArchivo->siguienteCambio()->referencia;
+		estrategiaArchivo->pop();
+		estrategiaArchivo->logActivo=false;
+	}
 	estrategiaArchivo->posicionarComponente(referencia);
 	if(!estrategiaArchivo->modificar(registro))
 		return false;
@@ -61,17 +91,26 @@ bool EREscrituraDirecta::modificar(Clave* unaClave,Registro* registro){
 
 bool EREscrituraDirecta::obtener(Clave* unaClave,Registro*registro){
 	Referencia referencia;
-	if(!indice->BuscarReferencia(clave,&referencia))
-		return false;
-	if(admin.acceder(referencia)){
-		estrategiaBuffer->posicionarComponente(admin.getPosicionEnBuffer());
-		return estrategiaBuffer->obtener(registro);
+	if(indice!=NULL){
+		if(!indice->BuscarReferencia(clave,&referencia))
+			return false;
+		if(admin.acceder(referencia)){
+			estrategiaBuffer->posicionarComponente(admin.getPosicionEnBuffer());
+			return estrategiaBuffer->obtener(registro);
+		}
+		estrategiaArchivo->posicionarComponente(referencia);
+		if(estrategiaArchivo->obtener(registro)){
+			insertarEnBuffer(referencia);
+			return true;
+		}
+	}else{
+		if(estrategiaBuffer->buscar(registro))
+			return true;
+		estrategiaArchivo->logActivo=false;
+		if(estrategiaArchivo->buscar(registro))
+			return true;
+		estrategiaArchivo->logActivo=true;
 	}
-	estrategiaArchivo->posicionarComponente(referencia);
-	if(estrategiaArchivo->obtener(registro)){
-		insertarEnBuffer(referencia);
-		return true;
-	};
 	return false;
 }
 void EREscrituraDirecta::insertarEnBuffer(Referencia refArchivo){
@@ -84,6 +123,7 @@ void EREscrituraDirecta::insertarEnBuffer(Referencia refArchivo){
 	estrategiaBuffer->escribir(componente);
 }
 void EREscrituraDirecta::actualizarIndice(Cambio cambio){
+	if(indice==NULL)return;
 	switch(cambio.operacion){
 		case Cambio::Alta : indice->insertar(cambio.referencia,&cambio.clave); break;
 		case Cambio::Baja : indice->eliminar(&cambio.clave); break;
