@@ -19,7 +19,7 @@ MisDatos::~MisDatos(){}
 	 Clave claveEstructural(&reg,1,"miStringID");
 	 ComparadorClave* comparador = new ComparadorRegistroVariable();
 	 Archivo* archivo=new Archivo();
-	 EABloques * estrategiaBloques=new EABloques();
+	 EABloques * estrategiaBloques=new EABloques(&reg,longitudBloque,0.8);
 
 
 	 if(!archivo->abrir(path.c_str())){
@@ -66,7 +66,7 @@ MisDatos::~MisDatos(){}
 	 /*inicializar el estrategia Recurso*/
 	 EstrategiaRecursos* estrategiaRecurso=NULL;
 	 if(tieneBuffer){
-		 EABloques * estrategiaBuffer=new EABloques();//TODO delete
+		 EABloques * estrategiaBuffer=new EABloques(&reg,longitudBloque,0.8);//TODO delete
 		 Almacenamiento* buffer=new Buffer(longitudBuffer);
 		 estrategiaRecurso=new EREscrituraDirecta(estrategiaBuffer,buffer,longitudBuffer/longitudBloque);
 	 }else{
@@ -123,7 +123,7 @@ MisDatos::~MisDatos(){}
 	 EstrategiaRecursos* estrategiaRecurso=NULL;
 	 if(tieneBuffer){
 		 Almacenamiento* buffer=new Buffer(longitudBuffer);
-		 EABloques * estrategiaBuffer=new EABloques();
+		 EABloques * estrategiaBuffer=new EABloques();//TODO delete
 		 estrategiaRecurso=new EREscrituraDirecta(estrategiaBuffer,buffer,longitudBuffer/reg.tamanioSerializado());
 	 }else{
 		 estrategiaRecurso=new ERUnAlmacenamiento();
