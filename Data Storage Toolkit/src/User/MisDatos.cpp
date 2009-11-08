@@ -329,7 +329,7 @@ MisDatos::~MisDatos(){}
   */
  void MisDatos::mostrarContenidoBufferArchivo1(){
 	 EREscrituraDirecta* estrategiaDirecta = dynamic_cast<EREscrituraDirecta*>(recurso1->getEstrategia());
-	 if(estrategiaDirecta!=NULL){
+	 if(estrategiaDirecta==NULL){
 		 cout<<"NO tieneBuffer";
 		 return;
 	 }
@@ -420,7 +420,7 @@ MisDatos::~MisDatos(){}
   * contenidos en estos ultimos.
   */
  void MisDatos::mostrarDatosArchivo1(){
-	 EstrategiaAlmacenamiento *estrategia=const_cast<EstrategiaAlmacenamiento *>(recurso2->getEstrategia()->getEstrategiaAlmacenamiento());
+	 EstrategiaAlmacenamiento *estrategia=const_cast<EstrategiaAlmacenamiento *>(recurso1->getEstrategia()->getEstrategiaAlmacenamiento());
 
 	 AtributoVariable<string> mistringid("miStringID");
 	 AtributoFijo<int> miInt("miInt");
