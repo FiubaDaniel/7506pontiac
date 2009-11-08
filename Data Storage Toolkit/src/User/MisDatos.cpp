@@ -69,12 +69,13 @@ MisDatos::~MisDatos(){}
 		 Buffer* buffer=new Buffer(longitudBuffer);
 		 buffer->setNombre("buffer");
 		 estrategiaBuffer->crear(buffer);
-		 estrategiaRecurso=new EREscrituraDirecta(estrategiaBuffer,buffer,longitudBuffer/longitudBloque);
+		 estrategiaRecurso=new EREscrituraDirecta(Indice,estrategiaBloques,estrategiaBuffer,longitudBuffer/longitudBloque);
+
 	 }else{
-		 estrategiaRecurso=new ERUnAlmacenamiento();
+		 estrategiaRecurso=new ERUnAlmacenamiento(Indice,estrategiaBloques);
 	 };
 
-	 recurso1=new Recurso(archivo,Indice,estrategiaRecurso,estrategiaBloques);
+	 recurso1=new Recurso(estrategiaRecurso);
  }
  /*
   * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe,
@@ -129,12 +130,11 @@ MisDatos::~MisDatos(){}
 		 Buffer* buffer=new Buffer(longitudBuffer);
 		 buffer->setNombre("buffer");
 		 estrategiaBuffer->crear(buffer);
-		 estrategiaRecurso=new EREscrituraDirecta(estrategiaBuffer,buffer,longitudBuffer/reg.tamanioSerializado());
+		 estrategiaRecurso=new EREscrituraDirecta(Indice,estrategiaRegistros,estrategiaBuffer,longitudBuffer/reg.tamanioSerializado());
 	 }else{
-		 estrategiaRecurso=new ERUnAlmacenamiento();
+		 estrategiaRecurso=new ERUnAlmacenamiento(Indice,estrategiaRegistros);
 	 };
-
-	 recurso2=new Recurso(archivo,Indice,estrategiaRecurso,estrategiaRegistros);
+	 recurso2=new Recurso(estrategiaRecurso);
  }
  /*
   * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe, lo crea.
@@ -149,8 +149,8 @@ MisDatos::~MisDatos(){}
 	 }else{
 		 estrategiaTexto->abrir(archivo);
 	 }
-	 EstrategiaRecursos *estrategiaRecurso=new ERUnAlmacenamiento();
-	 recurso2=new Recurso(archivo,NULL,estrategiaRecurso,estrategiaTexto);
+	 EstrategiaRecursos *estrategiaRecurso=new ERUnAlmacenamiento(NULL,estrategiaTexto);
+	 recurso2=new Recurso(estrategiaRecurso);
  }
  /*
   * Pre: Archivo inicializado.
@@ -433,10 +433,11 @@ MisDatos::~MisDatos(){}
 
 	 estrategia->posicionarComponente(0);
 	 while( estrategia->siguiente(&registro) ){
-		 cout<<"Posicion : "<<estrategia->posicionComponente()<<" ";
+		 cout<<"Pos : "<<estrategia->posicionComponente()<<" ";
 		 for(unsigned i=0;i<registro.cantidadAtributos();i++){
 			 cout<<registro.get(i)->getNombre()<<" : ";
 			 registro.get(i)->imprimir(cout);
+			 cout<<" ";
 		 }
 		 cout<<endl;
 	 }
@@ -474,12 +475,10 @@ MisDatos::~MisDatos(){}
 	 EstrategiaRecursos* estrategia = recurso1->getEstrategia();
 	 EREscrituraDirecta* estrategiaDirecta = dynamic_cast<EREscrituraDirecta*>(estrategia);
 	 if(estrategiaDirecta!=NULL){
-		 delete estrategiaDirecta->getBuffer();
+		 delete estrategiaDirecta->getEstrategiaBuffer();
 	 }
 	 delete estrategia->getEstrategiaAlmacenamiento();
 	 delete estrategia->getIndice();
-	 //delete comparador;
-	 delete recurso1->getAlmacenamiento();
 	 delete recurso1;
  }
  /*
@@ -490,11 +489,10 @@ MisDatos::~MisDatos(){}
 	EstrategiaRecursos* estrategia = recurso2->getEstrategia();
 	EREscrituraDirecta* estrategiaDirecta = dynamic_cast<EREscrituraDirecta*>(estrategia);
 	if(estrategiaDirecta!=NULL){
-	 		 delete estrategiaDirecta->getBuffer();
+	 		 delete estrategiaDirecta->getEstrategiaBuffer()->getAlmacenamiento();
 	 	 }
 	delete estrategia->getEstrategiaAlmacenamiento();
 	delete estrategia->getIndice();
-	delete recurso2->getAlmacenamiento();
 	//delete comparador;
 	delete recurso2;
  }
@@ -505,7 +503,6 @@ MisDatos::~MisDatos(){}
  void MisDatos::cerrarArchivo3(){
 	 delete recurso3->getEstrategia()->getEstrategiaAlmacenamiento();
      delete recurso3->getEstrategia();
-     delete recurso3->getAlmacenamiento();
      delete recurso3;
  }
 

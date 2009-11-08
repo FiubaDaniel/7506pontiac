@@ -3,15 +3,8 @@
 // Constructors/Destructors
 //  
 
-Recurso::Recurso (Almacenamiento* archivo,EstrategiaIndice* indice,EstrategiaRecursos* estrategiaUsada,EstrategiaAlmacenamiento*estretegiaAlmacenamiento) {
-	this->archivo=archivo;
-	this->indice=indice;
+Recurso::Recurso (EstrategiaRecursos* estrategiaUsada) {
 	this->estrategiaUsada=estrategiaUsada;
-	this->estrategiaAlmacenamiento=estretegiaAlmacenamiento;
-	this->estrategiaAlmacenamiento->logActivo=true;
-	this->estrategiaUsada->setEstrategiAlmacenamiento(estretegiaAlmacenamiento);
-	this->estrategiaUsada->setIndice(indice);
-	//TODO verificar q el registro este seteado en todos.
 }
 
 Recurso::~Recurso () {}
@@ -50,13 +43,12 @@ bool Recurso::obtener(Clave* unaClave,Registro*registro){
 void Recurso::cerrarArchivo(){
 
 }
-
 EstrategiaRecursos* Recurso::getEstrategia(){
 	return estrategiaUsada;
 }
-Almacenamiento* Recurso::getAlmacenamiento(){
-	return this->archivo;
-}
 void Recurso::mostrarIndice(){}
 void Recurso::mostrarDatos(){}
+EstrategiaRecursos* Recurso::getEstrategiaRecurso(){
+	return estrategiaUsada;
+}
 

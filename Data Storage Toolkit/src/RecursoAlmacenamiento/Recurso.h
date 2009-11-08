@@ -12,7 +12,7 @@ class EstrategiaRecursos;
 
 class Recurso{
 public:
-   Recurso(Almacenamiento* archivo,EstrategiaIndice* indice,EstrategiaRecursos* estrategiaUsada,EstrategiaAlmacenamiento*estretegiaAlmacenamiento);
+   Recurso(EstrategiaRecursos* estrategiaUsada);
 
    virtual ~Recurso ();
    /*
@@ -43,13 +43,8 @@ public:
    void mostrarIndice();
    void mostrarDatos();
    void cerrarArchivo();
-   Almacenamiento* getAlmacenamiento();
+   EstrategiaRecursos* getEstrategiaRecurso();
 private:
-   Clave *clave;
-   ComparadorClave*comparador;
-   EstrategiaAlmacenamiento*estrategiaAlmacenamiento;
-   Almacenamiento* archivo;
-   EstrategiaIndice* indice;
    EstrategiaRecursos* estrategiaUsada;
 };
 

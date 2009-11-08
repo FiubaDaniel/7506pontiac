@@ -36,9 +36,8 @@ void EABloques::setRegistro(Registro*registro){
 	if(bloque!=NULL){
 		bloque->inicializar(registro);
 	}else bloque=new Bloque(registro);
-};
+}
 void EABloques::finalizarAlamcenamiento(){
-
 	if(almacen!=NULL){
 		archivoEspacioLibre.close();
 		almacen->escribir( (char*)&capacBloque , sizeof(capacBloque) );
@@ -355,4 +354,13 @@ bool EABloques::buscar(Componente*componente){
 		}
 	}
 	return encontrado;
+}
+Almacenamiento* EABloques::getAlmacenamiento(){
+	return almacen;
+}
+Ttamanio EABloques::getCapacBloque(){
+    return capacBloque;
+}
+double EABloques::getPorcCarga(){
+    return porcCarga;
 }

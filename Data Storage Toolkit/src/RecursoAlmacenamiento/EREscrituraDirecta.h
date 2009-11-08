@@ -42,33 +42,28 @@ class EREscrituraDirecta : public EstrategiaRecursos{
 
 private:
 	AdministradorDeBuffer admin;
-	Almacenamiento* buffer;
 	EstrategiaAlmacenamiento*estrategiaArchivo;
 	EstrategiaAlmacenamiento*estrategiaBuffer;
-	Almacenamiento* archivo;
 	EstrategiaIndice* indice;
 	Registro*registro;
 	Clave*clave;
-	//size_t posicionEnBuffer(size_t posicionArchivo);
 	void actualizarIndice(Cambio cambio);
 	void actualizarBuffer(Cambio cambio);
 	void insertarEnBuffer(Referencia refArchivo);
 	void setClave(Registro*reg,Clave*clave);
 public:
-	EREscrituraDirecta(EstrategiaAlmacenamiento*estrategiaBuffer,Almacenamiento*buffer,size_t cantidadElementoBuffer);
+	EREscrituraDirecta(EstrategiaIndice* indice,EstrategiaAlmacenamiento*estrategiaArchivo,EstrategiaAlmacenamiento*estrategiaBuffer,size_t cantidadElementoBuffer);
 	virtual ~EREscrituraDirecta();
-	virtual bool insertar(Registro* registro);
-	virtual bool eliminar(Clave* unaClave);
-	virtual bool modificar(Clave* unaClave,Registro* registro);
-	virtual bool obtener(Clave* unaClave,Registro*registro);
-	virtual EstrategiaAlmacenamiento *getEstrategiaAlmacenamiento() const;
-	virtual EstrategiaAlmacenamiento *getEstrategiaBuffer() const;
-	virtual EstrategiaIndice *getIndice() const;
-	virtual Registro *getRegistro() const;
-	virtual void setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategiAlmacenamiento);
-	virtual void setIndice(EstrategiaIndice *indice);
-	virtual void setRegistro(Registro *registro);
-	Almacenamiento* getBuffer();
+	bool insertar(Registro* registro);
+	bool eliminar(Clave* unaClave);
+	bool modificar(Clave* unaClave,Registro* registro);
+	bool obtener(Clave* unaClave,Registro*registro);
+	EstrategiaAlmacenamiento *getEstrategiaAlmacenamiento();
+	EstrategiaAlmacenamiento *getEstrategiaBuffer();
+	EstrategiaIndice *getIndice();
+	void setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategiAlmacenamiento);
+	void setIndice(EstrategiaIndice *indice);
+	void setEstrategiaBuffer(EstrategiaAlmacenamiento* estrategia);
 };
 
 #endif // ESTRATEGIARECURSOSESCRITURADIRECTA_H

@@ -1,10 +1,13 @@
 #include "EREscrituraDirecta.h"
 
-EREscrituraDirecta::EREscrituraDirecta(EstrategiaAlmacenamiento*estrategiaBuffer,Almacenamiento *buffer,size_t cantidadElementoBuffer){
-	this->buffer=buffer;
+EREscrituraDirecta::EREscrituraDirecta(EstrategiaIndice* indice,EstrategiaAlmacenamiento*estrategiaArchivo,EstrategiaAlmacenamiento*estrategiaBuffer,size_t cantidadElementoBuffer){
+	this->estrategiaArchivo=estrategiaArchivo;
 	this->estrategiaBuffer=estrategiaBuffer;
-	estrategiaBuffer->logActivo=false;
+	this->indice=indice;
+	this->estrategiaBuffer->logActivo=false;
 	admin.setCapacidad(cantidadElementoBuffer);
+	registro=(Registro*)this->estrategiaArchivo->getRegistro();
+	clave=this->estrategiaArchivo->getClave();
 }
 
 EREscrituraDirecta::~EREscrituraDirecta(){}
@@ -179,9 +182,6 @@ void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 	}
 
 }
-Almacenamiento* EREscrituraDirecta::getBuffer(){
-	return buffer;
-}
 /*---------------------------------------------------------------------------------------------------------------*/
 AdministradorDeBuffer::AdministradorDeBuffer(){
 	tope=tablaArchivoBuffer.end();
@@ -263,16 +263,16 @@ bool AdministradorDeBuffer::acceder(size_t posicionArchivo){
 	return false;
 }
 
-EstrategiaIndice *EREscrituraDirecta::getIndice() const{
+EstrategiaIndice *EREscrituraDirecta::getIndice(){
 	return indice;
 }
 
 
 
-EstrategiaAlmacenamiento *EREscrituraDirecta::getEstrategiaAlmacenamiento() const{
+EstrategiaAlmacenamiento *EREscrituraDirecta::getEstrategiaAlmacenamiento(){
 	return estrategiaArchivo;
 }
-EstrategiaAlmacenamiento *EREscrituraDirecta::getEstrategiaBuffer() const{
+EstrategiaAlmacenamiento *EREscrituraDirecta::getEstrategiaBuffer(){
 	return estrategiaBuffer;
 }
 
@@ -281,21 +281,16 @@ void EREscrituraDirecta::setIndice(EstrategiaIndice *indice){
 	this->indice=indice;
 }
 
-
-
-void EREscrituraDirecta::setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategiAlmacenamiento){
-	this->estrategiaArchivo=estrategiAlmacenamiento;
-	clave=estrategiaArchivo->getClave();
+void EREscrituraDirecta::setEstrategiaBuffer(EstrategiaAlmacenamiento* estrategia){
+	this->estrategiaBuffer=estrategia;
+	registro=(Registro*)estrategia->getRegistro();
+	clave=estrategia->getClave();
 }
 
-
-
-Registro *EREscrituraDirecta::getRegistro() const{
-	return (Registro*)estrategiaArchivo->getRegistro();
-}
-
-
-void EREscrituraDirecta::setRegistro(Registro *registro){
+void EREscrituraDirecta::setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategia){
+	this->estrategiaArchivo=estrategia;
+	registro=(Registro*)estrategia->getRegistro();
+	clave=estrategia->getClave();
 }
 
 

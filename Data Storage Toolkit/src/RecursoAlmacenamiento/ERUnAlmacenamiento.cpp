@@ -1,10 +1,10 @@
 #include "ERUnAlmacenamiento.h"
 
-ERUnAlmacenamiento::ERUnAlmacenamiento(){
-	estrategiAlmacenamiento=NULL;
-	indice=NULL;
-	registro=NULL;
-	clave=NULL;
+ERUnAlmacenamiento::ERUnAlmacenamiento(EstrategiaIndice*inidice,EstrategiaAlmacenamiento*estrategia){
+	estrategiAlmacenamiento=estrategia;
+	this->indice=indice;
+	registro=(Registro*)estrategia->getRegistro();
+	clave=estrategia->getClave();
 }
 
 ERUnAlmacenamiento::~ERUnAlmacenamiento(){}
@@ -108,31 +108,22 @@ void ERUnAlmacenamiento::setClave(Registro*reg,Clave*clave){
 	}
 }
 
-Clave *ERUnAlmacenamiento::getClave() const{
-    return clave;
-}
-
-EstrategiaAlmacenamiento *ERUnAlmacenamiento::getEstrategiaAlmacenamiento() const{
+EstrategiaAlmacenamiento *ERUnAlmacenamiento::getEstrategiaAlmacenamiento(){
     return estrategiAlmacenamiento;
 }
 
-EstrategiaIndice *ERUnAlmacenamiento::getIndice() const{
+EstrategiaIndice *ERUnAlmacenamiento::getIndice(){
     return indice;
-}
-
-Registro *ERUnAlmacenamiento::getRegistro() const{
-    return registro;
 }
 
 void ERUnAlmacenamiento::setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategiAlmacenamiento)
 {
     this->estrategiAlmacenamiento = estrategiAlmacenamiento;
+    clave=estrategiAlmacenamiento->getClave();
+    registro=(Registro*)estrategiAlmacenamiento->getRegistro();
 }
 
 void ERUnAlmacenamiento::setIndice(EstrategiaIndice *indice){
     this->indice = indice;
 }
 
-void ERUnAlmacenamiento::setRegistro(Registro *registro){
-    this->registro = registro;
-}

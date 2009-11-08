@@ -10,17 +10,13 @@ class Recurso;
 class EstrategiaRecursos{
 public:
 	/*getters de los elementos que la estrategia esta utilizando*/
-	virtual const EstrategiaAlmacenamiento *getEstrategiaAlmacenamiento() const=0;
+	virtual const EstrategiaAlmacenamiento *getEstrategiaAlmacenamiento()=0;
 	/**/
-	virtual const EstrategiaIndice *getIndice() const=0;
-	/**/
-	virtual Registro *getRegistro() const=0;
+	virtual const EstrategiaIndice *getIndice()=0;
 	/*estrategia= es una EstrategiaAlmacenamiento estrategia lista para ser usada*/
 	virtual void setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategia)=0;
 	/*indice=es una EstrategiaIndice lista para se usada*/
 	virtual void setIndice(EstrategiaIndice *indice)=0;
-	/*se el registro modelo a se usado, para las operaciones con el recurso*/
-	virtual void setRegistro(Registro *registro)=0;
 	/* inserta el registro,coordinando el indice y la estrategia seteados.
 	 * si el registro ya se encuentra almacenado no realiza ninguna operacion y devuelve false.
 	 */
@@ -37,6 +33,5 @@ public:
 	 *de no existir el registro devuelve false y no realiza ninguna accion.
 	 */
 	virtual bool obtener(Clave* unaClave,Registro*registro)=0;
-
 };
 #endif // ESTRAGIARECURSOS_H

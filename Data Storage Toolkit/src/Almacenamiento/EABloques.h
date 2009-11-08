@@ -48,15 +48,9 @@ public:
 	size_t posicionComponente();
 	bool buscar(Componente*componente);
     /*------------------------------------------------------------*/
-	Almacenamiento *getAlmacen() const{
-        return almacen;
-    }
-    Ttamanio getCapacBloque() const{
-        return capacBloque;
-    }
-    double getPorcCarga() const{
-        return porcCarga;
-    }
+	Almacenamiento* getAlmacenamiento();
+    Ttamanio getCapacBloque();
+    double getPorcCarga();
     /*------------------------------------------------------------*/
 };
 
