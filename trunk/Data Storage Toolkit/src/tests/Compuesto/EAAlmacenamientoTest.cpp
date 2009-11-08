@@ -32,7 +32,7 @@ void EAAlmacenamientoTest::testInsertar(){
 	set(registro1,4,"samuel");
 	escritor->insertar(registro1);
 	/*********************************/
-	while(!escritor->hayMasCambios()){
+	while(!escritor->NoHayMasCambios()){
 		const Cambio* cambio=escritor->siguienteCambio();
 		escritor->posicionarComponente(cambio->referencia);
 		Atributo*att=(const_cast<Cambio*>(cambio))->clave.getAtributo("dni");
@@ -56,7 +56,7 @@ void EAAlmacenamientoTest::testEliminar(){
 	escritor->posicionarComponente(0);
 	set(registro1,1,"juan");
 	escritor->eliminar(registro1);
-	while(!escritor->hayMasCambios()){
+	while(!escritor->NoHayMasCambios()){
 		const Cambio* cambio=escritor->siguienteCambio();
 		setClave(registro1,&cambio->clave);
 		escritor->posicionarComponente(0);
@@ -96,7 +96,7 @@ void EAAlmacenamientoTest::testEliminar(){
 	set(registro1,7,"pepe");
 	escritor->eliminar(registro1);
 
-	while(!escritor->hayMasCambios()){
+	while(!escritor->NoHayMasCambios()){
 		const Cambio* cambio=escritor->siguienteCambio();
 		setClave(registro1,&cambio->clave);
 		escritor->posicionarComponente(0);
@@ -133,7 +133,7 @@ void EAAlmacenamientoTest::testEliminar(){
 	escritor->posicionarComponente(1);
 	set(registro1,3,"maxi");
 	escritor->eliminar(registro1);
-	while(!escritor->hayMasCambios()){
+	while(!escritor->NoHayMasCambios()){
 		const Cambio* cambio=escritor->siguienteCambio();
 		setClave(registro1,&cambio->clave);
 		escritor->posicionarComponente(0);
