@@ -1,11 +1,13 @@
 #include "EREscrituraDirecta.h"
 
-EREscrituraDirecta::EREscrituraDirecta(Almacenamiento *buffer): admin(10){
+EREscrituraDirecta::EREscrituraDirecta(Almacenamiento *buffer,size_t cantidadElementoBuffer){
 	this->buffer=buffer;
 	estrategiaBuffer->logActivo=false;
+	admin.setCapacidad(cantidadElementoBuffer);
 }
 
 EREscrituraDirecta::~EREscrituraDirecta(){}
+
 void EREscrituraDirecta::setClave(Registro*reg,Clave*clave){
 	for(Ttamanio i=0;i<clave->getCantidadAtributos();i++){
 		Atributo*att=clave->getAtributo(i);
@@ -180,10 +182,10 @@ Almacenamiento* EREscrituraDirecta::getBuffer(){
 	return buffer;
 }
 /*---------------------------------------------------------------------------------------------------------------*/
-AdministradorDeBuffer::AdministradorDeBuffer(size_t maximo){
+AdministradorDeBuffer::AdministradorDeBuffer(){
 	tope=tablaArchivoBuffer.end();
 	posicionEnTabla=tablaArchivoBuffer.end();
-	capacidad=maximo;
+	capacidad=0;
 }
 AdministradorDeBuffer::~AdministradorDeBuffer(){
 	for(std::map<size_t,NodoArchivoBuffer*>::iterator i=tablaArchivoBuffer.begin();i!=tablaArchivoBuffer.end();i++)

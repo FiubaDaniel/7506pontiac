@@ -23,7 +23,7 @@ private:
 	std::map<size_t,NodoArchivoBuffer*> tablaArchivoBuffer;
 public:
 	PNodoSiguiente tope;
-	AdministradorDeBuffer(size_t capacidad);
+	AdministradorDeBuffer();
 	virtual ~AdministradorDeBuffer();
 	bool buscar(size_t posicionArchivo);
 	size_t getPosicionEnBuffer();
@@ -33,6 +33,9 @@ public:
 	void insertar(size_t posicionArchivo);
 	friend void imprimir2(AdministradorDeBuffer &admin);
 	friend void imprimir(AdministradorDeBuffer &admin);
+	void setCapacidad(size_t capacidad){
+		this->capacidad=capacidad;
+	};
 };
 
 class EREscrituraDirecta : public EstrategiaRecursos{
@@ -52,7 +55,7 @@ private:
 	void insertarEnBuffer(Referencia refArchivo);
 	void setClave(Registro*reg,Clave*clave);
 public:
-	EREscrituraDirecta(Almacenamiento*buffer);
+	EREscrituraDirecta(Almacenamiento*buffer,size_t cantidadElementoBuffer);
 	virtual ~EREscrituraDirecta();
 	virtual bool insertar(Registro* registro);
 	virtual bool eliminar(Clave* unaClave);

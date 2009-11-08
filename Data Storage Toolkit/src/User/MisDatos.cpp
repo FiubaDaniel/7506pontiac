@@ -67,7 +67,7 @@ MisDatos::~MisDatos(){}
 	 EstrategiaRecursos* estrategiaRecurso=NULL;
 	 if(tieneBuffer){
 		 Almacenamiento* buffer=new Buffer(longitudBuffer);
-		 estrategiaRecurso=new EREscrituraDirecta(buffer);
+		 estrategiaRecurso=new EREscrituraDirecta(buffer,longitudBuffer/longitudBloque);
 	 }else{
 		 estrategiaRecurso=new ERUnAlmacenamiento();
 	 };
@@ -122,7 +122,7 @@ MisDatos::~MisDatos(){}
 	 EstrategiaRecursos* estrategiaRecurso=NULL;
 	 if(tieneBuffer){
 		 Almacenamiento* buffer=new Buffer(longitudBuffer);
-		 estrategiaRecurso=new EREscrituraDirecta(buffer);
+		 estrategiaRecurso=new EREscrituraDirecta(buffer,longitudBuffer/reg.tamanioSerializado());
 	 }else{
 		 estrategiaRecurso=new ERUnAlmacenamiento();
 	 };
