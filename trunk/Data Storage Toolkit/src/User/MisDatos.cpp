@@ -11,8 +11,11 @@ MisDatos::~MisDatos(){}
 		 int longitudBuffer, bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice) throw (ExcepcionMisDatos)
 {
 	 /*inicializo el archivo y la estrategia*/
-	 AtributoVariable<std::string> nombre("miStringID");
-	 Registro reg(1,&nombre);
+	 AtributoVariable<string> mistringid("miStringID");
+	 AtributoFijo<int> miInt("miInt");
+	 AtributoVariable<int> miListaInt("miListaInt");
+
+	 Registro reg(3,&mistringid,&miInt,&miListaInt);
 	 Clave claveEstructural(&reg,1,"miStringID");
 	 ComparadorClave* comparador = new ComparadorRegistroVariable();
 	 Archivo* archivo=new Archivo();
@@ -37,6 +40,7 @@ MisDatos::~MisDatos(){}
 	 }
 	 estrategiaBloques->setComparador(comparador);
 	 estrategiaBloques->setClave(&claveEstructural);
+	 estrategiaBloques->setRegistro(&reg);
 	 /*incializar indice*/
 	 EstrategiaIndice* Indice=NULL;
 	 if(tieneIndice){
@@ -86,7 +90,7 @@ MisDatos::~MisDatos(){}
 	 Registro reg(2,&miChar,&miInt);
 	 Clave claveEstructural(&reg,2,"miCharID","miIntId");
 	 Archivo* archivo=new Archivo();
-	 EARegistros * estrategiaRegistros=new EARegistros();
+	 EARegistros * estrategiaRegistros=new EARegistros(&reg);
 	 if(!archivo->abrir(path.c_str())){
 		 archivo->crear(path.c_str());
 		 estrategiaRegistros->crear(archivo);

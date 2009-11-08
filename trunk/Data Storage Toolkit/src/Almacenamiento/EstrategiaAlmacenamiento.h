@@ -47,6 +47,9 @@ public:
 		delete clave;
 		clave=unaClave->clonarce();
 	};
+	virtual Clave* getClave(){
+		return clave;
+	}
 	virtual void setComparador(ComparadorClave*unComparador){
 		comparador=unComparador;
 	};
