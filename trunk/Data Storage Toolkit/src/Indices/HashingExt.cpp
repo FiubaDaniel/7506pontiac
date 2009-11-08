@@ -15,13 +15,8 @@ void HashingExt::calcular_cantidad_cubos(const unsigned tam_clave_ref, const uns
            Se supone un 30% m�s de registros para evitar una mayor cantidad de sobreflujos
         */
         incrementar30(cant_reg_ini, cant_esperado);
-        /************************TEST******************************/
-        cout << "La cantidad de registros + 30% es: " << cant_esperado << std::endl;
 
         (*cant_cubos)  = (int) ( cant_esperado * tam_clave_ref / tam_para_datos ) + 1; //se suma 1 para redondear hacia arriba
-        /************************TEST******************************/
-        cout << "La cantidad de cubos que se van a crear son : " << *cant_cubos << std::endl;
-
 
 }
 unsigned HashingExt::dispersar(char *clave_mem)
@@ -38,9 +33,6 @@ unsigned HashingExt::dispersar(char *clave_mem)
         memcpy(&numero_a_dispersar, clave_mem  + offset, sizeof(numero_a_dispersar));
 
         ref_en_tabla = numero_a_dispersar % (this->tam_tabla);
-
-        /************************TEST******************************/
-        cout << "Dispersar(clave) = "  << ref_en_tabla <<endl;
 
         return ref_en_tabla;
 }
@@ -536,20 +528,14 @@ bool HashingExt::crear_con_carga_inicial(string nombre_arch, unsigned tam_cubo_b
                 (this->tam_clave) += un_atributo_aux->tamanio();
         }
 
-        /**********************TEST*****************************/
-        cout << "El tamanio de la clave es: "<< tam_clave << endl;
         //Luego se calcula el tama�o de cada registro de �ndice (sumando el tama�o ocupado por una referencia)
         this->tam_clave_ref = this->tam_clave + sizeof(Referencia);
 
        //Se calcula el tama�o para datos que tiene un cubo (restandole el espacio para metadatos)
         tam_para_datos = this->bytes_cubo - ( sizeof(Ttam_disp) + sizeof(Tcant_reg) );
-          /**********************TEST*****************************/
-        cout << "El tamanio para datos por cubo es : "<< tam_para_datos << endl;
 
         //Finalmente se calcula cuantos registros de �ndice entran por cubo:
         this->tam_cubo = tam_para_datos / (this->tam_clave_ref);
-        /**********************TEST*****************************/
-        cout << "La cantidad de registros que entran por bucket son : "<< this->tam_cubo << endl;
 
         /**      Se calculan la cantidad de cubos considerando una densidad de carga del 70% a efecto de
                 reducir la cantidad de sobreflujos que puedan ocurrir                                           **/
@@ -656,9 +642,8 @@ bool HashingExt::crear_con_carga_inicial(string nombre_arch, unsigned tam_cubo_b
                 */
 void HashingExt::crear(std::string nombreArch, unsigned int tamanioBloque, Clave* clave, ComparadorClave* comp)
 {
-        //unsigned cant_cubos = 0;  //cantidad de cubos iniciales
-        //int ref_cubos = REF_NULA; // apunta a un cubo en el archivo de cubos
-        unsigned tam_para_datos = 0; //tama�o para registros de �ndice por cubo
+        int ref_cubo_nul = REF_NULA;
+        unsigned tam_para_datos = 0; //tamaño para registros de índice por cubo
         Atributo *un_atributo_aux;  // variable auxiliar
 
         this->contador_cubos =-1;
@@ -673,7 +658,7 @@ void HashingExt::crear(std::string nombreArch, unsigned int tamanioBloque, Clave
 
         this->bytes_cubo = tamanioBloque;
         this->cant_at_clave = clave->getCantidadAtributos();
-        this->tam_tabla = 0;
+        this->tam_tabla = 1;
 
         /*****************  Se calcula la cantidad registros (clave, referencia) que caben por cubo      ******************/
         //Primero se calcula la cantidad de bytes ocupada por los datos que componen la clave
@@ -683,21 +668,14 @@ void HashingExt::crear(std::string nombreArch, unsigned int tamanioBloque, Clave
                 (this->tam_clave) += un_atributo_aux->tamanio();
         }
 
-         /**********************TEST*****************************/
-        cout << "El tamanio de la clave es: "<< tam_clave << endl;
-        //Luego se calcula el tama�o de cada registro de �ndice (sumando el tama�o ocupado por una referencia)
+        //Luego se calcula el tamaño de cada registro de índice (sumando el tamaño ocupado por una referencia)
         this->tam_clave_ref = this->tam_clave + sizeof(Referencia);
 
-       //Se calcula el tama�o para datos que tiene un cubo (restandole el espacio para metadatos)
+       //Se calcula el tamaño para datos que tiene un cubo (restandole el espacio para metadatos)
         tam_para_datos = this->bytes_cubo - ( sizeof(Ttam_disp) + sizeof(Tcant_reg) );
 
-        /**********************TEST*****************************/
-        cout << "El tamanio para datos por cubo es : "<< tam_para_datos << endl;
-
-        //Finalmente se calcula cuantos registros de �ndice entran por cubo:
+        //Finalmente se calcula cuantos registros de índice entran por cubo:
         this->tam_cubo = tam_para_datos / (this->tam_clave_ref);
-        /**********************TEST*****************************/
-        cout << "La cantidad de registros que entran por bucket son : "<< this->tam_cubo << endl;
 
 
         this->persist.open(nom_persist.c_str(),  fstream:: out | fstream::trunc| fstream::binary);
@@ -707,12 +685,12 @@ void HashingExt::crear(std::string nombreArch, unsigned int tamanioBloque, Clave
                 return;
         }
 
-        //Los 3 primeros atributos son los que cambian a lo largo del uso del �ndice
+        //Los 3 primeros atributos son los que cambian a lo largo del uso del índice
         this->persist.write( (char*) &(this->tam_tabla), sizeof(this->tam_tabla) );
         this->persist.write( (char*) &(this->contador_cubos), sizeof(this->contador_cubos) );
         this->persist.write( (char*) &(this->cant_cubos_libres), sizeof(this->cant_cubos_libres) );
 
-        //Los �ltimos atributos son los que no cambian
+        //Los últimos atributos son los que no cambian
         this->persist.write( (char*) &(this->bytes_cubo), sizeof(this->bytes_cubo));
         this->persist.write( (char*) &(this->tam_cubo), sizeof( this->tam_cubo));
         this->persist.write( (char*) &(this->tam_tabla), sizeof(this->tam_tabla));
@@ -727,9 +705,10 @@ void HashingExt::crear(std::string nombreArch, unsigned int tamanioBloque, Clave
                 cout << "Error al abrir el archivo de tabla" << endl;
                 return;
         }
+        this->tabla_dispersion.write((char*) &ref_cubo_nul, sizeof(ref_cubo_nul) );
         this->tabla_dispersion.close();
 
-        //Se crea el archivo de cubos libres vac�o
+        //Se crea el archivo de cubos libres vacío
         this->cubos_libres.open(nom_libres.c_str(), fstream:: out | fstream::trunc| fstream::binary);
         if ( !cubos_libres)
         {
@@ -738,7 +717,7 @@ void HashingExt::crear(std::string nombreArch, unsigned int tamanioBloque, Clave
         }
         this->cubos_libres.close();
 
-        //Se crea el archivo de cubos vac�o
+        //Se crea el archivo de cubos vacío
         this->cubos.open(nom_cubos.c_str(), fstream:: out | fstream::trunc | fstream::binary);
         if(!cubos)
         {
