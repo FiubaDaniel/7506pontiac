@@ -33,10 +33,9 @@ EABloques::~EABloques() {
 	archivoEspacioLibre.close();
 }
 void EABloques::finalizarAlamcenamiento(){
-	if(archivoEspacioLibre.is_open()){
-		almacen->escribir( (char*)&siguienteLibre , sizeof(siguienteLibre) );
-		archivoEspacioLibre.close();
-	}
+	archivoEspacioLibre.close();
+	almacen->escribir( (char*)&capacBloque , sizeof(capacBloque) );
+	almacen->escribir( (char*)&siguienteLibre , sizeof(siguienteLibre) );
 }
 bool EABloques::crear(Almacenamiento*almacen){
 	this->almacen=almacen;
@@ -45,7 +44,7 @@ bool EABloques::crear(Almacenamiento*almacen){
 	archivoEspacioLibre.open(ruta.c_str(),std::fstream::binary | std::fstream::out |std::fstream::trunc);
 	archivoEspacioLibre.close();
 	archivoEspacioLibre.open(ruta.c_str(),std::fstream::binary | std::fstream::in| std::fstream::out|std::fstream::trunc );
-	almacen->posicionar(sizeof(siguienteLibre));
+	almacen->posicionar(sizeof(siguienteLibre)+sizeof(capacBloque));
 	nroRegistro=0;
 	nroBloque=0;
 	siguienteLibre=0;
@@ -61,6 +60,7 @@ bool EABloques::abrir(Almacenamiento*almacen){
 	std::string ruta=almacen->getNombre()+".bloques";
 	archivoEspacioLibre.open(ruta.c_str(),std::fstream::binary | std::fstream::in| std::fstream::out );
 	this->almacen->posicionar(0);
+	this->almacen->leer((char*)&capacBloque,sizeof(siguienteLibre));
 	this->almacen->leer((char*)&siguienteLibre,sizeof(siguienteLibre));
 	nroRegistro=0;
 	return archivoEspacioLibre.is_open();
@@ -68,7 +68,7 @@ bool EABloques::abrir(Almacenamiento*almacen){
 bool EABloques::posicionarComponente(size_t nroCompuesto){
 	if(nroCompuesto<siguienteLibre){
 		nroBloque=nroCompuesto;
-		almacen->posicionar(capacBloque*nroBloque+sizeof(siguienteLibre));
+		almacen->posicionar(capacBloque*nroBloque+sizeof(siguienteLibre)+sizeof(capacBloque));
 		almacen->reiniciar();
 		nroRegistro=0;
 		return true;

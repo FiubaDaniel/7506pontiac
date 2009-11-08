@@ -74,7 +74,7 @@ public:
 
 	Atributo* clonar(){
 		AtributoVariable<T_tipo> *clon=new AtributoVariable<T_tipo>(nombre);
-		for(Ttamanio i= valores.size()-1;i>=0;i--){
+		for(Ttamanio i=0;i<valores.size();i++){
 			clon->valores.push_back(valores.at(i));
 		}
 		return clon;
