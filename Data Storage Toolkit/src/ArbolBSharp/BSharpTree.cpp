@@ -778,7 +778,7 @@ void BSharpTree::subflujoHijosRaiz(Nodo* nodo,Nodo* hermano,Referencia refNodo,R
 void BSharpTree::armarNuevaRaiz(Nodo* nodoIzq,Nodo* nodoDer){
 	std::stringbuf buf(ios_base :: in | ios_base :: out | ios_base :: binary);
 	NodoIntermedio* nodoIzquierdo = dynamic_cast<NodoIntermedio*>(nodoIzq);
-	NodoIntermedio* nodoDerecho = dynamic_cast<NodoIntermedio*>(nodoDerecho);
+	NodoIntermedio* nodoDerecho = dynamic_cast<NodoIntermedio*>(nodoDer);
 	Raiz->getListaElementos()->front()->setReferencia(nodoDerecho->getReferenciaIzq());
 	Raiz->setRefereciaIzq(nodoIzquierdo->getReferenciaIzq());
 	for(std::list<ElementoNodo*>::reverse_iterator it = nodoIzquierdo->getListaElementos()->rbegin();it != nodoIzquierdo->getListaElementos()->rend();++it){
