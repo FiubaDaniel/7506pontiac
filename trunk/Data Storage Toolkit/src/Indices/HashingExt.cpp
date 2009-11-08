@@ -832,7 +832,7 @@ bool HashingExt::abrir(std::string nombreArch,ComparadorClave* comp)
         this->persist.write( (char*) &(this->cant_cubos_libres), sizeof(this->cant_cubos_libres));
 
         return true;
-};
+}
 
 
 bool HashingExt::BuscarReferencia(const Clave *clave, Referencia* referencia)
