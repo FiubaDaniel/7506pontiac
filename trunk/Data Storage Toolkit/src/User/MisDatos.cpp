@@ -11,8 +11,14 @@ MisDatos::~MisDatos(){}
 		 int longitudBuffer, bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice) throw (ExcepcionMisDatos)
 {
 	 /*inicializo el archivo y la estrategia*/
+	 AtributoVariable<std::string> nombre("miStringID");
+	 Registro reg(1,&nombre);
+	 Clave claveEstructural(&reg,1,"miStringID");
+	 ComparadorClave* comparador = new ComparadorRegistroVariable();
 	 Archivo* archivo=new Archivo();
 	 EABloques * estrategiaBloques=new EABloques();
+
+
 	 if(!archivo->abrir(path.c_str())){
 		 archivo->crear(path.c_str());
 		 estrategiaBloques->crear(archivo);
@@ -22,28 +28,36 @@ MisDatos::~MisDatos(){}
 		 if(estrategiaBloques->getCapacBloque()!=longitud){
 			 estrategiaBloques->cerrar();
 			 archivo->cerrar();
+			 delete comparador;
+			 delete archivo;
+			 delete estrategiaBloques;
 			 throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
 		 }
+
 	 }
+	 estrategiaBloques->setComparador(comparador);
+	 estrategiaBloques->setClave(&claveEstructural);
 	 /*incializar indice*/
 	 EstrategiaIndice* Indice=NULL;
 	 if(tieneIndice){
-		 ComparadorClave* comparador = new ComparadorRegistroVariable();
-	           /*creo una clave estructural*/
-	      AtributoVariable<std::string> nombre("miStringID");
-	      Registro reg(1,&nombre);
-	      Clave claveEstructural(&reg,1,"miStringID");
-	      if(tipo==0){
-	        	   Indice = new EstrategiaBSharp(&claveEstructural);
-	      }else{
-	               Indice = new HashingExt();
-	      }
-	      if(!Indice->abrir(path,comparador)){
-	    	  Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
-	      }else if(Indice->tamanioBloque()!=longitudBloqueIndice){
-	           Indice->cerrar();
-	           throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
-	      }
+
+		 /*creo una clave estructural*/
+
+		 if(tipo==0){
+			 Indice = new EstrategiaBSharp(&claveEstructural);
+		 }else{
+			 Indice = new HashingExt();
+		 }
+		 if(!Indice->abrir(path,comparador)){
+			 Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
+		 }else if(Indice->tamanioBloque()!=longitudBloqueIndice){
+			 Indice->cerrar();
+			 delete comparador;
+			 delete archivo;
+			 delete estrategiaBloques;
+			 delete Indice;
+			 throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
+		 }
 	 }
 	 /*inicializar el estrategia Recurso*/
 	 EstrategiaRecursos* estrategiaRecurso=NULL;
@@ -65,6 +79,12 @@ MisDatos::~MisDatos(){}
  void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer, int longitudBuffer,
 		 bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice) throw (ExcepcionMisDatos)
 {
+	 ComparadorClave* comparador = new ComparadorRegistroFijo();
+	 /*creo una clave estructural*/
+	 AtributoVariable<char> miChar("miCharID");
+	 AtributoVariable<int> miInt("miIntID");
+	 Registro reg(2,&miChar,&miInt);
+	 Clave claveEstructural(&reg,2,"miCharID","miIntId");
 	 Archivo* archivo=new Archivo();
 	 EARegistros * estrategiaRegistros=new EARegistros();
 	 if(!archivo->abrir(path.c_str())){
@@ -73,14 +93,11 @@ MisDatos::~MisDatos(){}
 	 }else{
 		 estrategiaRegistros->abrir(archivo);
 	 }
+	 estrategiaRegistros->setComparador(comparador);
+	 estrategiaRegistros->setClave(&claveEstructural);
 	 EstrategiaIndice* Indice=NULL;
 	 if(tieneIndice){
-		 ComparadorClave* comparador = new ComparadorRegistroFijo();
-		 /*creo una clave estructural*/
-		 AtributoVariable<char> miChar("miCharID");
-		 AtributoVariable<int> miInt("miIntID");
-		 Registro reg(2,&miChar,&miInt);
-		 Clave claveEstructural(&reg,2,"miCharID","miIntId");
+
 		 if(tipo==0){
 			 Indice = new EstrategiaBSharp(&claveEstructural);
 		 }else{
@@ -90,6 +107,10 @@ MisDatos::~MisDatos(){}
 			 Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 		 }else if(Indice->tamanioBloque()!=longitudBloqueIndice){
 		 	     Indice->cerrar();
+		 	     delete archivo;
+		 	     delete estrategiaRegistros;
+		 	     delete comparador;
+		 	     delete Indice;
 		 	     throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
 		 }
 	 }

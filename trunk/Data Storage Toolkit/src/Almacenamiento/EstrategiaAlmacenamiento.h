@@ -43,7 +43,10 @@ public:
 		}
 	};
 	virtual Componente* getRegistro()=0;
-	virtual void setClave(Clave*unaClave){clave=unaClave->clonarce();};
+	virtual void setClave(Clave*unaClave){
+		delete clave;
+		clave=unaClave->clonarce();
+	};
 	virtual void setComparador(ComparadorClave*unComparador){
 		comparador=unComparador;
 	};
