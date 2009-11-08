@@ -183,7 +183,7 @@ Referencia BSharpTree::Siguiente(bool ultimo){
 }
 
 bool BSharpTree::modificar(const Clave* clave,Referencia refNueva){
-    Referencia referenciaDeNodoHoja;//
+    Referencia referenciaDeNodoHoja;
     Clave* aux = const_cast<Clave*>(clave);
 	NodoHoja* hoja = buscarHoja(Raiz,aux,referenciaDeNodoHoja);
 	bool modificado = hoja->setReferenciaDeClaveX(clave,refNueva);
@@ -204,7 +204,6 @@ bool BSharpTree::insertar(Referencia ref,Clave* clave){
 	std::stringbuf buf(ios_base :: in | ios_base :: out | ios_base :: binary);
 	ElementoNodo* elemento = new ElementoNodo(ref,clave);
 	if(Raiz->getEspacioLibre()==numeroDeElementosXnodo){
-		/*creo el nodo derecho hoja e inserto el elemento en ambos, raiz e hijo*/
 		char array2[tamanioNodo];
 		archivoArbol.seekp(0,fstream::end);
 		Referencia refAux  = (Referencia)archivoArbol.tellp();
@@ -217,7 +216,6 @@ bool BSharpTree::insertar(Referencia ref,Clave* clave){
 		grabarUnitario(Raiz,posicionRaiz);
 		archivoArbol.seekg(Raiz->getReferenciaIzq());
 		buf.pubseekpos(0);
-		/*Ahora toma la referencia izquierda q ya existia y le seteo su referencia izq hacia la hoja agregada*/
 		buf.pubsetbuf(array2,tamanioNodo);
 		archivoArbol.read(array2,tamanioNodo);
 		hoja = new NodoHoja(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
@@ -261,10 +259,10 @@ void BSharpTree::BuscarInsertarOEliminar(Nodo* &hoja,std::list<Referencia>&lista
 	if(!esRaiz){
 		delete nodo;
 	}else{ esRaiz = false;}
-	if(nivel!=0){//es nodo intermedio
+	if(nivel!=0){
 		NodoIntermedio* aux = new NodoIntermedio(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
 		modificarLista(listaDePadres,esInsertar,aux);
-		listaDePadres.push_front(refAux);/*el ultimo lo pongo delante siempre*/
+		listaDePadres.push_front(refAux);
 		BuscarInsertarOEliminar(hoja,listaDePadres,aux,clave,refHoja,esRaiz,esInsertar);
 	}else{
 		hoja =  new NodoHoja(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
