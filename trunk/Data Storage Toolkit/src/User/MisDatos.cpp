@@ -33,15 +33,16 @@ MisDatos::~MisDatos(){}
 	      AtributoVariable<std::string> nombre("miStringID");
 	      Registro reg(1,&nombre);
 	      Clave claveEstructural(&reg,1,"miStringID");
-
 	      if(tipo==0){
 	        	   Indice = new EstrategiaBSharp(&claveEstructural);
-
 	      }else{
 	               //Indice = new HashingExt();
 	      }
 	      if(!Indice->abrir(path,comparador)){
 	    	  Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
+	      }else if(Indice->tamanioBloque()!=longitudBloqueIndice){
+	           Indice->cerrar();
+	           throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
 	      }
 	 }
 	 /*inicializar el estrategia Recurso*/
@@ -87,6 +88,9 @@ MisDatos::~MisDatos(){}
 		 }
 		 if(!Indice->abrir(path,comparador)){
 			 Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
+		 }else if(Indice->tamanioBloque()!=longitudBloqueIndice){
+		 	     Indice->cerrar();
+		 	     throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
 		 }
 	 }
 	 /*inicializar el estrategia Recurso*/
@@ -404,30 +408,42 @@ MisDatos::~MisDatos(){}
   * Cierra el archivo correspondiente.
   */
  void MisDatos::cerrarArchivo1(){
+	 EstrategiaRecursos* estartegia = recurso1->getEstrategia();
+	 EREscrituraDirecta* estrategiaDirecta = dynamic_cast<EREscrituraDirecta*>(estrategia);
+	 if(estrategiaDirecta!=NULL){
+		 delete estrategiaDirecta->getBuffer();
+	 }
+	 delete estrategiaRecurso;
 	 delete archivo;
 	 delete estrategiaBloques;
 	 delete Indice;
 	 delete comparador;
+	 delete recurso1;
  }
  /*
   * Pre: Archivo inicializado.
   * Cierra el archivo correspondiente.
   */
  void MisDatos::cerrarArchivo2(){
+	EstrategiaRecursos* estartegia = recurso2->getEstrategia();
+	EREscrituraDirecta* estrategiaDirecta = dynamic_cast<EREscrituraDirecta*>(estrategia);
+	if(estrategiaDirecta!=NULL){
+	 		 delete estrategiaDirecta->getBuffer();
+	 	 }
+	delete estrategiaRecurso;
 	delete archivo;
 	delete estrategiaRegistros;
 	delete Indice;
 	delete comparador;
+	delete recurso2;
  }
  /*
   * Pre: Archivo inicializado.
   * Cierra el archivo correspondiente.
   */
  void MisDatos::cerrarArchivo3(){
-
 	 delete archivo;
      delete estrategiaTexto;
-
  }
 
 
