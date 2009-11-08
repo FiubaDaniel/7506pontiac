@@ -43,6 +43,7 @@ public:
    void mostrarIndice();
    void mostrarDatos();
    void cerrarArchivo();
+   Almacenamiento* getAlmacenamiento();
 private:
    Clave *clave;
    ComparadorClave*comparador;

@@ -300,8 +300,12 @@ MisDatos::~MisDatos(){}
   * Si el archivo no tiene buffer asociado, muestra un mensaje que lo especifique.
   */
  void MisDatos::mostrarContenidoBufferArchivo1(){
-	 EstrategiaAlmacenamiento *estrategiaBuffer=NULL;//TODO =recurso2->archivo;
-
+	 EREscrituraDirecta* estrategiaDirecta = dynamic_cast<EREscrituraDirecta*>(recurso1->getEstrategia());
+	 if(estrategiaDirecta!=NULL){
+		 cout<<"NO tieneBuffer";
+		 return;
+	 }
+	 EstrategiaAlmacenamiento *estrategia=estrategiaDirecta->getBuffer();
 	 AtributoVariable<string> mistringid("miStringID");
 	 AtributoFijo<int> miInt("miInt");
 	 AtributoVariable<int> miListaInt("miListaInt");
@@ -325,8 +329,12 @@ MisDatos::~MisDatos(){}
   * Si el archivo no tiene buffer asociado, muestra un mensaje que lo especifique.
   */
  void MisDatos::mostrarContenidoBufferArchivo2(){
-	 EstrategiaAlmacenamiento *estrategia=NULL;//TODO =recurso2->archivo;
-
+	 EREscrituraDirecta* estrategiaDirecta = dynamic_cast<EREscrituraDirecta*>(recurso2->getEstrategia());
+	 if(estrategiaDirecta!=NULL){
+		 cout<<"NO tieneBuffer";
+		 return;
+	 }
+	 EstrategiaAlmacenamiento *estrategia=estrategiaDirecta->getBuffer();
 	 AtributoFijo<int> miIntID("claveIntId");
 	 AtributoFijo<char> miCharID("claveCharId");
 	 AtributoFijo<int> miInt("miInt");
@@ -384,7 +392,7 @@ MisDatos::~MisDatos(){}
   * contenidos en estos ultimos.
   */
  void MisDatos::mostrarDatosArchivo1(){
-	 EstrategiaAlmacenamiento *estrategia=NULL;//TODO =recurso2->archivo;
+	 EstrategiaAlmacenamiento *estrategia=const_cast<EstrategiaAlmacenamiento *>(recurso2->getEstrategia()->getEstrategiAlmacenamiento());
 
 	 AtributoVariable<string> mistringid("miStringID");
 	 AtributoFijo<int> miInt("miInt");
@@ -408,7 +416,7 @@ MisDatos::~MisDatos(){}
   *  en los mismos.
   */
  void MisDatos::mostrarDatosArchivo2(){
-	 EstrategiaAlmacenamiento *estrategia=NULL;//TODO =recurso2->archivo;
+	 EstrategiaAlmacenamiento *estrategia=const_cast<EstrategiaAlmacenamiento*>(recurso2->getEstrategia()->getEstrategiAlmacenamiento());
 
 	 AtributoFijo<int> miIntID("claveIntId");
 	 AtributoFijo<char> miCharID("claveCharId");
@@ -439,7 +447,7 @@ MisDatos::~MisDatos(){}
 	 delete estrategia->getEstrategiAlmacenamiento();
 	 delete estrategia->getIndice();
 	 //delete comparador;
-	 //delete el archivo
+	 delete recurso1->getAlmacenamiento();
 	 delete recurso1;
  }
  /*
@@ -454,7 +462,7 @@ MisDatos::~MisDatos(){}
 	 	 }
 	delete estrategia->getEstrategiAlmacenamiento();
 	delete estrategia->getIndice();
-	//delete archivo
+	delete recurso2->getAlmacenamiento();
 	//delete comparador;
 	delete recurso2;
  }
@@ -465,7 +473,7 @@ MisDatos::~MisDatos(){}
  void MisDatos::cerrarArchivo3(){
 	 delete recurso3->getEstrategia()->getEstrategiAlmacenamiento();
      delete recurso3->getEstrategia();
-     //delete archivo;
+     delete recurso3->getAlmacenamiento();
      delete recurso3;
  }
 
