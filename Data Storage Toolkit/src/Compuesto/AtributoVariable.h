@@ -18,12 +18,17 @@ class AtributoVariable: public Atributo {
 private:
 	std::vector<T_tipo> valores;
 public:
+/******************************** Miembros de AtributoFijo ********************************************/
 	AtributoVariable(std::string nombreAtributo):AtributoVariable<T_tipo>::Atributo(nombreAtributo){
 		T_tipo aux;
 		valores.push_back(aux);
 	};
 	virtual ~AtributoVariable(){};
 
+	std::vector<T_tipo>& getVector(){
+		return valores;
+	};
+/**********************Implementacion de metodos heredados*********************************************/
 	Atributo& operator=(const Atributo& att)throw(std::bad_cast){
 		AtributoVariable<T_tipo>& otro=dynamic_cast<AtributoVariable<T_tipo>&>(const_cast<Atributo&>(att));
 		valores.clear();
@@ -135,9 +140,7 @@ public:
 					entrada>>valores.at(i);
 		}
 	};
-	std::vector<T_tipo>& getVector(){
-		return valores;
-	};
+
 };
 
 /*----------------------------------------------------------------------------*/
@@ -149,6 +152,7 @@ class AtributoVariable<string>: public Atributo {
 private:
 	string str;
 public:
+/******************************** Miembros de AtributoFijo ********************************************/
 	AtributoVariable(std::string nombreAtributo):Atributo(nombreAtributo){};
 
 	AtributoVariable<string>& operator=(const string & valor){
@@ -158,6 +162,7 @@ public:
 	operator string()const{
 		return str;
 	}
+/**********************Implementacion de metodos heredados*********************************************/
 	virtual void set(void* value){
 		char* pc=(char*)value;
 		unsigned char cantChar=*pc;
