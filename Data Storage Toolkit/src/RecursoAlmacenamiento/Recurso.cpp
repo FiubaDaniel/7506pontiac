@@ -53,7 +53,9 @@ void Recurso::cerrarArchivo(){
 EstrategiaRecursos* Recurso::getEstrategia(){
 	return estrategiaUsada;
 }
-
+Almacenamiento* Recurso::getAlmacenamiento(){
+	return this->archivo;
+}
 void Recurso::mostrarIndice(){}
 void Recurso::mostrarDatos(){}
 
