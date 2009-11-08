@@ -32,7 +32,6 @@ class EATexto: public EstrategiaAlmacenamiento {
 	void lineaARegistro(Registro*registro);
 public:
 	EATexto(Registro*registro);
-	EATexto(){}
 	virtual ~EATexto();
 	bool abrir(Almacenamiento*almacen);
 	bool crear(Almacenamiento*almacen);

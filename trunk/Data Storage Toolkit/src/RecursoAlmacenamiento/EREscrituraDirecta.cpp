@@ -5,6 +5,7 @@ EREscrituraDirecta::EREscrituraDirecta(EstrategiaIndice* indice,EstrategiaAlmace
 	this->estrategiaBuffer=estrategiaBuffer;
 	this->indice=indice;
 	this->estrategiaBuffer->logActivo=false;
+	this->estrategiaArchivo->logActivo=true;
 	admin.setCapacidad(cantidadElementoBuffer);
 	registro=(Registro*)this->estrategiaArchivo->getRegistro();
 	clave=this->estrategiaArchivo->getClave();
@@ -282,13 +283,14 @@ void EREscrituraDirecta::setIndice(EstrategiaIndice *indice){
 }
 
 void EREscrituraDirecta::setEstrategiaBuffer(EstrategiaAlmacenamiento* estrategia){
-	this->estrategiaBuffer=estrategia;
+	estrategiaBuffer=estrategia;
 	registro=(Registro*)estrategia->getRegistro();
 	clave=estrategia->getClave();
 }
 
 void EREscrituraDirecta::setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategia){
-	this->estrategiaArchivo=estrategia;
+	estrategiaArchivo=estrategia;
+	estrategiaArchivo->logActivo=true;
 	registro=(Registro*)estrategia->getRegistro();
 	clave=estrategia->getClave();
 }
