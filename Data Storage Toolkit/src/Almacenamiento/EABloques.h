@@ -29,7 +29,6 @@ private:
 	bool leerBloque(Bloque*bloque);
 	bool escribirBloque(Bloque*bloque);
 public:
-	EABloques();
 	EABloques(Registro* tipoRegistro,Ttamanio tamanioBloque,double porcCarga=0.8);
 	virtual ~EABloques();
 	void setRegistro(Registro*registro);

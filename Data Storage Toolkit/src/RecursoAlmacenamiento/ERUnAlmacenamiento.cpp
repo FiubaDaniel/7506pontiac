@@ -1,7 +1,8 @@
 #include "ERUnAlmacenamiento.h"
 
-ERUnAlmacenamiento::ERUnAlmacenamiento(EstrategiaIndice*inidice,EstrategiaAlmacenamiento*estrategia){
+ERUnAlmacenamiento::ERUnAlmacenamiento(EstrategiaIndice*indice,EstrategiaAlmacenamiento*estrategia){
 	estrategiAlmacenamiento=estrategia;
+	estrategiAlmacenamiento->logActivo=true;
 	this->indice=indice;
 	registro=(Registro*)estrategia->getRegistro();
 	clave=estrategia->getClave();
@@ -119,6 +120,7 @@ EstrategiaIndice *ERUnAlmacenamiento::getIndice(){
 void ERUnAlmacenamiento::setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategiAlmacenamiento)
 {
     this->estrategiAlmacenamiento = estrategiAlmacenamiento;
+    this->estrategiAlmacenamiento->logActivo=true;
     clave=estrategiAlmacenamiento->getClave();
     registro=(Registro*)estrategiAlmacenamiento->getRegistro();
 }
