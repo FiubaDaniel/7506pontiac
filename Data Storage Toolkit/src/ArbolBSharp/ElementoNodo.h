@@ -17,17 +17,24 @@ public:
 	 * referencia derecha lo q contiene.
 	 */
 	ElementoNodo(Referencia ref,Clave* cla);
+
 	ElementoNodo();
+
 	virtual ~ElementoNodo();
+
 	Referencia getReferencia();
+
 	void setReferencia(Referencia ref);
+
 	Clave* getClave();
+
 	ElementoNodo* clonarce();
+
 	void setClave(Clave* cla);
+
 private:
 	    Clave* clave;
 	    Referencia referencia;
-protected:
 
 };
 #endif /* ELEMENTONODOHOJA_H_ */
