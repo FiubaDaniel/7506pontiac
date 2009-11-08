@@ -351,7 +351,7 @@ MisDatos::~MisDatos(){}
   */
  void MisDatos::mostrarIndiceArchivo1(){
 
-        EstrategiaIndice *indice=recurso1->getEstrategia()->getIndice();
+        EstrategiaIndice *indice=const_cast<EstrategiaIndice *>(recurso1->getEstrategia()->getIndice());
         if(indice!=NULL){
         //tiene indice
                 indice->mostrarEstado();
@@ -369,7 +369,7 @@ MisDatos::~MisDatos(){}
   */
  void MisDatos::mostrarIndiceArchivo2(){
 
-        EstrategiaIndice *indice=recurso2->getEstrategia()->getIndice();
+        EstrategiaIndice *indice=const_cast<EstrategiaIndice *>(recurso2->getEstrategia()->getIndice());
         if(indice!=NULL){
         //tiene indice
                 indice->mostrarEstado();
@@ -431,16 +431,15 @@ MisDatos::~MisDatos(){}
   * Cierra el archivo correspondiente.
   */
  void MisDatos::cerrarArchivo1(){
-	 EstrategiaRecursos* estartegia = recurso1->getEstrategia();
+	 EstrategiaRecursos* estrategia = recurso1->getEstrategia();
 	 EREscrituraDirecta* estrategiaDirecta = dynamic_cast<EREscrituraDirecta*>(estrategia);
 	 if(estrategiaDirecta!=NULL){
 		 delete estrategiaDirecta->getBuffer();
 	 }
-	 delete estrategiaRecurso;
-	 delete archivo;
-	 delete estrategiaBloques;
-	 delete Indice;
-	 delete comparador;
+	 delete estrategia->getEstrategiAlmacenamiento();
+	 delete estrategia->getIndice();
+	 //delete comparador;
+	 //delete el archivo
 	 delete recurso1;
  }
  /*
@@ -448,16 +447,15 @@ MisDatos::~MisDatos(){}
   * Cierra el archivo correspondiente.
   */
  void MisDatos::cerrarArchivo2(){
-	EstrategiaRecursos* estartegia = recurso2->getEstrategia();
+	EstrategiaRecursos* estrategia = recurso2->getEstrategia();
 	EREscrituraDirecta* estrategiaDirecta = dynamic_cast<EREscrituraDirecta*>(estrategia);
 	if(estrategiaDirecta!=NULL){
 	 		 delete estrategiaDirecta->getBuffer();
 	 	 }
-	delete estrategiaRecurso;
-	delete archivo;
-	delete estrategiaRegistros;
-	delete Indice;
-	delete comparador;
+	delete estrategia->getEstrategiAlmacenamiento();
+	delete estrategia->getIndice();
+	//delete archivo
+	//delete comparador;
 	delete recurso2;
  }
  /*
@@ -465,8 +463,10 @@ MisDatos::~MisDatos(){}
   * Cierra el archivo correspondiente.
   */
  void MisDatos::cerrarArchivo3(){
-	 delete archivo;
-     delete estrategiaTexto;
+	 delete recurso3->getEstrategia()->getEstrategiAlmacenamiento();
+     delete recurso3->getEstrategia();
+     //delete archivo;
+     delete recurso3;
  }
 
 
