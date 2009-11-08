@@ -20,8 +20,8 @@ bool ERUnAlmacenamiento::insertar(Registro* registro){
 		if(estrategiAlmacenamiento->buscar(registro))
 			return false;
 	}
-	estrategiAlmacenamiento->insertar(registro);
-	while(!estrategiAlmacenamiento->hayMasCambios()){
+	if(!estrategiAlmacenamiento->insertar(registro))return false;
+	while(!estrategiAlmacenamiento->NoHayMasCambios()){
 		const Cambio* cambio=estrategiAlmacenamiento->siguienteCambio();
 		actualizarIndice(*cambio);
 		estrategiAlmacenamiento->pop();
@@ -44,10 +44,10 @@ bool ERUnAlmacenamiento::eliminar(Clave* unaClave){
 	}
 	estrategiAlmacenamiento->posicionarComponente(referencia);
 	setClave(registro,clave);
-	estrategiAlmacenamiento->eliminar(registro);
+	if(!estrategiAlmacenamiento->eliminar(registro))return false;
 	if(indice!=NULL)
 		indice->eliminar(unaClave);
-	while(!estrategiAlmacenamiento->hayMasCambios()){
+	while(!estrategiAlmacenamiento->NoHayMasCambios()){
 		const Cambio* cambio=estrategiAlmacenamiento->siguienteCambio();
 		actualizarIndice(*cambio);
 		estrategiAlmacenamiento->pop();
@@ -72,7 +72,7 @@ bool ERUnAlmacenamiento::modificar(Clave* unaClave,Registro* registro){
 	estrategiAlmacenamiento->posicionarComponente(referencia);
 	if(!estrategiAlmacenamiento->modificar(registro))
 		return false;
-	while(!estrategiAlmacenamiento->hayMasCambios()){
+	while(!estrategiAlmacenamiento->NoHayMasCambios()){
 		const Cambio* cambio=estrategiAlmacenamiento->siguienteCambio();
 		actualizarIndice(*cambio);
 		estrategiAlmacenamiento->pop();

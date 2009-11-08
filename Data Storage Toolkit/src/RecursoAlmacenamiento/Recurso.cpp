@@ -8,6 +8,7 @@ Recurso::Recurso (Almacenamiento* archivo,EstrategiaIndice* indice,EstrategiaRec
 	this->indice=indice;
 	this->estrategiaUsada=estrategiaUsada;
 	this->estrategiaAlmacenamiento=estretegiaAlmacenamiento;
+	this->estrategiaAlmacenamiento->logActivo=true;
 	this->estrategiaUsada->setEstrategiAlmacenamiento(estretegiaAlmacenamiento);
 	this->estrategiaUsada->setIndice(indice);
 	//TODO verificar q el registro este seteado en todos.

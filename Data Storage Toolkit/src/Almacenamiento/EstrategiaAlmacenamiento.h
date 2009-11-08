@@ -77,7 +77,7 @@ public:
 	const Cambio* siguienteCambio(){
 		return cambiosLog.front();
 	};
-	bool hayMasCambios(){
+	bool NoHayMasCambios(){
 		return cambiosLog.empty();
 	}
 };

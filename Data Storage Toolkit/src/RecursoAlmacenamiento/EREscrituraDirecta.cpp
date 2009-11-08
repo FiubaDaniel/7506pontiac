@@ -29,8 +29,8 @@ bool EREscrituraDirecta::insertar(Registro* registro){
 			estrategiaArchivo->logActivo=true;
 		}else return false;
 	}
-	estrategiaArchivo->insertar(registro);
-	while(!estrategiaArchivo->hayMasCambios()){
+	if(!estrategiaArchivo->insertar(registro))return false;
+	while(!estrategiaArchivo->NoHayMasCambios()){
 		const Cambio* cambio=estrategiaArchivo->siguienteCambio();
 		actualizarBuffer(*cambio);
 		actualizarIndice(*cambio);
@@ -55,8 +55,8 @@ bool EREscrituraDirecta::eliminar(Clave* unaClave){
 	estrategiaArchivo->posicionarComponente(referencia);
 	setClave(registro,clave);
 	estrategiaArchivo->eliminar(registro);
-	indice->eliminar(unaClave);
-	while(!estrategiaArchivo->hayMasCambios()){
+	if(!indice->eliminar(unaClave))return false;
+	while(!estrategiaArchivo->NoHayMasCambios()){
 		const Cambio* cambio=estrategiaArchivo->siguienteCambio();
 		actualizarBuffer(*cambio);
 		actualizarIndice(*cambio);
@@ -82,7 +82,7 @@ bool EREscrituraDirecta::modificar(Clave* unaClave,Registro* registro){
 	estrategiaArchivo->posicionarComponente(referencia);
 	if(!estrategiaArchivo->modificar(registro))
 		return false;
-	while(!estrategiaArchivo->hayMasCambios()){
+	while(!estrategiaArchivo->NoHayMasCambios()){
 		const Cambio* cambio=estrategiaArchivo->siguienteCambio();
 		actualizarBuffer(*cambio);
 		actualizarIndice(*cambio);
