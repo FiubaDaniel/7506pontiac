@@ -36,4 +36,14 @@ bool EstrategiaBSharp::modificar(const Clave* clave,Referencia refNueva){
 	return arbol->modificar(clave,refNueva);
 }
 
+void EstrategiaBSharp::cerrar(){
+	arbol->cerrar();
+}
+int EstrategiaBSharp::tamanioBloque(){
+	arbol->tamanioBloque();
+}
+void EstrategiaBSharp::mostrarEstado(){
+	arbol->imprimir();
+}
+
 
