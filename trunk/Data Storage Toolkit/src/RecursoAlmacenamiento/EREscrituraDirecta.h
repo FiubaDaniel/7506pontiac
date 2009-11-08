@@ -64,7 +64,7 @@ public:
 	virtual void setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategiAlmacenamiento);
 	virtual void setIndice(EstrategiaIndice *indice);
 	virtual void setRegistro(Registro *registro);
-	Almacenamiento* EREscrituraDirecta::getBuffer();
+	Almacenamiento* getBuffer();
 };
 
 #endif // ESTRATEGIARECURSOSESCRITURADIRECTA_H
