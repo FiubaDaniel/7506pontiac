@@ -403,16 +403,31 @@ MisDatos::~MisDatos(){}
   * Pre: Archivo inicializado.
   * Cierra el archivo correspondiente.
   */
- void MisDatos::cerrarArchivo1(){}
+ void MisDatos::cerrarArchivo1(){
+	 delete archivo;
+	 delete estrategiaBloques;
+	 delete Indice;
+	 delete comparador;
+ }
  /*
   * Pre: Archivo inicializado.
   * Cierra el archivo correspondiente.
   */
- void MisDatos::cerrarArchivo2(){}
+ void MisDatos::cerrarArchivo2(){
+	delete archivo;
+	delete estrategiaRegistros;
+	delete Indice;
+	delete comparador;
+ }
  /*
   * Pre: Archivo inicializado.
   * Cierra el archivo correspondiente.
   */
- void MisDatos::cerrarArchivo3(){}
+ void MisDatos::cerrarArchivo3(){
+
+	 delete archivo;
+     delete estrategiaTexto;
+
+ }
 
 
