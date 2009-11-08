@@ -50,6 +50,10 @@ void Recurso::cerrarArchivo(){
 
 }
 
+EstrategiaRecursos* Recurso::getEstrategia(){
+	return estrategiaUsada;
+}
+
 void Recurso::mostrarIndice(){}
 void Recurso::mostrarDatos(){}
 
