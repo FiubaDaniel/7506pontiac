@@ -90,8 +90,8 @@ MisDatos::~MisDatos(){}
 	 ComparadorClave* comparador = new ComparadorRegistroFijo();
 	 AtributoVariable<char> miChar("miCharID");
 	 AtributoVariable<int> miInt("miIntID");
-	 Registro reg(2,&miChar,&miInt);
-	 Clave claveEstructural(&reg,2,"miCharID","miIntID");
+	 Registro reg(2,&miInt,&miChar);
+	 Clave claveEstructural(&reg,2,"miIntID","miCharID");
 
 
 	 Archivo* archivo=new Archivo();
