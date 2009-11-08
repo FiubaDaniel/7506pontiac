@@ -66,7 +66,9 @@ MisDatos::~MisDatos(){}
 	 EstrategiaRecursos* estrategiaRecurso=NULL;
 	 if(tieneBuffer){
 		 EABloques * estrategiaBuffer=new EABloques(&reg,longitudBloque,0.8);//TODO delete
-		 Almacenamiento* buffer=new Buffer(longitudBuffer);
+		 Buffer* buffer=new Buffer(longitudBuffer);
+		 buffer->setNombre("buffer");
+		 estrategiaBuffer->crear(buffer);
 		 estrategiaRecurso=new EREscrituraDirecta(estrategiaBuffer,buffer,longitudBuffer/longitudBloque);
 	 }else{
 		 estrategiaRecurso=new ERUnAlmacenamiento();
@@ -125,6 +127,7 @@ MisDatos::~MisDatos(){}
 	 if(tieneBuffer){
 		 Almacenamiento* buffer=new Buffer(longitudBuffer);
 		 EABloques * estrategiaBuffer=new EABloques();//TODO delete
+		 estrategiaBuffer->abrir(buffer);
 		 estrategiaRecurso=new EREscrituraDirecta(estrategiaBuffer,buffer,longitudBuffer/reg.tamanioSerializado());
 	 }else{
 		 estrategiaRecurso=new ERUnAlmacenamiento();
@@ -358,7 +361,7 @@ MisDatos::~MisDatos(){}
   */
  void MisDatos::mostrarContenidoBufferArchivo2(){
 	 EREscrituraDirecta* estrategiaDirecta = dynamic_cast<EREscrituraDirecta*>(recurso2->getEstrategia());
-	 if(estrategiaDirecta!=NULL){
+	 if(estrategiaDirecta==NULL){
 		 cout<<"NO tieneBuffer";
 		 return;
 	 }

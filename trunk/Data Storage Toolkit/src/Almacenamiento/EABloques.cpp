@@ -38,13 +38,16 @@ void EABloques::setRegistro(Registro*registro){
 	}else bloque=new Bloque(registro);
 };
 void EABloques::finalizarAlamcenamiento(){
-	archivoEspacioLibre.close();
-	almacen->escribir( (char*)&capacBloque , sizeof(capacBloque) );
-	almacen->escribir( (char*)&siguienteLibre , sizeof(siguienteLibre) );
+
+	if(almacen!=NULL){
+		archivoEspacioLibre.close();
+		almacen->escribir( (char*)&capacBloque , sizeof(capacBloque) );
+		almacen->escribir( (char*)&siguienteLibre , sizeof(siguienteLibre) );
+	}
 }
 bool EABloques::crear(Almacenamiento*almacen){
-	this->almacen=almacen;
 	finalizarAlamcenamiento();
+	this->almacen=almacen;
 	std::string ruta=almacen->getNombre()+".bloques";
 	nroRegistro=0;
 	nroBloque=0;
@@ -61,8 +64,9 @@ void EABloques::cerrar(){
 	almacen->cerrar();
 }
 bool EABloques::abrir(Almacenamiento*almacen){
-	this->almacen=almacen;
+
 	finalizarAlamcenamiento();
+	this->almacen=almacen;
 	std::string ruta=almacen->getNombre()+".bloques";
 	archivoEspacioLibre.open(ruta.c_str(),std::fstream::binary | std::fstream::in| std::fstream::out );
 	this->almacen->posicionar(0);

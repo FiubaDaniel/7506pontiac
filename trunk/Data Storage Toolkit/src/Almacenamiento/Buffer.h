@@ -14,7 +14,7 @@ class Buffer : public Almacenamiento{
 	std::stringstream *archivo;
 public:
 	Buffer();
-	Buffer(int longitudBuffer){};
+	Buffer(int longitudBuffer);
 	~Buffer();
 	/*-------------------------------------------------------------------------*/
 	/*utilizado por la estrategiaAlmacenamiento*/
