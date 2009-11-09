@@ -46,6 +46,7 @@ public:
 	bool obtener(Componente*componente);
 	size_t posicionComponente();
 	bool buscar(Componente*componente);
+	Componente*getComponente();
     /*------------------------------------------------------------*/
 	Almacenamiento* getAlmacenamiento();
     Ttamanio getCapacBloque();

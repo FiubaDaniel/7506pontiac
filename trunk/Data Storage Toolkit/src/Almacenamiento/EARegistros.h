@@ -44,6 +44,7 @@ public:
 	size_t posicionComponente();
 	bool buscar(Componente*componente);
 	Almacenamiento* getAlmacenamiento();
+	Componente*getComponente();
 };
 
 #endif /* EAREGISTROS_H_ */

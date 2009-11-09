@@ -249,4 +249,6 @@ bool EATexto::buscar(Componente*componente){
 Almacenamiento* EATexto::getAlmacenamiento(){
 	return almacen;
 }
-
+Componente*EATexto::getComponente(){
+	return registro;
+}
