@@ -14,10 +14,10 @@
 
 class EATexto: public EstrategiaAlmacenamiento {
 	Registro*registro;
-	bool ultimo;
 	Almacenamiento* almacen;
 	size_t posComp;
 	std::string linea;
+	bool ultimo;
 	int comparar(Registro*registro,Registro*registro2);
 	/* intenta leer la siguiente linea del archivo, devuelve false,
 	 * si tras intentar, encuentra el fin de archivo

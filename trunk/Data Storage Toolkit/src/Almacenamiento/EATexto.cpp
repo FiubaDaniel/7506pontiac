@@ -14,15 +14,15 @@ EATexto::~EATexto() {
 	delete registro;
 }
 
-bool EATexto::abrir(Almacenamiento*almacen){
-	this->almacen=almacen;
+bool EATexto::abrir(Almacenamiento*almacenamiento){
+	almacen=almacenamiento;
 	posComp=0;
 	linea.clear();
 	ultimo=false;
 	return true;
 }
-bool EATexto::crear(Almacenamiento *almacen){
-	this->almacen=almacen;
+bool EATexto::crear(Almacenamiento *almacenamiento){
+	almacen=almacenamiento;
 	posComp=0;
 	linea.clear();
 	ultimo=false;
