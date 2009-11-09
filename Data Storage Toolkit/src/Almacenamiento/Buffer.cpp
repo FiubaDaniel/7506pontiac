@@ -10,14 +10,14 @@ Buffer::~Buffer (){
 	delete archivo;
 }
 void Buffer::escribir(const void* bytes,size_t cantidad){
-	archivo->write((char*)&bytes,cantidad);
+	archivo->write((char*)bytes,cantidad);
 }
 void Buffer::escribir(const void* unByte){
 	archivo->put(*(char*)unByte);
 
 }
 void Buffer::leer(void* bytes,size_t cantidad){
-	archivo->read((char*)&bytes,cantidad);
+	archivo->read((char*)bytes,cantidad);
 }
 void Buffer::leer(void* unBytes){
 	*(char*)unBytes=archivo->get();
