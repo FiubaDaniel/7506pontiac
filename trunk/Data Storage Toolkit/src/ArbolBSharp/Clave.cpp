@@ -59,7 +59,6 @@ Atributo* Clave::getAtributo(std::string nombre){
 void Clave::deserializar(std::streambuf&buf){
 	for(Ttamanio i=0;i<atributosDeClave.size();i++){
 		atributosDeClave.at(i)->deserializar(buf);
-		atributosDeClave.at(i)->imprimir(cout);cout<<endl;
 	}
 }
 void Clave::serializar(std::streambuf&buf){
