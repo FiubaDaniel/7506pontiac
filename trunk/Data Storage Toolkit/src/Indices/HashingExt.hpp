@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <stdlib.h>
+#include <math.h>
 #include "../ArbolBSharp/Clave.h"
 #include "EstrategiaIndice.h"
 #include "../ArbolBSharp/ComparadorClave.h"
