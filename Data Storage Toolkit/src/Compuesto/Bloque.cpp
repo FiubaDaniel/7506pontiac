@@ -24,8 +24,8 @@ bool Bloque::esfijo(){
 	return false;
 }
 Ttamanio Bloque::deserializar(std::streambuf&entrada){
-	Ttamanio nrocomponetes;
-	Ttamanio offset=sizeof(Ttamanio);
+	unsigned char nrocomponetes;
+	Ttamanio offset=sizeof(unsigned char);
 	entrada.sgetn((char*)&nrocomponetes,offset);
 	Ttamanio i=0;
 	while(i<nrocomponetes and i<componentes.size()){
@@ -48,8 +48,8 @@ Ttamanio Bloque::deserializar(std::streambuf&entrada){
 	return offset;
 }
 Ttamanio Bloque::serializar(std::streambuf&salida){
-	Ttamanio nrocomponetes=componentes.size();
-	Ttamanio offset=sizeof(Ttamanio);
+	unsigned char nrocomponetes=componentes.size();
+	Ttamanio offset=sizeof(unsigned char);
 	salida.sputn((char*)&nrocomponetes,offset);
 	for(Ttamanio i=0;i<nrocomponetes;i++){
 		offset+=componentes.at(i)->serializar(salida);
