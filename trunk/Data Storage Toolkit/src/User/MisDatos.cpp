@@ -18,6 +18,7 @@ MisDatos::~MisDatos(){}
 	 Registro reg(3,&mistringid,&miInt,&miListaInt);
 	 Clave claveEstructural(&reg,1,"miStringID");
 	 ComparadorClave* comparador = new ComparadorRegistroVariable();
+
 	 Archivo* archivo=new Archivo();
 	 EABloques * estrategiaBloques=new EABloques(&reg,longitudBloque,0.8);
 
@@ -88,24 +89,38 @@ MisDatos::~MisDatos(){}
 {
 	 /*creo una clave estructural*/
 	 ComparadorClave* comparador = new ComparadorRegistroFijo();
-	 AtributoVariable<char> miChar("miCharID");
-	 AtributoVariable<int> miInt("miIntID");
-	 Registro reg(2,&miInt,&miChar);
+	 AtributoFijo<int> miIntID("miIntID");
+	 AtributoFijo<char> miCharID("miCharID");
+	 AtributoFijo<int> miInt("miInt");
+	 Registro reg(3,&miIntID,&miCharID,&miInt);
 	 Clave claveEstructural(&reg,2,"miIntID","miCharID");
 
-
 	 Archivo* archivo=new Archivo();
-	 EARegistros * estrategiaRegistros=new EARegistros(&reg);
+	 EARegistros * estrategiaregistro=new EARegistros(&reg);
+
+
 	 if(!archivo->abrir(path.c_str())){
 		 archivo->crear(path.c_str());
-		 estrategiaRegistros->crear(archivo);
+		 estrategiaregistro->crear(archivo);
 	 }else{
-		 estrategiaRegistros->abrir(archivo);
+		 estrategiaregistro->abrir(archivo);
+		 /*if(estrategiaregistro->getCapacBloque()!=longitud){
+			 estrategiaregistro->cerrar();
+			 archivo->cerrar();
+			 delete comparador;
+			 delete archivo;
+			 delete estrategiaregistro;
+			 throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
+		 }*/
+
 	 }
-	 estrategiaRegistros->setComparador(comparador);
-	 estrategiaRegistros->setClave(&claveEstructural);
+	 estrategiaregistro->setComparador(comparador);
+	 estrategiaregistro->setClave(&claveEstructural);
+	 /*incializar indice*/
 	 EstrategiaIndice* Indice=NULL;
 	 if(tieneIndice){
+
+		 /*creo una clave estructural*/
 
 		 if(tipo==0){
 			 Indice = new EstrategiaBSharp(&claveEstructural);
@@ -115,25 +130,27 @@ MisDatos::~MisDatos(){}
 		 if(!Indice->abrir(path,comparador)){
 			 Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 		 }else if(Indice->tamanioBloque()!=longitudBloqueIndice){
-		 	     Indice->cerrar();
-		 	     delete archivo;
-		 	     delete estrategiaRegistros;
-		 	     delete comparador;
-		 	     delete Indice;
-		 	     throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
+			 Indice->cerrar();
+			 delete comparador;
+			 delete archivo;
+			 delete estrategiaregistro;
+			 delete Indice;
+			 throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
 		 }
 	 }
 	 /*inicializar el estrategia Recurso*/
 	 EstrategiaRecursos* estrategiaRecurso=NULL;
 	 if(tieneBuffer){
-		 EARegistros * estrategiaBuffer=new EARegistros(&reg);//TODO delete
+		 EARegistros* estrategiaBuffer=new EARegistros(&reg);//TODO delete
 		 Buffer* buffer=new Buffer(longitudBuffer);
 		 buffer->setNombre("buffer");
 		 estrategiaBuffer->crear(buffer);
-		 estrategiaRecurso=new EREscrituraDirecta(Indice,estrategiaRegistros,estrategiaBuffer,longitudBuffer/reg.tamanioSerializado());
+		 estrategiaRecurso=new EREscrituraDirecta(Indice,estrategiaregistro,estrategiaBuffer,longitudBuffer);
+
 	 }else{
-		 estrategiaRecurso=new ERUnAlmacenamiento(Indice,estrategiaRegistros);
+		 estrategiaRecurso=new ERUnAlmacenamiento(Indice,estrategiaregistro);
 	 };
+
 	 recurso2=new Recurso(estrategiaRecurso);
  }
  /*
@@ -179,8 +196,8 @@ MisDatos::~MisDatos(){}
   * con el mensaje de error correspondiente.
   */
  void MisDatos::agregarRegistroArchivo2(MiRegistroFijo registro) throw (ExcepcionMisDatos){
-	 AtributoFijo<int> miIntID("claveIntId");
-	 AtributoFijo<char> miCharID("claveCharId");
+	 AtributoFijo<int> miIntID("miIntID");
+	 AtributoFijo<char> miCharID("miCharID");
 	 AtributoFijo<int> miInt("miInt");
 
 	 miIntID=registro.getMiIntID();
@@ -188,7 +205,7 @@ MisDatos::~MisDatos(){}
 	 miInt=registro.getMiInt();
 
 	 Registro registroRecurso(3,&miIntID,&miCharID,&miInt);
-	 Clave clave(&registroRecurso,2,"claveIntId","claveCharId");
+	 Clave clave(&registroRecurso,2,"miIntID","miCharID");
 
 	 if(not recurso2->insertar(&registroRecurso))
 		 throw ExcepcionMisDatos("No se pudo Insertar el registro en Archivo2");
@@ -227,15 +244,15 @@ MisDatos::~MisDatos(){}
   *  lanza una excepcion con el mensaje de error correspondiente.
   */
  void MisDatos::eliminarRegistroArchivo2(int claveInt, char claveChar) throw (ExcepcionMisDatos){
-	 AtributoFijo<int> miIntID("claveIntId");
-	 AtributoFijo<char> miCharID("claveCharId");
+	 AtributoFijo<int> miIntID("miIntID");
+	 AtributoFijo<char> miCharID("miCharID");
 	 AtributoFijo<int> miInt("miInt");
 
 	 miIntID=claveInt;
 	 miCharID=claveChar;
 
 	 Registro registro(3,&miIntID,&miCharID,&miInt);
-	 Clave clave(&registro,2,"claveIntId","claveCharId");
+	 Clave clave(&registro,2,"miIntID","miCharID");
 
 	 if(not recurso2->eliminar(&clave))
 		 throw ExcepcionMisDatos("No se pudo eliminar el registro en Archivo2");
@@ -266,8 +283,8 @@ MisDatos::~MisDatos(){}
   * lanza una excepcion con el mensaje de error correspondiente.
   */
  void MisDatos::modificarRegistroArchivo2(MiRegistroFijo registro) throw (ExcepcionMisDatos){
-	 AtributoFijo<int> miIntID("claveIntId");
-	 AtributoFijo<char> miCharID("claveCharId");
+	 AtributoFijo<int> miIntID("miIntID");
+	 AtributoFijo<char> miCharID("miCharID");
 	 AtributoFijo<int> miInt("miInt");
 
 	 miIntID=registro.getMiIntID();
@@ -275,7 +292,7 @@ MisDatos::~MisDatos(){}
 	 miInt=registro.getMiInt();
 
 	 Registro registroRecurso(3,&miIntID,&miCharID,&miInt);
-	 Clave clave(&registroRecurso,2,"claveIntId","claveCharId");
+	 Clave clave(&registroRecurso,2,"miIntID","miCharID");
 
 	 if(not recurso2->modificar(&clave,&registroRecurso))
 		 throw ExcepcionMisDatos("No se pudo Modificar el registro en Archivo2");
@@ -313,11 +330,11 @@ MisDatos::~MisDatos(){}
   * lanza una excepcion con el mensaje de error correspondiente.
   */
  MiRegistroFijo MisDatos::obtenerRegistroArchivo2(int claveInt, char claveChar) throw (ExcepcionMisDatos){
-	 AtributoFijo<int> miIntID("claveIntId");
-	 AtributoFijo<char> miCharID("claveCharId");
+	 AtributoFijo<int> miIntID("miIntID");
+	 AtributoFijo<char> miCharID("miCharID");
 	 AtributoFijo<int> miInt("miInt");
 	 Registro registro(3,&miIntID,&miCharID,&miInt);
-	 Clave clave(&registro,2,"claveIntId","claveCharId");
+	 Clave clave(&registro,2,"miIntID","miCharID");
 	 /*obtengo*/
 	 if(not recurso2->obtener(&clave,&registro))
 		 throw ExcepcionMisDatos("No pudo obtener el registro en Archivo2");
@@ -369,8 +386,8 @@ MisDatos::~MisDatos(){}
 		 return;
 	 }
 	 EstrategiaAlmacenamiento *estrategia=estrategiaDirecta->getEstrategiaBuffer();
-	 AtributoFijo<int> miIntID("claveIntId");
-	 AtributoFijo<char> miCharID("claveCharId");
+	 AtributoFijo<int> miIntID("miIntID");
+	 AtributoFijo<char> miCharID("miCharID");
 	 AtributoFijo<int> miInt("miInt");
 	 Registro registro(3,&miIntID,&miCharID,&miInt);
 
@@ -453,8 +470,8 @@ MisDatos::~MisDatos(){}
  void MisDatos::mostrarDatosArchivo2(){
 	 EstrategiaAlmacenamiento *estrategia=const_cast<EstrategiaAlmacenamiento*>(recurso2->getEstrategia()->getEstrategiaAlmacenamiento());
 
-	 AtributoFijo<int> miIntID("claveIntId");
-	 AtributoFijo<char> miCharID("claveCharId");
+	 AtributoFijo<int> miIntID("miIntID");
+	 AtributoFijo<char> miCharID("miCharID");
 	 AtributoFijo<int> miInt("miInt");
 	 Registro registro(3,&miIntID,&miCharID,&miInt);
 
