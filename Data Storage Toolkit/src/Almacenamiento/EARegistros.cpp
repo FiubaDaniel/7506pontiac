@@ -83,6 +83,8 @@ void EARegistros::leer(Registro*registro){
 bool EARegistros::escribir(Componente *componente){
 	Registro*registro=dynamic_cast<Registro*>(componente);
 	if(registro!=NULL&&nroRegistro<=siguienteRegLibre){
+		if(nroRegistro==siguienteRegLibre)
+			siguienteRegLibre++;
 		if(logActivo){
 			clave->set(registro);
 			pushCambio(Cambio(clave,nroRegistro,Cambio::Alta));
@@ -104,11 +106,7 @@ bool EARegistros::leer(Componente *componente){
 
 bool EARegistros::insertar(Componente *componente){
 	posicionarComponente(siguienteRegLibre);
-	if(escribir(componente)){
-		siguienteRegLibre++;
-		return true;
-	}
-	return false;
+	return escribir(componente);
 }
 
 bool EARegistros::modificar(Componente *componente){
