@@ -194,3 +194,6 @@ bool EARegistros::buscar(Componente*componente){
 Almacenamiento* EARegistros::getAlmacenamiento(){
 	return almacen;
 }
+Componente*EARegistros::getComponente(){
+	return registro;
+}

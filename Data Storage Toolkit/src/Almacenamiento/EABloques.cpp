@@ -352,3 +352,6 @@ Ttamanio EABloques::getCapacBloque(){
 double EABloques::getPorcCarga(){
     return porcCarga;
 }
+Componente*EABloques::getComponente(){
+	return bloque;
+}

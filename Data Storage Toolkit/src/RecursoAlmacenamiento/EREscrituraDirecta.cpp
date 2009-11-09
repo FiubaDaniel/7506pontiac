@@ -124,7 +124,7 @@ void EREscrituraDirecta::insertarEnBuffer(Referencia refArchivo){
 	admin.insertar(refArchivo);
 	size_t posicionBuffer=admin.getPosicionEnBuffer();
 	estrategiaArchivo->posicionarComponente(refArchivo);
-	Componente *componente=estrategiaArchivo->getRegistro();
+	Componente *componente=estrategiaArchivo->getComponente();
 	estrategiaArchivo->leer(componente);
 	estrategiaBuffer->posicionarComponente(posicionBuffer);
 	estrategiaBuffer->escribir(componente);

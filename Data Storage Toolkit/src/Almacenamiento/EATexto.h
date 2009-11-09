@@ -48,6 +48,7 @@ public:
 	size_t posicionComponente();
 	bool buscar(Componente*componente);
 	Almacenamiento* getAlmacenamiento();
+	Componente*getComponente();
 };
 
 #endif /* EATEXTO_H_ */

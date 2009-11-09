@@ -19,9 +19,7 @@ private:
 	std::vector<T_tipo> valores;
 public:
 /******************************** Miembros de AtributoFijo ********************************************/
-	AtributoVariable(std::string nombreAtributo):AtributoVariable<T_tipo>::Atributo(nombreAtributo){
-		T_tipo aux;
-		valores.push_back(aux);
+	AtributoVariable(std::string nombreAtributo):Atributo(nombreAtributo){
 	};
 	virtual ~AtributoVariable(){};
 
@@ -74,6 +72,7 @@ public:
 
 	Atributo* clonar(){
 		AtributoVariable<T_tipo> *clon=new AtributoVariable<T_tipo>(nombre);
+		clon->valores.clear();
 		for(Ttamanio i=0;i<valores.size();i++){
 			clon->valores.push_back(valores.at(i));
 		}
@@ -85,7 +84,8 @@ public:
 		unsigned char aux=valores.size();
 		salida.sputn((char*)&aux,offset);
 		for(Ttamanio i=0;i<valores.size();i++){
-			salida.sputn((char*)&valores.at(i),sizeof(T_tipo));
+			T_tipo aux=valores.at(i);
+			salida.sputn((char*)&aux,sizeof(T_tipo));
 			offset+=sizeof(T_tipo);
 		}
 		return offset;
