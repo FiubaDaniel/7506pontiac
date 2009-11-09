@@ -61,7 +61,7 @@ int main() {
 	
 	/* ARCHIVO 1 */
 	
-	misDatos.inicializarArchivo1("MiArchivo1.dat", 256, true, 1024, true, ARBOL, 128);
+/*	misDatos.inicializarArchivo1("MiArchivo1.dat", 256, true, 1024, true, ARBOL, 128);
 	
 	for (int i=0; i<CENTENAMAXREGISTROS*100; ++i){
 		cantElementos = i % DELTA + MINIMO;
@@ -85,7 +85,7 @@ int main() {
 		mostrarArchivo1(misDatos);
 	}
 	
-	misDatos.cerrarArchivo1();
+	misDatos.cerrarArchivo1();*/
 	
 	/* ARCHIVO 2 */
 	
