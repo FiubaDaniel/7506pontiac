@@ -98,7 +98,9 @@ MisDatos::~MisDatos(){}
 	 Archivo* archivo=new Archivo();
 	 EARegistros * estrategiaregistro=new EARegistros(&reg);
 
-
+	 archivo->crear(path.c_str());
+	 estrategiaregistro->crear(archivo);
+	 /*
 	 if(!archivo->abrir(path.c_str())){
 		 archivo->crear(path.c_str());
 		 estrategiaregistro->crear(archivo);
@@ -111,9 +113,9 @@ MisDatos::~MisDatos(){}
 			 delete archivo;
 			 delete estrategiaregistro;
 			 throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
-		 }*/
+		 }
 
-	 }
+	 }*/
 	 estrategiaregistro->setComparador(comparador);
 	 estrategiaregistro->setClave(&claveEstructural);
 	 /*incializar indice*/
@@ -127,6 +129,9 @@ MisDatos::~MisDatos(){}
 		 }else{
 			 Indice = new HashingExt();
 		 }
+
+		 Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
+		 /*
 		 if(!Indice->abrir(path,comparador)){
 			 Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 		 }else if(Indice->tamanioBloque()!=longitudBloqueIndice){
@@ -136,7 +141,7 @@ MisDatos::~MisDatos(){}
 			 delete estrategiaregistro;
 			 delete Indice;
 			 throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
-		 }
+		 }*/
 	 }
 	 /*inicializar el estrategia Recurso*/
 	 EstrategiaRecursos* estrategiaRecurso=NULL;
@@ -368,6 +373,7 @@ MisDatos::~MisDatos(){}
 		 for(unsigned i=0;i<registro.cantidadAtributos();i++){
 			 cout<<registro.get(i)->getNombre()<<" : ";
 			 registro.get(i)->imprimir(cout);
+			 cout<<" ";
 		 }
 		 cout<<endl;
 	 }
@@ -397,6 +403,7 @@ MisDatos::~MisDatos(){}
 		 for(unsigned i=0;i<registro.cantidadAtributos();i++){
 			 cout<<registro.get(i)->getNombre()<<" : ";
 			 registro.get(i)->imprimir(cout);
+			 cout<<" ";
 		 }
 		 cout<<endl;
 	 }
@@ -481,6 +488,7 @@ MisDatos::~MisDatos(){}
 		 for(unsigned i=0;i<registro.cantidadAtributos();i++){
 			 cout<<registro.get(i)->getNombre()<<" : ";
 			 registro.get(i)->imprimir(cout);
+			 cout<<" ";
 		 }
 		 cout<<endl;
 	 }
