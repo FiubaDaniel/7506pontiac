@@ -97,7 +97,7 @@ bool BSharpTree::abrir(string nombreArch,ComparadorClave* comp){
 int BSharpTree::calcularCantidadElementosPorNodo(unsigned int tamSerializadoClave){
 	 unsigned int resultado = tamanioNodo - 2 * sizeof(int) - sizeof(Referencia);
 	 int tamElemento = sizeof(Referencia)+tamSerializadoClave;
-	 resultado = (int)((resultado/tamElemento)-1);
+	 resultado = (int)(resultado/tamElemento);
 	 if (resultado<1){
 		throw  TamanioInsuficienteException();
 	 }else return resultado;
@@ -873,14 +873,14 @@ void BSharpTree::imprimir(){
     cout<<"Tamanio de los nodos: "<< tamanioNodo <<endl;
     cout<<"posicion de la raiz: "<<posicionRaiz<<endl;
 	cout<<" "<<endl;
-	imprimirIterativo(Raiz,Raiz->getNumeroNivel());
+	imprimirIterativo(Raiz);
 }
 
-void BSharpTree::imprimirIterativo(Nodo* nodoE,unsigned int nivelRaiz){
+void BSharpTree::imprimirIterativo(Nodo* nodoE){
 	if(nodoE->getNumeroNivel()!=0){
 		NodoIntermedio* nodo = dynamic_cast<NodoIntermedio*>(nodoE);
 	    cout <<" Nodo Intermedio: ";
-		cout <<" Nivel: " << nodo->getNumeroNivel();
+		//cout <<" Nivel: " << nodo->getNumeroNivel();
 	    cout <<" Referencia Izquierda: " << nodo->getReferenciaIzq();
 	    cout <<" Elementos: ";
 	    std::list<ElementoNodo*>::iterator it = nodo->getListaElementos()->begin();
@@ -896,13 +896,13 @@ void BSharpTree::imprimirIterativo(Nodo* nodoE,unsigned int nivelRaiz){
 		      ++it;
 	     }
 	    Nodo* nodoSiguiente = obtenerNodoPorPosiciones(nodo->getReferenciaIzq());
-	    imprimirIterativo(nodoSiguiente,nivelRaiz);
+	    imprimirIterativo(nodoSiguiente);
 	    delete nodoSiguiente;
 	    it = nodo->getListaElementos()->begin();
 	    while(it!=nodo->getListaElementos()->end()){
 	    	ElementoNodo* elem = *it;
 	    	nodoSiguiente = obtenerNodoPorPosiciones(elem->getReferencia());
-	    	imprimirIterativo(nodoSiguiente,nivelRaiz);
+	    	imprimirIterativo(nodoSiguiente);
 	    	delete nodoSiguiente;
 	    	++it;
 	    }

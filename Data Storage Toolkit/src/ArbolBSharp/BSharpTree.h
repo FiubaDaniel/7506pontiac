@@ -133,7 +133,7 @@ private:
 
 	void recomponerRaiz();
 
-	void imprimirIterativo(Nodo* nodo,unsigned int nivelRaiz);
+	void imprimirIterativo(Nodo* nodo);
 
 	unsigned int numeroDeElementosXnodo,posicionRaiz,cantidadMinimaDeElementos;
 
