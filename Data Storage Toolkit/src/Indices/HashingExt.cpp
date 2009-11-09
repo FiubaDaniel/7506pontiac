@@ -22,15 +22,16 @@ void HashingExt::calcular_cantidad_cubos(const unsigned tam_clave_ref, const uns
 unsigned HashingExt::dispersar(char *clave_mem)
 {
         /*
-                Se enmascaran los bits menos significativos (sufijos) de la concatenaci�n de los componentes de la clave
-                En este caso los que entran en un entero sin signo, es decir 32 bits
-                Luego la operaci�n de m�dulo, regresar� los bits menos significativos asociados con el tama�o actual de la tabla de dispersi�n
+             Se transforma la clave a un valor entero, mediante la sumatoria de los bytes en base 2
+             Luego se aplica el MÓDULO (tamaño de la tabla)
         */
-        unsigned ref_en_tabla=0; //valor de dispersi�n
-        unsigned numero_a_dispersar;
-        unsigned offset = this->tam_clave - sizeof(numero_a_dispersar);
+        unsigned ref_en_tabla=0; //valor de dispersión
+        int numero_a_dispersar = 0;
 
-        memcpy(&numero_a_dispersar, clave_mem  + offset, sizeof(numero_a_dispersar));
+        for(int i = 0; i < this->tam_clave; i++)
+        {
+                numero_a_dispersar += pow(2, i)*(*(clave_mem+i));
+        }
 
         ref_en_tabla = numero_a_dispersar % (this->tam_tabla);
 
