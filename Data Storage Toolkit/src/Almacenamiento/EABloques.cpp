@@ -7,71 +7,79 @@
 #include "EABloques.h"
 #include <iostream>
 
-EABloques::EABloques(Registro* tipoRegistro,Ttamanio tamanioBloque,double porcCarga){
+EABloques::EABloques(Registro* tipoRegistro,Ttamanio tamanioBloque,double porcentajeCarga){
 	almacen=NULL;
-	this->bloque=new Bloque(tipoRegistro);
+	bloque=new Bloque(tipoRegistro);
 	capacBloque=tamanioBloque;
-	bloqueSerializado=new char[tamanioBloque];
-	this->porcCarga=porcCarga;
+	porcCarga=porcentajeCarga;
 }
 
 EABloques::~EABloques() {
-	delete[] bloqueSerializado;
+	cerrar();
 	delete bloque;
-	archivoEspacioLibre.close();
 }
-void EABloques::setRegistro(Registro*registro){
-	if(bloque!=NULL){
-		bloque->inicializar(registro);
-	}else bloque=new Bloque(registro);
-}
-void EABloques::finalizarAlamcenamiento(){
-	if(almacen!=NULL){
-		archivoEspacioLibre.close();
-		almacen->escribir( (char*)&capacBloque , sizeof(capacBloque) );
-		almacen->escribir( (char*)&siguienteLibre , sizeof(siguienteLibre) );
-	}
-}
-bool EABloques::crear(Almacenamiento*almacen){
-	finalizarAlamcenamiento();
-	this->almacen=almacen;
-	std::string ruta=almacen->getNombre()+".bloques";
+bool EABloques::crear(Almacenamiento*almacenamiento){
+	almacen=almacenamiento;
 	nroRegistro=0;
 	nroBloque=0;
 	siguienteLibre=0;
+	std::string ruta=almacen->getNombre()+".bloques";
 	archivoEspacioLibre.open(ruta.c_str(),std::fstream::binary | std::fstream::out |std::fstream::trunc);
 	archivoEspacioLibre.close();
 	archivoEspacioLibre.open(ruta.c_str(),std::fstream::binary | std::fstream::in| std::fstream::out|std::fstream::trunc );
-	almacen->escribir( (char*)&capacBloque , sizeof(capacBloque) );
-	almacen->escribir( (char*)&siguienteLibre , sizeof(siguienteLibre) );
+	almacen->posicionar(0);
+	almacen->escribir(&capacBloque , sizeof(capacBloque) );
+	almacen->escribir(&siguienteLibre , sizeof(siguienteLibre) );
+	almacen->escribir(&porcCarga,sizeof(porcCarga));
+	bloqueSerializado=new char[capacBloque];
+
 	return archivoEspacioLibre.is_open();
 }
-void EABloques::cerrar(){
-	finalizarAlamcenamiento();
-	almacen->cerrar();
-}
-bool EABloques::abrir(Almacenamiento*almacen){
+bool EABloques::abrir(Almacenamiento*almacenamiento){
+	almacen=almacenamiento;
 
-	finalizarAlamcenamiento();
-	this->almacen=almacen;
 	std::string ruta=almacen->getNombre()+".bloques";
 	archivoEspacioLibre.open(ruta.c_str(),std::fstream::binary | std::fstream::in| std::fstream::out );
-	this->almacen->posicionar(0);
-	this->almacen->leer((char*)&capacBloque,sizeof(siguienteLibre));
-	this->almacen->leer((char*)&siguienteLibre,sizeof(siguienteLibre));
+	if( not archivoEspacioLibre.is_open())
+		return false;
+	almacen->posicionar(0);
+	almacen->leer(&capacBloque , sizeof(capacBloque) );
+	almacen->leer(&siguienteLibre , sizeof(siguienteLibre) );
+	almacen->leer(&porcCarga,sizeof(porcCarga));
+	bloqueSerializado=new char[capacBloque];
+
 	nroRegistro=0;
-	return archivoEspacioLibre.is_open();
+	return true;
+}
+
+void EABloques::cerrar(){
+	delete[] bloqueSerializado;
+	bloqueSerializado=NULL;
+	if(almacen!=NULL){
+		archivoEspacioLibre.close();
+		almacen->posicionar(0);
+		almacen->escribir(&capacBloque , sizeof(capacBloque) );
+		almacen->escribir(&siguienteLibre , sizeof(siguienteLibre) );
+		almacen->escribir(&porcCarga,sizeof(porcCarga));
+		almacen=NULL;
+	}
 }
 bool EABloques::posicionarComponente(size_t nroCompuesto){
 	if(nroCompuesto<siguienteLibre){
 		nroBloque=nroCompuesto;
-		almacen->posicionar(capacBloque*nroBloque+sizeof(siguienteLibre)+sizeof(capacBloque));
+		almacen->posicionar(capacBloque*nroBloque+sizeof(siguienteLibre)+sizeof(capacBloque)+sizeof(porcCarga));
 		almacen->reiniciar();
 		nroRegistro=0;
 		return true;
 	}
 	return false;
 }
+void EABloques::setRegistro(Registro*registro){
+	if(bloque!=NULL){
+		bloque->inicializar(registro);
+	}else bloque=new Bloque(registro);
+}
+
 bool EABloques::leerBloque(Bloque*bloque){
 	/*leo el bloque*/
 	almacen->leer(bloqueSerializado,capacBloque);

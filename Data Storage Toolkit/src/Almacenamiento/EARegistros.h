@@ -18,10 +18,8 @@ class EARegistros: public EstrategiaAlmacenamiento {
 	size_t nroRegistro;
 	size_t siguienteRegLibre;
 	Ttamanio tamanioRegistro;
-	Ttamanio tamanioEncabezado;
 	char* registroSerializado;
 	Almacenamiento* almacen;
-	void finalizarAlmacenamiento();
 	int comparar(Registro*reg1,Registro*reg2);
 	/*escribe el registro en la posicion.*/
 	void escribir(Registro*registro);

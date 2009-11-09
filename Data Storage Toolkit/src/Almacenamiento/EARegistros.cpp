@@ -12,11 +12,38 @@ EARegistros::EARegistros(Registro*registro){
 	tamanioRegistro=registro->tamanioSerializado();
 	this->registro=(Registro*)registro->clonar();
 }
-void EARegistros::finalizarAlmacenamiento(){
+
+EARegistros::~EARegistros() {
+	cerrar();
+	delete registro;
+}
+bool EARegistros::abrir(Almacenamiento*almacenamiento){
+	almacen=almacenamiento;
+	almacen->posicionar(0);
+	almacen->leer(&tamanioRegistro,sizeof(tamanioRegistro));
+	almacen->leer(&siguienteRegLibre,sizeof(siguienteRegLibre));
+	registroSerializado=new char[tamanioRegistro];
+	posicionarComponente(0);
+	return true;
+}
+bool EARegistros::crear(Almacenamiento*almacenamiento){
+	almacen=almacenamiento;
+	registroSerializado=new char[tamanioRegistro];
+	siguienteRegLibre=0;
+	almacen->posicionar(0);
+	almacen->escribir(&tamanioRegistro,sizeof(tamanioRegistro));
+	almacen->escribir(&siguienteRegLibre,sizeof(siguienteRegLibre));
+	posicionarComponente(0);
+	return true;
+}
+void EARegistros::cerrar(){
+	delete[] registroSerializado;
+	registroSerializado=NULL;
 	if(almacen!=NULL){
 		almacen->posicionar(0);
-		almacen->escribir((char*)tamanioEncabezado,sizeof(tamanioEncabezado));
-		almacen->escribir((char*)siguienteRegLibre,sizeof(siguienteRegLibre));
+		almacen->escribir(&tamanioRegistro,sizeof(tamanioRegistro));
+		almacen->escribir(&siguienteRegLibre,sizeof(siguienteRegLibre));
+		almacen=NULL;
 	}
 }
 int EARegistros::comparar(Registro*reg1,Registro*reg2){
@@ -27,40 +54,7 @@ int EARegistros::comparar(Registro*reg1,Registro*reg2){
 	delete clave2;
 	return resultado;
 }
-EARegistros::~EARegistros() {
-	finalizarAlmacenamiento();
-	delete[] registroSerializado;
-	delete registro;
-}
-bool EARegistros::abrir(Almacenamiento*almacen){
-	finalizarAlmacenamiento();
-	this->almacen=almacen;
-	almacen->posicionar(0);
-	Ttamanio tamRegistro=0;
-	almacen->leer((char*)tamRegistro,sizeof(tamanioRegistro));
-	if(tamRegistro>tamanioRegistro){
-		delete[] registroSerializado;
-		registroSerializado=new char[tamRegistro];
-		tamanioRegistro=tamRegistro;
-	}
-	almacen->leer((char*)siguienteRegLibre,sizeof(siguienteRegLibre));
-	posicionarComponente(0);
-	return true;
-}
-bool EARegistros::crear(Almacenamiento*almacenamiento){
-	finalizarAlmacenamiento();
-	almacen=almacenamiento;
-	registroSerializado=new char[tamanioRegistro];
-	tamanioEncabezado=sizeof(siguienteRegLibre);
-	siguienteRegLibre=0;
-	this->almacen->posicionar(0);
-	this->almacen->escribir(&siguienteRegLibre,sizeof(siguienteRegLibre));
-	return true;
-}
-void EARegistros::cerrar(){
-	finalizarAlmacenamiento();
-	almacen->cerrar();
-}
+
 void EARegistros::escribir(Registro*registro){
 	if(!almacen->fin()){
 		std::stringbuf buf(std::ios_base::binary | std::ios_base::out );
@@ -152,7 +146,7 @@ bool EARegistros::eliminar(Componente *componente){
 }
 bool EARegistros::posicionarComponente(size_t nroCompuesto){
 	nroRegistro=nroCompuesto;
-	almacen->posicionar(nroCompuesto*tamanioRegistro+tamanioEncabezado);
+	almacen->posicionar(nroCompuesto*tamanioRegistro+sizeof(tamanioRegistro)+sizeof(siguienteRegLibre));
 	return true;
 }
 bool EARegistros::siguiente(Componente *componente){

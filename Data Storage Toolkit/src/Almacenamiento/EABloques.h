@@ -25,7 +25,6 @@ private:
 	std::fstream archivoEspacioLibre;
 	size_t buscarEspacioLibre(Ttamanio espacio,bool& encontrado);
 	bool buscarComponente(Registro*registro,Ttamanio&posicion);
-	void finalizarAlamcenamiento();
 	bool leerBloque(Bloque*bloque);
 	bool escribirBloque(Bloque*bloque);
 public:
