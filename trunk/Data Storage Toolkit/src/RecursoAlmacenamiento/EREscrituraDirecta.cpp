@@ -143,7 +143,6 @@ void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 	Componente* componente;
 	switch(cambio.operacion){
 		case Cambio::Alta :
-			registro=NULL;
 			insertarEnBuffer(cambio.referencia);
 			break;
 		case Cambio::Modificacion:

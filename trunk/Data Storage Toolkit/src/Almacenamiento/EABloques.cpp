@@ -69,7 +69,8 @@ bool EABloques::posicionarComponente(size_t nroCompuesto){
 		almacen->reiniciar();
 		nroRegistro=0;
 		return true;
-	}return false;
+	}
+	return false;
 }
 bool EABloques::leerBloque(Bloque*bloque){
 	/*leo el bloque*/
@@ -108,6 +109,8 @@ bool EABloques::escribir(Componente*compuesto){
 	if(bloque!=NULL&&nroBloque<=siguienteLibre){
 		if(bloque->tamanioSerializado()<=capacBloque){
 			escribirBloque(bloque);
+			if(siguienteLibre<nroBloque)
+				siguienteLibre=nroBloque;
 			if(logActivo){
 				for(Ttamanio i=0;i<bloque->cantidadComponentes();i++){
 					clave->set((Registro*)bloque->get(i));
