@@ -710,7 +710,7 @@ void HashingExt::crear(std::string nombreArch, unsigned int tamanioBloque, Clave
 
 
         this->persist.open(nom_persist.c_str(),  fstream:: out | fstream::trunc| fstream::binary);
-        if(!persist)
+        if(!persist.is_open())
         {
                 cout << "Error al abrir el archivo de persistencia " <<endl;
                 return;
@@ -731,7 +731,7 @@ void HashingExt::crear(std::string nombreArch, unsigned int tamanioBloque, Clave
         this->persist.close();
 
         this->tabla_dispersion.open(nom_tabla.c_str(), fstream:: out | fstream::trunc | fstream::binary);
-        if(! ( tabla_dispersion))
+        if(! tabla_dispersion.is_open())
         {
                 cout << "Error al abrir el archivo de tabla" << endl;
                 return;
@@ -741,7 +741,7 @@ void HashingExt::crear(std::string nombreArch, unsigned int tamanioBloque, Clave
 
         //Se crea el archivo de cubos libres vacío
         this->cubos_libres.open(nom_libres.c_str(), fstream:: out | fstream::trunc| fstream::binary);
-        if ( !cubos_libres)
+        if ( !cubos_libres.is_open())
         {
                 cout << "Error al abrir el archivo de cubos libres " << endl;
                 return;
@@ -750,7 +750,7 @@ void HashingExt::crear(std::string nombreArch, unsigned int tamanioBloque, Clave
 
         //Se crea el archivo de cubos vacío
         this->cubos.open(nom_cubos.c_str(), fstream:: out | fstream::trunc | fstream::binary);
-        if(!cubos)
+        if(!cubos.is_open())
         {
                 cout << "Error al abrir el archivo de cubos " <<endl;
                 return;
