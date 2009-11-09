@@ -869,7 +869,6 @@ Nodo* BSharpTree::obtenerNodoPorPosiciones(Referencia posInicial){
 }
 
 void BSharpTree::imprimir(){
-    cout<<"Numero de Registros por nodo: "<< numeroDeElementosXnodo <<endl;;
     cout<<"Tamanio de los nodos: "<< tamanioNodo <<endl;
     cout<<"posicion de la raiz: "<<posicionRaiz<<endl;
 	cout<<" "<<endl;
@@ -880,7 +879,7 @@ void BSharpTree::imprimirIterativo(Nodo* nodoE){
 	if(nodoE->getNumeroNivel()!=0){
 		NodoIntermedio* nodo = dynamic_cast<NodoIntermedio*>(nodoE);
 	    cout <<" Nodo Intermedio: ";
-		//cout <<" Nivel: " << nodo->getNumeroNivel();
+		cout <<" Nivel: " << nodo->getNumeroNivel();
 	    cout <<" Referencia Izquierda: " << nodo->getReferenciaIzq();
 	    cout <<" Elementos: ";
 	    std::list<ElementoNodo*>::iterator it = nodo->getListaElementos()->begin();
