@@ -97,7 +97,7 @@ bool BSharpTree::abrir(string nombreArch,ComparadorClave* comp){
 int BSharpTree::calcularCantidadElementosPorNodo(unsigned int tamSerializadoClave){
 	 unsigned int resultado = tamanioNodo - 2 * sizeof(int) - sizeof(Referencia);
 	 int tamElemento = sizeof(Referencia)+tamSerializadoClave;
-	 resultado = (int)resultado/tamElemento;
+	 resultado = (int)((resultado/tamElemento)-1);
 	 if (resultado<1){
 		throw  TamanioInsuficienteException();
 	 }else return resultado;
