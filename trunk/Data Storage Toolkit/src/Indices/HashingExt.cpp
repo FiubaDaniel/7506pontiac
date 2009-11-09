@@ -364,6 +364,17 @@ bool HashingExt::buscar_clave(Clave *clave, Referencia *referencia, unsigned rec
         this->tabla_dispersion.seekg(pos_tabla*sizeof(ref_cubo), ios_base::beg);
         this->tabla_dispersion.read( (char*) &ref_cubo, sizeof(ref_cubo));
 
+        if(ref_cubo == REF_NULA)
+        {
+                //Significa que no hay ningún registro almacenado
+                delete [] clave_mem;
+                delete [] p_cubo;
+                delete [] un_registro;
+                delete [] una_clave;
+
+                return false;
+        }
+
         this->cubos.seekg(ref_cubo*(this->bytes_cubo), ios_base::beg);
         this->cubos.read( (char*) p_cubo, this->bytes_cubo);
 
