@@ -109,14 +109,14 @@ int main() {
 
 	misDatos.cerrarArchivo2();
 	}catch(exception& e){
-		cerr<<e.what()<<endl;
-		cerr<<"Cerrando Archivo"<<endl;
+		cout<<e.what()<<endl;
+		cout<<"Cerrando Archivo"<<endl;
 		misDatos.cerrarArchivo1();
 		misDatos.cerrarArchivo2();
 
 	}catch(ExcepcionMisDatos& e){
-		cerr<<e.getMensaje()<<endl;
-		cerr<<"Cerrando Archivo"<<endl;
+		cout<<e.getMensaje()<<endl;
+		cout<<"Cerrando Archivo"<<endl;
 		misDatos.cerrarArchivo1();
 		misDatos.cerrarArchivo2();
 	}
