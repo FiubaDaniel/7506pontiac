@@ -100,22 +100,12 @@ MisDatos::~MisDatos(){}
 
 	 archivo->crear(path.c_str());
 	 estrategiaregistro->crear(archivo);
-	 /*
 	 if(!archivo->abrir(path.c_str())){
 		 archivo->crear(path.c_str());
 		 estrategiaregistro->crear(archivo);
 	 }else{
 		 estrategiaregistro->abrir(archivo);
-		 /*if(estrategiaregistro->getCapacBloque()!=longitud){
-			 estrategiaregistro->cerrar();
-			 archivo->cerrar();
-			 delete comparador;
-			 delete archivo;
-			 delete estrategiaregistro;
-			 throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
-		 }
-
-	 }*/
+	 }
 	 estrategiaregistro->setComparador(comparador);
 	 estrategiaregistro->setClave(&claveEstructural);
 	 /*incializar indice*/
@@ -130,8 +120,6 @@ MisDatos::~MisDatos(){}
 			 Indice = new HashingExt();
 		 }
 
-		 Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
-		 /*
 		 if(!Indice->abrir(path,comparador)){
 			 Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 		 }else if(Indice->tamanioBloque()!=longitudBloqueIndice){
@@ -141,7 +129,7 @@ MisDatos::~MisDatos(){}
 			 delete estrategiaregistro;
 			 delete Indice;
 			 throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
-		 }*/
+		 }
 	 }
 	 /*inicializar el estrategia Recurso*/
 	 EstrategiaRecursos* estrategiaRecurso=NULL;
@@ -174,7 +162,7 @@ MisDatos::~MisDatos(){}
 		 estrategiaTexto->abrir(archivo);
 	 }
 	 EstrategiaRecursos *estrategiaRecurso=new ERUnAlmacenamiento(NULL,estrategiaTexto);
-	 recurso2=new Recurso(estrategiaRecurso);
+	 recurso3=new Recurso(estrategiaRecurso);
  }
  /*
   * Pre: Archivo inicializado.
@@ -502,10 +490,13 @@ MisDatos::~MisDatos(){}
 	 EstrategiaRecursos* estrategia = recurso1->getEstrategia();
 	 EREscrituraDirecta* estrategiaDirecta = dynamic_cast<EREscrituraDirecta*>(estrategia);
 	 if(estrategiaDirecta!=NULL){
-		 delete estrategiaDirecta->getEstrategiaBuffer();
+ 		 delete estrategiaDirecta->getEstrategiaBuffer()->getAlmacenamiento();
+ 		 delete estrategiaDirecta->getEstrategiaBuffer();
 	 }
-	 delete estrategia->getEstrategiaAlmacenamiento();
+	 delete estrategia->getEstrategiaAlmacenamiento()->getAlmacenamiento();
+	 delete estrategia->getEstrategiaAlmacenamiento()->getAlmacenamiento();
 	 delete estrategia->getIndice();
+	 delete estrategia;
 	 delete recurso1;
  }
  /*
@@ -513,21 +504,24 @@ MisDatos::~MisDatos(){}
   * Cierra el archivo correspondiente.
   */
  void MisDatos::cerrarArchivo2(){
-	EstrategiaRecursos* estrategia = recurso2->getEstrategia();
-	EREscrituraDirecta* estrategiaDirecta = dynamic_cast<EREscrituraDirecta*>(estrategia);
-	if(estrategiaDirecta!=NULL){
-	 		 delete estrategiaDirecta->getEstrategiaBuffer()->getAlmacenamiento();
-	 	 }
-	delete estrategia->getEstrategiaAlmacenamiento();
-	delete estrategia->getIndice();
-	//delete comparador;
-	delete recurso2;
+	 EstrategiaRecursos* estrategia = recurso2->getEstrategia();
+	 EREscrituraDirecta* estrategiaDirecta = dynamic_cast<EREscrituraDirecta*>(estrategia);
+	 if(estrategiaDirecta!=NULL){
+ 		 delete estrategiaDirecta->getEstrategiaBuffer()->getAlmacenamiento();
+ 		 delete estrategiaDirecta->getEstrategiaBuffer();
+	 }
+	 delete estrategia->getEstrategiaAlmacenamiento()->getAlmacenamiento();
+	 delete estrategia->getEstrategiaAlmacenamiento()->getAlmacenamiento();
+	 delete estrategia->getIndice();
+	 delete estrategia;
+	 delete recurso2;
  }
  /*
   * Pre: Archivo inicializado.
   * Cierra el archivo correspondiente.
   */
  void MisDatos::cerrarArchivo3(){
+	 delete recurso3->getEstrategia()->getEstrategiaAlmacenamiento()->getAlmacenamiento();
 	 delete recurso3->getEstrategia()->getEstrategiaAlmacenamiento();
      delete recurso3->getEstrategia();
      delete recurso3;
