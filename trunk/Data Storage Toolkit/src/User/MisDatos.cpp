@@ -55,12 +55,14 @@ MisDatos::~MisDatos(){}
 		 if(!Indice->abrir(path,comparador)){
 			 Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 		 }else if(Indice->tamanioBloque()!=longitudBloqueIndice){
+			 estrategiaBloques->cerrar();
+			 archivo->cerrar();
 			 Indice->cerrar();
 			 delete comparador;
 			 delete archivo;
 			 delete estrategiaBloques;
 			 delete Indice;
-			 throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
+			 throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloqueIndice incorrecta");
 		 }
 	 }
 	 /*inicializar el estrategia Recurso*/
@@ -123,6 +125,8 @@ MisDatos::~MisDatos(){}
 		 if(!Indice->abrir(path,comparador)){
 			 Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 		 }else if(Indice->tamanioBloque()!=longitudBloqueIndice){
+			 estrategiaregistro->cerrar();
+			 archivo->cerrar();
 			 Indice->cerrar();
 			 delete comparador;
 			 delete archivo;
@@ -494,7 +498,7 @@ MisDatos::~MisDatos(){}
  		 delete estrategiaDirecta->getEstrategiaBuffer();
 	 }
 	 delete estrategia->getEstrategiaAlmacenamiento()->getAlmacenamiento();
-	 delete estrategia->getEstrategiaAlmacenamiento()->getAlmacenamiento();
+	 delete estrategia->getEstrategiaAlmacenamiento();
 	 delete estrategia->getIndice();
 	 delete estrategia;
 	 delete recurso1;
@@ -511,7 +515,7 @@ MisDatos::~MisDatos(){}
  		 delete estrategiaDirecta->getEstrategiaBuffer();
 	 }
 	 delete estrategia->getEstrategiaAlmacenamiento()->getAlmacenamiento();
-	 delete estrategia->getEstrategiaAlmacenamiento()->getAlmacenamiento();
+	 delete estrategia->getEstrategiaAlmacenamiento();
 	 delete estrategia->getIndice();
 	 delete estrategia;
 	 delete recurso2;
