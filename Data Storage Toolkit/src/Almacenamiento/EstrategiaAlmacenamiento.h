@@ -53,6 +53,9 @@ public:
 	virtual void setComparador(ComparadorClave*unComparador){
 		comparador=unComparador;
 	};
+	virtual ComparadorClave* getComparador(){
+		return comparador;
+	};
 	virtual bool abrir(Almacenamiento*almacen)=0;
 	virtual bool crear(Almacenamiento*almacen)=0;
 	virtual void cerrar()=0;
