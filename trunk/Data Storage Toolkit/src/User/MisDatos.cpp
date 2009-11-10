@@ -498,6 +498,7 @@ MisDatos::~MisDatos(){}
  		 delete estrategiaDirecta->getEstrategiaBuffer();
 	 }
 	 delete estrategia->getEstrategiaAlmacenamiento()->getAlmacenamiento();
+	 delete estrategia->getEstrategiaAlmacenamiento()->getComparador();
 	 delete estrategia->getEstrategiaAlmacenamiento();
 	 delete estrategia->getIndice();
 	 delete estrategia;
@@ -515,6 +516,7 @@ MisDatos::~MisDatos(){}
  		 delete estrategiaDirecta->getEstrategiaBuffer();
 	 }
 	 delete estrategia->getEstrategiaAlmacenamiento()->getAlmacenamiento();
+	 delete estrategia->getEstrategiaAlmacenamiento()->getComparador();
 	 delete estrategia->getEstrategiaAlmacenamiento();
 	 delete estrategia->getIndice();
 	 delete estrategia;
