@@ -10,9 +10,9 @@ class Recurso;
 class EstrategiaRecursos{
 public:
 	/*getters de los elementos que la estrategia esta utilizando*/
-	virtual const EstrategiaAlmacenamiento *getEstrategiaAlmacenamiento()=0;
+	virtual  EstrategiaAlmacenamiento *getEstrategiaAlmacenamiento()=0;
 	/**/
-	virtual const EstrategiaIndice *getIndice()=0;
+	virtual  EstrategiaIndice *getIndice()=0;
 	/*estrategia= es una EstrategiaAlmacenamiento estrategia lista para ser usada*/
 	virtual void setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategia)=0;
 	/*indice=es una EstrategiaIndice lista para se usada*/
