@@ -60,7 +60,7 @@ int main() {
 	int claveRegFijo = 0;
 
 	/* ARCHIVO 1 */
-
+	try{
 	misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
 
 	for (int i=0; i<CENTENAMAXREGISTROS*100; ++i){
@@ -108,6 +108,17 @@ int main() {
 	}
 
 	misDatos.cerrarArchivo2();
+	}catch(exception& e){
+		cerr<<e.what()<<endl;
+		cerr<<"Cerrando Archivo"<<endl;
+		misDatos.cerrarArchivo1();
+		misDatos.cerrarArchivo2();
 
+	}catch(ExcepcionMisDatos& e){
+		cerr<<e.getMensaje()<<endl;
+		cerr<<"Cerrando Archivo"<<endl;
+		misDatos.cerrarArchivo1();
+		misDatos.cerrarArchivo2();
+	}
 	return 0;
 }
