@@ -214,6 +214,7 @@ public:
 		if(tam==std::streambuf::traits_type::eof())
 			throw IOSerializacionExcepcion("Excepcion:AtributoVariable "+nombre+" no fue deserializado, no se puede leer el tamanio");
 		char *buf=new char[tam];
+		entrada.sgetn(buf,tam);
 		if(entrada.sgetn(buf,tam)!=tam)
 			throw IOSerializacionExcepcion("Excepcion:AtributoVariable "+nombre+" no fue deserializado");
 		str.clear();
