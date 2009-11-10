@@ -12,9 +12,9 @@ MisDatos::~MisDatos(){}
 {
 	 /*inicializo el archivo y la estrategia*/
 	 AtributoVariable<string> mistringid("miStringID");
+	 mistringid ="abarquillamiento";
 	 AtributoFijo<int> miInt("miInt");
 	 AtributoVariable<int> miListaInt("miListaInt");
-
 	 Registro reg(3,&mistringid,&miInt,&miListaInt);
 	 Clave claveEstructural(&reg,1,"miStringID");
 	 ComparadorClave* comparador = new ComparadorRegistroVariable();
