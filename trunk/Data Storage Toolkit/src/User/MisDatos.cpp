@@ -11,7 +11,7 @@ MisDatos::~MisDatos(){}
 		 int longitudBuffer, bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice) throw (ExcepcionMisDatos)
 {
 	 /*inicializo el archivo y la estrategia*/
-	 AtributoVariable<string> mistringid("miStringID");
+	 AtributoFijo<char*> mistringid("miStringID",20);
 	 mistringid ="abarquillamiento";
 	 AtributoFijo<int> miInt("miInt");
 	 AtributoVariable<int> miListaInt("miListaInt");
@@ -174,7 +174,7 @@ MisDatos::~MisDatos(){}
   * con el mensaje de error correspondiente.
   */
  void MisDatos::agregarRegistroArchivo1(MiRegistroVariable registro) throw (ExcepcionMisDatos){
-	 AtributoVariable<string> mistringid("miStringID");
+	 AtributoFijo<char*> mistringid("miStringID",20);
 	 mistringid=registro.getMiStringID();
 	 AtributoFijo<int> miInt("miInt");
 	 miInt=registro.getMiInt();
@@ -224,8 +224,8 @@ MisDatos::~MisDatos(){}
   * clave, lanza una excepcion con el mensaje de error correspondiente.
   */
  void MisDatos::eliminarRegistroArchivo1(std::string clave) throw (ExcepcionMisDatos){
-	 AtributoVariable<string> mistringid("miStringID");
-	 mistringid=clave;
+	 AtributoFijo<char*> mistringid("miStringID",20);
+	 mistringid=clave.c_str();
 	 AtributoFijo<int> miInt("miInt");
 	 AtributoVariable<int> miListaInt("miListaInt");
 
@@ -260,7 +260,7 @@ MisDatos::~MisDatos(){}
   *  lanza una excepcion con el mensaje de error correspondiente.
   */
  void MisDatos::modificarRegistroArchivo1(MiRegistroVariable registro) throw (ExcepcionMisDatos){
-	 AtributoVariable<string> mistringid("miStringID");
+	 AtributoFijo<char*> mistringid("miStringID",20);
 	 mistringid=registro.getMiStringID();
 	 AtributoFijo<int> miInt("miInt");
 	 miInt=registro.getMiInt();
@@ -300,7 +300,7 @@ MisDatos::~MisDatos(){}
   *  lanza una excepcion con el mensaje de error correspondiente.
   */
  MiRegistroVariable MisDatos::obtenerRegistroArchivo1(std::string clave) throw (ExcepcionMisDatos){
-	 AtributoVariable<string> mistringid("miStringID");
+	 AtributoFijo<char*> mistringid("miStringID",20);
 	 AtributoFijo<int> miInt("miInt");
 	 AtributoVariable<int> miListaInt("miListaInt");
 	 mistringid=clave;
@@ -354,7 +354,7 @@ MisDatos::~MisDatos(){}
 		 return;
 	 }
 	 EstrategiaAlmacenamiento *estrategiaBuffer=estrategiaDirecta->getEstrategiaBuffer();
-	 AtributoVariable<string> mistringid("miStringID");
+	 AtributoFijo<char*> mistringid("miStringID",20);
 	 AtributoFijo<int> miInt("miInt");
 	 AtributoVariable<int> miListaInt("miListaInt");
 	 Registro registro(3,&mistringid,&miInt,&miListaInt);
@@ -444,7 +444,7 @@ MisDatos::~MisDatos(){}
  void MisDatos::mostrarDatosArchivo1(){
 	 EstrategiaAlmacenamiento *estrategia=const_cast<EstrategiaAlmacenamiento *>(recurso1->getEstrategia()->getEstrategiaAlmacenamiento());
 
-	 AtributoVariable<string> mistringid("miStringID");
+	 AtributoFijo<char*> mistringid("miStringID",20);
 	 AtributoFijo<int> miInt("miInt");
 	 AtributoVariable<int> miListaInt("miListaInt");
 	 Registro registro(3,&mistringid,&miInt,&miListaInt);
