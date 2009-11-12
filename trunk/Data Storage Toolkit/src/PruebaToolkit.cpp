@@ -128,7 +128,7 @@ int main() {
 
 			delete(miRegVariable);
 			delete(miLista);
-	}*/
+	}
 		cout<<"Elimina "<<endl;
 		cout<<" "<<endl;
 	for (int i=50; i<CENTENAMAXREGISTROS*100; ++i){
