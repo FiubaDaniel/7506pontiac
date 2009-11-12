@@ -16,7 +16,7 @@ EREscrituraDirecta::~EREscrituraDirecta(){}
 void EREscrituraDirecta::setClave(Registro*reg,Clave*clave){
 	for(Ttamanio i=0;i<clave->getCantidadAtributos();i++){
 		Atributo*att=clave->getAtributo(i);
-		reg->get(att->getNombre())->set(att);
+		*reg->get(att->getNombre())=*att;
 	}
 }
 bool EREscrituraDirecta::insertar(Registro* registro){
