@@ -452,9 +452,11 @@ void MisDatos::mostrarDatosArchivo1(){
 	AtributoFijo<int> miInt("miInt");
 	AtributoVariable<int> miListaInt("miListaInt");
 	Registro registro(3,&mistringid,&miInt,&miListaInt);
-
+    //TODO agrego cant
+	int cant=0;
 	estrategia->posicionarComponente(0);
 	while( estrategia->siguiente(&registro) ){
+		cant++;
 		cout<<"Pos : "<<estrategia->posicionComponente()<<" ";
 		for(unsigned i=0;i<registro.cantidadAtributos();i++){
 			cout<<registro.get(i)->getNombre()<<" : ";
@@ -464,6 +466,7 @@ void MisDatos::mostrarDatosArchivo1(){
 		cout<<endl;
 	}
 	cout<<endl;
+	cout<<"cantidad en archivo: "<<cant<<endl;
 }
 /*
  * Pre: Archivo inicializado.
