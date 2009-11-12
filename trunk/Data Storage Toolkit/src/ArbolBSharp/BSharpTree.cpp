@@ -639,7 +639,7 @@ void BSharpTree::buscarHermanos(Nodo* nodoActual,NodoIntermedio* padre,Nodo* &he
 		informacion[4]=true;
 		extremo = true;
 	}
-	if((informacion[3]||informacion[4])&&Raiz->getListaElementos()->size()!=1){
+	if((informacion[3]||informacion[4])&&(Raiz->getListaElementos()->size()!=1||Raiz->getNumeroNivel()>1)){
 		refHermanoIzq = obtenerReferenciaHermano(padre,nodoActual->getListaElementos()->front()->getClave(),extremo);
 		hermanoIzq =  obtenerHermanoXsuBflujo(nodoActual->getNumeroNivel(),refHermanoIzq);
 		refHermanoDer = obtenerReferenciaHermano(padre,hermanoIzq->getListaElementos()->front()->getClave(),extremo);
