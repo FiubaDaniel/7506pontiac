@@ -940,6 +940,7 @@ int BSharpTree::tamanioBloque(){
 	return tamanioNodo;
 }
 void BSharpTree::cerrar(){
+	grabarUnitario(Raiz,posicionRaiz);
 	archivoArbol.close();
 	archivoEspaciosLibres.close();
 }
