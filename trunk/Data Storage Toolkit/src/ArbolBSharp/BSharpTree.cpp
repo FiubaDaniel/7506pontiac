@@ -80,15 +80,15 @@ bool BSharpTree::abrir(string nombreArch,ComparadorClave* comp){
 	std:: stringbuf buf(ios_base :: in | ios_base :: out | ios_base :: binary);
 	int tamanio = sizeof(int)*3;
 	char array[tamanio];
-	buf.pubsetbuf(array,tamanio);
 	archivoArbol.read(array,tamanio);
+	buf.pubsetbuf(array,tamanio);
 	buf.pubseekpos(0);
 	buf.sgetn((char*)&numeroDeElementosXnodo,sizeof(numeroDeElementosXnodo));
 	buf.sgetn((char*)&tamanioNodo,sizeof(tamanioNodo));
 	buf.sgetn((char*)&posicionRaiz,sizeof(int));
 	char array2[tamanioNodo];
+	archivoArbol.read(array2,tamanioNodo);
 	buf.pubsetbuf(array2,tamanioNodo);
-	archivoArbol.read(array2,tamanio);
 	Raiz = new NodoIntermedio(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
     cantidadMinimaDeElementos = (unsigned int) ((numeroDeElementosXnodo)*2)/3;
     return true;
@@ -123,9 +123,9 @@ NodoHoja* BSharpTree::buscarPrimerNodoHoja(NodoIntermedio* nodo){
      }
 	char array2[tamanioNodo];
 	buf.pubseekpos(0);
-	buf.pubsetbuf(array2,tamanioNodo);
 	archivoArbol.seekg(ref);
 	archivoArbol.read(array2,tamanioNodo);
+	buf.pubsetbuf(array2,tamanioNodo);
 	buf.pubseekpos(0);
 	buf.sgetn((char*)&nivel,sizeof(int));
 	if(nivel!=0){
@@ -146,8 +146,8 @@ NodoHoja* BSharpTree::buscarHoja(NodoIntermedio* nodo,Clave* clave,Referencia& r
 	char array2[tamanioNodo];
 	buf.pubseekpos(0);
 	archivoArbol.seekg(refAux);
-	buf.pubsetbuf(array2,tamanioNodo);
 	archivoArbol.read(array2,tamanioNodo);
+	buf.pubsetbuf(array2,tamanioNodo);
 	buf.pubseekpos(0);
 	buf.sgetn((char*)&nivel,sizeof(int));
 	if(nivel!=0){
@@ -172,9 +172,9 @@ Referencia BSharpTree::Siguiente(bool ultimo){
 		if(ultimoNodo->numeroPos() == (numeroDeElementosXnodo-ultimoNodo->getEspacioLibre())){
 			char array2[tamanioNodo];
 			buf.pubseekpos(0);
-			buf.pubsetbuf(array2,tamanioNodo);
 			archivoArbol.seekg(ultimoNodo->getReferenciaSiguiente());
 			archivoArbol.read(array2,tamanioNodo);
+			buf.pubsetbuf(array2,tamanioNodo);
 			delete ultimoNodo;
 			ultimoNodo = new NodoHoja(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
 		}
@@ -217,8 +217,8 @@ bool BSharpTree::insertar(Referencia ref,Clave* clave){
 		grabarUnitario(Raiz,posicionRaiz);
 		archivoArbol.seekg(Raiz->getReferenciaIzq());
 		buf.pubseekpos(0);
-		buf.pubsetbuf(array2,tamanioNodo);
 		archivoArbol.read(array2,tamanioNodo);
+		buf.pubsetbuf(array2,tamanioNodo);
 		hoja = new NodoHoja(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
 		hoja->setReferenciaSiguiente(refAux);
 	    grabarUnitario(hoja,Raiz->getReferenciaIzq());
@@ -253,8 +253,8 @@ void BSharpTree::BuscarInsertarOEliminar(Nodo* &hoja,std::list<Referencia>&lista
 	Referencia refAux = nodo->bucarReferenciaAsiguienteNodo(clave);
 	char array2[tamanioNodo];
 	archivoArbol.seekg(refAux);
-	buf.pubsetbuf(array2,tamanioNodo);
 	archivoArbol.read(array2,tamanioNodo);
+	buf.pubsetbuf(array2,tamanioNodo);
 	buf.pubseekpos(0);
 	buf.sgetn((char*)&nivel,sizeof(int));
 	if(!esRaiz){
@@ -335,8 +335,8 @@ void BSharpTree::resolverDesborde(Nodo* nodo,std::list<Referencia>&listaDePadres
 	ElementoNodo* elementoPadre=NULL;
 	archivoArbol.seekg(listaDePadres.front());
 	char array2[tamanioNodo];
-	buff.pubsetbuf(array2,tamanioNodo);
 	archivoArbol.read(array2,tamanioNodo);
+	buff.pubsetbuf(array2,tamanioNodo);
 	NodoIntermedio* padre = new NodoIntermedio(&buff,numeroDeElementosXnodo,comparador,claveEstructural);
 	/*primero obtengo si se balancea y si es con hermano derecho o izq*/
 	buscarNodoBalancearODividir(padre,nodo,hermano,refHijo,izq,balancear,refHermano,elementoPadre);
@@ -452,8 +452,8 @@ void BSharpTree::obtenerHermano(Referencia ref,Nodo*& hermano,unsigned int nivel
 	std::stringbuf buffer(ios_base :: in | ios_base :: out | ios_base :: binary);
 	char array2[tamanioNodo];
 	archivoArbol.seekg(ref);
-	buffer.pubsetbuf(array2,tamanioNodo);
 	archivoArbol.read(array2,tamanioNodo);
+	buffer.pubsetbuf(array2,tamanioNodo);
 	if(nivel==0){
 	   hermano = new NodoHoja(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
 	}else{ hermano = new NodoIntermedio(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);}
@@ -541,8 +541,8 @@ void BSharpTree::resolverSubflujo(Nodo* nodo,std::list<Referencia>&listaDePadres
 	if(refHijo == posicionRaiz){return;}//La raiz tiene permitido estar en subflujo, es mas tener solo un elemento
 	archivoArbol.seekg(listaDePadres.front());//listaDePadre.front() tiene la ref al padre
 	char array2[tamanioNodo];
-	buff.pubsetbuf(array2,tamanioNodo);
 	archivoArbol.read(array2,tamanioNodo);
+	buff.pubsetbuf(array2,tamanioNodo);
 	NodoIntermedio* padre = new NodoIntermedio(&buff,numeroDeElementosXnodo,comparador,claveEstructural);
 	buscarHermanos(nodo,padre,hermanoIzq,hermanoDer,refHermanoIzq,refHermanoDer,refHijo,booleanoInformacion);
 	if(booleanoInformacion[0]){
@@ -704,9 +704,9 @@ Nodo* BSharpTree::obtenerHermanoXsuBflujo(int nivel,Referencia ref){
       std::stringbuf buff(ios_base :: in | ios_base :: out | ios_base :: binary);
       buff.pubseekpos(0);
       char array2[tamanioNodo];
-      buff.pubsetbuf(array2,tamanioNodo);
       archivoArbol.seekg(ref);
       archivoArbol.read(array2,tamanioNodo);
+      buff.pubsetbuf(array2,tamanioNodo);
       if(nivel==0){
     	  Nodo* nodo = new NodoHoja(&buff,numeroDeElementosXnodo,comparador,claveEstructural);
     	  return nodo;
@@ -741,8 +741,8 @@ NodoIntermedio* BSharpTree::buscarIntermedio(Clave* clave,NodoIntermedio* nodo,b
 		buf.pubseekpos(0);
 		archivoArbol.seekg(refAux);
 		char array2[tamanioNodo];
-		buf.pubsetbuf(array2,tamanioNodo);
 		archivoArbol.read(array2,tamanioNodo);
+		buf.pubsetbuf(array2,tamanioNodo);
 		buf.pubseekpos(0);
 		int nivel;
 		buf.sgetn((char*)&nivel,sizeof(int));
@@ -793,9 +793,9 @@ void BSharpTree::armarNuevaRaiz(Nodo* nodoIzq,Nodo* nodoDer){
 void BSharpTree::recomponerRaiz(){
 	std::stringbuf buf(ios_base :: in | ios_base :: out | ios_base :: binary);
 	char arrayRaiz[tamanioNodo];
-	buf.pubsetbuf(arrayRaiz,tamanioNodo);
 	archivoArbol.seekg(posicionRaiz);
 	archivoArbol.read(arrayRaiz,tamanioNodo);
+	buf.pubsetbuf(arrayRaiz,tamanioNodo);
 	Raiz = new NodoIntermedio(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
 }
 
@@ -806,8 +806,8 @@ void BSharpTree::nuevoEspacioLibre(Referencia ref){
 	int cantElem;
 	int tamanio = sizeof(Referencia);
 	char array[tamanio];
-	buffer.pubsetbuf(array,tamanio);
 	archivoEspaciosLibres.read(array,tamanio);
+	buffer.pubsetbuf(array,tamanio);
 	buffer.pubseekpos(0);
 	buffer.sgetn((char*)&cantElem,sizeof(int));
 	int pos = sizeof(int)+ (cantElem*sizeof(Referencia));
@@ -829,8 +829,8 @@ Referencia BSharpTree::buscarEspacioLibre(){
 	int cantElem;
 	int tamanio = sizeof(int);
 	char array[tamanio];
-	buffer.pubsetbuf(array,tamanio);
 	archivoEspaciosLibres.read(array,tamanio);
+	buffer.pubsetbuf(array,tamanio);
 	buffer.pubseekpos(0);
 	buffer.sgetn((char*)&cantElem,sizeof(int));
 	if(cantElem == 0)return 0;
@@ -838,9 +838,9 @@ Referencia BSharpTree::buscarEspacioLibre(){
 	int pos = sizeof(int)+ (sizeof(Referencia)*(cantElem));
 	Referencia retorno;
 	char array3[sizeof(Referencia)];
-	buffer.pubsetbuf(array3,sizeof(Referencia));
 	archivoEspaciosLibres.seekg(pos);
 	archivoEspaciosLibres.read(array3,sizeof(Referencia));
+	buffer.pubsetbuf(array3,sizeof(Referencia));
 	buffer.pubseekpos(0);
 	buffer.sputn((char*)&retorno,sizeof(Referencia));
 	buffer.pubsetbuf(array,tamanio);
@@ -856,8 +856,8 @@ Nodo* BSharpTree::obtenerNodoPorPosiciones(Referencia posInicial){
 	Nodo* nodo;
 	archivoArbol.seekp(posInicial);
 	char array2[tamanioNodo];
-	buffer.pubsetbuf(array2,tamanioNodo);
 	archivoArbol.read(array2,tamanioNodo);
+	buffer.pubsetbuf(array2,tamanioNodo);
 	int nivel;
 	buffer.sgetn((char*)&nivel,sizeof(int));
 	if(nivel==0){
@@ -944,6 +944,7 @@ void BSharpTree::cerrar(){
 	archivoEspaciosLibres.close();
 }
 BSharpTree::~BSharpTree() {
+  grabarUnitario(Raiz,posicionRaiz);
   delete Raiz;
   archivoArbol.close();
   archivoEspaciosLibres.close();
