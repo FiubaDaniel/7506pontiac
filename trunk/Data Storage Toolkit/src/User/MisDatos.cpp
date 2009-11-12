@@ -493,13 +493,16 @@ MisDatos::~MisDatos(){}
  void MisDatos::cerrarArchivo1(){
 	 EstrategiaRecursos* estrategia = recurso1->getEstrategia();
 	 EREscrituraDirecta* estrategiaDirecta = dynamic_cast<EREscrituraDirecta*>(estrategia);
+	 Almacenamiento* almacen=NULL;
 	 if(estrategiaDirecta!=NULL){
- 		 delete estrategiaDirecta->getEstrategiaBuffer()->getAlmacenamiento();
+ 		 almacen=estrategiaDirecta->getEstrategiaBuffer()->getAlmacenamiento();
  		 delete estrategiaDirecta->getEstrategiaBuffer();
+ 		 delete almacen;
 	 }
-	 delete estrategia->getEstrategiaAlmacenamiento()->getAlmacenamiento();
+	 almacen=estrategia->getEstrategiaAlmacenamiento()->getAlmacenamiento();
 	 delete estrategia->getEstrategiaAlmacenamiento()->getComparador();
 	 delete estrategia->getEstrategiaAlmacenamiento();
+	 delete almacen;
 	 delete estrategia->getIndice();
 	 delete estrategia;
 	 delete recurso1;
@@ -511,13 +514,16 @@ MisDatos::~MisDatos(){}
  void MisDatos::cerrarArchivo2(){
 	 EstrategiaRecursos* estrategia = recurso2->getEstrategia();
 	 EREscrituraDirecta* estrategiaDirecta = dynamic_cast<EREscrituraDirecta*>(estrategia);
+	 Almacenamiento* almacen=NULL;
 	 if(estrategiaDirecta!=NULL){
- 		 delete estrategiaDirecta->getEstrategiaBuffer()->getAlmacenamiento();
+ 		 almacen=estrategiaDirecta->getEstrategiaBuffer()->getAlmacenamiento();
  		 delete estrategiaDirecta->getEstrategiaBuffer();
+ 		 delete almacen;
 	 }
-	 delete estrategia->getEstrategiaAlmacenamiento()->getAlmacenamiento();
+	 almacen=estrategia->getEstrategiaAlmacenamiento()->getAlmacenamiento();
 	 delete estrategia->getEstrategiaAlmacenamiento()->getComparador();
 	 delete estrategia->getEstrategiaAlmacenamiento();
+	 delete almacen;
 	 delete estrategia->getIndice();
 	 delete estrategia;
 	 delete recurso2;
@@ -527,8 +533,9 @@ MisDatos::~MisDatos(){}
   * Cierra el archivo correspondiente.
   */
  void MisDatos::cerrarArchivo3(){
-	 delete recurso3->getEstrategia()->getEstrategiaAlmacenamiento()->getAlmacenamiento();
+	Almacenamiento * almacen=recurso3->getEstrategia()->getEstrategiaAlmacenamiento()->getAlmacenamiento();
 	 delete recurso3->getEstrategia()->getEstrategiaAlmacenamiento();
+	 delete almacen;
      delete recurso3->getEstrategia();
      delete recurso3;
  }
