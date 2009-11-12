@@ -113,7 +113,7 @@ int main() {
    cout<<"Aca abre y agrega"<<endl;
    cout<<" "<<endl;
    misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
-		for (int i=0; i<CENTENAMAXREGISTROS*100; ++i){
+		for (int i=100; i<200; ++i){
 			cantElementos = i % DELTA + MINIMO;
 			nroTermino = i;
 
