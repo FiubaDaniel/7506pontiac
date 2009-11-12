@@ -109,7 +109,7 @@ int main() {
 			delete(miLista);
 		}
 		//Problema en el cerrar
-  /* misDatos.cerrarArchivo1();
+   misDatos.cerrarArchivo1();
    cout<<"Aca abre y agrega"<<endl;
    cout<<" "<<endl;
    misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
