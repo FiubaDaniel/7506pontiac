@@ -13,7 +13,7 @@ Bloque::Bloque(Componente*componente) : Bloque::Componente(){
 }
 Bloque::~Bloque() {
 	for(Ttamanio i=0; i<componentes.size();i++){
-				delete componentes.at(i);
+		delete componentes.at(i);
 	}
 }
 Componente* Bloque::clonar(){
@@ -68,7 +68,8 @@ Componente* Bloque::get(Ttamanio nroComponente){
 	return componentes.at(nroComponente);
 }
 bool Bloque::eliminar(Ttamanio posicion){
-	if(posicion>=componentes.size())return false;
+	if(posicion>=componentes.size())
+		return false;
 	delete componentes.at(posicion);
 	componentes.erase(componentes.begin()+posicion);
 	return true;

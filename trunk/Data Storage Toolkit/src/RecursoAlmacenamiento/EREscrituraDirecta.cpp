@@ -7,11 +7,13 @@ EREscrituraDirecta::EREscrituraDirecta(EstrategiaIndice* indice,EstrategiaAlmace
 	this->estrategiaBuffer->logActivo=false;
 	this->estrategiaArchivo->logActivo=true;
 	admin.setCapacidad(cantidadElementoBuffer);
-	registro=(Registro*)this->estrategiaArchivo->getRegistro();
+	registro=(Registro*)this->estrategiaArchivo->getRegistro()->clonar();
 	clave=this->estrategiaArchivo->getClave();
 }
 
-EREscrituraDirecta::~EREscrituraDirecta(){}
+EREscrituraDirecta::~EREscrituraDirecta(){
+	delete registro;
+}
 
 void EREscrituraDirecta::setClave(Registro*reg,Clave*clave){
 	for(Ttamanio i=0;i<clave->getCantidadAtributos();i++){

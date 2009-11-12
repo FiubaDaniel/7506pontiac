@@ -30,8 +30,7 @@ void Clave::set(Registro*reg){
 	for(Ttamanio i=0;i<atributosDeClave.size();i++){
 		Atributo*att=atributosDeClave.at(i);
 		std::string nombre=att->getNombre();
-		Atributo*atreg=reg->get(nombre);
-		*att=*atreg;
+		*att=*reg->get(nombre);
 	}
 }
 unsigned int Clave::getCantidadAtributos(){
