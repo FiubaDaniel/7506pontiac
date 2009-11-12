@@ -61,7 +61,8 @@ int main() {
 
 	/* ARCHIVO 1 */
 	try{
-	misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
+		//TODO descomentar
+	/*misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
 
 	for (int i=0; i<CENTENAMAXREGISTROS*100; ++i){
 		cantElementos = i % DELTA + MINIMO;
@@ -83,8 +84,58 @@ int main() {
 	for (int i=50; i<CENTENAMAXREGISTROS*100; ++i){
 		misDatos.eliminarRegistroArchivo1(Terminos::obtenerTermino(i));
 		mostrarArchivo1(misDatos);
-	}
+	}*/
+		/*------------------------------------------------------------*/
+	//TODO Probar el abrir.
 
+	cout << "Aca crea"<<endl;
+	cout<<" "<<endl;
+	misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
+
+		for (int i=0; i<CENTENAMAXREGISTROS*100; ++i){
+			cantElementos = i % DELTA + MINIMO;
+			nroTermino = i;
+
+			miLista = new int[cantElementos];
+			for (int j=0; j<cantElementos; ++j){
+				miLista[j] = j;
+			}
+			miRegVariable = new MiRegistroVariable(Terminos::obtenerTermino(nroTermino), i, miLista, cantElementos);
+			misDatos.agregarRegistroArchivo1(*miRegVariable);
+
+			mostrarArchivo1(misDatos);
+
+			delete(miRegVariable);
+			delete(miLista);
+		}
+		//Problema en el cerrar
+  /* misDatos.cerrarArchivo1();
+   cout<<"Aca abre y agrega"<<endl;
+   cout<<" "<<endl;
+   misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
+		for (int i=0; i<CENTENAMAXREGISTROS*100; ++i){
+			cantElementos = i % DELTA + MINIMO;
+			nroTermino = i;
+
+			miLista = new int[cantElementos];
+			for (int j=0; j<cantElementos; ++j){
+				miLista[j] = j;
+			}
+			miRegVariable = new MiRegistroVariable(Terminos::obtenerTermino(nroTermino), i, miLista, cantElementos);
+			misDatos.agregarRegistroArchivo1(*miRegVariable);
+
+			mostrarArchivo1(misDatos);
+
+			delete(miRegVariable);
+			delete(miLista);
+	}*/
+		cout<<"Elimina "<<endl;
+		cout<<" "<<endl;
+	for (int i=50; i<CENTENAMAXREGISTROS*100; ++i){
+		misDatos.eliminarRegistroArchivo1(Terminos::obtenerTermino(i));
+		mostrarArchivo1(misDatos);
+	}
+	/*--------------------------------------------------------------------*/
 	misDatos.cerrarArchivo1();
 
 	/* ARCHIVO 2 */
