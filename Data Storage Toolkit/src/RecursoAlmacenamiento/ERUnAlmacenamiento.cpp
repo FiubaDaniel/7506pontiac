@@ -4,11 +4,13 @@ ERUnAlmacenamiento::ERUnAlmacenamiento(EstrategiaIndice*indice,EstrategiaAlmacen
 	estrategiAlmacenamiento=estrategia;
 	estrategiAlmacenamiento->logActivo=true;
 	this->indice=indice;
-	registro=(Registro*)estrategia->getRegistro();
+	registro=(Registro*)estrategia->getRegistro()->clonar();
 	clave=estrategia->getClave();
 }
 
-ERUnAlmacenamiento::~ERUnAlmacenamiento(){}
+ERUnAlmacenamiento::~ERUnAlmacenamiento(){
+	delete registro;
+}
 
 bool ERUnAlmacenamiento::insertar(Registro* registro){
 	clave->set(registro);

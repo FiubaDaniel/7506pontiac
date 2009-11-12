@@ -27,11 +27,12 @@ public:/*Metodos Heredados*/
 	virtual Ttamanio serializar(std::streambuf&salida);
 	virtual Ttamanio tamanioSerializado();
 	virtual Componente* clonar();
+	friend std::ostream& operator<<(std::ostream&out,Registro& registro);
 protected:
 	Registro();
 	std::vector<Atributo*> atributos;
 	Ttamanio tamanioBuffer;
 	bool fijo;
 };
-
+std::ostream& operator<<(std::ostream&out,Registro& registro);
 #endif // REGISTRO_H

@@ -176,7 +176,7 @@ public:
 
 	int comparar(const Atributo*otroAtributo)throw(std::bad_cast){
 		const AtributoFijo<char*>& otro=dynamic_cast<AtributoFijo<char*>&>(*const_cast<Atributo*>(otroAtributo));
-		return strcmp(this->datos,otro.datos);
+		return memcmp(this->datos,otro.datos,longitud);
 	}
 	void imprimir(std::ostream&salida){
 		salida<<datos;
