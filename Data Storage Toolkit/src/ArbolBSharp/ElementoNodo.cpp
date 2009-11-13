@@ -9,11 +9,11 @@
 
 ElementoNodo::ElementoNodo(Referencia ref,Clave* cla) {
 	referencia= ref;
-    clave = cla->clonarce();
+	clave = cla->clonarce();
 }
 ElementoNodo::ElementoNodo(){}
 ElementoNodo::~ElementoNodo() {
-       delete clave;
+	delete clave;
 }
 Referencia ElementoNodo::getReferencia(){
 	return referencia;
@@ -25,7 +25,7 @@ Clave* ElementoNodo::getClave(){
 	return clave;
 }
 void ElementoNodo::setClave(Clave* nueva){
-     clave = nueva->clonarce();
+	clave = nueva->clonarce();
 }
 ElementoNodo* ElementoNodo::clonarce(){
 	ElementoNodo* clon = new ElementoNodo();
