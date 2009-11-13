@@ -74,15 +74,15 @@ public:
 	virtual ~BSharpTree();
 private:
 
-	NodoHoja* buscarPrimerNodoHoja(NodoIntermedio* nodo);
+	NodoHoja* buscarPrimerNodoHoja(Nodo* nodoE);
 
-	NodoHoja* buscarHoja(NodoIntermedio* nodo,Clave* clave,Referencia& referenciaDeNodoHoja);
+	NodoHoja* buscarHoja(Nodo* nodoE,Clave* clave,Referencia& referenciaDeNodoHoja);
 
 	bool buscarIterativo(NodoIntermedio* nodo, Clave* clave,Referencia* ref,NodoHoja* ultimo);
 
 	int calcularCantidadElementosPorNodo(unsigned int tamSerializadoClave);
 
-	void BuscarInsertarOEliminar(Nodo* &hoja,std::list<Referencia>&listaDePadres,NodoIntermedio* nodo, Clave* clave,Referencia& refHoja,bool& esRaiz,bool esInsertar);
+	void BuscarInsertarOEliminar(Nodo* &hoja,std::list<Referencia>&listaDePadres,Nodo* nodo, Clave* clave,Referencia& refHoja,bool& esRaiz,bool esInsertar);
 
 	Referencia buscarEspacioLibre();
 
@@ -114,14 +114,13 @@ private:
 
 	void armarNuevaRaiz(Nodo* nodoIzq,Nodo* nodoDer);
 
-
 	void nuevoEspacioLibre(Referencia);
 
 	void destruirNodos(Nodo* nodo,Nodo* hermanoDer,Nodo* hermanoIzq);
 
 	void eliminarClaveEnIntermedio(Clave* claveAeliminar,Clave* claveSetear);
 
-	NodoIntermedio* buscarIntermedio(Clave* clave,NodoIntermedio* nodo,bool esRaiz,Referencia& refAux);
+	NodoIntermedio* buscarIntermedio(Clave* clave,Nodo* nodoE,bool esRaiz,Referencia& refAux);
 
 	void buscarHermanos(Nodo* nodoActual,NodoIntermedio* padre,Nodo* &hermanoIzq,Nodo* &hermanoDer,Referencia& refHermanoIzq,Referencia& refHermanoDer,Referencia refHijo,vector<bool> &informacion);
 
@@ -135,6 +134,8 @@ private:
 
 	void imprimirIterativo(Nodo* nodo);
 
+	void reacomodarArbol(NodoHoja*& hojaIzq,NodoHoja*& hojaDer,NodoIntermedio*&nuevaRaiz);
+
 	unsigned int numeroDeElementosXnodo,posicionRaiz,cantidadMinimaDeElementos;
 
 	unsigned int tamanioNodo;
@@ -144,7 +145,7 @@ private:
 	string nombreArchivo;
 	string nombreEspaciosLibres;
 	ComparadorClave* comparador;
-	NodoIntermedio* Raiz;
+	Nodo* Raiz;
 	NodoHoja* ultimoNodo;
 	Clave * claveEstructural;
 };
