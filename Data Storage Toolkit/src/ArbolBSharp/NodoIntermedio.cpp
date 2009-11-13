@@ -32,21 +32,21 @@ void NodoIntermedio::setRefereciaIzq(Referencia ref){
 	referenciaIzq = ref;
 }
 void NodoIntermedio::serializate(std::stringbuf* buffer){
-	    buffer->pubseekpos(0);
-		buffer->sputn ((char*)&numeroNivel,sizeof(numeroNivel));
-		buffer->sputn ((char*)&cantidadDeElementosLibre,sizeof(cantidadDeElementosLibre));
-		buffer->sputn ((char*)&referenciaIzq,sizeof(referenciaIzq));
-		std::list<ElementoNodo*>::iterator it = listaElementos.begin();
-		if(!listaElementos.empty()){
-			while(it != listaElementos.end()){
-				ElementoNodo* elemento = *it;
-			    Clave * clave = elemento->getClave();
-			    clave->serializar(*buffer);
-			    Referencia refD = elemento->getReferencia();
-			    buffer->sputn ((char*)&refD,sizeof(Referencia));
-			    ++it;
-			}
+	buffer->pubseekpos(0);
+	buffer->sputn ((char*)&numeroNivel,sizeof(numeroNivel));
+	buffer->sputn ((char*)&cantidadDeElementosLibre,sizeof(cantidadDeElementosLibre));
+	buffer->sputn ((char*)&referenciaIzq,sizeof(referenciaIzq));
+	std::list<ElementoNodo*>::iterator it = listaElementos.begin();
+	if(!listaElementos.empty()){
+		while(it != listaElementos.end()){
+			ElementoNodo* elemento = *it;
+			Clave * clave = elemento->getClave();
+			clave->serializar(*buffer);
+			Referencia refD = elemento->getReferencia();
+			buffer->sputn ((char*)&refD,sizeof(Referencia));
+			++it;
 		}
+	}
 }
 /*
  * Devuelve 1 si agrego el elemento o devuelve 0 si ya existia
@@ -62,17 +62,17 @@ int NodoIntermedio::agregarElemento(ElementoNodo* elemento){
 		retorno = 2;
 	}
 	if(listaElementos.empty()){
-			listaElementos.push_back(elemento->clonarce());
-			cantidadDeElementosLibre = cantidadDeElementosLibre - 1;
-			return 1;
-		}
+		listaElementos.push_back(elemento->clonarce());
+		cantidadDeElementosLibre = cantidadDeElementosLibre - 1;
+		return 1;
+	}
 	std::list<ElementoNodo*>::iterator it = listaElementos.begin();
 	bool ubicado = false;
 	while(!ubicado && it != listaElementos.end()){
 		ElementoNodo* elementoAux = *it;
 		if(comparador->Comparar(elemento->getClave(),elementoAux->getClave())==0){
 			retorno = 0,
-			ubicado=true;
+					ubicado=true;
 		}else if(comparador->Comparar(elemento->getClave(),elementoAux->getClave())<0){
 			listaElementos.insert(it,elemento->clonarce());
 			if(retorno==1){
@@ -81,15 +81,15 @@ int NodoIntermedio::agregarElemento(ElementoNodo* elemento){
 			ubicado=true;
 		}else{
 			++it;
-			}
 		}
+	}
 	if(!ubicado){
 		listaElementos.push_back(elemento->clonarce());
 		if(retorno==1){
 			cantidadDeElementosLibre = cantidadDeElementosLibre - 1;
 		}
 	}
-	    return retorno;
+	return retorno;
 }
 /*
  * Izq determina si el hermano con el q se valancea esta a la izq o esta a la derecha.
@@ -104,50 +104,50 @@ void NodoIntermedio::balanceo(Nodo* nodoHermanoE,Nodo* nodoPadreE, bool izq){
 	ElementoNodo* referenciaDeBusqueda;
 	bool encontrado;
 	if(izq){
-		    encontrado = false;
-		    referenciaDeBusqueda = listaElementos.front();
-		    std::list<ElementoNodo*>::reverse_iterator itReversa = nodoPadre->getListaElementos()->rbegin();
-		    while(!encontrado && itReversa != nodoPadre->getListaElementos()->rend()){
-		    	elementoPadre = *itReversa;
-		    	if(comparador->Comparar(referenciaDeBusqueda->getClave(),elementoPadre->getClave())<0){
-		    		++itReversa;
-		    	}else{
-		    		encontrado = true;
-		    	}
-		    }
-		    Referencia refIzqNodoDer;
-		    refIzqNodoDer = referenciaDeBusqueda->getReferencia();
-		    Clave* claveAux = referenciaDeBusqueda->getClave();
-		    referenciaDeBusqueda->setClave(elementoPadre->getClave());//para elemento q cambia de nodo, y la clave será la del elemento del padre
-		    referenciaDeBusqueda->setReferencia(referenciaIzq);
-		    nodoHermano->getListaElementos()->push_back(referenciaDeBusqueda);
-		    nodoHermano->setEspacioLibre(nodoHermano->getEspacioLibre()-1);
-		    elementoPadre->setClave(claveAux);
-		    referenciaIzq = refIzqNodoDer;
-		    listaElementos.pop_front();
-		}else{
-			encontrado = false;
-			referenciaDeBusqueda = listaElementos.back();
-			std::list<ElementoNodo*>::iterator it = nodoPadre->getListaElementos()->begin();
-			while(!encontrado && it != nodoPadre->getListaElementos()->end()){
-		          elementoPadre = *it;
-				 if(comparador->Comparar(referenciaDeBusqueda->getClave(),elementoPadre->getClave())>0){
-					    ++it;
-				}else{
-					   encontrado = true;
-				    }
-			 }
-			Referencia refIzqNodoDer;
-			refIzqNodoDer = referenciaDeBusqueda->getReferencia();
-			Clave* clave = referenciaDeBusqueda->getClave();
-			referenciaDeBusqueda->setClave(elementoPadre->getClave());
-			referenciaDeBusqueda->setReferencia(nodoHermano->getReferenciaIzq());
-			nodoHermano->getListaElementos()->push_front(referenciaDeBusqueda);
-			nodoHermano->setEspacioLibre(nodoHermano->getEspacioLibre()-1);
-		    elementoPadre->setClave(clave);
-		    nodoHermano->setRefereciaIzq(refIzqNodoDer);
-		    listaElementos.pop_back();
+		encontrado = false;
+		referenciaDeBusqueda = listaElementos.front();
+		std::list<ElementoNodo*>::reverse_iterator itReversa = nodoPadre->getListaElementos()->rbegin();
+		while(!encontrado && itReversa != nodoPadre->getListaElementos()->rend()){
+			elementoPadre = *itReversa;
+			if(comparador->Comparar(referenciaDeBusqueda->getClave(),elementoPadre->getClave())<0){
+				++itReversa;
+			}else{
+				encontrado = true;
+			}
 		}
+		Referencia refIzqNodoDer;
+		refIzqNodoDer = referenciaDeBusqueda->getReferencia();
+		Clave* claveAux = referenciaDeBusqueda->getClave();
+		referenciaDeBusqueda->setClave(elementoPadre->getClave());//para elemento q cambia de nodo, y la clave será la del elemento del padre
+		referenciaDeBusqueda->setReferencia(referenciaIzq);
+		nodoHermano->getListaElementos()->push_back(referenciaDeBusqueda);
+		nodoHermano->setEspacioLibre(nodoHermano->getEspacioLibre()-1);
+		elementoPadre->setClave(claveAux);
+		referenciaIzq = refIzqNodoDer;
+		listaElementos.pop_front();
+	}else{
+		encontrado = false;
+		referenciaDeBusqueda = listaElementos.back();
+		std::list<ElementoNodo*>::iterator it = nodoPadre->getListaElementos()->begin();
+		while(!encontrado && it != nodoPadre->getListaElementos()->end()){
+			elementoPadre = *it;
+			if(comparador->Comparar(referenciaDeBusqueda->getClave(),elementoPadre->getClave())>0){
+				++it;
+			}else{
+				encontrado = true;
+			}
+		}
+		Referencia refIzqNodoDer;
+		refIzqNodoDer = referenciaDeBusqueda->getReferencia();
+		Clave* clave = referenciaDeBusqueda->getClave();
+		referenciaDeBusqueda->setClave(elementoPadre->getClave());
+		referenciaDeBusqueda->setReferencia(nodoHermano->getReferenciaIzq());
+		nodoHermano->getListaElementos()->push_front(referenciaDeBusqueda);
+		nodoHermano->setEspacioLibre(nodoHermano->getEspacioLibre()-1);
+		elementoPadre->setClave(clave);
+		nodoHermano->setRefereciaIzq(refIzqNodoDer);
+		listaElementos.pop_back();
+	}
 }
 /*
  * Izq debe determinar que los hermanos estan a izq
@@ -196,8 +196,8 @@ void NodoIntermedio::balanceoEspecialHermanosIzq(NodoIntermedio* nodoQcede,Eleme
 	listaQrecibe->front()->setClave(elemPadre->getClave());
 	listaQrecibe->front()->setReferencia(refIzq);
 	nodoQcede->getListaElementos()->pop_back();
-    refIzq = refElemHijo;
-    elemPadre->setClave(claveElemHijo);
+	refIzq = refElemHijo;
+	elemPadre->setClave(claveElemHijo);
 }
 /*
  * Dos nodos uno sobrebordado y el otro completo, entonces se dividen en nodos en tres nodos nuevos,
@@ -206,9 +206,9 @@ void NodoIntermedio::balanceoEspecialHermanosIzq(NodoIntermedio* nodoQcede,Eleme
  * Clave indica el elemento del padre q separa ambos nodos.
  * retorna el elemento q debe agregarce al padre
  */
- /*
-  * PreCondicion: el nodo this q llame a la funcion es el nodo Izquierdo, o sea el de claves mas chicas.
-  */
+/*
+ * PreCondicion: el nodo this q llame a la funcion es el nodo Izquierdo, o sea el de claves mas chicas.
+ */
 ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMedioE,Nodo* nodoDerE,Nodo* nodoPadreE,Clave* clave){
 	NodoIntermedio* nodoHermano = dynamic_cast<NodoIntermedio*>(nodoHermanoE);
 	NodoIntermedio* nodoIzq = dynamic_cast<NodoIntermedio*>(nodoIzqE);
@@ -235,19 +235,19 @@ ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* 
 		ElementoNodo* elemento = *itThis;
 		if(cantElementosIzq==0) {
 			nodoMedio->setRefereciaIzq(elemento->getReferencia());
-		    elemento->setReferencia(0);
+			elemento->setReferencia(0);
 			retorno = elemento;
 			cantElementosIzq = -1;
 		}else{
-		if(cantElementosIzq>0){
-	        nodoIzq->agregarElemento(elemento);
-			cantElementosIzq--;
-		}else{
-			nodoMedio->agregarElemento(elemento);
-			cantElementosMedio--;
-		    }
+			if(cantElementosIzq>0){
+				nodoIzq->agregarElemento(elemento);
+				cantElementosIzq--;
+			}else{
+				nodoMedio->agregarElemento(elemento);
+				cantElementosMedio--;
+			}
 		}
-	  ++itThis;
+		++itThis;
 	}
 	cantElementosMedio--;
 	while(itHermano != nodoHermano->getListaElementos()->end()){
@@ -268,7 +268,7 @@ ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* 
 				nodoDer->agregarElemento(elemento2);
 			}
 		}
-			++itHermano;
+		++itHermano;
 	}
 	listaElementos.clear();
 	nodoHermano->getListaElementos()->clear();
@@ -290,12 +290,12 @@ Referencia NodoIntermedio::bucarReferenciaAsiguienteNodo(Clave* clave){
 	while(!encontrado && it != listaElementos.rend ()){
 		elemento = *it;
 		if(comparador->Comparar(elemento->getClave(),clave)==0 || comparador->Comparar(elemento->getClave(),clave)<0){
-		     return elemento->getReferencia();
-		  }else{
-			  ++it;
-		  }
+			return elemento->getReferencia();
+		}else{
+			++it;
+		}
 	}
-		return 0;
+	return 0;
 }
 int NodoIntermedio::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre){
 	std::list<ElementoNodo*>::reverse_iterator it = Padre->getListaElementos()->rbegin();
@@ -309,18 +309,18 @@ int NodoIntermedio::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre
 		}
 		++it;
 		if(encontrado){
-		auxiliarPadre = *it;
-		bool esEste = false;
-		std::list<ElementoNodo*>::iterator itAux=  Padre->getListaElementos()->begin();
-		while(!esEste){
-			ElementoNodo* elem = *itAux;
-			if(comparador->Comparar(elem->getClave(),auxiliarPadre->getClave())==0){
-				esEste = true;
-				Padre->getListaElementos()->erase(itAux);
-				Padre->setEspacioLibre(Padre->getEspacioLibre()+1);
+			auxiliarPadre = *it;
+			bool esEste = false;
+			std::list<ElementoNodo*>::iterator itAux=  Padre->getListaElementos()->begin();
+			while(!esEste){
+				ElementoNodo* elem = *itAux;
+				if(comparador->Comparar(elem->getClave(),auxiliarPadre->getClave())==0){
+					esEste = true;
+					Padre->getListaElementos()->erase(itAux);
+					Padre->setEspacioLibre(Padre->getEspacioLibre()+1);
+				}
+				++itAux;
 			}
-			++itAux;
-		    }
 		}
 	}
 	Clave* claveDeElementoPadre = elementoPadre->getClave();
@@ -335,14 +335,14 @@ int NodoIntermedio::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre
 		if(cantIzq>0 ){
 			nodoHermanoIzq->agregarElemento(elem);
 		}else{
-		if(cantIzq == 0){
-					nodoDerecho->setRefereciaIzq(elem->getReferencia());
-					elementoPadre->setClave(elem->getClave());
-					elem->setReferencia(refIzqDeNodoDer);
-					elem->setClave(claveDeElementoPadre);
-					nodoHermanoDer->agregarElemento(elem);
-		}else{nodoHermanoDer->agregarElemento(elem);}
-	  }
+			if(cantIzq == 0){
+				nodoDerecho->setRefereciaIzq(elem->getReferencia());
+				elementoPadre->setClave(elem->getClave());
+				elem->setReferencia(refIzqDeNodoDer);
+				elem->setClave(claveDeElementoPadre);
+				nodoHermanoDer->agregarElemento(elem);
+			}else{nodoHermanoDer->agregarElemento(elem);}
+		}
 		++itMedio;
 		cantIzq--;
 	}
@@ -367,20 +367,20 @@ void NodoIntermedio::setearClave(const Clave* claveAeliminar,Clave* claveSetear)
 bool NodoIntermedio::estaClave(const Clave* clave){
 	std::list<ElementoNodo*>::iterator it = listaElementos.begin();
 	while(it != listaElementos.end()){
-			ElementoNodo* elemento = *it;
-			if(comparador->Comparar(clave,elemento->getClave())==0){
-				return true;
-			}
-			++it;
+		ElementoNodo* elemento = *it;
+		if(comparador->Comparar(clave,elemento->getClave())==0){
+			return true;
 		}
-    return false;
+		++it;
+	}
+	return false;
 }
 void NodoIntermedio::limpiar(){
 	std::list<ElementoNodo*>::iterator it;
-		for(it = listaElementos.begin();it != listaElementos.end();++it){
-			 ElementoNodo* elemento = *it;
-			 delete elemento;
-		}
+	for(it = listaElementos.begin();it != listaElementos.end();++it){
+		ElementoNodo* elemento = *it;
+		delete elemento;
+	}
 }
 NodoIntermedio::~NodoIntermedio() {}
 
