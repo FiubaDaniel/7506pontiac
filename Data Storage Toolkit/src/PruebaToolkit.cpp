@@ -88,9 +88,7 @@ int main() {
 		/*------------------------------------------------------------*/
 	//TODO Probar el abrir.
 
-	cout << "Aca crea"<<endl;
-	cout<<" "<<endl;
-	misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
+/*	misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
 
 		for (int i=0; i<CENTENAMAXREGISTROS*100; ++i){
 			cantElementos = i % DELTA + MINIMO;
@@ -109,11 +107,11 @@ int main() {
 			delete(miLista);
 		}
 		//Problema en el cerrar
-   misDatos.cerrarArchivo1();
+   misDatos.cerrarArchivo1();*/
    cout<<"Aca abre y agrega"<<endl;
    cout<<" "<<endl;
    misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
-		for (int i=100; i<200; ++i){
+		for (int i=100; i<150; ++i){
 			cantElementos = i % DELTA + MINIMO;
 			nroTermino = i;
 
@@ -132,7 +130,7 @@ int main() {
 		cout<<"Elimina "<<endl;
 		cout<<" "<<endl;
 		int cant = 0;
-	for (int i=50; i<CENTENAMAXREGISTROS*100; ++i){
+	for (int i=100; i<150; ++i){
 		cant++;
 		misDatos.eliminarRegistroArchivo1(Terminos::obtenerTermino(i));
 		mostrarArchivo1(misDatos);
