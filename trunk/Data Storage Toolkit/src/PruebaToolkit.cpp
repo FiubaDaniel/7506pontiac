@@ -131,9 +131,12 @@ int main() {
 	}
 		cout<<"Elimina "<<endl;
 		cout<<" "<<endl;
+		int cant = 0;
 	for (int i=50; i<CENTENAMAXREGISTROS*100; ++i){
+		cant++;
 		misDatos.eliminarRegistroArchivo1(Terminos::obtenerTermino(i));
 		mostrarArchivo1(misDatos);
+		cout<<"Esto es cant: "<<cant<<endl;
 	}
 	/*--------------------------------------------------------------------*/
 	misDatos.cerrarArchivo1();
