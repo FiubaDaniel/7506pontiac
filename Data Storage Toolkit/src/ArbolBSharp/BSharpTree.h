@@ -112,7 +112,9 @@ private:
 
 	void subflujoHijosRaiz(Nodo* nodo,Nodo* hermano,Referencia refNodo,Referencia refHermano);
 
-	void armarNuevaRaiz(Nodo* nodoIzq,Nodo* nodoDer);
+	void armarRaizIntermedia(Nodo* nodoIzq,Nodo* nodoDer,Referencia refNodoIzq,Referencia refNodoDer);
+
+	void armarRaizHoja(Nodo* nodoIzq,Nodo* nodoDer,Referencia refIzq,Referencia refDer);
 
 	void nuevoEspacioLibre(Referencia);
 
