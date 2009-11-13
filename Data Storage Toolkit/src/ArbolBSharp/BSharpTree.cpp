@@ -47,17 +47,6 @@ void BSharpTree::crear(string nombreArch,unsigned int tamanioDeBloque, Clave* cl
 		buffer.pubseekpos(0);
 		Raiz->serializate(&buffer);
 		archivoArbol.write(array2,tamanioNodo);
-		//Todo Ya no es un intermedio esto lo hago en insertar
-		/*Raiz->setRefereciaIzq(archivoArbol.tellp());
-		NodoHoja* hoja = new NodoHoja(numeroDeElementosXnodo,0,comparador);
-		buffer.pubseekpos(0);
-		hoja->serializate(&buffer);
-		archivoArbol.write(array2,tamanioNodo);
-		archivoArbol.seekp(posicionRaiz);
-		buffer.pubseekpos(0);
-		Raiz->serializate(&buffer);
-		archivoArbol.write(array2,tamanioNodo);
-		delete hoja;*/
 		archivoEspaciosLibres.seekp(0);
 		char array3[sizeof(int)];
 		buffer.pubsetbuf(array3,sizeof(int));
@@ -91,7 +80,6 @@ bool BSharpTree::abrir(string nombreArch,ComparadorClave* comp){
 	char array2[tamanioNodo];
 	archivoArbol.read(array2,tamanioNodo);
 	buf.pubsetbuf(array2,tamanioNodo);
-	//TODO cambio1
 	buf.pubseekpos(0);
 	int nivel;
 	buf.sgetn((char*)&nivel,sizeof(int));
@@ -122,6 +110,18 @@ bool BSharpTree::Buscar(const Clave* clave,Referencia* referencia){
 		return nodoRaiz->buscarReferenciaDeClaveX(clave,referencia);
 	}
 	NodoHoja* hoja = buscarHoja(Raiz,aux,referenciaDeNodoHoja);
+	std::list<ElementoNodo*>::iterator it = hoja->getListaElementos()->begin();
+		while(it!=hoja->getListaElementos()->end()){
+			ElementoNodo* elem = *it;
+			for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
+				cout<<" ";
+				elem->getClave()->getAtributo(i)->imprimir(cout);
+				cout<<" ";
+			}
+			cout << elem->getReferencia();
+			cout<<"   ";
+			++it;
+		}
 	return hoja->buscarReferenciaDeClaveX(clave,referencia);
 }
 
@@ -233,26 +233,6 @@ bool BSharpTree::insertar(Referencia ref,Clave* clave){
 			delete hojaDer;
 		}
 		return true;
-		/*char array2[tamanioNodo];
-		archivoArbol.seekp(0,fstream::end);
-		Referencia refAux  = (Referencia)archivoArbol.tellp();
-		NodoHoja* hoja = new NodoHoja(numeroDeElementosXnodo,0,comparador);
-		hoja->agregarElemento(elemento);
-		grabarUnitario(hoja,refAux);
-		delete hoja;
-		elemento->setReferencia(refAux);
-		Raiz->agregarElemento(elemento);
-		grabarUnitario(Raiz,posicionRaiz);
-		archivoArbol.seekg(Raiz->getReferenciaIzq());
-		buf.pubseekpos(0);
-		archivoArbol.read(array2,tamanioNodo);
-		buf.pubsetbuf(array2,tamanioNodo);
-		hoja = new NodoHoja(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
-		hoja->setReferenciaSiguiente(refAux);
-	    grabarUnitario(hoja,Raiz->getReferenciaIzq());
-	    delete elemento;
-	    delete hoja;
-		return true;*/
 	}
 	Referencia refHoja;
 	Nodo* hoja=NULL;
@@ -686,7 +666,6 @@ void BSharpTree::destruirNodos(Nodo* nodo,Nodo* hermanoDer,Nodo* hermanoIzq){
 
 void BSharpTree::buscarHermanos(Nodo* nodoActual,NodoIntermedio* padre,Nodo* &hermanoIzq,Nodo* &hermanoDer,Referencia& refHermanoIzq,Referencia& refHermanoDer,Referencia refHijo,vector<bool> &informacion){
 	bool extremo = false;
-	//TODO cambio 2, casteo la Raiz y cambio donde dice Raiz por RaizCast
 	NodoIntermedio* RaizCast = dynamic_cast<NodoIntermedio*>(Raiz);
 	if(refHijo==padre->getReferenciaIzq()){
 		informacion[3]=true;
@@ -986,7 +965,6 @@ void BSharpTree::imprimirIterativo(Nodo* nodoE){
 		cout<<" "<<endl;
 	}
 }
-
 
 bool BSharpTree::estaVacio(){
 	if(Raiz->getListaElementos()->empty())return true;
