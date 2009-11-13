@@ -674,7 +674,7 @@ void BSharpTree::buscarHermanos(Nodo* nodoActual,NodoIntermedio* padre,Nodo* &he
 		informacion[4]=true;
 		extremo = true;
 	}
-	if((informacion[3]||informacion[4])&&(RaizCast->getListaElementos()->size()!=1||RaizCast->getNumeroNivel()>1)){
+	if((informacion[3]||informacion[4])&&(RaizCast->getListaElementos()->size()!=1||(RaizCast->getListaElementos()->size()==1&& padre->getReferenciaIzq()!=RaizCast->getReferenciaIzq()))){
 		refHermanoIzq = obtenerReferenciaHermano(padre,nodoActual->getListaElementos()->front()->getClave(),extremo);
 		hermanoIzq =  obtenerHermanoXsuBflujo(nodoActual->getNumeroNivel(),refHermanoIzq);
 		refHermanoDer = obtenerReferenciaHermano(padre,hermanoIzq->getListaElementos()->front()->getClave(),extremo);
