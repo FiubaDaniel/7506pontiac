@@ -60,7 +60,7 @@ bool EREscrituraDirecta::eliminar(Clave* unaClave){
 	}
 	estrategiaArchivo->posicionarComponente(referencia);
 	setClave(registro,clave);
-	if(estrategiaArchivo->eliminar(registro))
+	if(!estrategiaArchivo->eliminar(registro))
 		return false;
 	while(!estrategiaArchivo->NoHayMasCambios()){
 		const Cambio* cambio=estrategiaArchivo->siguienteCambio();
