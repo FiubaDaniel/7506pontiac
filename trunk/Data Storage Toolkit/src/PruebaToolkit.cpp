@@ -132,9 +132,12 @@ int main() {
 		int cant = 0;
 	for (int i=100; i<150; ++i){
 		cant++;
+		if(cant==36)
+			cout<<"";
 		misDatos.eliminarRegistroArchivo1(Terminos::obtenerTermino(i));
 		mostrarArchivo1(misDatos);
 		cout<<"Esto es cant: "<<cant<<endl;
+
 	}
 	/*--------------------------------------------------------------------*/
 	misDatos.cerrarArchivo1();

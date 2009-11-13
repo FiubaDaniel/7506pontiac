@@ -256,7 +256,7 @@ bool EABloques::eliminar(Componente*componente){
 					if(logActivo){
 						for(Ttamanio i=0;i<bloque->cantidadComponentes();i++){
 							clave->set((Registro*)bloque->get(i));
-							pushCambio(Cambio(clave,nroBloque,Cambio::Reubicacion));
+							pushCambio(Cambio(clave,posBorrado,Cambio::Reubicacion));
 						}
 					}
 				}
