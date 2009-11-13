@@ -8,7 +8,7 @@
 #include "Clave.h"
 Clave::Clave(const Clave & otra){
 	for(Ttamanio i=0;i<otra.atributosDeClave.size();i++){
-			atributosDeClave.push_back(  otra.atributosDeClave.at(i)->clonar()   );
+		atributosDeClave.push_back(  otra.atributosDeClave.at(i)->clonar()   );
 	}
 }
 Clave::Clave(Registro* registro,unsigned int cantidadAtributosEntrantes,...){
@@ -40,20 +40,20 @@ void Clave::setCantidadAtributos(unsigned int cant){
 	cantidadAtributos = cant;
 }
 Clave* Clave::clonarce(){
-       Clave* clon = new Clave();
-       clon->setCantidadAtributos(cantidadAtributos);
-		for(Ttamanio i=0;i < atributosDeClave.size();i++){
-			clon->atributosDeClave.push_back(atributosDeClave.at(i)->clonar());
-		}
-		return clon;
+	Clave* clon = new Clave();
+	clon->setCantidadAtributos(cantidadAtributos);
+	for(Ttamanio i=0;i < atributosDeClave.size();i++){
+		clon->atributosDeClave.push_back(atributosDeClave.at(i)->clonar());
+	}
+	return clon;
 }
 Atributo* Clave::getAtributo(Ttamanio posicion){
 	return atributosDeClave.at(posicion);
 }
 Atributo* Clave::getAtributo(std::string nombre){
 	for(Ttamanio i=0;i<atributosDeClave.size();i++)
-	    if(atributosDeClave.at(i)->getNombre()==nombre)
-	    	return atributosDeClave.at(i);
+		if(atributosDeClave.at(i)->getNombre()==nombre)
+			return atributosDeClave.at(i);
 	return NULL;
 }
 void Clave::deserializar(std::streambuf&buf){
@@ -63,7 +63,7 @@ void Clave::deserializar(std::streambuf&buf){
 }
 void Clave::serializar(std::streambuf&buf){
 	for(Ttamanio i=0;i<atributosDeClave.size();i++){
-	    atributosDeClave.at(i)->serializar(buf);
+		atributosDeClave.at(i)->serializar(buf);
 	}
 }
 int Clave::tamanioSerializado(){
