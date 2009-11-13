@@ -34,35 +34,35 @@ void Nodo::setNumeroNivel(unsigned int num){
 }
 int Nodo::Eliminar(const Clave* clave){
 	std::list<ElementoNodo*>::iterator it = listaElementos.begin();
-    bool encontrado = false;
-    int retorno = 1;
-    bool noExiste = false;
+	bool encontrado = false;
+	int retorno = 1;
+	bool noExiste = false;
 	while(!encontrado && it!=listaElementos.end()){
-	    	ElementoNodo* elemento = *it;
-	    	if(comparador->Comparar(elemento->getClave(),clave)==0){
-	    		listaElementos.erase(it);
-	    		delete elemento;
-	    		cantidadDeElementosLibre = cantidadDeElementosLibre+1;
-	    		if(listaElementos.size()<(((cantidadMaximaDeElementos)*2)/3)){
-	    		    retorno = 2;
-	    		}
-	    		encontrado = true;
-	    	  }else if(comparador->Comparar(elemento->getClave(),clave)>0){
-	    		retorno = 0;
-	    		encontrado = true;
-	    		noExiste = true;
-	    	}
-	   ++it;
+		ElementoNodo* elemento = *it;
+		if(comparador->Comparar(elemento->getClave(),clave)==0){
+			listaElementos.erase(it);
+			delete elemento;
+			cantidadDeElementosLibre = cantidadDeElementosLibre+1;
+			if(listaElementos.size()<(((cantidadMaximaDeElementos)*2)/3)){
+				retorno = 2;
+			}
+			encontrado = true;
+		}else if(comparador->Comparar(elemento->getClave(),clave)>0){
+			retorno = 0;
+			encontrado = true;
+			noExiste = true;
+		}
+		++it;
 	}
 	if(noExiste || !encontrado){retorno = 0;}
 	return retorno;
 }
 Nodo::~Nodo() {
 	std::list<ElementoNodo*>::iterator it = listaElementos.begin();
-          while(it!=listaElementos.end()){
-	            ElementoNodo* elemento = *it;
-	            delete elemento;
-	            ++it;
-          }
-        listaElementos.clear();
+	while(it!=listaElementos.end()){
+		ElementoNodo* elemento = *it;
+		delete elemento;
+		++it;
+	}
+	listaElementos.clear();
 }
