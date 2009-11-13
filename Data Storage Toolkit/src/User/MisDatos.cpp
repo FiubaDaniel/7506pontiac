@@ -508,6 +508,7 @@ void MisDatos::cerrarArchivo1(){
 			delete almacen;
 		}
 		almacen=estrategia->getEstrategiaAlmacenamiento()->getAlmacenamiento();
+		recurso2->getEstrategia()->getEstrategiaAlmacenamiento()->cerrar();
 		delete estrategia->getEstrategiaAlmacenamiento()->getComparador();
 		delete estrategia->getEstrategiaAlmacenamiento();
 		delete almacen;
@@ -532,6 +533,7 @@ void MisDatos::cerrarArchivo2(){
 			delete almacen;
 		}
 		almacen=estrategia->getEstrategiaAlmacenamiento()->getAlmacenamiento();
+		recurso2->getEstrategia()->getEstrategiaAlmacenamiento()->cerrar();
 		delete estrategia->getEstrategiaAlmacenamiento()->getComparador();
 		delete estrategia->getEstrategiaAlmacenamiento();
 		delete almacen;
@@ -548,6 +550,7 @@ void MisDatos::cerrarArchivo2(){
 void MisDatos::cerrarArchivo3(){
 	if(recurso3!=NULL){
 		Almacenamiento * almacen=recurso3->getEstrategia()->getEstrategiaAlmacenamiento()->getAlmacenamiento();
+		recurso3->getEstrategia()->getEstrategiaAlmacenamiento()->cerrar();
 		delete recurso3->getEstrategia()->getEstrategiaAlmacenamiento();
 		delete almacen;
 		delete recurso3->getEstrategia();
