@@ -18,7 +18,7 @@ class AdministradorDeBuffer{
 private:
 	PNodoSiguiente posicionEnTabla;
 	size_t capacidad;
-	void promover(PNodoSiguiente &promovido);
+	//void promover(PNodoSiguiente &promovido);
 	void promoverAprimero(PNodoSiguiente &promovido);
 	std::map<size_t,NodoArchivoBuffer*> tablaArchivoBuffer;
 public:

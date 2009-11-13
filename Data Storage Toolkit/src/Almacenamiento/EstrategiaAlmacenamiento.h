@@ -79,7 +79,7 @@ public:
 		delete cambiosLog.front();
 		cambiosLog.pop();
 	};
-	const Cambio* siguienteCambio(){
+	Cambio* siguienteCambio(){
 		return cambiosLog.front();
 	};
 	bool NoHayMasCambios(){
