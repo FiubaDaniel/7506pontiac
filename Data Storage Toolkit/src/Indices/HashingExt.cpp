@@ -737,7 +737,7 @@ void HashingExt::crear(std::string nombreArch, unsigned int tamanioBloque, Clave
         //Los últimos atributos son los que no cambian
         this->persist.write( (char*) &(this->bytes_cubo), sizeof(this->bytes_cubo));
         this->persist.write( (char*) &(this->tam_cubo), sizeof( this->tam_cubo));
-        this->persist.write( (char*) &(this->tam_tabla), sizeof(this->tam_tabla));
+        this->persist.write( (char*) &(this->cant_at_clave), sizeof(this->cant_at_clave));
         this->persist.write( (char*) &(this->tam_clave_ref), sizeof( this->tam_clave_ref));
         this->persist.write( (char*) &(this->tam_clave), sizeof(this->tam_clave) );
 
@@ -828,7 +828,7 @@ bool HashingExt::abrir(std::string nombreArch,ComparadorClave* comp)
 
         this->persist.read( (char*) &(this->bytes_cubo), sizeof(this->bytes_cubo));
         this->persist.read( (char*) &(this->tam_cubo), sizeof( this->tam_cubo));
-        this->persist.read( (char*) &(this->tam_tabla), sizeof(this->tam_tabla));
+        this->persist.read( (char*) &(this->cant_at_clave), sizeof(this->cant_at_clave));
         this->persist.read( (char*) &(this->tam_clave_ref), sizeof( this->tam_clave_ref));
         this->persist.read( (char*) &(this->tam_clave), sizeof(this->tam_clave) );
 
@@ -852,6 +852,7 @@ bool HashingExt::abrir(std::string nombreArch,ComparadorClave* comp)
 
         //Se persisten los atributos que pudieron haber cambiado
 
+        this->persist.seekp(0, ios_base::beg);
         this->persist.write( (char*) &(this->tam_tabla), sizeof(this->tam_tabla) );
         this->persist.write( (char*) &(this->contador_cubos), sizeof(this->contador_cubos));
         this->persist.write( (char*) &(this->cant_cubos_libres), sizeof(this->cant_cubos_libres));
