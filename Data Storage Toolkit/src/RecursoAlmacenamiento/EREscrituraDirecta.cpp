@@ -64,6 +64,7 @@ bool EREscrituraDirecta::eliminar(Clave* unaClave){
 		return false;
 	while(!estrategiaArchivo->NoHayMasCambios()){
 		Cambio* cambio=estrategiaArchivo->siguienteCambio();
+		//todo eliminar cout
 		cout<<endl;
 				cambio->clave.getAtributo(0)->imprimir(cout);cout<<endl;
 		actualizarBuffer(*cambio);
@@ -93,7 +94,6 @@ bool EREscrituraDirecta::modificar(Clave* unaClave,Registro* registro){
 		return false;
 	while(!estrategiaArchivo->NoHayMasCambios()){
 		Cambio* cambio=estrategiaArchivo->siguienteCambio();
-		cambio->clave.getAtributo(0)->imprimir(cout);cout<<endl;
 		actualizarBuffer(*cambio);
 		actualizarIndice(*cambio);
 		estrategiaArchivo->pop();
@@ -146,6 +146,7 @@ void EREscrituraDirecta::actualizarIndice(Cambio cambio){
 			indice->eliminar(&cambio.clave);
 			break;
 		case Cambio::Reubicacion :
+			//TODO eliminar cout
 			cambio.clave.getAtributo(0)->imprimir(cout);cout<<endl;
 			indice->modificar(&cambio.clave,cambio.referencia);
 			break;
