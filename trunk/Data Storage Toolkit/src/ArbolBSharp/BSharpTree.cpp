@@ -111,17 +111,17 @@ bool BSharpTree::Buscar(const Clave* clave,Referencia* referencia){
 	}
 	NodoHoja* hoja = buscarHoja(Raiz,aux,referenciaDeNodoHoja);
 	std::list<ElementoNodo*>::iterator it = hoja->getListaElementos()->begin();
-		while(it!=hoja->getListaElementos()->end()){
-			ElementoNodo* elem = *it;
-			for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
-				cout<<" ";
-				elem->getClave()->getAtributo(i)->imprimir(cout);
-				cout<<" ";
-			}
-			cout << elem->getReferencia();
-			cout<<"   ";
-			++it;
+	while(it!=hoja->getListaElementos()->end()){
+		ElementoNodo* elem = *it;
+		for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
+			cout<<" ";
+			elem->getClave()->getAtributo(i)->imprimir(cout);
+			cout<<" ";
 		}
+		cout << elem->getReferencia();
+		cout<<"   ";
+		++it;
+	}
 	return hoja->buscarReferenciaDeClaveX(clave,referencia);
 }
 
@@ -654,7 +654,7 @@ void BSharpTree::resolverSubflujo(Nodo* nodo,std::list<Referencia>&listaDePadres
 				resolverSubflujo(padre,listaDePadres,refHijo);}
 		}
 	}else{
-		if(nodo->getNumeroNivel()>0){subflujoHijosRaiz(nodo,hermanoIzq,refHijo,refHermanoIzq);}
+		subflujoHijosRaiz(nodo,hermanoIzq,refHijo,refHermanoIzq);
 	}
 }
 
@@ -674,7 +674,7 @@ void BSharpTree::buscarHermanos(Nodo* nodoActual,NodoIntermedio* padre,Nodo* &he
 		informacion[4]=true;
 		extremo = true;
 	}
-	if((informacion[3]||informacion[4])&&(RaizCast->getListaElementos()->size()!=1||(RaizCast->getListaElementos()->size()==1&& padre->getReferenciaIzq()!=RaizCast->getReferenciaIzq()))){
+	if((informacion[3]||informacion[4])&&(Raiz->getListaElementos()->size()!=1||(Raiz->getListaElementos()->size()==1 &&refHijo!=RaizCast->getReferenciaIzq()&&refHijo!=Raiz->getListaElementos()->back()->getReferencia()))){
 		refHermanoIzq = obtenerReferenciaHermano(padre,nodoActual->getListaElementos()->front()->getClave(),extremo);
 		hermanoIzq =  obtenerHermanoXsuBflujo(nodoActual->getNumeroNivel(),refHermanoIzq);
 		refHermanoDer = obtenerReferenciaHermano(padre,hermanoIzq->getListaElementos()->front()->getClave(),extremo);
@@ -797,7 +797,27 @@ NodoIntermedio* BSharpTree::buscarIntermedio(Clave* clave,Nodo* nodoE,bool esRai
  * un solo nodo q pasa a ser la nueva raiz.
  */
 void BSharpTree::subflujoHijosRaiz(Nodo* nodo,Nodo* hermano,Referencia refNodo,Referencia refHermano){
-	if((nodo->getEspacioLibre()<(cantidadMinimaDeElementos-2))||(hermano->getEspacioLibre()<(cantidadMinimaDeElementos-2))||((nodo->getEspacioLibre()<cantidadMinimaDeElementos)&&(hermano->getEspacioLibre()<cantidadMinimaDeElementos))){
+	if((hermano->getListaElementos()->size()>cantidadMinimaDeElementos)){//se puede balancear
+		if(comparador->Comparar(nodo->getListaElementos()->back()->getClave(),hermano->getListaElementos()->front()->getClave())<0){//hermano esta a la derecha de nodo
+			hermano->balanceo(nodo,Raiz,true);
+		}else{//hermano esta a la izquierda de nodo
+			hermano->balanceo(nodo,Raiz,false);
+		}
+	}else if(nodo->getNumeroNivel()==0){//debe unirce pasando la Raiz a una hoja
+		if(comparador->Comparar(nodo->getListaElementos()->back()->getClave(),hermano->getListaElementos()->front()->getClave())<0){
+			armarRaizHoja(nodo,hermano,refNodo,refHermano);
+		}else{
+			armarRaizHoja(hermano,nodo,refHermano,refNodo);
+		}
+	}else{//Debe unirce siendo que la Raiz sigue siendo nodo Intermedio
+		if(comparador->Comparar(nodo->getListaElementos()->back()->getClave(),hermano->getListaElementos()->front()->getClave())<0){
+			armarRaizIntermedia(nodo,hermano,refNodo,refHermano);
+		}else{
+			armarRaizIntermedia(hermano,nodo,refHermano,refNodo);
+		}
+	}
+
+	/*if((nodo->getEspacioLibre()<(cantidadMinimaDeElementos-2))||(hermano->getEspacioLibre()<(cantidadMinimaDeElementos-2))||((nodo->getEspacioLibre()<cantidadMinimaDeElementos)&&(hermano->getEspacioLibre()<cantidadMinimaDeElementos))){
 		if(comparador->Comparar(nodo->getListaElementos()->front()->getClave(),hermano->getListaElementos()->back()->getClave())>0){
 			armarNuevaRaiz(hermano,nodo);
 		}else{
@@ -805,10 +825,10 @@ void BSharpTree::subflujoHijosRaiz(Nodo* nodo,Nodo* hermano,Referencia refNodo,R
 		}
 		nuevoEspacioLibre(refNodo);
 		nuevoEspacioLibre(refHermano);
-	}
+	}*/
 }
 
-void BSharpTree::armarNuevaRaiz(Nodo* nodoIzq,Nodo* nodoDer){
+void BSharpTree::armarRaizIntermedia(Nodo* nodoIzq,Nodo* nodoDer,Referencia refNodoIzq,Referencia refNodoDer){
 	std::stringbuf buf(ios_base :: in | ios_base :: out | ios_base :: binary);
 	NodoIntermedio* nodoIzquierdo = dynamic_cast<NodoIntermedio*>(nodoIzq);
 	NodoIntermedio* nodoDerecho = dynamic_cast<NodoIntermedio*>(nodoDer);
@@ -824,8 +844,21 @@ void BSharpTree::armarNuevaRaiz(Nodo* nodoIzq,Nodo* nodoDer){
 	}
 	RaizCast->setNumeroNivel(RaizCast->getNumeroNivel()-1);
 	grabarUnitario(RaizCast,posicionRaiz);
+	nuevoEspacioLibre(refNodoIzq);
+	nuevoEspacioLibre(refNodoDer);
 	delete nodoIzquierdo;
 	delete nodoDerecho;
+}
+
+void BSharpTree::armarRaizHoja(Nodo* nodoIzq,Nodo* nodoDer,Referencia refIzq,Referencia refDer){
+	for(std::list<ElementoNodo*>::iterator it = nodoDer->getListaElementos()->begin();it != nodoDer->getListaElementos()->end();++it){
+			nodoIzq->agregarElemento(*it);
+	}
+	delete Raiz;
+	Raiz = nodoIzq;
+	delete nodoDer;
+	nuevoEspacioLibre(refIzq);
+	nuevoEspacioLibre(refDer);
 }
 
 void BSharpTree::recomponerRaiz(){
