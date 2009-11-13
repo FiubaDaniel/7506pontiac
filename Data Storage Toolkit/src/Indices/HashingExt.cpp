@@ -777,41 +777,47 @@ void HashingExt::crear(std::string nombreArch, unsigned int tamanioBloque, Clave
 
 }
 
+
 bool HashingExt::abrir(std::string nombreArch,ComparadorClave* comp)
 {
+        cout<< "Se entro a abrir()" << endl;
         this->nom_tabla = nombreArch + "_tabla";
         this->nom_cubos = nombreArch + "_cubos";
         this->nom_libres = nombreArch + "_libres";
         this->nom_persist = nombreArch + "_persistencia" ;
 
-        this->tabla_dispersion.open(nom_tabla.c_str(), fstream:: out | fstream::in | fstream::binary);
-        if ( ! (tabla_dispersion.is_open() ))
+        this->tabla_dispersion.open(nom_tabla.c_str(), fstream::in | fstream:: out |fstream::binary);
+        if ( tabla_dispersion.fail() )
         {
-                cout << "Error al abrir el archivo de la tabla " << endl;
+                tabla_dispersion.clear();
+                cout << "El archivo de tabla NO EXISTE (se creara) " << endl;
                 return false;
         }
 
 
-        this->cubos_libres.open(nom_libres.c_str(), fstream:: out | fstream::in | fstream::binary);
-        if ( ! (cubos_libres.is_open() ) )
+        this->cubos_libres.open(nom_libres.c_str(), fstream::in | fstream::out| fstream::binary);
+        if ( cubos_libres.fail() )
         {
-                cout << "Error al abrir el archivo de cubos libres " << endl;
+                cubos_libres.clear();
+                cout << "El archivo de cubos libres NO EXISTE (se creara) " << endl;
                 return false;
         }
 
 
-        this->cubos.open(nom_cubos.c_str(), fstream:: out | fstream::in | fstream::binary);
-        if(! (cubos.is_open()) )
+        this->cubos.open(nom_cubos.c_str(),  fstream::in | fstream::out| fstream::binary);
+        if( cubos.fail() )
         {
-                cout << "Error al abrir el archivo de cubos " <<endl;
+                cubos.clear();
+                cout << "El archivo de cubos N0 EXISTE (se creara)" <<endl;
                 return false;
         }
 
 
-        this->persist.open(nom_persist.c_str(),  fstream:: in | fstream::binary);
-        if(!(persist.is_open()))
+        this->persist.open(nom_persist.c_str(),  fstream:: in | fstream::out| fstream::binary);
+        if( persist.fail() )
         {
-                cout << "Error al abrir el archivo de persistencia " <<endl;
+                persist.clear();
+                cout << "El archivo de persistencia NO EXISTE (se creara)" <<endl;
                 return false;
         }
 
@@ -894,8 +900,8 @@ void HashingExt::mostrarEstado()
         Ttam_disp tam_disp;
         char *un_registro = new char[this->tam_clave_ref]; //variable auxiliar
         char *una_clave = new char[this->tam_clave]; //variable auxiliar
-        unsigned numero_a_dispersar;
-        unsigned offset;
+        int numero_a_dispersar;
+
         Referencia una_ref;
 
         cout<<"**********************   Tabla de dispersion   *************************"<<endl;
@@ -930,15 +936,23 @@ void HashingExt::mostrarEstado()
                                 memcpy(un_registro, p_cubo + sizeof(Tcant_reg) + sizeof(Ttam_disp) + k*(this->tam_clave_ref), this->tam_clave_ref );
                                 memcpy(una_clave, un_registro, this->tam_clave);
                                 memcpy(&una_ref, un_registro + this->tam_clave, sizeof(Referencia));
-                                offset = (this->tam_clave) - sizeof(numero_a_dispersar);
-                                memcpy(&numero_a_dispersar, una_clave  + offset, sizeof(numero_a_dispersar));
+
+                                numero_a_dispersar = 0;
+                                for(int i = 0; i < this->tam_clave; i++)
+                                {
+                                        numero_a_dispersar += pow(2, i)*(*(una_clave+i));
+                                }
                                 cout << numero_a_dispersar << ", " << una_ref << " || ";
                         }
                         memcpy(un_registro, p_cubo + sizeof(Tcant_reg) + sizeof(Ttam_disp) + (cant_reg -1)*(this->tam_clave_ref), this->tam_clave_ref );
                         memcpy(una_clave, un_registro, this->tam_clave);
                         memcpy(&una_ref, un_registro + this->tam_clave, sizeof(Referencia));
-                        offset = this->tam_clave - sizeof(numero_a_dispersar);
-                        memcpy(&numero_a_dispersar, una_clave  + offset, sizeof(numero_a_dispersar));
+
+                        numero_a_dispersar = 0;
+                        for(int v = 0; v < this->tam_clave; v++)
+                        {
+                                numero_a_dispersar += pow(2, v)*(*(una_clave+v));
+                        }
                         cout << numero_a_dispersar << ", " << una_ref << endl;
                 }
         }
