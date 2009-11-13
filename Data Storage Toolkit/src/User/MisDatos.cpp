@@ -104,8 +104,7 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer, int longi
 	Archivo* archivo=new Archivo();
 	EARegistros * estrategiaregistro=new EARegistros(&reg);
 
-	archivo->crear(path.c_str());
-	estrategiaregistro->crear(archivo);
+
 	if(!archivo->abrir(path.c_str())){
 		archivo->crear(path.c_str());
 		estrategiaregistro->crear(archivo);
@@ -508,9 +507,10 @@ void MisDatos::cerrarArchivo1(){
 			delete almacen;
 		}
 		almacen=estrategia->getEstrategiaAlmacenamiento()->getAlmacenamiento();
-		recurso2->getEstrategia()->getEstrategiaAlmacenamiento()->cerrar();
+		//recurso2->getEstrategia()->getEstrategiaAlmacenamiento()->cerrar();
 		delete estrategia->getEstrategiaAlmacenamiento()->getComparador();
 		delete estrategia->getEstrategiaAlmacenamiento();
+		almacen->cerrar();
 		delete almacen;
 		delete estrategia->getIndice();
 		delete estrategia;
@@ -533,9 +533,10 @@ void MisDatos::cerrarArchivo2(){
 			delete almacen;
 		}
 		almacen=estrategia->getEstrategiaAlmacenamiento()->getAlmacenamiento();
-		recurso2->getEstrategia()->getEstrategiaAlmacenamiento()->cerrar();
+		//recurso2->getEstrategia()->getEstrategiaAlmacenamiento()->cerrar();
 		delete estrategia->getEstrategiaAlmacenamiento()->getComparador();
 		delete estrategia->getEstrategiaAlmacenamiento();
+		almacen->cerrar();
 		delete almacen;
 		delete estrategia->getIndice();
 		delete estrategia;
@@ -550,8 +551,9 @@ void MisDatos::cerrarArchivo2(){
 void MisDatos::cerrarArchivo3(){
 	if(recurso3!=NULL){
 		Almacenamiento * almacen=recurso3->getEstrategia()->getEstrategiaAlmacenamiento()->getAlmacenamiento();
-		recurso3->getEstrategia()->getEstrategiaAlmacenamiento()->cerrar();
+		//recurso3->getEstrategia()->getEstrategiaAlmacenamiento()->cerrar();
 		delete recurso3->getEstrategia()->getEstrategiaAlmacenamiento();
+		almacen->cerrar();
 		delete almacen;
 		delete recurso3->getEstrategia();
 		delete recurso3;
