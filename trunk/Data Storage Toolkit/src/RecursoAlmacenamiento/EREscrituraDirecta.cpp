@@ -143,6 +143,8 @@ void EREscrituraDirecta::actualizarIndice(Cambio cambio){
 			indice->insertar(cambio.referencia,&cambio.clave);
 			break;
 		case Cambio::Baja :
+			//TODO eliminar cout
+						cambio.clave.getAtributo(0)->imprimir(cout);cout<<endl;
 			indice->eliminar(&cambio.clave);
 			break;
 		case Cambio::Reubicacion :
