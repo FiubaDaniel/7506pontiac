@@ -6,7 +6,7 @@
  */
 #include "NodoHoja.h"
 NodoHoja::NodoHoja(unsigned int cantElem,Referencia refSiguiente,ComparadorClave* comparador) : NodoHoja ::Nodo(cantElem,0,comparador){
-    referenciaSiguiente = refSiguiente;
+	referenciaSiguiente = refSiguiente;
 	pos = 0;
 }
 
@@ -65,14 +65,14 @@ void NodoHoja::serializate(stringbuf* buffer){
 	std::list<ElementoNodo*>::iterator it;
 	it = listaElementos.begin();
 	if(!listaElementos.empty()){
-	while(it != listaElementos.end()){
-		ElementoNodo* elemento = *it;
-		Clave * clave = elemento->getClave();
-		clave->serializar(*buffer);
-		Referencia ref = elemento->getReferencia();
-		buffer->sputn ((char*)&ref,sizeof(ref));
-		++it;
-	   }
+		while(it != listaElementos.end()){
+			ElementoNodo* elemento = *it;
+			Clave * clave = elemento->getClave();
+			clave->serializar(*buffer);
+			Referencia ref = elemento->getReferencia();
+			buffer->sputn ((char*)&ref,sizeof(ref));
+			++it;
+		}
 	}
 }
 
@@ -93,7 +93,7 @@ int NodoHoja::agregarElemento(ElementoNodo* elemento){
 		ElementoNodo* elementoAux = *it;
 		if(comparador->Comparar(elemento->getClave(),elementoAux->getClave())==0){
 			retorno = 0,
-			ubicado=true;
+					ubicado=true;
 		}else if(comparador->Comparar(elemento->getClave(),elementoAux->getClave())<0){
 			listaElementos.insert(it,elemento->clonarce());
 			if(retorno==1){
@@ -101,7 +101,7 @@ int NodoHoja::agregarElemento(ElementoNodo* elemento){
 			}
 			ubicado=true;
 		}
-      ++it;
+		++it;
 	}
 	if(!ubicado){
 		listaElementos.push_back(elemento->clonarce());
@@ -109,7 +109,7 @@ int NodoHoja::agregarElemento(ElementoNodo* elemento){
 			cantidadDeElementosLibre=cantidadDeElementosLibre-1;
 		}
 	}
-    return retorno;
+	return retorno;
 }
 
 void NodoHoja::balanceo(Nodo* nodoHermanoE,Nodo* nodoPadreE,bool izq){
@@ -123,7 +123,7 @@ void NodoHoja::balanceo(Nodo* nodoHermanoE,Nodo* nodoPadreE,bool izq){
 		while(!encontrado && itAux != nodoPadre->getListaElementos()->end()){
 			elem = *itAux;
 			if(comparador->Comparar(elemento->getClave(),elem->getClave())==0){
-			     encontrado = true;
+				encontrado = true;
 			}else{
 				++itAux;
 			}
@@ -152,7 +152,7 @@ void NodoHoja::balanceo(Nodo* nodoHermanoE,Nodo* nodoPadreE,bool izq){
 
 void NodoHoja::balanceoEspecial(Nodo* nodoPegado,Nodo* nodoAlejado,Nodo* padre,bool Izq){
 	if(Izq){
-		 /*
+		/*
 		 * Los hermanos estan a izq siendo que el nodo this esta en subflujo, el nodo mas proximo tiene
 		 * la minima cantidad de elementos y el mas alejado tiene al menos un elemento mas del minimo.
 		 */
@@ -169,10 +169,10 @@ void NodoHoja::balanceoEspecial(Nodo* nodoPegado,Nodo* nodoAlejado,Nodo* padre,b
 		cantidadDeElementosLibre = cantidadDeElementosLibre-1;
 		nodoAlejado->setEspacioLibre(nodoAlejado->getEspacioLibre()+1);
 	}else{
-         /*
-          * Los hermanos estan a derecha siendo q el nodo this esta en subflujo, el nodo mas proximo tiene
-          * la minima cantidad de elementos y el mas alejado tiene al menos un elemento mas del minimo.
-          */
+		/*
+		 * Los hermanos estan a derecha siendo q el nodo this esta en subflujo, el nodo mas proximo tiene
+		 * la minima cantidad de elementos y el mas alejado tiene al menos un elemento mas del minimo.
+		 */
 		std::list<ElementoNodo*>::iterator itPadre = padre->getListaElementos()->begin();
 		++itPadre;
 		ElementoNodo* elemento = *itPadre;
@@ -190,14 +190,14 @@ void NodoHoja::balanceoEspecial(Nodo* nodoPegado,Nodo* nodoAlejado,Nodo* padre,b
 }
 
 ElementoNodo* NodoHoja::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMedioE,Nodo* nodoDerE,Nodo* nodoPadreE,Clave* clave){
-    NodoHoja* nodoHermano = dynamic_cast<NodoHoja*>(nodoHermanoE);
-    NodoHoja* nodoIzq = dynamic_cast<NodoHoja*>(nodoIzqE);
-    NodoHoja* nodoMedio = dynamic_cast<NodoHoja*>(nodoMedioE);
-    NodoHoja* nodoDer = dynamic_cast<NodoHoja*>(nodoDerE);
-    NodoIntermedio* nodoPadre= dynamic_cast<NodoIntermedio*>(nodoPadreE);
-    /*Seteo las referecnias siguienters q pueda, exepto la de nodo izq pq la de medio es indefinido*/
-    nodoMedio->setReferenciaSiguiente(referenciaSiguiente);
-    nodoDer->setReferenciaSiguiente(nodoHermano->getReferenciaSiguiente());
+	NodoHoja* nodoHermano = dynamic_cast<NodoHoja*>(nodoHermanoE);
+	NodoHoja* nodoIzq = dynamic_cast<NodoHoja*>(nodoIzqE);
+	NodoHoja* nodoMedio = dynamic_cast<NodoHoja*>(nodoMedioE);
+	NodoHoja* nodoDer = dynamic_cast<NodoHoja*>(nodoDerE);
+	NodoIntermedio* nodoPadre= dynamic_cast<NodoIntermedio*>(nodoPadreE);
+	/*Seteo las referecnias siguienters q pueda, exepto la de nodo izq pq la de medio es indefinido*/
+	nodoMedio->setReferenciaSiguiente(referenciaSiguiente);
+	nodoDer->setReferenciaSiguiente(nodoHermano->getReferenciaSiguiente());
 	int cantIzq = ((cantidadMaximaDeElementos*2)+1)/3;
 	int cantMedio = ((cantidadMaximaDeElementos*2)+1)/3;
 	ElementoNodo* elementoApadre,*elementoPadre;
@@ -217,19 +217,19 @@ ElementoNodo* NodoHoja::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMe
 	while(it != listaElementos.end ()){
 		ElementoNodo* elemento = *it;
 		if(cantIzq==0) {
-		    elementoApadre = new ElementoNodo(0,elemento->getClave());
-		    nodoMedio->agregarElemento(elemento);
-		    cantMedio--;
-			cantIzq=-1;
-		}else{
-		if(cantIzq>0){
-        nodoIzq->agregarElemento(elemento);
-		cantIzq--;
-		}else{
+			elementoApadre = new ElementoNodo(0,elemento->getClave());
 			nodoMedio->agregarElemento(elemento);
 			cantMedio--;
-			 }
-		  }
+			cantIzq=-1;
+		}else{
+			if(cantIzq>0){
+				nodoIzq->agregarElemento(elemento);
+				cantIzq--;
+			}else{
+				nodoMedio->agregarElemento(elemento);
+				cantMedio--;
+			}
+		}
 		it++;
 	}
 	while(it2 != nodoHermano->getListaElementos()->end()){
@@ -241,11 +241,11 @@ ElementoNodo* NodoHoja::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMe
 			cantMedio=-1;
 		}else{
 			if(cantMedio>0){
-			nodoMedio->agregarElemento(elemento);
-			cantMedio--;
-		}else{
-			nodoDer->agregarElemento(elemento);
-		    }
+				nodoMedio->agregarElemento(elemento);
+				cantMedio--;
+			}else{
+				nodoDer->agregarElemento(elemento);
+			}
 		}
 		it2++;
 	}
@@ -261,29 +261,29 @@ bool NodoHoja::buscar(const Clave* clave,ElementoNodo*&elemento){
 	pos = 0;
 	while(!encontrado && it!=listaElementos.end() && existe){
 		elemento = *it;
-	    int comparacion = comparador->Comparar(elemento->getClave(),clave);
-	    if(comparacion>0){
-	    	existe=false;
-	 	   }else if(comparacion==0){
-	 		   encontrado=true;
-	 	   }else{
-	 		   ++it;
-	 		   pos++;
-	 	     }
+		int comparacion = comparador->Comparar(elemento->getClave(),clave);
+		if(comparacion>0){
+			existe=false;
+		}else if(comparacion==0){
+			encontrado=true;
+		}else{
+			++it;
+			pos++;
+		}
 	}
 	if(!encontrado || !existe)return false;
-	    return true;;
+	return true;;
 }
 
 bool NodoHoja::buscarReferenciaDeClaveX(const Clave* clave,Referencia* ref){
-   ElementoNodo * elemento;
-   bool encontro= buscar(clave,elemento);
-   *ref = elemento->getReferencia();
-   return encontro;
+	ElementoNodo * elemento;
+	bool encontro= buscar(clave,elemento);
+	*ref = elemento->getReferencia();
+	return encontro;
 }
 
 bool NodoHoja::setReferenciaDeClaveX(const Clave* clave,Referencia refNueva){
-    ElementoNodo* elemento;
+	ElementoNodo* elemento;
 	bool encontro = buscar(clave,elemento);
 	elemento->setReferencia(refNueva);
 	return encontro;
@@ -294,16 +294,16 @@ int NodoHoja::busquedaSecuencial(const Clave* clave,ElementoNodo* &elemento){
 	bool encontrado = false;
 	int retorno  = -1;
 	while(it != listaElementos.end()&& !encontrado){
-	    elemento = *it;
+		elemento = *it;
 		if(comparador->Comparar(elemento->getClave(),clave)==0){
 			encontrado = true;
 			retorno = 0;
 		}
-        if(comparador->Comparar(elemento->getClave(),clave)>0){
-        	encontrado = true;
-        	retorno = 1;
-        }
-        ++it;
+		if(comparador->Comparar(elemento->getClave(),clave)>0){
+			encontrado = true;
+			retorno = 1;
+		}
+		++it;
 	}
 	return retorno;
 }
@@ -322,7 +322,7 @@ int NodoHoja::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre){
 		}
 
 		if(encontrado){
-            --it;
+			--it;
 			elementoPadre = *it;
 		}
 		++it;
@@ -337,7 +337,7 @@ int NodoHoja::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre){
 		}else {
 			nodoHermanoDer->agregarElemento(elem);
 		}
-	 ++itMedio;
+		++itMedio;
 	}
 	this->getListaElementos()->clear();
 	elementoPadre->setClave(nodoHermanoDer->getListaElementos()->front()->getClave());
