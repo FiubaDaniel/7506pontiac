@@ -39,31 +39,31 @@ public:
 };
 
 class EREscrituraDirecta : public EstrategiaRecursos{
-
 private:
 	AdministradorDeBuffer admin;
-	EstrategiaAlmacenamiento*estrategiaArchivo;
-	EstrategiaAlmacenamiento*estrategiaBuffer;
+	std::queue<Cambio> cambiosArchivo;
+	Almacenamiento*archivo;
+	Almacenamiento*buffer;
 	EstrategiaIndice* indice;
-	Registro*registro;
 	Clave*clave;
 	void actualizarIndice(Cambio cambio);
 	void actualizarBuffer(Cambio cambio);
 	void insertarEnBuffer(Referencia refArchivo);
 	void setClave(Registro*reg,Clave*clave);
 public:
-	EREscrituraDirecta(EstrategiaIndice* indice,EstrategiaAlmacenamiento*estrategiaArchivo,EstrategiaAlmacenamiento*estrategiaBuffer,size_t cantidadElementoBuffer);
+	EREscrituraDirecta(EstrategiaIndice* indice,Almacenamiento*archivo,Almacenamiento*buffer,size_t cantidadElementoBuffer);
 	virtual ~EREscrituraDirecta();
 	bool insertar(Registro* registro);
 	bool eliminar(Clave* unaClave);
 	bool modificar(Clave* unaClave,Registro* registro);
 	bool obtener(Clave* unaClave,Registro*registro);
-	EstrategiaAlmacenamiento *getEstrategiaAlmacenamiento();
-	EstrategiaAlmacenamiento *getEstrategiaBuffer();
+	void cerrar();
+	Almacenamiento *getAlmacenamiento();
+	Almacenamiento *getBuffer();
 	EstrategiaIndice *getIndice();
-	void setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategiAlmacenamiento);
 	void setIndice(EstrategiaIndice *indice);
-	void setEstrategiaBuffer(EstrategiaAlmacenamiento* estrategia);
+	/*void setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategiAlmacenamiento);
+	void setEstrategiaBuffer(EstrategiaAlmacenamiento* estrategia);*/
 };
 
 #endif // ESTRATEGIARECURSOSESCRITURADIRECTA_H

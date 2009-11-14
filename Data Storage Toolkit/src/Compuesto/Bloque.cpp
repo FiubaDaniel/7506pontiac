@@ -57,7 +57,7 @@ Ttamanio Bloque::serializar(std::streambuf&salida){
 	return offset;
 }
 Ttamanio Bloque::tamanioSerializado(){
-	Ttamanio offset=sizeof(Ttamanio);
+	Ttamanio offset=sizeof(unsigned char);
 	for(Ttamanio i=0;i<componentes.size();i++){
 		offset+=componentes.at(i)->tamanioSerializado();
 	}
@@ -98,4 +98,17 @@ void Bloque::inicializar(Componente*componente){
 		componentes.pop_back();
 	}
 	componentes.push_back(componente->clonar());
+}
+void Bloque::imprimir(std::ostream&salida){
+	salida<<"º";
+	salida<<componentes.size();
+	salida<<"("<<tamanioSerializado()<<")"<<std::endl;
+	for(Ttamanio i=0;i<componentes.size();i++){
+		componentes[i]->imprimir(salida);
+		salida<<" : "<<"("<<componentes[i]->tamanioSerializado()<<")"<<std::endl;
+	}
+}
+std::ostream& operator<<(std::ostream&out,Bloque&bloque){
+	bloque.imprimir(out);
+	return out;
 }

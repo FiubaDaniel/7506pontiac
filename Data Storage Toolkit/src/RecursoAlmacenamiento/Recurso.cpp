@@ -51,4 +51,6 @@ void Recurso::mostrarDatos(){}
 EstrategiaRecursos* Recurso::getEstrategiaRecurso(){
 	return estrategiaUsada;
 }
-
+void Recurso::cerrar(){
+	estrategiaUsada->cerrar();
+}

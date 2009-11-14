@@ -1,15 +1,13 @@
 #include "ERUnAlmacenamiento.h"
 
-ERUnAlmacenamiento::ERUnAlmacenamiento(EstrategiaIndice*indice,EstrategiaAlmacenamiento*estrategia){
-	estrategiAlmacenamiento=estrategia;
-	estrategiAlmacenamiento->logActivo=true;
+ERUnAlmacenamiento::ERUnAlmacenamiento(EstrategiaIndice*indice,Almacenamiento*archivo){
+	almacen=archivo;
+	almacen->getEstrategia()->setColaCambios(&colaCambios);
 	this->indice=indice;
-	registro=(Registro*)estrategia->getRegistro()->clonar();
-	clave=estrategia->getClave();
+	clave=almacen->getEstrategia()->getClave();
 }
 
 ERUnAlmacenamiento::~ERUnAlmacenamiento(){
-	delete registro;
 }
 
 bool ERUnAlmacenamiento::insertar(Registro* registro){
@@ -19,15 +17,14 @@ bool ERUnAlmacenamiento::insertar(Registro* registro){
 		if(indice->BuscarReferencia(clave,&referencia))
 			return false;
 	}else {
-		estrategiAlmacenamiento->logActivo=false;
-		if(estrategiAlmacenamiento->buscar(registro))
+		if(almacen->buscar(registro))
 			return false;
 	}
-	if(!estrategiAlmacenamiento->insertar(registro))return false;
-	while(!estrategiAlmacenamiento->NoHayMasCambios()){
-		const Cambio* cambio=estrategiAlmacenamiento->siguienteCambio();
-		actualizarIndice(*cambio);
-		estrategiAlmacenamiento->pop();
+	if(!almacen->insertar(registro))return false;
+	while(!colaCambios.empty()){
+		Cambio& cambio=colaCambios.front();
+		actualizarIndice(cambio);
+		colaCambios.pop();
 	};
 	return true;
 }
@@ -37,21 +34,17 @@ bool ERUnAlmacenamiento::eliminar(Clave* unaClave){
 		if(!indice->BuscarReferencia(unaClave,&referencia))
 			return false;
 	}else {
-		estrategiAlmacenamiento->logActivo=true;
-		setClave(registro,clave);
-		if(!estrategiAlmacenamiento->buscar(registro))
+		if(!almacen->buscar(unaClave))
 			return false;
-		referencia=estrategiAlmacenamiento->siguienteCambio()->referencia;
-		estrategiAlmacenamiento->pop();
-		estrategiAlmacenamiento->logActivo=false;
+		referencia=almacen->posicionComponente();
 	}
-	estrategiAlmacenamiento->posicionarComponente(referencia);
-	setClave(registro,clave);
-	if(!estrategiAlmacenamiento->eliminar(registro))return false;
-	while(!estrategiAlmacenamiento->NoHayMasCambios()){
-		const Cambio* cambio=estrategiAlmacenamiento->siguienteCambio();
-		actualizarIndice(*cambio);
-		estrategiAlmacenamiento->pop();
+	almacen->posicionarComponente(referencia);
+	if(!almacen->eliminar(unaClave))
+		return false;
+	while(!colaCambios.empty()){
+		Cambio& cambio=colaCambios.front();
+		actualizarIndice(cambio);
+		colaCambios.pop();
 	};
 	return true;
 }
@@ -62,72 +55,56 @@ bool ERUnAlmacenamiento::modificar(Clave* unaClave,Registro* registro){
 		if(!indice->BuscarReferencia(unaClave,&referencia))
 			return false;
 	}else {
-		estrategiAlmacenamiento->logActivo=true;
-		setClave(registro,clave);
-		if(!estrategiAlmacenamiento->buscar(registro))
+		if(!almacen->buscar(unaClave))
 			return false;
-		referencia=estrategiAlmacenamiento->siguienteCambio()->referencia;
-		estrategiAlmacenamiento->pop();
-		estrategiAlmacenamiento->logActivo=false;
+		referencia=almacen->posicionComponente();
 	}
-	estrategiAlmacenamiento->posicionarComponente(referencia);
-	if(!estrategiAlmacenamiento->modificar(registro))
+	almacen->posicionarComponente(referencia);
+	if(!almacen->modificar(registro))
 		return false;
-	while(!estrategiAlmacenamiento->NoHayMasCambios()){
-		const Cambio* cambio=estrategiAlmacenamiento->siguienteCambio();
-		actualizarIndice(*cambio);
-		estrategiAlmacenamiento->pop();
+	while(!colaCambios.empty()){
+		Cambio& cambio=colaCambios.front();
+		actualizarIndice(cambio);
+		colaCambios.pop();
 	};
 	return true;
 }
 bool ERUnAlmacenamiento::obtener(Clave* unaClave,Registro*registro){
 	Referencia referencia;
 	if(indice!=NULL){
-		if(!indice->BuscarReferencia(clave,&referencia))
+		if(!indice->BuscarReferencia(unaClave,&referencia))
 			return false;
-		estrategiAlmacenamiento->posicionarComponente(referencia);
-		return estrategiAlmacenamiento->obtener(registro);
+
 	}else{
-		estrategiAlmacenamiento->logActivo=false;
-		setClave(registro,clave);
-		return estrategiAlmacenamiento->buscar(registro);
+		if(almacen->buscar(unaClave)){
+			referencia=almacen->posicionComponente();
+		}
 	}
+	almacen->posicionarComponente(referencia);
+	return almacen->obtener(registro);
 }
 
 void ERUnAlmacenamiento::actualizarIndice(Cambio cambio){
-	if(indice){
-		switch(cambio.operacion){
+	switch(cambio.operacion){
 		case Cambio::Alta : indice->insertar(cambio.referencia,&cambio.clave); break;
 		case Cambio::Baja : indice->eliminar(&cambio.clave); break;
 		case Cambio::Reubicacion : indice->modificar(&cambio.clave,cambio.referencia); break;
 		default:break;
-		}
-	}
-}
-void ERUnAlmacenamiento::setClave(Registro*reg,Clave*clave){
-	for(Ttamanio i=0;i<clave->getCantidadAtributos();i++){
-		Atributo*att=clave->getAtributo(i);
-		reg->get(att->getNombre())->set(att);
 	}
 }
 
-EstrategiaAlmacenamiento *ERUnAlmacenamiento::getEstrategiaAlmacenamiento(){
-	return estrategiAlmacenamiento;
+Almacenamiento *ERUnAlmacenamiento::getAlmacenamiento(){
+    return almacen;
 }
 
 EstrategiaIndice *ERUnAlmacenamiento::getIndice(){
-	return indice;
-}
-
-void ERUnAlmacenamiento::setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategiAlmacenamiento)
-{
-	this->estrategiAlmacenamiento = estrategiAlmacenamiento;
-	this->estrategiAlmacenamiento->logActivo=true;
-	clave=estrategiAlmacenamiento->getClave();
-	registro=(Registro*)estrategiAlmacenamiento->getRegistro();
+    return indice;
 }
 
 void ERUnAlmacenamiento::setIndice(EstrategiaIndice *indice){
-	this->indice = indice;
+    this->indice = indice;
 }
-
+void ERUnAlmacenamiento::cerrar(){
+	indice->cerrar();
+	almacen->cerrar();
+}

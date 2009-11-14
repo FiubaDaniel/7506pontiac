@@ -8,6 +8,7 @@
 #ifndef BLOQUE_H_
 #define BLOQUE_H_
 #include <vector>
+#include <iostream>
 #include "Componente.h"
 #include "Compuesto.h"
 
@@ -20,8 +21,10 @@ public:/*Heredados de Componente*/
 	virtual Ttamanio deserializar(std::streambuf&entrada);
 	virtual Ttamanio serializar(std::streambuf&salida);
 	virtual Ttamanio tamanioSerializado();
+	virtual void imprimir(std::ostream&salida);
 	virtual Componente* clonar();
 	virtual bool esfijo();
+	friend std::ostream& operator<<(std::ostream&out,Bloque&bloque);
 public:/*Heredados de compuesto*/
 	virtual Componente* get(Ttamanio nroComponente);
 	virtual Ttamanio cantidadComponentes();
@@ -32,5 +35,7 @@ public:/*Heredados de compuesto*/
 protected:
 	Bloque();
 	std::vector<Componente*> componentes;
+
 };
+
 #endif /* BLOQUE_H_ */

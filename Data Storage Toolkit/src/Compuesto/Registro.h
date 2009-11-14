@@ -25,6 +25,7 @@ public:
 public:/*Metodos Heredados*/
 	virtual Ttamanio deserializar(std::streambuf&entrada);
 	virtual Ttamanio serializar(std::streambuf&salida);
+	virtual void imprimir(std::ostream&salida);
 	virtual Ttamanio tamanioSerializado();
 	virtual Componente* clonar();
 	friend std::ostream& operator<<(std::ostream&out,Registro& registro);

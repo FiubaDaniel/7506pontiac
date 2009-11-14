@@ -1,18 +1,18 @@
 #include "EREscrituraDirecta.h"
 
-EREscrituraDirecta::EREscrituraDirecta(EstrategiaIndice* indice,EstrategiaAlmacenamiento*estrategiaArchivo,EstrategiaAlmacenamiento*estrategiaBuffer,size_t cantidadElementoBuffer){
-	this->estrategiaArchivo=estrategiaArchivo;
-	this->estrategiaBuffer=estrategiaBuffer;
+EREscrituraDirecta::EREscrituraDirecta(EstrategiaIndice* indice,Almacenamiento*archivo,Almacenamiento*buffer,size_t cantidadElementoBuffer){
+	this->archivo=archivo;
+	this->buffer=buffer;
 	this->indice=indice;
-	this->estrategiaBuffer->logActivo=false;
-	this->estrategiaArchivo->logActivo=true;
+	this->archivo->getEstrategia()->setColaCambios(&this->cambiosArchivo);
+	this->buffer->getEstrategia()->setColaCambios(NULL);
 	admin.setCapacidad(cantidadElementoBuffer);
-	registro=(Registro*)this->estrategiaArchivo->getRegistro()->clonar();
-	clave=this->estrategiaArchivo->getClave();
+	//TODO registro=(Registro*)this->estrategiaArchivo->getRegistro()->clonar();
+	clave=this->archivo->getEstrategia()->getClave();
 }
 
 EREscrituraDirecta::~EREscrituraDirecta(){
-	delete registro;
+
 }
 
 void EREscrituraDirecta::setClave(Registro*reg,Clave*clave){
@@ -28,19 +28,18 @@ bool EREscrituraDirecta::insertar(Registro* registro){
 		if(indice->BuscarReferencia(clave,&referencia))
 			return false;
 	}else {
-		if(!estrategiaBuffer->buscar(registro)){
-			estrategiaArchivo->logActivo=false;
-			if(estrategiaArchivo->buscar(registro))
-				return false;
-			estrategiaArchivo->logActivo=true;
-		}else return false;
+		if(buffer->buscar(registro))
+			return false;
+		if(archivo->buscar(registro))
+			return false;
 	}
-	if(!estrategiaArchivo->insertar(registro))return false;
-	while(!estrategiaArchivo->NoHayMasCambios()){
-		const Cambio* cambio=estrategiaArchivo->siguienteCambio();
-		actualizarBuffer(*cambio);
-		actualizarIndice(*cambio);
-		estrategiaArchivo->pop();
+	if(!archivo->insertar(registro))
+		return false;
+	while(!cambiosArchivo.empty()){
+		Cambio& cambio=cambiosArchivo.front();
+		actualizarBuffer(cambio);
+		actualizarIndice(cambio);
+		cambiosArchivo.pop();
 	};
 	return true;
 }
@@ -50,27 +49,19 @@ bool EREscrituraDirecta::eliminar(Clave* unaClave){
 		if(!indice->BuscarReferencia(unaClave,&referencia))
 			return false;
 	}else {
-		estrategiaArchivo->logActivo=true;
-		setClave(registro,clave);
-		if(!estrategiaArchivo->buscar(registro))
-			return false;
-		referencia=estrategiaArchivo->siguienteCambio()->referencia;
-		estrategiaArchivo->pop();
-		estrategiaArchivo->logActivo=false;
+		/*TODO usar cola de cambios*/
+		if(archivo->buscar(unaClave)){
+			//TODO ver q se borra del buffer
+			archivo->eliminar(unaClave);
+		}else return false;
 	}
-	estrategiaArchivo->posicionarComponente(referencia);
-	setClave(registro,unaClave);
-	if(!estrategiaArchivo->eliminar(registro))
-		return false;
-	while(!estrategiaArchivo->NoHayMasCambios()){
-		Cambio* cambio=estrategiaArchivo->siguienteCambio();
-		//todo eliminar cout
-		cout<<endl;
-				cambio->clave.getAtributo(0)->imprimir(cout);cout<<endl;
-		actualizarBuffer(*cambio);
-		actualizarIndice(*cambio);
-
-		estrategiaArchivo->pop();
+	archivo->posicionarComponente(referencia);
+	archivo->eliminar(unaClave);
+	while(!cambiosArchivo.empty()){
+		Cambio& cambio=cambiosArchivo.front();
+		actualizarBuffer(cambio);
+		actualizarIndice(cambio);
+		cambiosArchivo.pop();
 	};
 	return true;
 }
@@ -81,22 +72,20 @@ bool EREscrituraDirecta::modificar(Clave* unaClave,Registro* registro){
 		if(!indice->BuscarReferencia(clave,&referencia))
 			return false;
 	}else {
-		estrategiaArchivo->logActivo=true;
+		//TODO revisar
 		setClave(registro,clave);
-		if(!estrategiaArchivo->buscar(registro))
-			return false;
-		referencia=estrategiaArchivo->siguienteCambio()->referencia;
-		estrategiaArchivo->pop();
-		estrategiaArchivo->logActivo=false;
+		if(archivo->buscar(registro)){
+			archivo->modificar(registro);
+		}else return false;
 	}
-	estrategiaArchivo->posicionarComponente(referencia);
-	if(!estrategiaArchivo->modificar(registro))
+	archivo->posicionarComponente(referencia);
+	if(!archivo->modificar(registro))
 		return false;
-	while(!estrategiaArchivo->NoHayMasCambios()){
-		Cambio* cambio=estrategiaArchivo->siguienteCambio();
-		actualizarBuffer(*cambio);
-		actualizarIndice(*cambio);
-		estrategiaArchivo->pop();
+	while(!cambiosArchivo.empty()){
+		Cambio& cambio=cambiosArchivo.front();
+		actualizarBuffer(cambio);
+		actualizarIndice(cambio);
+		cambiosArchivo.pop();
 	};
 	return true;
 }
@@ -108,50 +97,42 @@ bool EREscrituraDirecta::obtener(Clave* unaClave,Registro*registro){
 		if(!indice->BuscarReferencia(clave,&referencia))
 			return false;
 		if(admin.acceder(referencia)){
-			estrategiaBuffer->posicionarComponente(admin.getPosicionEnBuffer());
-			return estrategiaBuffer->obtener(registro);
+			buffer->posicionarComponente(admin.getPosicionEnBuffer());
+			return buffer->obtener(registro);
 		}
-		estrategiaArchivo->posicionarComponente(referencia);
-		if(estrategiaArchivo->obtener(registro)){
+		archivo->posicionarComponente(referencia);
+		if(archivo->obtener(registro)){
 			insertarEnBuffer(referencia);
 			return true;
 		}
 	}else{
-		if(estrategiaBuffer->buscar(registro))
+		if(buffer->buscar(registro))
 			return true;
-		estrategiaArchivo->logActivo=false;
-		if(estrategiaArchivo->buscar(registro))
+		if(archivo->buscar(registro)){
+			referencia=archivo->posicionComponente();
+			insertarEnBuffer(referencia);
 			return true;
-		estrategiaArchivo->logActivo=true;
+		}
+
 	}
 	return false;
 }
 void EREscrituraDirecta::insertarEnBuffer(Referencia refArchivo){
 	admin.insertar(refArchivo);
 	size_t posicionBuffer=admin.getPosicionEnBuffer();
-	estrategiaArchivo->posicionarComponente(refArchivo);
-	Componente *componente=estrategiaArchivo->getComponente()->clonar();
-	estrategiaArchivo->leer(componente);
-	estrategiaBuffer->posicionarComponente(posicionBuffer);
-	estrategiaBuffer->escribir(componente);
-	delete componente;
+	archivo->posicionarComponente(refArchivo);
+	//TODO q pasa si strategia=NULL
+	Componente *componente=archivo->getEstrategia()->getComponenteUsado();
+	archivo->leer(componente);
+	buffer->posicionarComponente(posicionBuffer);
+	buffer->escribir(componente);
 }
 void EREscrituraDirecta::actualizarIndice(Cambio cambio){
 	if(indice==NULL)return;
-	switch(cambio.operacion){
-		case Cambio::Alta :
-			indice->insertar(cambio.referencia,&cambio.clave);
-			break;
-		case Cambio::Baja :
-			//TODO eliminar cout
-						cambio.clave.getAtributo(0)->imprimir(cout);cout<<endl;
-			indice->eliminar(&cambio.clave);
-			break;
-		case Cambio::Reubicacion :
-			//TODO eliminar cout
-			cambio.clave.getAtributo(0)->imprimir(cout);cout<<endl;
-			indice->modificar(&cambio.clave,cambio.referencia);
-			break;
+		switch(cambio.operacion){
+		case Cambio::Alta : indice->insertar(cambio.referencia,&cambio.clave); break;
+		case Cambio::Baja : indice->eliminar(&cambio.clave); break;
+		case Cambio::Reubicacion : indice->modificar(&cambio.clave,cambio.referencia); break;
 		default:break;
 	}
 }
@@ -159,47 +140,46 @@ void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 	size_t posicionBuffer;
 	Componente* componente;
 	switch(cambio.operacion){
-		case Cambio::Alta :
-			insertarEnBuffer(cambio.referencia);
-			break;
-		case Cambio::Modificacion:
-		case Cambio::Baja :
-			if(admin.acceder(cambio.referencia)){
-				posicionBuffer=admin.getPosicionEnBuffer();
-				estrategiaArchivo->posicionarComponente(cambio.referencia);
-				componente=estrategiaArchivo->getComponente()->clonar();
-				estrategiaArchivo->leer(componente);
-				estrategiaBuffer->posicionarComponente(posicionBuffer);
-				estrategiaBuffer->escribir(componente);
-				delete componente;
-			}
-			break;
-		case Cambio::Reubicacion :
-			Referencia posicionAnterior;
-			indice->BuscarReferencia(&cambio.clave,&posicionAnterior);
-			/* si el Componente de la posicoin previa esta en el buffer la actualizo*/
-/*	TODO buffer		if(admin.acceder(posicionAnterior)){
-				admin.at(posicionAnterior)->
-				posicionBuffer=admin.getPosicionEnBuffer();
-				estrategiaArchivo->posicionarComponente(posicionAnterior);
-				componente=estrategiaArchivo->getComponente()->clonar();
-				estrategiaArchivo->leer(componente);
-				estrategiaBuffer->posicionarComponente(posicionBuffer);
-				estrategiaBuffer->escribir(componente);
-				delete componente;
-			}
-			actualizo la nueva posicion si esta en el buffer
-			if(!admin.acceder(cambio.referencia))
-				admin.insertar(cambio.referencia);
+	case Cambio::Alta :
+		insertarEnBuffer(cambio.referencia);
+		break;
+	case Cambio::Modificacion:
+	case Cambio::Baja :
+		if(admin.acceder(cambio.referencia)){
 			posicionBuffer=admin.getPosicionEnBuffer();
-			estrategiaArchivo->posicionarComponente(cambio.referencia);
-			componente=estrategiaArchivo->getComponente()->clonar();
-			estrategiaArchivo->leer(componente);
-			estrategiaBuffer->posicionarComponente(posicionBuffer);
-			estrategiaBuffer->escribir(componente);
-			delete componente;*/
-			break;
-		default:break;
+			archivo->posicionarComponente(cambio.referencia);
+			componente=archivo->getEstrategia()->getComponenteUsado()->clonar();
+			archivo->leer(componente);
+			buffer->posicionarComponente(posicionBuffer);
+			buffer->escribir(componente);
+			delete componente;
+		}
+		break;
+	case Cambio::Reubicacion :
+		Referencia posicionAnterior;
+		indice->BuscarReferencia(&cambio.clave,&posicionAnterior);
+		/* si el Componente de la posicoin previa esta en el buffer la actualizo*/
+		if(admin.acceder(posicionAnterior)){
+			posicionBuffer=admin.getPosicionEnBuffer();
+			archivo->posicionarComponente(posicionAnterior);
+			componente=archivo->getEstrategia()->getComponenteUsado()->clonar();
+			archivo->leer(componente);
+			buffer->posicionarComponente(posicionBuffer);
+			buffer->escribir(componente);
+			delete componente;
+		}
+		/*actualizo la nueva posicion si esta en el buffer*/
+		if(!admin.acceder(cambio.referencia))
+			admin.insertar(cambio.referencia);
+		posicionBuffer=admin.getPosicionEnBuffer();
+		archivo->posicionarComponente(cambio.referencia);
+		componente=archivo->getEstrategia()->getComponenteUsado()->clonar();
+		archivo->leer(componente);
+		buffer->posicionarComponente(posicionBuffer);
+		buffer->escribir(componente);
+		delete componente;
+		break;
+	default:break;
 	}
 
 }
@@ -290,29 +270,21 @@ EstrategiaIndice *EREscrituraDirecta::getIndice(){
 
 
 
-EstrategiaAlmacenamiento *EREscrituraDirecta::getEstrategiaAlmacenamiento(){
-	return estrategiaArchivo;
+Almacenamiento *EREscrituraDirecta::getAlmacenamiento(){
+	return archivo;
 }
-EstrategiaAlmacenamiento *EREscrituraDirecta::getEstrategiaBuffer(){
-	return estrategiaBuffer;
+Almacenamiento *EREscrituraDirecta::getBuffer(){
+	return buffer;
 }
 
 
 void EREscrituraDirecta::setIndice(EstrategiaIndice *indice){
 	this->indice=indice;
 }
-
-void EREscrituraDirecta::setEstrategiaBuffer(EstrategiaAlmacenamiento* estrategia){
-	estrategiaBuffer=estrategia;
-	registro=(Registro*)estrategia->getRegistro();
-	clave=estrategia->getClave();
-}
-
-void EREscrituraDirecta::setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategia){
-	estrategiaArchivo=estrategia;
-	estrategiaArchivo->logActivo=true;
-	registro=(Registro*)estrategia->getRegistro();
-	clave=estrategia->getClave();
+void EREscrituraDirecta::cerrar(){
+	indice->cerrar();
+	buffer->cerrar();
+	archivo->cerrar();
 }
 
 

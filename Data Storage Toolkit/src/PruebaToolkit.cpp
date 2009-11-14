@@ -61,36 +61,8 @@ int main() {
 
 	/* ARCHIVO 1 */
 	try{
-
-	misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
-
-	for (int i=0; i<CENTENAMAXREGISTROS*100; ++i){
-		cantElementos = i % DELTA + MINIMO;
-		nroTermino = invertirDecenaUnidad(i);
-
-		miLista = new int[cantElementos];
-		for (int j=0; j<cantElementos; ++j){
-			miLista[j] = j;
-		}
-		miRegVariable = new MiRegistroVariable(Terminos::obtenerTermino(nroTermino), i, miLista, cantElementos);
-		misDatos.agregarRegistroArchivo1(*miRegVariable);
-
-		mostrarArchivo1(misDatos);
-
-		delete(miRegVariable);
-		delete(miLista);
-	}
-
-	for (int i=50; i<CENTENAMAXREGISTROS*100; ++i){
-		misDatos.eliminarRegistroArchivo1(Terminos::obtenerTermino(i));
-		mostrarArchivo1(misDatos);
-	}
-/*------------------------------------------------------------------------*/
-	//TODO Probar el abrir.
-
-	/*misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
-
-		for (int i=0; i<CENTENAMAXREGISTROS*100; ++i){
+		misDatos.inicializarArchivo1("MiArchivo1", 256, false, 1024, true, ARBOL, 128);
+		for (int i=0; i<100; ++i){
 			cantElementos = i % DELTA + MINIMO;
 			nroTermino = i;
 
@@ -103,68 +75,45 @@ int main() {
 
 			mostrarArchivo1(misDatos);
 
-			delete(miRegVariable);
-			delete(miLista);
+			delete miRegVariable;
+			delete miLista;
 		}
-		//Problema en el cerrar
-   misDatos.cerrarArchivo1();
-   cout<<"Aca abre y agrega"<<endl;
-   cout<<" "<<endl;
-   misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
-		for (int i=100; i<150; ++i){
-			cantElementos = i % DELTA + MINIMO;
-			nroTermino = i;
-
-			miLista = new int[cantElementos];
-			for (int j=0; j<cantElementos; ++j){
-				miLista[j] = j;
-			}
-			miRegVariable = new MiRegistroVariable(Terminos::obtenerTermino(nroTermino), i, miLista, cantElementos);
-			misDatos.agregarRegistroArchivo1(*miRegVariable);
-
-			mostrarArchivo1(misDatos);
-
-			delete(miRegVariable);
-			delete(miLista);
-	}
 		cout<<"Elimina "<<endl;
 		cout<<" "<<endl;
-		int cant2 = 0;
-	for (int i=100; i<150; ++i){
-		cant2++;
-		if(cant2==46)
-			cout<<"";
-		misDatos.eliminarRegistroArchivo1(Terminos::obtenerTermino(i));
-		mostrarArchivo1(misDatos);
-		cout<<"Esto es cant: "<<cant2<<endl;
+		int cant = 0;
+		for (int i=0; i<100; ++i){
+			cant++;
+			if(i==4)
+				cout<<endl;
+			misDatos.eliminarRegistroArchivo1(Terminos::obtenerTermino(i));
+			mostrarArchivo1(misDatos);
+			cout<<"Esto es cant: "<<cant<<endl;
 
-	}*/
-	/*--------------------------------------------------------------------*/
-	misDatos.cerrarArchivo1();
+		}
+		/*--------------------------------------------------------------------*/
+		misDatos.cerrarArchivo1();
 
-	/* ARCHIVO 2 */
+		/* ARCHIVO 2 */
 
-	misDatos.inicializarArchivo2("MiArchivo2", true, 128, true, HASH, 64);
+		misDatos.inicializarArchivo2("MiArchivo2", true, 128, true, HASH, 64);
 
-	for(int i=0; i<CENTENAMAXREGISTROS*100; ++i){
-		claveRegFijo = invertirDecenaUnidad(i);
+		for(int i=0; i<CENTENAMAXREGISTROS*100; ++i){
+			claveRegFijo = invertirDecenaUnidad(i);
 
-		miRegFijo = new MiRegistroFijo(claveRegFijo, calcularChar(claveRegFijo), i);
-		misDatos.agregarRegistroArchivo2(*miRegFijo);
+			miRegFijo = new MiRegistroFijo(claveRegFijo, calcularChar(claveRegFijo), i);
+			misDatos.agregarRegistroArchivo2(*miRegFijo);
 
-		mostrarArchivo2(misDatos);
+			mostrarArchivo2(misDatos);
 
-		delete(miRegFijo);
-	}
-	int cant3=0;
-	for (int i=50; i<CENTENAMAXREGISTROS*100; ++i){
-		cant3++;
-		misDatos.eliminarRegistroArchivo2(i, calcularChar(i));
-		mostrarArchivo2(misDatos);
-		cout<<"CANTIDAD eliminados en el hash: "<<cant3<<endl;
-	}
+			delete(miRegFijo);
+		}
 
-	misDatos.cerrarArchivo2();
+		for (int i=50; i<CENTENAMAXREGISTROS*100; ++i){
+			misDatos.eliminarRegistroArchivo2(i, calcularChar(i));
+			mostrarArchivo2(misDatos);
+		}
+
+		misDatos.cerrarArchivo2();
 	}catch(exception& e){
 		cout<<e.what()<<endl;
 		cout<<"Cerrando Archivo"<<endl;
