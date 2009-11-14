@@ -61,8 +61,8 @@ int main() {
 
 	/* ARCHIVO 1 */
 	try{
-		//TODO descomentar
-	/*misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
+
+	misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
 
 	for (int i=0; i<CENTENAMAXREGISTROS*100; ++i){
 		cantElementos = i % DELTA + MINIMO;
@@ -84,11 +84,11 @@ int main() {
 	for (int i=50; i<CENTENAMAXREGISTROS*100; ++i){
 		misDatos.eliminarRegistroArchivo1(Terminos::obtenerTermino(i));
 		mostrarArchivo1(misDatos);
-	}*/
-		/*------------------------------------------------------------*/
+	}
+/*------------------------------------------------------------------------*/
 	//TODO Probar el abrir.
 
-/*	misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
+	/*misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
 
 		for (int i=0; i<CENTENAMAXREGISTROS*100; ++i){
 			cantElementos = i % DELTA + MINIMO;
@@ -107,7 +107,7 @@ int main() {
 			delete(miLista);
 		}
 		//Problema en el cerrar
-   misDatos.cerrarArchivo1();*/
+   misDatos.cerrarArchivo1();
    cout<<"Aca abre y agrega"<<endl;
    cout<<" "<<endl;
    misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
@@ -129,16 +129,16 @@ int main() {
 	}
 		cout<<"Elimina "<<endl;
 		cout<<" "<<endl;
-		int cant = 0;
+		int cant2 = 0;
 	for (int i=100; i<150; ++i){
-		cant++;
-		if(cant==46)
+		cant2++;
+		if(cant2==46)
 			cout<<"";
 		misDatos.eliminarRegistroArchivo1(Terminos::obtenerTermino(i));
 		mostrarArchivo1(misDatos);
-		cout<<"Esto es cant: "<<cant<<endl;
+		cout<<"Esto es cant: "<<cant2<<endl;
 
-	}
+	}*/
 	/*--------------------------------------------------------------------*/
 	misDatos.cerrarArchivo1();
 
@@ -156,10 +156,12 @@ int main() {
 
 		delete(miRegFijo);
 	}
-
+	int cant3=0;
 	for (int i=50; i<CENTENAMAXREGISTROS*100; ++i){
+		cant3++;
 		misDatos.eliminarRegistroArchivo2(i, calcularChar(i));
 		mostrarArchivo2(misDatos);
+		cout<<"CANTIDAD eliminados en el hash: "<<cant3<<endl;
 	}
 
 	misDatos.cerrarArchivo2();
