@@ -4,7 +4,7 @@
  *  Created on: 03/11/2009
  *      Author: paulo
  */
-
+/*
 #include "EAAlmacenamientoTest.h"
 void imprimir(Registro*reg){
 	reg->get(0)->imprimir(cout);
@@ -31,7 +31,7 @@ void EAAlmacenamientoTest::testInsertar(){
 	escritor->insertar(registro1);
 	set(registro1,4,"samuel");
 	escritor->insertar(registro1);
-	/*********************************/
+	/********************************
 	while(!escritor->NoHayMasCambios()){
 		const Cambio* cambio=escritor->siguienteCambio();
 		escritor->posicionarComponente(cambio->referencia);
@@ -48,7 +48,7 @@ void EAAlmacenamientoTest::testInsertar(){
 }
 void EAAlmacenamientoTest::testEliminar(){
 
-	/**********************************************************************/
+	********************************************************************
 	escritor->logActivo=true;
 	escritor->posicionarComponente(0);
 	set(registro1,0,"paulo");
@@ -71,7 +71,7 @@ void EAAlmacenamientoTest::testEliminar(){
 		escritor->pop();
 	}
 	escritor->logActivo=false;
-	/**********************************************************************/
+	********************************************************************
 	escritor->posicionarComponente(0);
 	set(registro1,0,"paulo");
 	escritor->insertar(registro1);
@@ -81,13 +81,13 @@ void EAAlmacenamientoTest::testEliminar(){
 	set(registro1,7,"pepe");
 	escritor->insertar(registro1);
 
-/*	escritor->posicionarComponente(0);
+	escritor->posicionarComponente(0);
 	while( escritor->siguiente(registro2) ){
 		cout<<escritor->posicionComponente()<<" ";
 		imprimir(registro2);
 	}
-	cout<<endl;*/
-	/**********************************************************************/
+	cout<<endl;
+	********************************************************************
 	escritor->logActivo=true;
 	escritor->posicionarComponente(2);
 	set(registro1,0,"paulo");
@@ -110,22 +110,22 @@ void EAAlmacenamientoTest::testEliminar(){
 		escritor->pop();
 	}
 	escritor->logActivo=false;
-	/**********************************************************************/
-	/*escritor->posicionarComponente(0);
+	********************************************************************
+	escritor->posicionarComponente(0);
 	while( escritor->siguiente(registro2) ){
 		cout<<escritor->posicionComponente()<<" ";
 		imprimir(registro2);
 	}
-	cout<<endl;*/
+	cout<<endl;
 
-	/**********************************************************************/
+	********************************************************************
 	escritor->posicionarComponente(2);
 	set(registro1,0,"paulo");
 	escritor->insertar(registro1);
 	escritor->posicionarComponente(2);
 	set(registro1,7,"pepe");
 	escritor->insertar(registro1);
-	/**********************************************************************/
+	********************************************************************
 	escritor->logActivo=true;
 	escritor->posicionarComponente(1);
 	set(registro1,2,"dani");
@@ -148,8 +148,8 @@ void EAAlmacenamientoTest::testEliminar(){
 		escritor->pop();
 	}
 	escritor->logActivo=false;
-	/**********************************************************************/
-	/**********************************************************************/
+	********************************************************************
+	********************************************************************
 	escritor->posicionarComponente(0);
 	while( escritor->siguiente(registro2) ){
 		cout<<escritor->posicionComponente()<<" ";
@@ -207,7 +207,7 @@ void EAAlmacenamientoTest::testModificar(){
 		imprimir(registro2);
 	}
 	cout<<endl;
-/*		while(!escritor->hayMasCambios()){
+		while(!escritor->hayMasCambios()){
 			const Cambio* cambio=escritor->siguienteCambio();
 			setClave(registro1,&cambio->clave);
 			escritor->posicionarComponente(0);
@@ -221,11 +221,11 @@ void EAAlmacenamientoTest::testModificar(){
 			}
 			escritor->pop();
 		}
-		escritor->logActivo=false;*/
+		escritor->logActivo=false;
 
 
 }
 void EAAlmacenamientoTest::run2(){
 
 
-}
+}*/
