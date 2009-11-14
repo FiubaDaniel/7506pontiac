@@ -20,7 +20,7 @@
 #include <string>
 #include <exception>
 using namespace std;
-
+/*
 class ExcepcionEAA : public exception{
 private:
 	string mensaje;
@@ -126,7 +126,7 @@ public:
 		}
 	}
 	virtual ~EAAlmacenamientoTest();
-};
+};*/
 
 
 #endif /* EAALMACENAMIENTOTEST_H_ */
