@@ -1,47 +1,88 @@
 #include "Buffer.h"
 
 Buffer::Buffer(){
-	archivo =new std::stringstream(std::ios_base::out|std::ios_base::binary|std::ios_base::in);
+	archivo =NULL;
+	estrategia=NULL;
 }
-Buffer::Buffer(int longitudBuffer){
-	archivo =new std::stringstream(std::ios_base::out|std::ios_base::binary|std::ios_base::in);
+Buffer::Buffer(unsigned longitudBuffer){
+	this->longitudBuffer=longitudBuffer;
+	archivo=NULL;
+	estrategia=NULL;
+}
+Buffer::Buffer(EstrategiaAlmacenamiento*estrategia,unsigned longitudBuffer){
+	this->longitudBuffer=longitudBuffer;
+	archivo=NULL;
+	if(estrategia){
+	this->estrategia=estrategia;
+	this->estrategia->setAlmacenamiento(this);
+	}
 }
 Buffer::~Buffer (){
-	delete archivo;
+	if(archivo)
+		cerrar();
+}
+bool Buffer::abrir(const char* nombre){
+	this->nombre=nombre;
+	archivo =new std::stringstream(std::ios_base::out|std::ios_base::binary|std::ios_base::in);
+	return true;
+	if(estrategia)
+		estrategia->abrir();
+}
+void Buffer::crear(const char* nombre){
+	this->nombre=nombre;
+	archivo =new std::stringstream(std::ios_base::out|std::ios_base::binary|std::ios_base::in);
+	if(estrategia)
+		estrategia->crear();
 }
 void Buffer::escribir(const void* bytes,size_t cantidad){
-	archivo->write((char*)bytes,cantidad);
+	if(archivo)
+		archivo->write((char*)bytes,cantidad);
 }
 void Buffer::escribir(const void* unByte){
-	archivo->put(*(char*)unByte);
+	if(archivo) archivo->put(*(char*)unByte);
 
 }
 void Buffer::leer(void* bytes,size_t cantidad){
-	archivo->read((char*)bytes,cantidad);
+	if(archivo) archivo->read((char*)bytes,cantidad);
 }
 void Buffer::leer(void* unBytes){
 	*(char*)unBytes=archivo->get();
 }
 void Buffer::posicionar(size_t posicion){
-	archivo->seekg(posicion);
-	archivo->seekp(posicion);
+	if(archivo) {archivo->seekg(posicion);
+	archivo->seekp(posicion);}
 }
 bool Buffer::bien(){
+	if(!archivo)
+		return false;
 	return archivo->good();
 }
 void Buffer::posicionarAlfinal(){
-	archivo->seekg(std::ios_base::end);
-	archivo->seekp(std::ios_base::end);
+	if(archivo) {archivo->seekg(std::ios_base::end);
+	archivo->seekp(std::ios_base::end);}
 }
 bool Buffer::fin(){
+	if(!archivo)
+		return true;
 	return archivo->eof();
 }
-void Buffer::reiniciar(){
-	archivo->clear();
+void Buffer::clear(){
+	if(archivo) archivo->clear();
 }
 size_t Buffer::posicionActual(){
-	return archivo->tellg();
+	if(archivo)
+		return archivo->tellg();
+	else return 0;
 }
 void Buffer::cerrar(){
-
+	if(archivo) {
+		if(estrategia)
+			estrategia->cerrar();
+		delete archivo;
+		archivo=NULL;
+	}
+}
+Almacenamiento*Buffer::clonar(){
+	Buffer*clon=new Buffer(NULL,longitudBuffer);
+	return clon;
 }

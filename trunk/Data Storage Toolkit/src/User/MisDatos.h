@@ -42,6 +42,9 @@ class MisDatos {
 	Recurso *recurso1;
 	Recurso *recurso2;
 	Recurso *recurso3;
+	Registro* registro1;
+	Registro* registro2;
+	Registro* registro3;
 public:
 	MisDatos();
 	virtual ~MisDatos();

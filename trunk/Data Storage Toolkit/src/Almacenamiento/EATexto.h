@@ -11,10 +11,10 @@
 #include <sstream>
 #include <cstring>
 #include "EstrategiaAlmacenamiento.h"
+#include "Almacenamiento.h"
 
 class EATexto: public EstrategiaAlmacenamiento {
 	Registro*registro;
-	Almacenamiento* almacen;
 	size_t posComp;
 	std::string linea;
 	bool ultimo;
@@ -33,8 +33,8 @@ class EATexto: public EstrategiaAlmacenamiento {
 public:
 	EATexto(Registro*registro);
 	virtual ~EATexto();
-	bool abrir(Almacenamiento*almacen);
-	bool crear(Almacenamiento*almacen);
+	bool abrir();
+	void crear();
 	void cerrar();
 	Componente* getRegistro();
 	bool posicionarComponente(size_t nroCompuesto);
@@ -43,12 +43,14 @@ public:
 	bool insertar(Componente*componente);
 	bool modificar(Componente*componente);
 	bool eliminar(Componente*componente);
+	bool eliminar(Clave*clave);
 	bool siguiente(Componente*componente);
 	bool obtener(Componente*componente);
 	size_t posicionComponente();
 	bool buscar(Componente*componente);
-	Almacenamiento* getAlmacenamiento();
-	Componente*getComponente();
+	bool buscar(Clave*unaClave);
+	Componente*getComponenteUsado();
+	void imprimirMetada(std::ostream&out);
 };
 
 #endif /* EATEXTO_H_ */

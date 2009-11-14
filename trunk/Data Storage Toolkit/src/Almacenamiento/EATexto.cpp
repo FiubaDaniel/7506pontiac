@@ -14,35 +14,30 @@ EATexto::~EATexto() {
 	delete registro;
 }
 
-bool EATexto::abrir(Almacenamiento*almacenamiento){
-	almacen=almacenamiento;
+bool EATexto::abrir( ){
 	posComp=0;
 	linea.clear();
 	ultimo=false;
 	return true;
 }
-bool EATexto::crear(Almacenamiento *almacenamiento){
-	almacen=almacenamiento;
+void EATexto::crear(){
 	posComp=0;
 	linea.clear();
 	ultimo=false;
-	return true;
 }
-void EATexto::cerrar(){
-	almacen->cerrar();
+void EATexto::cerrar( ){
+
 }
 int EATexto::comparar(Registro*registro,Registro*registro2){
-		clave->set(registro);
-		Clave*clave2=clave->clonarce();
-		clave2->set(registro2);
-		int resultado=comparador->Comparar(clave,clave2);
-		delete clave2;
-		return resultado;
+	clave->set(registro);
+	Clave*clave2=clave->clonarce();
+	clave2->set(registro2);
+	int resultado=comparador->Comparar(clave,clave2);
+	delete clave2;
+	return resultado;
 }
-Componente *EATexto::getRegistro(){
-	return registro;
-}
-bool EATexto::escribir(Componente *componente){
+
+bool EATexto::escribir(Componente *componente ){
 	Registro* registro=dynamic_cast<Registro*>(componente);
 	if(registro){
 		this->registroALinea(registro);
@@ -52,7 +47,7 @@ bool EATexto::escribir(Componente *componente){
 	}
 	return false;
 }
-bool EATexto::leer(Componente *componente){
+bool EATexto::leer(Componente *componente ){
 	Registro* registro=dynamic_cast<Registro*>(componente);
 	if(registro){
 		posComp++;
@@ -63,7 +58,7 @@ bool EATexto::leer(Componente *componente){
 	}
 	return false;
 }
-bool EATexto::insertar(Componente *componente){
+bool EATexto::insertar(Componente *componente ){
 	Registro* nuevo=dynamic_cast<Registro*>(componente);
 	if(nuevo){
 		registroALinea(nuevo);
@@ -85,9 +80,9 @@ bool EATexto::insertar(Componente *componente){
 			almacen->posicionar(posicion);
 		registroALinea(nuevo);
 		escribirLinea();
-		if(logActivo){
+		if(colaDeCambios){
 			clave->set(nuevo);
-			pushCambio(Cambio(clave,posComp-1,Cambio::Alta));
+			colaDeCambios->push(Cambio(clave,posComp-1,Cambio::Alta));
 		}
 		return true;
 	}
@@ -104,12 +99,30 @@ bool EATexto::eliminar(Componente *componente){
 				linea.resize(tamanio,' ');
 				almacen->posicionar(posicion);
 				escribirLinea();
-				if(logActivo){
+				if(colaDeCambios){
 					clave->set(eliminado);
-					pushCambio(Cambio(clave,posComp-1,Cambio::Baja));
+					colaDeCambios->push(Cambio(clave,posComp-1,Cambio::Baja));
 				}
 				return true;
 			}
+		}
+	}
+	return false;
+}
+bool EATexto::eliminar(Clave *unaClave){
+	size_t posicion=almacen->posicionActual();
+	if(leer(registro)){
+		clave->set(registro);
+		if(comparador->Comparar(unaClave,clave)==0){
+			size_t tamanio=linea.length();
+			linea.clear();
+			linea.resize(tamanio,' ');
+			almacen->posicionar(posicion);
+			escribirLinea();
+			if(colaDeCambios){
+				colaDeCambios->push(Cambio(unaClave,posComp-1,Cambio::Baja));
+			}
+			return true;
 		}
 	}
 	return false;
@@ -126,9 +139,9 @@ bool EATexto::modificar(Componente *componente){
 					/*si el tamanio del modificado es menor o igual se escribe en la posicion actual*/
 					almacen->posicionar(posicion);
 					escribirLinea();
-					if(logActivo){
+					if(colaDeCambios){
 						clave->set(modificado);
-						pushCambio(Cambio(clave,posComp-1,Cambio::Modificacion));
+						colaDeCambios->push(Cambio(clave,posComp-1,Cambio::Modificacion));
 					}
 				}else{
 					size_t nuevoTamanio=linea.length();
@@ -152,9 +165,9 @@ bool EATexto::modificar(Componente *componente){
 						almacen->posicionar(posicion);
 					registroALinea(modificado);
 					escribirLinea();
-					if(logActivo){
+					if(colaDeCambios){
 						clave->set(modificado);
-						pushCambio(Cambio(clave,posComp-1,Cambio::Reubicacion));
+						colaDeCambios->push(Cambio(clave,posComp-1,Cambio::Reubicacion));
 					}
 				}
 				return true;
@@ -163,7 +176,7 @@ bool EATexto::modificar(Componente *componente){
 	}
 	return false;
 }
-bool EATexto::obtener(Componente *componente){
+bool EATexto::obtener(Componente *componente ){
 	return siguiente(componente);
 }
 size_t EATexto::posicionComponente(){
@@ -171,8 +184,8 @@ size_t EATexto::posicionComponente(){
 }
 bool EATexto::posicionarComponente(size_t nroCompuesto){
 	if(nroCompuesto<posComp){
-			almacen->posicionar(0);
-			posComp=0;
+		almacen->posicionar(0);
+		posComp=0;
 	}
 	bool ultimo=false;
 	while((not ultimo) and nroCompuesto>posComp){
@@ -218,14 +231,14 @@ bool EATexto::leerLinea(){
 		almacen->leer(&chr);
 	}
 	if(chr!='\n'){
-		almacen->reiniciar();
+		almacen->clear();
 		return false;
 	}
 	return true;
 }
-void EATexto::escribirLinea(){
+void EATexto::escribirLinea( ){
 	linea.push_back('\n');
-	almacen->reiniciar();
+	almacen->clear();
 	almacen->escribir(linea.c_str(),linea.size());
 
 }
@@ -233,22 +246,32 @@ bool EATexto::buscar(Componente*componente){
 	bool encontrado=false;
 	bool fin;
 	do{
-		size_t pos=posicionComponente();
 		fin=siguiente(registro);
 		if(comparar(registro,(Registro*)componente)==0){
-			lineaARegistro( (Registro*)componente);
+			lineaARegistro((Registro*)componente);
 			encontrado=true;
-			if(logActivo){
-				clave->set((Registro*)componente);
-				pushCambio(Cambio(clave,pos,Cambio::Reubicacion));
-			}
 		}
 	}while((not fin)and not encontrado);
 	return encontrado;
 }
-Almacenamiento* EATexto::getAlmacenamiento(){
-	return almacen;
+bool EATexto::buscar(Clave*unaClave){
+	bool encontrado=false;
+	bool fin;
+	do{
+		size_t pos=almacen->posicionActual();
+		fin=siguiente(registro);
+		clave->set(registro);
+		if(comparador->Comparar(unaClave,clave)==0){
+			almacen->posicionar(pos);
+			posComp--;
+			return true;
+		}
+	}while((not fin)and not encontrado);
+	return encontrado;
 }
-Componente*EATexto::getComponente(){
+Componente*EATexto::getComponenteUsado(){
 	return registro;
+}
+void EATexto::imprimirMetada(std::ostream&out){
+	out<<"Estrategia Texto:"<<std::endl;
 }

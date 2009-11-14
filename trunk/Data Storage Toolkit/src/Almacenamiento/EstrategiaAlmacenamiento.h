@@ -1,17 +1,21 @@
 #ifndef ESTRATEGIAALMACENAMIENTO_H_
 #define ESTRATEGIAALMACENAMIENTO_H_
 #include <queue>
-#include "Almacenamiento.h"
 #include "../ArbolBSharp/ComparadorClave.h"
 #include "../ArbolBSharp/Clave.h"
 
 class Almacenamiento;
+
 class Cambio{
 public:
 	Clave clave;
 	Referencia referencia;
 	enum TOperacion{Alta,Baja,Reubicacion,Modificacion} operacion;
 public:
+	Cambio(const Cambio&cambio):clave(cambio.clave){
+			referencia=cambio.referencia;
+			operacion=cambio.operacion;
+	};
 	Cambio(const Cambio*cambio):clave(cambio->clave){
 		referencia=cambio->referencia;
 		operacion=cambio->operacion;
@@ -24,40 +28,30 @@ public:
 };
 
 class EstrategiaAlmacenamiento {
-private:
-	std::queue<Cambio*> cambiosLog;
 protected:
-	void pushCambio(const Cambio& cambio){
-		cambiosLog.push(new Cambio(cambio));
-	};
+	std::queue<Cambio>* colaDeCambios;
 	Clave *clave;
 	ComparadorClave*comparador;
+	Almacenamiento*almacen;
 public:
-	EstrategiaAlmacenamiento(){clave=NULL;};
+	EstrategiaAlmacenamiento(){
+		almacen=NULL;
+		colaDeCambios=NULL;
+		clave=NULL;
+	};
 	virtual ~EstrategiaAlmacenamiento(){
 		if(clave)
 			delete clave;
-		while(!cambiosLog.empty()){
-			delete cambiosLog.front();
-			cambiosLog.pop();
+	};
+	void setAlmacenamiento(Almacenamiento*almacen){
+		if(this->almacen){
+			cerrar();
 		}
-	};
-	virtual Componente* getRegistro()=0;
-	virtual void setClave(Clave*unaClave){
-		delete clave;
-		clave=unaClave->clonarce();
-	};
-	virtual Clave* getClave(){
-		return clave;
+		this->almacen=almacen;
 	}
-	virtual void setComparador(ComparadorClave*unComparador){
-		comparador=unComparador;
-	};
-	virtual ComparadorClave* getComparador(){
-		return comparador;
-	};
-	virtual bool abrir(Almacenamiento*almacen)=0;
-	virtual bool crear(Almacenamiento*almacen)=0;
+	/*******************************************************************************/
+	virtual bool abrir()=0;
+	virtual void crear()=0;
 	virtual void cerrar()=0;
 	virtual bool posicionarComponente(size_t nroComponente)=0;
 	virtual size_t posicionComponente()=0;
@@ -66,24 +60,29 @@ public:
 	virtual bool insertar(Componente*componente)=0;
 	virtual bool modificar(Componente*componente)=0;
 	virtual bool eliminar(Componente*componente)=0;
+	virtual bool eliminar(Clave*clave)=0;
 	virtual bool siguiente(Componente*componente)=0;
 	virtual bool obtener(Componente*componente)=0;
 	virtual bool buscar(Componente*componente)=0;
-	virtual Almacenamiento* getAlmacenamiento()=0;
-	virtual Componente*getComponente()=0;
-	bool logActivo;
-	/* Cola que refleja los cambios producidos en la estructura del archivo
-	 * a causa de las operaciones. La cola es exclusivamente para uso externo.
-	 */
-	void pop(){
-		delete cambiosLog.front();
-		cambiosLog.pop();
+	virtual bool buscar(Clave*unaClave)=0;
+	/*******************************************************************************/
+	void setClave(Clave*unaClave){
+		delete clave;
+		clave=unaClave->clonarce();
 	};
-	Cambio* siguienteCambio(){
-		return cambiosLog.front();
-	};
-	bool NoHayMasCambios(){
-		return cambiosLog.empty();
+	Clave* getClave(){
+		return clave;
 	}
+	void setComparador(ComparadorClave*unComparador){
+		comparador=unComparador;
+	};
+	ComparadorClave* getComparador(){
+		return comparador;
+	};
+	void setColaCambios(std::queue<Cambio>* cambiosLog){
+		this->colaDeCambios=cambiosLog;
+	}
+	virtual Componente*getComponenteUsado()=0;
+	virtual void imprimirMetada(std::ostream&out)=0;
 };
 #endif /* ESTRATEGIAALMACENAMIENTO_H_ */

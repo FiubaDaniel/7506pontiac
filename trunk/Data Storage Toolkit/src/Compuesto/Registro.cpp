@@ -72,11 +72,13 @@ Atributo* Registro::getId(){
 bool Registro::esfijo(){
 	return fijo;
 }
-std::ostream& operator<<(std::ostream&out,Registro& registro){
-	for(Ttamanio i=0;i<registro.atributos.size();i++){
-		out<<registro.atributos.at(i)->getNombre()<<" : ";
-		registro.atributos.at(i)->imprimir(out);
+void Registro::imprimir(std::ostream&salida){
+	for(Ttamanio i=0;i<atributos.size();i++){
+		salida<< atributos.at(i)->getNombre()<<" : ";
+		atributos.at(i)->imprimir(salida);
 	}
-	out<<std::endl;
+}
+std::ostream& operator<<(std::ostream&out,Registro& registro){
+	registro.imprimir(out);
 	return out;
 }

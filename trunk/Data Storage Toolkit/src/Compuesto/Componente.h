@@ -8,6 +8,7 @@
 #ifndef COMPONENTE_H_
 #define COMPONENTE_H_
 #include <streambuf>
+#include <iostream>
 typedef unsigned int Ttamanio;
 /*
  * Interfaz para la serializacion.
@@ -19,6 +20,7 @@ public:
 	virtual Ttamanio deserializar(std::streambuf&entrada)=0;
 	virtual Ttamanio serializar(std::streambuf&salida)=0;
 	virtual Ttamanio tamanioSerializado()=0;
+	virtual void imprimir(std::ostream&salida)=0;
 	virtual Componente* clonar()=0;
 	virtual bool esfijo()=0;
 };

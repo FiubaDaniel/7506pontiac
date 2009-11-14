@@ -7,22 +7,21 @@
 
 class ERUnAlmacenamiento : public EstrategiaRecursos{
 public:
-	ERUnAlmacenamiento (EstrategiaIndice*indice,EstrategiaAlmacenamiento *estrategiAlmacenamiento);
+	ERUnAlmacenamiento (EstrategiaIndice*indice,Almacenamiento *almacenamiento);
 	virtual ~ERUnAlmacenamiento ( );
 	bool insertar(Registro* registro);
 	bool eliminar(Clave* unaClave);
 	bool modificar(Clave* unaClave,Registro* registro);
 	bool obtener(Clave* unaClave,Registro*registro);
-    EstrategiaAlmacenamiento *getEstrategiaAlmacenamiento() ;
+	void cerrar();
+    Almacenamiento *getAlmacenamiento();
     EstrategiaIndice *getIndice() ;
-    void setEstrategiAlmacenamiento(EstrategiaAlmacenamiento *estrategiAlmacenamiento);
     void setIndice(EstrategiaIndice *indice);
 private:
-    void setClave(Registro*reg,Clave*clave);
 	void actualizarIndice(Cambio cambio);
-	EstrategiaAlmacenamiento* estrategiAlmacenamiento;
+	std::queue<Cambio> colaCambios;
+	Almacenamiento* almacen;
 	EstrategiaIndice* indice;
-	Registro*registro;
 	Clave*clave;
 };
 
