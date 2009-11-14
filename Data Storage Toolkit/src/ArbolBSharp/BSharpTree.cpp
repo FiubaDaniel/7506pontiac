@@ -110,18 +110,6 @@ bool BSharpTree::Buscar(const Clave* clave,Referencia* referencia){
 		return nodoRaiz->buscarReferenciaDeClaveX(clave,referencia);
 	}
 	NodoHoja* hoja = buscarHoja(Raiz,aux,referenciaDeNodoHoja);
-	std::list<ElementoNodo*>::iterator it = hoja->getListaElementos()->begin();
-	while(it!=hoja->getListaElementos()->end()){
-		ElementoNodo* elem = *it;
-		for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
-			cout<<" ";
-			elem->getClave()->getAtributo(i)->imprimir(cout);
-			cout<<" ";
-		}
-		cout << elem->getReferencia();
-		cout<<"   ";
-		++it;
-	}
 	return hoja->buscarReferenciaDeClaveX(clave,referencia);
 }
 
@@ -536,11 +524,15 @@ void BSharpTree::desbordeRaiz(Nodo* RaizE){
 }
 
 bool BSharpTree::eliminar(const Clave* claveE){
+	Clave* clave = const_cast<Clave*>(claveE);
+	if(Raiz->getNumeroNivel()==0){
+		NodoHoja* RaizCast = dynamic_cast<NodoHoja*>(Raiz);
+		return RaizCast->Eliminar(clave);
+	}
 	std::stringbuf buf(ios_base :: in | ios_base :: out | ios_base :: binary);
 	Referencia refHoja;
 	Nodo* hoja=NULL;
 	bool esRaiz=true;
-	Clave* clave = const_cast<Clave*>(claveE);
 	std::list<Referencia>listaDePadres;
 	listaDePadres.push_back(posicionRaiz);
 	BuscarInsertarOEliminar(hoja,listaDePadres,Raiz,clave,refHoja,esRaiz,false);
@@ -803,11 +795,15 @@ void BSharpTree::subflujoHijosRaiz(Nodo* nodo,Nodo* hermano,Referencia refNodo,R
 		}else{//hermano esta a la izquierda de nodo
 			hermano->balanceo(nodo,Raiz,false);
 		}
+		hermano->setEspacioLibre(hermano->getEspacioLibre()+1);
+		grabado(nodo,hermano,Raiz,refNodo,refHermano,posicionRaiz);
+		delete nodo;
+		delete hermano;
 	}else if(nodo->getNumeroNivel()==0){//debe unirce pasando la Raiz a una hoja
 		if(comparador->Comparar(nodo->getListaElementos()->back()->getClave(),hermano->getListaElementos()->front()->getClave())<0){
 			armarRaizHoja(nodo,hermano,refNodo,refHermano);
 		}else{
-			armarRaizHoja(hermano,nodo,refHermano,refNodo);
+			armarRaizHoja(hermano,nodo,refNodo,refHermano);
 		}
 	}else{//Debe unirce siendo que la Raiz sigue siendo nodo Intermedio
 		if(comparador->Comparar(nodo->getListaElementos()->back()->getClave(),hermano->getListaElementos()->front()->getClave())<0){
@@ -839,7 +835,7 @@ void BSharpTree::armarRaizIntermedia(Nodo* nodoIzq,Nodo* nodoDer,Referencia refN
 	for(std::list<ElementoNodo*>::reverse_iterator it = nodoIzquierdo->getListaElementos()->rbegin();it != nodoIzquierdo->getListaElementos()->rend();++it){
 		RaizCast->agregarElemento(*it);
 	}
-	for(std::list<ElementoNodo*>::iterator it = nodoIzquierdo->getListaElementos()->begin();it != nodoIzquierdo->getListaElementos()->end();++it){
+	for(std::list<ElementoNodo*>::iterator it = nodoDerecho->getListaElementos()->begin();it != nodoDerecho->getListaElementos()->end();++it){
 		RaizCast->agregarElemento(*it);
 	}
 	RaizCast->setNumeroNivel(RaizCast->getNumeroNivel()-1);
@@ -852,10 +848,13 @@ void BSharpTree::armarRaizIntermedia(Nodo* nodoIzq,Nodo* nodoDer,Referencia refN
 
 void BSharpTree::armarRaizHoja(Nodo* nodoIzq,Nodo* nodoDer,Referencia refIzq,Referencia refDer){
 	for(std::list<ElementoNodo*>::iterator it = nodoDer->getListaElementos()->begin();it != nodoDer->getListaElementos()->end();++it){
-			nodoIzq->agregarElemento(*it);
+		nodoIzq->agregarElemento(*it);
 	}
 	delete Raiz;
+	NodoHoja* nodoI = dynamic_cast<NodoHoja*>(nodoIzq);
+	nodoI->setReferenciaSiguiente(0);
 	Raiz = nodoIzq;
+	grabarUnitario(nodoIzq,posicionRaiz);
 	delete nodoDer;
 	nuevoEspacioLibre(refIzq);
 	nuevoEspacioLibre(refDer);
@@ -867,7 +866,14 @@ void BSharpTree::recomponerRaiz(){
 	archivoArbol.seekg(posicionRaiz);
 	archivoArbol.read(arrayRaiz,tamanioNodo);
 	buf.pubsetbuf(arrayRaiz,tamanioNodo);
-	Raiz = new NodoIntermedio(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
+	buf.pubseekpos(0);
+	int nivel;
+	buf.sgetn((char*)&nivel,sizeof(int));
+	if(nivel==0){
+		Raiz = new NodoHoja(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
+		}else{
+		Raiz = new NodoIntermedio(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
+	}
 }
 
 void BSharpTree::nuevoEspacioLibre(Referencia ref){
