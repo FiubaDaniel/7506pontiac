@@ -215,6 +215,7 @@ bool EABloques::modificar(Componente*componente){
 					siguienteLibre++;
 				}
 				if(colaDeCambios){
+					//TODO modificacion ? reubicacion?
 					clave->set((Registro*)componente);
 					colaDeCambios->push(Cambio(clave,posModificado,Cambio::Reubicacion));
 				}
@@ -283,7 +284,7 @@ bool EABloques::eliminar(Componente*componente){
 			}
 			if(colaDeCambios){
 				clave->set((Registro*)componente);
-				colaDeCambios->push(Cambio(clave,nroBloque,Cambio::Baja));
+				colaDeCambios->push(Cambio(clave,posBorrado,Cambio::Baja));
 			}
 			return true;
 		}

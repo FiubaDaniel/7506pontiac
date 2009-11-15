@@ -33,21 +33,21 @@ Ttamanio Registro::deserializar(std::streambuf&entrada){
 	}
 	return offset;
 }
-Ttamanio Registro::serializar(std::streambuf&salida){
+Ttamanio Registro::serializar(std::streambuf&salida)const{
 	Ttamanio offset=0;
 	for(Ttamanio i=0;i<atributos.size();i++){
 		offset+=atributos.at(i)->serializar(salida);
 	}
 	return offset;
 }
-Ttamanio Registro::tamanioSerializado(){
+Ttamanio Registro::tamanioSerializado()const{
 	Ttamanio tamanio=0;
 	for(Ttamanio i=0;i<atributos.size();i++){
 		tamanio+=atributos.at(i)->tamanioSerializado();
 	}
 	return tamanio;
 }
-Componente* Registro::clonar(){
+Componente* Registro::clonar()const{
 	Registro* clon=new Registro(0);
 	for(Ttamanio i=0;i<atributos.size();i++){
 		clon->atributos.push_back(atributos.at(i)->clonar());
@@ -72,7 +72,7 @@ Atributo* Registro::getId(){
 bool Registro::esfijo(){
 	return fijo;
 }
-void Registro::imprimir(std::ostream&salida){
+void Registro::imprimir(std::ostream&salida)const{
 	for(Ttamanio i=0;i<atributos.size();i++){
 		salida<< atributos.at(i)->getNombre()<<" : ";
 		atributos.at(i)->imprimir(salida);
@@ -82,3 +82,12 @@ std::ostream& operator<<(std::ostream&out,Registro& registro){
 	registro.imprimir(out);
 	return out;
 }
+bool Registro::copiar(Componente*componente){
+	Registro* fuente=dynamic_cast<Registro*>(componente);
+	if(fuente==NULL)
+		return false;
+	for(Ttamanio i=0;i<atributos.size();i++){
+		*atributos.at(i)=*fuente->atributos.at(i);
+	}
+	return true;
+};

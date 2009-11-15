@@ -8,14 +8,11 @@
 #ifndef REGISTROMEMORIA_H_
 #define REGISTROMEMORIA_H_
 #include "Registro.h"
-class RegistroMemoria :public Registro {
+#include "ComponenteMemoria.h"
+class RegistroMemoria :public Registro , public ComponenteMemoria{
 public:
-	RegistroMemoria(Registro*registro,Ttamanio nroCompuesto,Ttamanio nroRegistro);
+	RegistroMemoria(Registro*registro);
 	virtual ~RegistroMemoria();
-	bool estaEscrito();
-	bool estaSucio();
-	void setSucio(bool valor);
-	void setEscrito(bool valor);
 public:/*MetodoHeredados*/
 	virtual Ttamanio deserializar(std::streambuf&entrada);
 	virtual Ttamanio serializar(std::streambuf&salida);
@@ -24,7 +21,6 @@ public:/*MetodoHeredados*/
 private:
 	Ttamanio nroCompuesto;
 	Ttamanio nroRegitro;
-	enum flags {sucio=0x01,escrito=0x02} estado;
 };
 
 #endif /* REGISTROMEMORIA_H_ */

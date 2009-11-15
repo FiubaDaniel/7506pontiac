@@ -8,22 +8,17 @@
 #ifndef BLOQUEMEMORIA_H_
 #define BLOQUEMEMORIA_H_
 #include "Bloque.h"
-class BloqueMemoria:public Bloque {
+#include "ComponenteMemoria.h"
+
+class BloqueMemoria:public Bloque ,public ComponenteMemoria {
 public:
 	BloqueMemoria(Bloque* bloque);
 	virtual ~BloqueMemoria();
-	Ttamanio nroCompuesto;
-	bool estaEscrito();
-	bool estaSucio();
-	void setSucio(bool valor);
-	void setEscrito(bool valor);
 public:/*Heredado de componente*/
 	Ttamanio deserializar(std::streambuf&entrada);
-	Ttamanio serializar(std::streambuf&salida);
-	Ttamanio tamanioSerializado();
-	Componente* clonar();
-private:
-	enum flags {sucio=0x01,escrito=0x02} estado;
+	Ttamanio serializar(std::streambuf&salida)const;
+	Ttamanio tamanioSerializado()const;
+	Componente* clonar()const;
 };
 
 #endif /* BLOQUEMEMORIA_H_ */
