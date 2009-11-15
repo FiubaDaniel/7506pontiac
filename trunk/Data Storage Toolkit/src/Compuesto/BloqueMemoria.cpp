@@ -13,36 +13,24 @@ BloqueMemoria::BloqueMemoria(Bloque* bloque):BloqueMemoria::Bloque(){
 	}
 }
 BloqueMemoria::~BloqueMemoria(){}
-bool BloqueMemoria::estaEscrito(){return estado&escrito;}
-bool BloqueMemoria::estaSucio(){return estado&sucio;}
-void BloqueMemoria::setSucio(bool valor){
-	if(valor) estado =flags(estado|sucio);
-	else estado=flags(estado|(!sucio));
-}
-void BloqueMemoria::setEscrito(bool valor){
-	if(valor) estado =flags(estado|escrito);
-	else estado=flags(estado|(!escrito));
-}
+
 Ttamanio BloqueMemoria::deserializar(std::streambuf&entrada){
 	Ttamanio offset=sizeof(flags);
 	entrada.sgetn((char*)&estado,offset);
-	if(!estaSucio()){
-		offset+=Bloque::deserializar(entrada);
-	}
+	offset+=Bloque::deserializar(entrada);
 	return offset;
 }
-Ttamanio BloqueMemoria::serializar(std::streambuf&salida){
+Ttamanio BloqueMemoria::serializar(std::streambuf&salida)const{
 	Ttamanio offset=sizeof(flags);
 	salida.sputn((char*)&estado,offset);
-	if(!estaSucio())
-		offset+=Bloque::serializar(salida);
+	offset+=Bloque::serializar(salida);
 	return offset;
 }
-Ttamanio BloqueMemoria::tamanioSerializado(){
+Ttamanio BloqueMemoria::tamanioSerializado()const{
 	return Bloque::tamanioSerializado()+sizeof(flags);
 }
-Componente* BloqueMemoria::clonar(){
-	BloqueMemoria* clon=new BloqueMemoria(this);
+Componente* BloqueMemoria::clonar()const{
+	BloqueMemoria* clon=new BloqueMemoria(const_cast<BloqueMemoria*>(this));
 	clon->estado=estado;
 	return clon;
 }

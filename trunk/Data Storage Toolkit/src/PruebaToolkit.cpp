@@ -61,7 +61,7 @@ int main() {
 
 	/* ARCHIVO 1 */
 	try{
-		misDatos.inicializarArchivo1("MiArchivo1", 256, false, 1024, true, ARBOL, 128);
+		misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
 		for (int i=0; i<100; ++i){
 			cantElementos = i % DELTA + MINIMO;
 			nroTermino = i;
@@ -70,6 +70,8 @@ int main() {
 			for (int j=0; j<cantElementos; ++j){
 				miLista[j] = j;
 			}
+			if(i==99)
+				cout<<endl;
 			miRegVariable = new MiRegistroVariable(Terminos::obtenerTermino(nroTermino), i, miLista, cantElementos);
 			misDatos.agregarRegistroArchivo1(*miRegVariable);
 
@@ -83,8 +85,6 @@ int main() {
 		int cant = 0;
 		for (int i=0; i<100; ++i){
 			cant++;
-			if(i==4)
-				cout<<endl;
 			misDatos.eliminarRegistroArchivo1(Terminos::obtenerTermino(i));
 			mostrarArchivo1(misDatos);
 			cout<<"Esto es cant: "<<cant<<endl;

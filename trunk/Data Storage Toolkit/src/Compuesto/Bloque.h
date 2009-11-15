@@ -19,11 +19,12 @@ public:
 	void inicializar(Componente*componente);
 public:/*Heredados de Componente*/
 	virtual Ttamanio deserializar(std::streambuf&entrada);
-	virtual Ttamanio serializar(std::streambuf&salida);
-	virtual Ttamanio tamanioSerializado();
-	virtual void imprimir(std::ostream&salida);
-	virtual Componente* clonar();
+	virtual Ttamanio serializar(std::streambuf&salida)const;
+	virtual Ttamanio tamanioSerializado()const;
+	virtual void imprimir(std::ostream&salida)const;
+	virtual Componente* clonar()const;
 	virtual bool esfijo();
+	bool copiar(Componente*componente);
 	friend std::ostream& operator<<(std::ostream&out,Bloque&bloque);
 public:/*Heredados de compuesto*/
 	virtual Componente* get(Ttamanio nroComponente);

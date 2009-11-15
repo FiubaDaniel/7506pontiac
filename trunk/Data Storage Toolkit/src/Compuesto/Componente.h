@@ -18,11 +18,12 @@ public:
 	Componente(){};
 	virtual ~Componente(){};
 	virtual Ttamanio deserializar(std::streambuf&entrada)=0;
-	virtual Ttamanio serializar(std::streambuf&salida)=0;
-	virtual Ttamanio tamanioSerializado()=0;
-	virtual void imprimir(std::ostream&salida)=0;
-	virtual Componente* clonar()=0;
+	virtual Ttamanio serializar(std::streambuf&salida)const=0;
+	virtual Ttamanio tamanioSerializado()const=0;
+	virtual void imprimir(std::ostream&salida)const=0;
+	virtual Componente* clonar()const =0;
 	virtual bool esfijo()=0;
+	virtual bool copiar(Componente*componente)=0;
 };
 
 #endif /* REGISTRO_H_ */

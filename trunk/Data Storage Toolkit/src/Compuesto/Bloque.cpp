@@ -16,7 +16,7 @@ Bloque::~Bloque() {
 		delete componentes.at(i);
 	}
 }
-Componente* Bloque::clonar(){
+Componente* Bloque::clonar()const{
 	Bloque* clon=new Bloque(componentes.at(0)->clonar());
 	return clon;
 }
@@ -47,7 +47,7 @@ Ttamanio Bloque::deserializar(std::streambuf&entrada){
 	}
 	return offset;
 }
-Ttamanio Bloque::serializar(std::streambuf&salida){
+Ttamanio Bloque::serializar(std::streambuf&salida)const{
 	unsigned char nrocomponetes=componentes.size();
 	Ttamanio offset=sizeof(unsigned char);
 	salida.sputn((char*)&nrocomponetes,offset);
@@ -56,7 +56,7 @@ Ttamanio Bloque::serializar(std::streambuf&salida){
 	}
 	return offset;
 }
-Ttamanio Bloque::tamanioSerializado(){
+Ttamanio Bloque::tamanioSerializado()const{
 	Ttamanio offset=sizeof(unsigned char);
 	for(Ttamanio i=0;i<componentes.size();i++){
 		offset+=componentes.at(i)->tamanioSerializado();
@@ -99,7 +99,7 @@ void Bloque::inicializar(Componente*componente){
 	}
 	componentes.push_back(componente->clonar());
 }
-void Bloque::imprimir(std::ostream&salida){
+void Bloque::imprimir(std::ostream&salida)const{
 	salida<<"º";
 	salida<<componentes.size();
 	salida<<"("<<tamanioSerializado()<<")"<<std::endl;
@@ -111,4 +111,14 @@ void Bloque::imprimir(std::ostream&salida){
 std::ostream& operator<<(std::ostream&out,Bloque&bloque){
 	bloque.imprimir(out);
 	return out;
+}
+bool Bloque::copiar(Componente*componente){
+	Bloque* fuente=dynamic_cast<Bloque*>(componente);
+	if(fuente==NULL)
+		return false;
+	inicializar(fuente->get(0));
+	for (Ttamanio i=1;i<fuente->cantidadComponentes();i++){
+		componentes.push_back(fuente->get(i)->clonar());
+	}
+	return true;
 }
