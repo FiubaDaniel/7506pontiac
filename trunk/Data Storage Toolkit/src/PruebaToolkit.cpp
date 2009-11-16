@@ -144,14 +144,16 @@ int main() {
 	for (int i=0; i<MINBORRARVARIABLE; ++i){
 		try{
 			miRegVariable = misDatos.obtenerRegistroArchivo1(Terminos::obtenerTermino(i));
+			mostrarRegistroVariable(miRegVariable);
+			delete miRegVariable;
 		}catch(ExcepcionMisDatos e){
 			cout << e.getMensaje() << endl;
 			cout << "*****ERROR CON CLAVE: " << Terminos::obtenerTermino(i) << " *****" << endl;
 		}
 
-		mostrarRegistroVariable(miRegVariable);
+		//TODO corro para arriba mostrarRegistroVariable(miRegVariable);
 
-		delete miRegVariable;
+		//TDOO corro para arriba delete miRegVariable;
 	}
 
 	// CIERRO ARCHIVO 1
