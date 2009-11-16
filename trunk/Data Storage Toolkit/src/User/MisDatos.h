@@ -34,7 +34,7 @@
 #include "../Almacenamiento/Buffer.h"
 #include "../Indices/EstrategiaBSharp.h"
 #include "../Indices/EstrategiaIndice.h"
-#include "../Indices/HashingExt.h"
+#include "../Indices/HashingExt.hpp"
 
 enum TipoIndice {ARBOL, HASH};
 
