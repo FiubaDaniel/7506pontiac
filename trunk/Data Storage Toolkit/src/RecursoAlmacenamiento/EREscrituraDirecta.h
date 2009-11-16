@@ -9,19 +9,19 @@
  *
  */
 struct NodoArchivoBuffer;
-typedef  std::map<size_t,NodoArchivoBuffer>::iterator PNodoSiguiente;
+typedef  std::map<Referencia,NodoArchivoBuffer>::iterator PNodoSiguiente;
 struct NodoArchivoBuffer{
-	size_t posicionBuffer;
+	Referencia posicionBuffer;
 	PNodoSiguiente siguiente;
 };
 
 class AdministradorDeBuffer{
 public:
-	size_t capacidad;
-	std::map<size_t,NodoArchivoBuffer> tablaArchivoBuffer;
+	Referencia capacidad;
+	std::map<Referencia,NodoArchivoBuffer> tablaArchivoBuffer;
 	PNodoSiguiente primero;
 	PNodoSiguiente ultimo;
-	AdministradorDeBuffer(size_t capacidad){
+	AdministradorDeBuffer(Referencia capacidad){
 		this->capacidad=capacidad;
 		tablaArchivoBuffer.clear();
 	}
@@ -32,7 +32,7 @@ public:
 	virtual ~AdministradorDeBuffer(){
 
 	};
-	bool buscar(size_t posicionArchivo,size_t&posicionBuffer){
+	bool buscar(Referencia posicionArchivo,Referencia&posicionBuffer){
 		PNodoSiguiente it;
 		it=tablaArchivoBuffer.find(posicionArchivo);
 		posicionBuffer=it->second.posicionBuffer;
@@ -69,14 +69,14 @@ public:
 		return true;
 	};
 
-	bool promoverAUltimo(size_t posicionArchivo){
+	bool promoverAUltimo(Referencia posicionArchivo){
 		PNodoSiguiente it;
 		it=tablaArchivoBuffer.find(posicionArchivo);
 		if(it!=tablaArchivoBuffer.end())
 			return promoverAUltimo(it);
 		return false;
 	}
-	void insertar(size_t posicionArchivo,size_t&posicioBuffer){
+	void insertar(Referencia posicionArchivo,Referencia&posicioBuffer){
 		PNodoSiguiente it;
 		NodoArchivoBuffer nuevo;
 		/*Si la tabla esta llena*/
@@ -91,7 +91,7 @@ public:
 			nuevo.posicionBuffer=tablaArchivoBuffer.size();
 		}
 		/*inserto la nueva posicionArchivo*/
-		pair<PNodoSiguiente,bool> resultado=tablaArchivoBuffer.insert(std::pair<size_t,NodoArchivoBuffer> (posicionArchivo,nuevo));
+		pair<PNodoSiguiente,bool> resultado=tablaArchivoBuffer.insert(std::pair<Referencia,NodoArchivoBuffer> (posicionArchivo,nuevo));
 		if(!resultado.second){
 			posicioBuffer=resultado.first->second.posicionBuffer;
 			return;
@@ -132,7 +132,7 @@ public:
 		}
 		return true;
 	};
-	bool promoverAPrimero(size_t posicionArchivo){
+	bool promoverAPrimero(Referencia posicionArchivo){
 		PNodoSiguiente it;
 		it=tablaArchivoBuffer.find(posicionArchivo);
 		if(it!=tablaArchivoBuffer.end())
@@ -164,7 +164,7 @@ private:
 	void insertarEnBuffer(Referencia refArchivo);
 	void setClave(Registro*reg,Clave*clave);
 public:
-	EREscrituraDirecta(EstrategiaIndice* indice,Almacenamiento*archivo,Almacenamiento*buffer,size_t cantidadElementoBuffer);
+	EREscrituraDirecta(EstrategiaIndice* indice,Almacenamiento*archivo,Almacenamiento*buffer,Referencia cantidadElementoBuffer);
 	virtual ~EREscrituraDirecta();
 	bool insertar(Registro* registro);
 	bool eliminar(Clave* unaClave);

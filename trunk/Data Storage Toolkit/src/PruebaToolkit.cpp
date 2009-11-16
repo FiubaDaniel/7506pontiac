@@ -142,6 +142,8 @@ int main() {
 
 	// OBTENGO REGISTROS VARIABLES
 	for (int i=0; i<MINBORRARVARIABLE; ++i){
+		if(i==15)
+			cout<<endl;
 		try{
 			miRegVariable = misDatos.obtenerRegistroArchivo1(Terminos::obtenerTermino(i));
 			mostrarRegistroVariable(miRegVariable);
@@ -224,12 +226,14 @@ int main() {
 	for (int i=0; i<MINBORRARFIJO; ++i){
 		try{
 			miRegFijo = misDatos.obtenerRegistroArchivo2(i, calcularChar(i));
+			mostrarRegistroFijo(miRegFijo);
+			delete miRegFijo;
 		}catch(ExcepcionMisDatos e){
 			cout << e.getMensaje() << endl;
 			cout << "*****ERROR CON CLAVE: " << i << " " << calcularChar(i) << " *****" << endl;
 		}
-		mostrarRegistroFijo(miRegFijo);
-		delete miRegFijo;
+		//TODO corro al try mostrarRegistroFijo(miRegFijo);
+		//TODO corro para hacia el try delete miRegFijo;
 	}
 
 	// CIERRO ARCHIVO 2
