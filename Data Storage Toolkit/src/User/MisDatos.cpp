@@ -300,7 +300,7 @@ MiRegistroVariable* MisDatos::obtenerRegistroArchivo1(std::string clave) throw (
 	Clave claveRecurso(registro1,1,"miStringID");
 
 	if(not recurso1->obtener(&claveRecurso,registro1))
-		throw ExcepcionMisDatos("No se pudo Modificar el registro en Archivo1");
+		throw ExcepcionMisDatos("No se pudo obtener el registro en Archivo1");
 	mistringid=(AtributoFijo<char*>*)registro1->get(0);
 	AtributoFijo<int>* miInt=(AtributoFijo<int>*)registro1->get(1);
 	AtributoVariable<int>* miListaInt=(AtributoVariable<int>* )registro1->get(2);

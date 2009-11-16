@@ -89,6 +89,7 @@ bool EREscrituraDirecta::modificar(Clave* unaClave,Registro* registro){
 bool EREscrituraDirecta::obtener(Clave* unaClave,Registro*registro){
 	Referencia referencia;
 	Referencia refBuffer;
+	setClave(registro,unaClave);
 	if(indice!=NULL){
 		if(!indice->BuscarReferencia(clave,&referencia))
 			return false;
@@ -97,6 +98,7 @@ bool EREscrituraDirecta::obtener(Clave* unaClave,Registro*registro){
 			buffer->leer(componenteBuffer);
 			if(not ((ComponenteMemoria*)componenteBuffer)->estaSucio()){
 				buffer->posicionarComponente(refBuffer);
+
 				return buffer->obtener(registro);
 			}
 		}
