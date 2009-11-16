@@ -12,6 +12,8 @@ BloqueMemoria::BloqueMemoria(Bloque* bloque):BloqueMemoria::Bloque(){
 			this->componentes.push_back( aux->clonar());
 	}
 }
+BloqueMemoria::BloqueMemoria(Registro* registro):BloqueMemoria::Bloque(registro){
+}
 BloqueMemoria::~BloqueMemoria(){}
 
 Ttamanio BloqueMemoria::deserializar(std::streambuf&entrada){

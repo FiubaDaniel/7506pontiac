@@ -6,7 +6,12 @@
  */
 
 #include "RegistroMemoria.h"
-RegistroMemoria::RegistroMemoria(Registro*registro):RegistroMemoria::Registro(){}
+RegistroMemoria::RegistroMemoria(Registro*registro):RegistroMemoria::Registro(){
+	for(Ttamanio i=0;i<registro->cantidadAtributos();i++){
+		Atributo* aux=registro->get(i);
+		this->atributos.push_back( aux->clonar() );
+	}
+}
 RegistroMemoria::~RegistroMemoria(){}
 
 Ttamanio RegistroMemoria::deserializar(std::streambuf&entrada){
@@ -15,17 +20,17 @@ Ttamanio RegistroMemoria::deserializar(std::streambuf&entrada){
 	offset+=Registro::deserializar(entrada);
 	return offset;
 }
-Ttamanio RegistroMemoria::serializar(std::streambuf&salida){
+Ttamanio RegistroMemoria::serializar(std::streambuf&salida)const{
 	Ttamanio offset=sizeof(flags);
 	salida.sputn((char*)&estado,offset);
 	offset+=Registro::serializar(salida);
 	return offset;
 }
-Ttamanio RegistroMemoria::tamanioSerializado(){
+Ttamanio RegistroMemoria::tamanioSerializado()const{
 	return Registro::tamanioSerializado()+sizeof(char)+sizeof(Ttamanio);
 }
-Componente* RegistroMemoria::clonar(){
-	RegistroMemoria* clon=new RegistroMemoria(this);
+Componente* RegistroMemoria::clonar()const{
+	RegistroMemoria* clon=new RegistroMemoria(const_cast<RegistroMemoria*>(this));
 	clon->estado=estado;
 	return clon;
 }

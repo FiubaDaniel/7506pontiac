@@ -1,5 +1,7 @@
 #include "MisDatos.h"
 #include "../Indices/Set.h"
+#include "../Compuesto/BloqueMemoria.h"
+#include "../Compuesto/RegistroMemoria.h"
 MisDatos::MisDatos(){
 	recurso1=NULL;
 	recurso2=NULL;
@@ -77,7 +79,8 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 	/*inicializar el estrategia Recurso*/
 	EstrategiaRecursos* estrategiaRecurso=NULL;
 	if(tieneBuffer){
-		EABloques * estrategiaBuffer=new EABloques(registro1,longitudBloque,0.8);//TODO delete
+		BloqueMemoria bloqueMem(registro1);
+		EABloques * estrategiaBuffer=new EABloques(&bloqueMem,longitudBloque,0.8);//TODO delete
 		Buffer* buffer=new Buffer(estrategiaBuffer,longitudBuffer);
 		buffer->crear("buffer");
 		estrategiaRecurso=new EREscrituraDirecta(Indice,archivo,buffer,longitudBuffer/longitudBloque);
@@ -143,7 +146,8 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer, int longi
 	/*inicializar el estrategia Recurso*/
 	EstrategiaRecursos* estrategiaRecurso=NULL;
 	if(tieneBuffer){
-		EARegistros* estrategiaBuffer=new EARegistros(registro2);//TODO delete
+		RegistroMemoria regmem(registro2);
+		EARegistros* estrategiaBuffer=new EARegistros(&regmem);
 		Buffer* buffer=new Buffer(estrategiaBuffer,longitudBuffer);
 		buffer->crear("buffer");
 		estrategiaRecurso=new EREscrituraDirecta(Indice,archivo,buffer,longitudBuffer);

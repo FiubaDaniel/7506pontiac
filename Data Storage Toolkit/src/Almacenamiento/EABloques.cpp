@@ -13,7 +13,12 @@ EABloques::EABloques(Registro* tipoRegistro,Ttamanio tamanioBloque,double porcen
 	porcCarga=porcentajeCarga;
 	archivoEspacioLibre=NULL;
 }
-
+EABloques::EABloques(Bloque* tipoBloque,Ttamanio tamanioBloque,double porcentajeCarga){
+	bloque=(Bloque*)tipoBloque->clonar();
+	capacBloque=tamanioBloque;
+	porcCarga=porcentajeCarga;
+	archivoEspacioLibre=NULL;
+}
 EABloques::~EABloques() {
 	delete archivoEspacioLibre;
 	delete bloque;
@@ -62,14 +67,14 @@ void EABloques::cerrar(){
 	}
 }
 bool EABloques::posicionarComponente(size_t nroCompuesto){
-	if(nroCompuesto<siguienteLibre){
-		nroBloque=nroCompuesto;
-		almacen->posicionar(capacBloque*nroBloque+sizeof(siguienteLibre)+sizeof(capacBloque)+sizeof(porcCarga));
+	nroBloque=nroCompuesto;
+	almacen->posicionar(capacBloque*nroBloque+sizeof(siguienteLibre)+sizeof(capacBloque)+sizeof(porcCarga));
+	if(almacen->fin()){
 		almacen->clear();
-		nroRegistro=0;
-		return true;
+		return false;
 	}
-	return false;
+	nroRegistro=0;
+	return true;
 }
 void EABloques::setRegistro(Registro*registro){
 	if(bloque!=NULL){
@@ -118,7 +123,7 @@ bool EABloques::escribir(Componente*compuesto){
 	if(bloque!=NULL&&nroBloque<=siguienteLibre){
 		if(bloque->tamanioSerializado()<=capacBloque){
 			escribirBloque(bloque);
-			if(siguienteLibre<nroBloque)
+			if(siguienteLibre<=nroBloque)
 				siguienteLibre=nroBloque;
 			if(colaDeCambios){
 				for(Ttamanio i=0;i<bloque->cantidadComponentes();i++){

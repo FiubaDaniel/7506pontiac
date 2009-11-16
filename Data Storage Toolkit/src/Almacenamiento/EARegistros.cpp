@@ -160,6 +160,10 @@ bool EARegistros::eliminar(Clave *unaClave ){
 bool EARegistros::posicionarComponente(size_t nroCompuesto ){
 	nroRegistro=nroCompuesto;
 	almacen->posicionar(nroCompuesto*tamanioRegistro+sizeof(tamanioRegistro)+sizeof(siguienteRegLibre));
+	if(almacen->fin()){
+		almacen->clear();
+		return false;
+	}
 	return true;
 }
 bool EARegistros::siguiente(Componente *componente){
