@@ -324,6 +324,8 @@ MiRegistroFijo* MisDatos::obtenerRegistroArchivo2(int claveInt, char claveChar) 
 	AtributoFijo<int>* miIntID=(AtributoFijo<int>*)registro2->get(0);
 	AtributoFijo<char>* miCharID=(AtributoFijo<char>*)registro2->get(1);
 	AtributoFijo<int>* miInt=(AtributoFijo<int>*)registro2->get(2);
+	*miIntID=claveInt;
+	*miCharID=claveChar;
 	Clave clave(registro2,2,"miIntID","miCharID");
 	/*obtengo*/
 	if(not recurso2->obtener(&clave,registro2))

@@ -95,7 +95,8 @@ bool EREscrituraDirecta::obtener(Clave* unaClave,Registro*registro){
 		if(admin.buscar(referencia,refBuffer)){
 			buffer->posicionarComponente(refBuffer);
 			buffer->leer(componenteBuffer);
-			if(not ((ComponenteMemoria*)componenteBuffer)->estaSucio()){
+			ComponenteMemoria* compMem=dynamic_cast<ComponenteMemoria*>(componenteBuffer);
+			if(not compMem->estaSucio()){
 				buffer->posicionarComponente(refBuffer);
 				return buffer->obtener(registro);
 			}
