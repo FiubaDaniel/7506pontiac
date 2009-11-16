@@ -49,7 +49,6 @@ bool ERUnAlmacenamiento::eliminar(Clave* unaClave){
 	return true;
 }
 bool ERUnAlmacenamiento::modificar(Clave* unaClave,Registro* registro){
-	clave->set(registro);
 	Referencia referencia;
 	if(indice!=NULL){
 		if(!indice->BuscarReferencia(unaClave,&referencia))
