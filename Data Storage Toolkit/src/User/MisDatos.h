@@ -115,13 +115,14 @@ public:
 	  * Retorna el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
 	  *  lanza una excepcion con el mensaje de error correspondiente.
 	  */
-	 MiRegistroVariable obtenerRegistroArchivo1(std::string clave) throw (ExcepcionMisDatos);
+	 //TODO cambio el return a tipo puntero
+	 MiRegistroVariable *obtenerRegistroArchivo1(std::string clave) throw (ExcepcionMisDatos);
 	 /*
 	  * Pre: Archivo inicializado.
 	  * Retorna el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
 	  * lanza una excepcion con el mensaje de error correspondiente.
 	  */
-	 MiRegistroFijo obtenerRegistroArchivo2(int claveInt, char claveChar) throw (ExcepcionMisDatos);
+	 MiRegistroFijo *obtenerRegistroArchivo2(int claveInt, char claveChar) throw (ExcepcionMisDatos);
 	 /*
 	  * Pre: Archivo inicializado.
 	  * Muestra por salida standard toda la metadata del buffer, de los bloques y sus registros, asi como

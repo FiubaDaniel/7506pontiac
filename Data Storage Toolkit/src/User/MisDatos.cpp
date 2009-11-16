@@ -293,7 +293,7 @@ void MisDatos::modificarRegistroArchivo2(MiRegistroFijo registro) throw (Excepci
  * Retorna el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
  *  lanza una excepcion con el mensaje de error correspondiente.
  */
-MiRegistroVariable MisDatos::obtenerRegistroArchivo1(std::string clave) throw (ExcepcionMisDatos){
+MiRegistroVariable* MisDatos::obtenerRegistroArchivo1(std::string clave) throw (ExcepcionMisDatos){
 	AtributoFijo<char*>* mistringid=(AtributoFijo<char*>*)registro1->get(0);
 	*mistringid=clave;
 
@@ -310,14 +310,15 @@ MiRegistroVariable MisDatos::obtenerRegistroArchivo1(std::string clave) throw (E
 		pLista[i]=miListaInt->getVector().at(i);
 	}
 
-	return MiRegistroVariable(*mistringid,*miInt,pLista,miListaInt->getVector().size());
+	//TODO anterio return MiRegistroVariable(*mistringid,*miInt,pLista,miListaInt->getVector().size());
+	return new MiRegistroVariable(*mistringid,*miInt,pLista,miListaInt->getVector().size());
 }
 /*
  * Pre: Archivo inicializado.
  * Retorna el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
  * lanza una excepcion con el mensaje de error correspondiente.
  */
-MiRegistroFijo MisDatos::obtenerRegistroArchivo2(int claveInt, char claveChar) throw (ExcepcionMisDatos){
+MiRegistroFijo* MisDatos::obtenerRegistroArchivo2(int claveInt, char claveChar) throw (ExcepcionMisDatos){
 	AtributoFijo<int>* miIntID=(AtributoFijo<int>*)registro2->get(0);
 	AtributoFijo<char>* miCharID=(AtributoFijo<char>*)registro2->get(1);
 	AtributoFijo<int>* miInt=(AtributoFijo<int>*)registro2->get(2);
@@ -329,7 +330,8 @@ MiRegistroFijo MisDatos::obtenerRegistroArchivo2(int claveInt, char claveChar) t
 	miIntID=(AtributoFijo<int>*)registro2->get(0);
 	miCharID=(AtributoFijo<char>*)registro2->get(1);
 	miInt=(AtributoFijo<int>*)registro2->get(2);
-	return MiRegistroFijo(*miIntID,*miCharID,*miInt);
+	//TODO anterior return MiRegistroFijo(*miIntID,*miCharID,*miInt);
+	return new MiRegistroFijo(*miIntID,*miCharID,*miInt);
 }
 /*
  * Pre: Archivo inicializado.
