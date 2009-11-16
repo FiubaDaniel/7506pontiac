@@ -1,6 +1,6 @@
 #include "EREscrituraDirecta.h"
 
-EREscrituraDirecta::EREscrituraDirecta(EstrategiaIndice* indice,Almacenamiento*archivo,Almacenamiento*buffer,size_t cantidadElementoBuffer){
+EREscrituraDirecta::EREscrituraDirecta(EstrategiaIndice* indice,Almacenamiento*archivo,Almacenamiento*buffer,Referencia cantidadElementoBuffer){
 	this->archivo=archivo;
 	this->buffer=buffer;
 	this->indice=indice;
@@ -89,7 +89,6 @@ bool EREscrituraDirecta::modificar(Clave* unaClave,Registro* registro){
 bool EREscrituraDirecta::obtener(Clave* unaClave,Registro*registro){
 	Referencia referencia;
 	Referencia refBuffer;
-	setClave(registro,unaClave);
 	if(indice!=NULL){
 		if(!indice->BuscarReferencia(unaClave,&referencia))
 			return false;
@@ -98,7 +97,6 @@ bool EREscrituraDirecta::obtener(Clave* unaClave,Registro*registro){
 			buffer->leer(componenteBuffer);
 			if(not ((ComponenteMemoria*)componenteBuffer)->estaSucio()){
 				buffer->posicionarComponente(refBuffer);
-
 				return buffer->obtener(registro);
 			}
 		}
@@ -108,6 +106,7 @@ bool EREscrituraDirecta::obtener(Clave* unaClave,Registro*registro){
 			return true;
 		}
 	}else{
+		setClave(registro,unaClave);
 		if(buffer->buscar(registro))
 			return true;
 		if(archivo->buscar(registro)){

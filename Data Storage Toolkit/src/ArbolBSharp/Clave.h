@@ -11,7 +11,7 @@
 #include "../Compuesto/Registro.h"
 #include "../Compuesto/AtributoFijo.h"
 #include "../Compuesto/AtributoVariable.h"
-typedef size_t Referencia;
+typedef unsigned int Referencia;
 class Clave {
 
 public:

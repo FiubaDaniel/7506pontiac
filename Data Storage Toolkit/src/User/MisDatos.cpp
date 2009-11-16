@@ -83,7 +83,8 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 		EABloques * estrategiaBuffer=new EABloques(&bloqueMem,longitudBloque,0.8);//TODO delete
 		Buffer* buffer=new Buffer(estrategiaBuffer,longitudBuffer);
 		buffer->crear("buffer");
-		estrategiaRecurso=new EREscrituraDirecta(Indice,archivo,buffer,longitudBuffer/longitudBloque);
+		long nroElem=longitudBuffer/longitudBloque;
+		estrategiaRecurso=new EREscrituraDirecta(Indice,archivo,buffer,nroElem);
 
 	}else{
 		estrategiaRecurso=new ERUnAlmacenamiento(Indice,archivo);
@@ -150,7 +151,8 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer, int longi
 		EARegistros* estrategiaBuffer=new EARegistros(&regmem);
 		Buffer* buffer=new Buffer(estrategiaBuffer,longitudBuffer);
 		buffer->crear("buffer");
-		estrategiaRecurso=new EREscrituraDirecta(Indice,archivo,buffer,longitudBuffer);
+		long nroElem=longitudBuffer/regmem.tamanioSerializado();
+		estrategiaRecurso=new EREscrituraDirecta(Indice,archivo,buffer,nroElem);
 
 	}else{
 		estrategiaRecurso=new ERUnAlmacenamiento(Indice,archivo);
