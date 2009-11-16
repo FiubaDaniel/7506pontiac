@@ -36,3 +36,8 @@ Componente* BloqueMemoria::clonar()const{
 	clon->estado=estado;
 	return clon;
 }
+void BloqueMemoria::imprimir(std::ostream&salida)const{
+	if(estaSucio())
+		salida<<"RegistroSucio"<<std::endl;
+	Bloque::imprimir(salida);
+}

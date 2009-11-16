@@ -3,10 +3,10 @@
 
 class ComponenteMemoria{
 public:
-	bool estaEscrito(){
+	bool estaEscrito()const{
 		return estado&escrito;
 	};
-	bool estaSucio(){
+	bool estaSucio()const{
 		return estado&sucio;
 	};
 	void setSucio(bool valor){

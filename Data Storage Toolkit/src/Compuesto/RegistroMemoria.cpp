@@ -34,4 +34,8 @@ Componente* RegistroMemoria::clonar()const{
 	clon->estado=estado;
 	return clon;
 }
-
+void RegistroMemoria::imprimir(std::ostream&salida)const{
+	if(estaSucio())
+		salida<<"RegistroSucio"<<std::endl;
+	Registro::imprimir(salida);
+}
