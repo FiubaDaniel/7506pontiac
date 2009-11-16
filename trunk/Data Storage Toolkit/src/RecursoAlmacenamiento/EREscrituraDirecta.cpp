@@ -121,7 +121,7 @@ void EREscrituraDirecta::insertarEnBuffer(Referencia refArchivo){
 	Referencia refBuffer;
 	if(!admin.buscar(refArchivo,refBuffer))
 		admin.insertar(refArchivo,refBuffer);
-	admin.imprimir(cout);
+
 	Componente *componente=archivo->getEstrategia()->getComponenteUsado()->clonar();
 	archivo->posicionarComponente(refArchivo);
 	archivo->leer(componente);

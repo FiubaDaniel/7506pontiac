@@ -21,6 +21,7 @@ public:/*Heredado de componente*/
 	Ttamanio serializar(std::streambuf&salida)const;
 	Ttamanio tamanioSerializado()const;
 	Componente* clonar()const;
+	void imprimir(std::ostream&salida)const;
 };
 
 #endif /* BLOQUEMEMORIA_H_ */

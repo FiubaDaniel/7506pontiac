@@ -19,6 +19,7 @@ public:/*MetodoHeredados*/
 	virtual Ttamanio serializar(std::streambuf&salida)const;
 	virtual Ttamanio tamanioSerializado()const;
 	virtual Componente* clonar()const;
+	void imprimir(std::ostream&salida)const;
 private:
 	Ttamanio nroCompuesto;
 	Ttamanio nroRegitro;
