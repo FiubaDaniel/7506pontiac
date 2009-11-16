@@ -8,11 +8,12 @@ EREscrituraDirecta::EREscrituraDirecta(EstrategiaIndice* indice,Almacenamiento*a
 	this->buffer->getEstrategia()->setColaCambios(NULL);
 	admin.capacidad=cantidadElementoBuffer;
 	componenteBuffer=buffer->getEstrategia()->getComponenteUsado()->clonar();
-	clave=this->archivo->getEstrategia()->getClave();
+	clave=this->archivo->getEstrategia()->getClave()->clonarce();
 }
 
 EREscrituraDirecta::~EREscrituraDirecta(){
 	delete componenteBuffer;
+	delete clave;
 }
 
 void EREscrituraDirecta::setClave(Registro*reg,Clave*clave){
@@ -64,10 +65,9 @@ bool EREscrituraDirecta::eliminar(Clave* unaClave){
 	return true;
 }
 bool EREscrituraDirecta::modificar(Clave* unaClave,Registro* registro){
-	clave->set(registro);
 	Referencia referencia;
 	if(indice!=NULL){
-		if(!indice->BuscarReferencia(clave,&referencia))
+		if(!indice->BuscarReferencia(unaClave,&referencia))
 			return false;
 		archivo->posicionarComponente(referencia);
 	}else {
@@ -91,7 +91,7 @@ bool EREscrituraDirecta::obtener(Clave* unaClave,Registro*registro){
 	Referencia refBuffer;
 	setClave(registro,unaClave);
 	if(indice!=NULL){
-		if(!indice->BuscarReferencia(clave,&referencia))
+		if(!indice->BuscarReferencia(unaClave,&referencia))
 			return false;
 		if(admin.buscar(referencia,refBuffer)){
 			buffer->posicionarComponente(refBuffer);
