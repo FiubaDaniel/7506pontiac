@@ -92,8 +92,10 @@ public:
 		}
 		/*inserto la nueva posicionArchivo*/
 		pair<PNodoSiguiente,bool> resultado=tablaArchivoBuffer.insert(std::pair<size_t,NodoArchivoBuffer> (posicionArchivo,nuevo));
-		if(!resultado.second)
+		if(!resultado.second){
+			posicioBuffer=resultado.first->second.posicionBuffer;
 			return;
+		}
 		it=resultado.first;
 		// si es el primero
 		if(tablaArchivoBuffer.size()==1){
@@ -124,11 +126,10 @@ public:
 			anterior->second.siguiente=it->second.siguiente;
 			if(it==ultimo)
 				ultimo=anterior;
+			/*coloco it al principio*/
+			it->second.siguiente=primero;
+			primero=it;
 		}
-		/*coloco it al principio*/
-
-		it->second.siguiente=primero;
-		primero=it;
 		return true;
 	};
 	bool promoverAPrimero(size_t posicionArchivo){

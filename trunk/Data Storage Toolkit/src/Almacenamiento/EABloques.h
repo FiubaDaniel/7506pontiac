@@ -30,6 +30,7 @@ private:
 	bool escribirBloque(Bloque*bloque);
 public:
 	EABloques(Registro* tipoRegistro,Ttamanio tamanioBloque,double porcCarga=0.8);
+	EABloques(Bloque* tipoBloque,Ttamanio tamanioBloque,double porcCarga=0.8);
 	virtual ~EABloques();
 	bool abrir();
 	void crear();

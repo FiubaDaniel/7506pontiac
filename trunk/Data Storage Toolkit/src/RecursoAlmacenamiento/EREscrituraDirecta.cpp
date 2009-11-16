@@ -119,11 +119,15 @@ bool EREscrituraDirecta::obtener(Clave* unaClave,Registro*registro){
 }
 void EREscrituraDirecta::insertarEnBuffer(Referencia refArchivo){
 	Referencia refBuffer;
-	admin.insertar(refArchivo,refBuffer);
+	if(!admin.buscar(refArchivo,refBuffer))
+		admin.insertar(refArchivo,refBuffer);
+	admin.imprimir(cout);
 	Componente *componente=archivo->getEstrategia()->getComponenteUsado()->clonar();
 	archivo->posicionarComponente(refArchivo);
 	archivo->leer(componente);
 	componenteBuffer->copiar(componente);
+	ComponenteMemoria* compMem=dynamic_cast<ComponenteMemoria*>(componenteBuffer);
+	compMem->setSucio(false);
 	buffer->posicionarComponente(refBuffer);
 	buffer->escribir(componenteBuffer);
 	delete componente;
@@ -141,6 +145,7 @@ void EREscrituraDirecta::actualizarIndice(Cambio cambio){
 void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 	Referencia posicionBuffer;
 	Componente* componente;
+	ComponenteMemoria* compMem;
 	switch(cambio.operacion){
 	case Cambio::Alta :
 		insertarEnBuffer(cambio.referencia);
@@ -150,7 +155,8 @@ void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 		if(admin.buscar(cambio.referencia,posicionBuffer)){
 			buffer->posicionarComponente(posicionBuffer);
 			buffer->leer(componenteBuffer);
-			((ComponenteMemoria*)componenteBuffer)->setSucio(true);
+			compMem=dynamic_cast<ComponenteMemoria*>(componenteBuffer);
+			compMem->setSucio(true);
 			buffer->posicionarComponente(posicionBuffer);
 			buffer->escribir(componenteBuffer);
 			//ponerlo como primero a ser reciclado
@@ -166,7 +172,8 @@ void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 			//marcar componente como sucio
 			buffer->posicionarComponente(posicionBuffer);
 			buffer->leer(componenteBuffer);
-			((ComponenteMemoria*)componenteBuffer)->setSucio(true);
+			compMem=dynamic_cast<ComponenteMemoria*>(componenteBuffer);
+			compMem->setSucio(true);
 			buffer->posicionarComponente(posicionBuffer);
 			buffer->escribir(componenteBuffer);
 			//ponerlo como primero a ser usado
@@ -179,7 +186,8 @@ void EREscrituraDirecta::actualizarBuffer(Cambio cambio){
 		componente=archivo->getEstrategia()->getComponenteUsado()->clonar();
 		archivo->leer(componente);
 		componenteBuffer->copiar(componente);
-		((ComponenteMemoria*)componenteBuffer)->setSucio(false);
+		compMem=dynamic_cast<ComponenteMemoria*>(componenteBuffer);
+		compMem->setSucio(false);
 		buffer->posicionarComponente(posicionBuffer);
 		buffer->escribir(componenteBuffer);
 		delete componente;

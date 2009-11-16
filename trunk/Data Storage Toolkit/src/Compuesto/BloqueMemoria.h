@@ -8,11 +8,13 @@
 #ifndef BLOQUEMEMORIA_H_
 #define BLOQUEMEMORIA_H_
 #include "Bloque.h"
+#include "Registro.h"
 #include "ComponenteMemoria.h"
 
 class BloqueMemoria:public Bloque ,public ComponenteMemoria {
 public:
 	BloqueMemoria(Bloque* bloque);
+	BloqueMemoria(Registro* registro);
 	virtual ~BloqueMemoria();
 public:/*Heredado de componente*/
 	Ttamanio deserializar(std::streambuf&entrada);

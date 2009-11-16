@@ -20,7 +20,7 @@ void mostrarArchivo1(MisDatos& misDatos){
 	cout << "********* BUFFER **********" << endl;
 	misDatos.mostrarContenidoBufferArchivo1();
 	cout << "********* INDICE **********" << endl;
-	misDatos.mostrarIndiceArchivo1();
+	//misDatos.mostrarIndiceArchivo1();
 }
 
 //para mostrar los datos, buffer e indice de Archivo2
@@ -61,7 +61,7 @@ int main() {
 
 	/* ARCHIVO 1 */
 	try{
-		misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
+/*		misDatos.inicializarArchivo1("MiArchivo1", 256, true, 1024, true, ARBOL, 128);
 		for (int i=0; i<100; ++i){
 			cantElementos = i % DELTA + MINIMO;
 			nroTermino = i;
@@ -70,7 +70,7 @@ int main() {
 			for (int j=0; j<cantElementos; ++j){
 				miLista[j] = j;
 			}
-			if(i==99)
+			if(i%6==0)
 				cout<<endl;
 			miRegVariable = new MiRegistroVariable(Terminos::obtenerTermino(nroTermino), i, miLista, cantElementos);
 			misDatos.agregarRegistroArchivo1(*miRegVariable);
@@ -85,13 +85,16 @@ int main() {
 		int cant = 0;
 		for (int i=0; i<100; ++i){
 			cant++;
+			if(i==60)
+				cout<<endl;
 			misDatos.eliminarRegistroArchivo1(Terminos::obtenerTermino(i));
+
 			mostrarArchivo1(misDatos);
 			cout<<"Esto es cant: "<<cant<<endl;
 
 		}
-		/*--------------------------------------------------------------------*/
-		misDatos.cerrarArchivo1();
+		--------------------------------------------------------------------
+		misDatos.cerrarArchivo1();*/
 
 		/* ARCHIVO 2 */
 
