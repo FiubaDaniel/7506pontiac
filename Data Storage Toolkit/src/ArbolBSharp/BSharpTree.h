@@ -110,9 +110,9 @@ private:
 
 	void resolverReferenciaSiguiente(Nodo* nodoIzq,Referencia refAHermanoNuevo);
 
-	void subflujoHijosRaiz(Nodo* nodo,Nodo* hermano,Referencia refNodo,Referencia refHermano);
+	void subflujoHijosRaiz(Nodo* nodo,Nodo* hermano,Nodo* padre,Referencia refNodo,Referencia refHermano);
 
-	void armarRaizIntermedia(Nodo* nodoIzq,Nodo* nodoDer,Referencia refNodoIzq,Referencia refNodoDer);
+	void armarRaizIntermedia(Nodo* nodoIzq,Nodo* nodoDer,Nodo* padre,Referencia refNodoIzq,Referencia refNodoDer);
 
 	void armarRaizHoja(Nodo* nodoIzq,Nodo* nodoDer,Referencia refIzq,Referencia refDer);
 

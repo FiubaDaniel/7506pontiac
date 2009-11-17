@@ -328,7 +328,7 @@ int NodoIntermedio::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre
 	auxiliarPadre->setReferencia(referenciaIzq);
 	nodoHermanoIzq->agregarElemento(auxiliarPadre);
 	Referencia refIzqDeNodoDer  = nodoDerecho->getReferenciaIzq();
-	unsigned int cantIzq = cantidadMaximaDeElementos- (cantidadMaximaDeElementos - nodoHermanoIzq->getEspacioLibre()) - 1;
+    int cantIzq = cantidadMaximaDeElementos- (cantidadMaximaDeElementos - nodoHermanoIzq->getEspacioLibre()) - 1;
 	std::list<ElementoNodo*>::iterator itMedio = listaElementos.begin();
 	while(itMedio != listaElementos.end()){
 		ElementoNodo* elem = *itMedio;
