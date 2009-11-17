@@ -62,21 +62,21 @@ bool BSharpTree::abrir(string nombreArch,ComparadorClave* comp){
 	comparador = comp;
 	nombreArchivo = nombreArch+"_Arbol";
 	nombreEspaciosLibres = nombreArch+"_EspaciosLibre";
-	archivoArbol.seekg(0);
 	archivoEspaciosLibres.open(nombreEspaciosLibres.c_str(),std::fstream::out|std::fstream::in|std::fstream::binary);
 	archivoArbol.open(nombreArchivo.c_str(),std::fstream::out|std::fstream::in|std::fstream::binary);
 	if(!archivoArbol.is_open()||!archivoEspaciosLibres.is_open()){
 		return false;
 	}
+	archivoArbol.seekg(0);
 	std:: stringbuf buf(ios_base :: in | ios_base :: out | ios_base :: binary);
 	int tamanio = sizeof(int)*3;
 	char array[tamanio];
 	archivoArbol.read(array,tamanio);
 	buf.pubsetbuf(array,tamanio);
 	buf.pubseekpos(0);
-	buf.sgetn((char*)&numeroDeElementosXnodo,sizeof(numeroDeElementosXnodo));
-	buf.sgetn((char*)&tamanioNodo,sizeof(tamanioNodo));
-	buf.sgetn((char*)&posicionRaiz,sizeof(int));
+	buf.sgetn((char*)&numeroDeElementosXnodo,sizeof(unsigned int));
+	buf.sgetn((char*)&tamanioNodo,sizeof(unsigned int));
+	buf.sgetn((char*)&posicionRaiz,sizeof(unsigned int));
 	char array2[tamanioNodo];
 	archivoArbol.read(array2,tamanioNodo);
 	buf.pubsetbuf(array2,tamanioNodo);
