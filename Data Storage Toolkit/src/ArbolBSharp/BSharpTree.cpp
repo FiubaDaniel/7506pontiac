@@ -585,48 +585,6 @@ void BSharpTree::resolverSubflujo(Nodo* nodo,std::list<Referencia>&listaDePadres
 		delete padre;
 	}else if(booleanoInformacion[2]){
 		int subflujo = nodo->unirse(hermanoIzq,hermanoDer,padre);
-		cout<<"HERMANO Izq"<<endl;
-		std::list<ElementoNodo*>::iterator it = hermanoIzq->getListaElementos()->begin();
-		while(it!=hermanoIzq->getListaElementos()->end()){
-			ElementoNodo* elem = *it;
-			for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
-				cout<<" ";
-				elem->getClave()->getAtributo(i)->imprimir(cout);
-				cout<<" ";
-			}
-			cout << elem->getReferencia();
-			cout<<"   ";
-			++it;
-		}
-		cout<<" "<<endl;
-		cout<<"HERMANO Der"<<endl;
-		it = hermanoDer->getListaElementos()->begin();
-		while(it!=hermanoDer->getListaElementos()->end()){
-			ElementoNodo* elem = *it;
-			for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
-				cout<<" ";
-				elem->getClave()->getAtributo(i)->imprimir(cout);
-				cout<<" ";
-			}
-			cout << elem->getReferencia();
-			cout<<"   ";
-			++it;
-		}
-		cout<<" "<<endl;
-		cout<<"Padre"<<endl;
-		it = padre->getListaElementos()->begin();
-		while(it!=padre->getListaElementos()->end()){
-			ElementoNodo* elem = *it;
-			for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
-				cout<<" ";
-				elem->getClave()->getAtributo(i)->imprimir(cout);
-				cout<<" ";
-			}
-			cout << elem->getReferencia();
-			cout<<"   ";
-			++it;
-		}
-		cout<<" "<<endl;
 		resolverReferenciaSiguiente(hermanoIzq,refHermanoDer);
 		grabar(hermanoIzq,hermanoDer,refHermanoIzq,refHermanoDer);
 		nuevoEspacioLibre(refHijo);
@@ -652,48 +610,6 @@ void BSharpTree::resolverSubflujo(Nodo* nodo,std::list<Referencia>&listaDePadres
 			delete padre;
 		}else{
 			int subflujo = hermanoIzq->unirse(nodo,hermanoDer,padre);
-			cout<<"HERMANO nodo"<<endl;
-			std::list<ElementoNodo*>::iterator it = nodo->getListaElementos()->begin();
-			while(it!=nodo->getListaElementos()->end()){
-				ElementoNodo* elem = *it;
-				for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
-					cout<<" ";
-					elem->getClave()->getAtributo(i)->imprimir(cout);
-					cout<<" ";
-				}
-				cout << elem->getReferencia();
-				cout<<"   ";
-				++it;
-			}
-			cout<<" "<<endl;
-			cout<<"HERMANO Der"<<endl;
-			it = hermanoDer->getListaElementos()->begin();
-			while(it!=hermanoDer->getListaElementos()->end()){
-				ElementoNodo* elem = *it;
-				for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
-					cout<<" ";
-					elem->getClave()->getAtributo(i)->imprimir(cout);
-					cout<<" ";
-				}
-				cout << elem->getReferencia();
-				cout<<"   ";
-				++it;
-			}
-			cout<<" "<<endl;
-			cout<<"Padre"<<endl;
-			it = padre->getListaElementos()->begin();
-			while(it!=padre->getListaElementos()->end()){
-				ElementoNodo* elem = *it;
-				for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
-					cout<<" ";
-					elem->getClave()->getAtributo(i)->imprimir(cout);
-					cout<<" ";
-				}
-				cout << elem->getReferencia();
-				cout<<"   ";
-				++it;
-			}
-			cout<<" "<<endl;
 			resolverReferenciaSiguiente(nodo,refHermanoDer);
 			grabar(nodo,hermanoDer,refHijo,refHermanoDer);
 			nuevoEspacioLibre(refHermanoIzq);
@@ -718,107 +634,7 @@ void BSharpTree::resolverSubflujo(Nodo* nodo,std::list<Referencia>&listaDePadres
 			destruirNodos(nodo,hermanoDer,hermanoIzq);
 			delete padre;
 		}else{
-			cout<<"HERMANO nodo"<<endl;
-			std::list<ElementoNodo*>::iterator it = nodo->getListaElementos()->begin();
-			while(it!=nodo->getListaElementos()->end()){
-				ElementoNodo* elem = *it;
-				for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
-					cout<<" ";
-					elem->getClave()->getAtributo(i)->imprimir(cout);
-					cout<<" ";
-				}
-				cout << elem->getReferencia();
-				cout<<"   ";
-				++it;
-			}
-			cout<<" "<<endl;
-			cout<<"HERMANO Izq"<<endl;
-			it = hermanoIzq->getListaElementos()->begin();
-			while(it!=hermanoIzq->getListaElementos()->end()){
-				ElementoNodo* elem = *it;
-				for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
-					cout<<" ";
-					elem->getClave()->getAtributo(i)->imprimir(cout);
-					cout<<" ";
-				}
-				cout << elem->getReferencia();
-				cout<<"   ";
-				++it;
-			}
-			cout<<" "<<endl;
-			cout<<"HERMANO Der"<<endl;
-			it = hermanoDer->getListaElementos()->begin();
-			while(it!=hermanoDer->getListaElementos()->end()){
-				ElementoNodo* elem = *it;
-				for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
-					cout<<" ";
-					elem->getClave()->getAtributo(i)->imprimir(cout);
-					cout<<" ";
-				}
-				cout << elem->getReferencia();
-				cout<<"   ";
-				++it;
-			}
-			cout<<" "<<endl;
-			cout<<"Padre"<<endl;
-			it = padre->getListaElementos()->begin();
-			while(it!=padre->getListaElementos()->end()){
-				ElementoNodo* elem = *it;
-				for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
-					cout<<" ";
-					elem->getClave()->getAtributo(i)->imprimir(cout);
-					cout<<" ";
-				}
-				cout << elem->getReferencia();
-				cout<<"   ";
-				++it;
-			}
-			cout<<" "<<endl;
-
-			cout <<"Se produce la union"<<endl;
 			int subflujo = hermanoIzq->unirse(hermanoDer,nodo,padre);
-			cout<<"HERMANO nodo"<<endl;
-			it = nodo->getListaElementos()->begin();
-			while(it!=nodo->getListaElementos()->end()){
-				ElementoNodo* elem = *it;
-				for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
-					cout<<" ";
-					elem->getClave()->getAtributo(i)->imprimir(cout);
-					cout<<" ";
-				}
-				cout << elem->getReferencia();
-				cout<<"   ";
-				++it;
-			}
-			cout<<" "<<endl;
-			cout<<"HERMANO Der"<<endl;
-			it = hermanoDer->getListaElementos()->begin();
-			while(it!=hermanoDer->getListaElementos()->end()){
-				ElementoNodo* elem = *it;
-				for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
-					cout<<" ";
-					elem->getClave()->getAtributo(i)->imprimir(cout);
-					cout<<" ";
-				}
-				cout << elem->getReferencia();
-				cout<<"   ";
-				++it;
-			}
-			cout<<" "<<endl;
-			cout<<"Padre"<<endl;
-			it = padre->getListaElementos()->begin();
-			while(it!=padre->getListaElementos()->end()){
-				ElementoNodo* elem = *it;
-				for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
-					cout<<" ";
-					elem->getClave()->getAtributo(i)->imprimir(cout);
-					cout<<" ";
-				}
-				cout << elem->getReferencia();
-				cout<<"   ";
-				++it;
-			}
-			cout<<" "<<endl;
 			resolverReferenciaSiguiente(hermanoDer,refHijo);
 			grabar(nodo,hermanoDer,refHijo,refHermanoDer);
 			nuevoEspacioLibre(refHermanoIzq);
@@ -973,34 +789,6 @@ NodoIntermedio* BSharpTree::buscarIntermedio(Clave* clave,Nodo* nodoE,bool esRai
  * un solo nodo q pasa a ser la nueva raiz.
  */
 void BSharpTree::subflujoHijosRaiz(Nodo* nodo,Nodo* hermano,Nodo* padre,Referencia refNodo,Referencia refHermano){
-	cout<<"NODO"<<endl;
-	std::list<ElementoNodo*>::iterator it = nodo->getListaElementos()->begin();
-	while(it!=nodo->getListaElementos()->end()){
-		ElementoNodo* elem = *it;
-		for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
-			cout<<" ";
-			elem->getClave()->getAtributo(i)->imprimir(cout);
-			cout<<" ";
-		}
-		cout << elem->getReferencia();
-		cout<<"   ";
-		++it;
-	}
-	cout<<" "<<endl;
-	cout<<"HERMANO"<<endl;
-	it = hermano->getListaElementos()->begin();
-	while(it!=hermano->getListaElementos()->end()){
-		ElementoNodo* elem = *it;
-		for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
-			cout<<" ";
-			elem->getClave()->getAtributo(i)->imprimir(cout);
-			cout<<" ";
-		}
-		cout << elem->getReferencia();
-		cout<<"   ";
-		++it;
-	}
-	cout<<" "<<endl;
 	if((hermano->getListaElementos()->size()>cantidadMinimaDeElementos)){//se puede balancear
 		if(comparador->Comparar(nodo->getListaElementos()->back()->getClave(),hermano->getListaElementos()->front()->getClave())<0){//hermano esta a la derecha de nodo
 			hermano->balanceo(nodo,padre,true);
@@ -1024,26 +812,13 @@ void BSharpTree::subflujoHijosRaiz(Nodo* nodo,Nodo* hermano,Nodo* padre,Referenc
 			armarRaizIntermedia(hermano,nodo,padre,refHermano,refNodo);
 		}
 	}
-
-	/*if((nodo->getEspacioLibre()<(cantidadMinimaDeElementos-2))||(hermano->getEspacioLibre()<(cantidadMinimaDeElementos-2))||((nodo->getEspacioLibre()<cantidadMinimaDeElementos)&&(hermano->getEspacioLibre()<cantidadMinimaDeElementos))){
-		if(comparador->Comparar(nodo->getListaElementos()->front()->getClave(),hermano->getListaElementos()->back()->getClave())>0){
-			armarNuevaRaiz(hermano,nodo);
-		}else{
-			armarNuevaRaiz(nodo,hermano);
-		}
-		nuevoEspacioLibre(refNodo);
-		nuevoEspacioLibre(refHermano);
-	}*/
 }
 
 void BSharpTree::armarRaizIntermedia(Nodo* nodoIzq,Nodo* nodoDer,Nodo* padre,Referencia refNodoIzq,Referencia refNodoDer){
 	std::stringbuf buf(ios_base :: in | ios_base :: out | ios_base :: binary);
 	NodoIntermedio* nodoIzquierdo = dynamic_cast<NodoIntermedio*>(nodoIzq);
 	NodoIntermedio* nodoDerecho = dynamic_cast<NodoIntermedio*>(nodoDer);
-
 	NodoIntermedio* RaizCast = dynamic_cast<NodoIntermedio*>(padre);
-	cout<<"Referencia Izq nodo DER: "<< nodoDerecho->getReferenciaIzq()<<endl;
-	cout<<"Refercnia Izq nodo IZQ: "<<nodoIzquierdo->getReferenciaIzq()<<endl;
 	RaizCast->getListaElementos()->front()->setReferencia(nodoDerecho->getReferenciaIzq());
 	RaizCast->setRefereciaIzq(nodoIzquierdo->getReferenciaIzq());
 	for(std::list<ElementoNodo*>::reverse_iterator it = nodoIzquierdo->getListaElementos()->rbegin();it != nodoIzquierdo->getListaElementos()->rend();++it){
