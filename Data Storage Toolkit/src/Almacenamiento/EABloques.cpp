@@ -66,7 +66,7 @@ void EABloques::cerrar(){
 		archivoEspacioLibre=NULL;
 	}
 }
-bool EABloques::posicionarComponente(size_t nroCompuesto){
+bool EABloques::posicionarComponente(Referencia nroCompuesto){
 	nroBloque=nroCompuesto;
 	almacen->posicionar(capacBloque*nroBloque+sizeof(siguienteLibre)+sizeof(capacBloque)+sizeof(porcCarga));
 	if(almacen->fin()){
@@ -144,8 +144,8 @@ bool EABloques::leer(Componente*compuesto){
 	}
 	return false;
 }
-size_t EABloques::buscarEspacioLibre(Ttamanio espacio,bool& encontrado){
-	size_t nroBloque=0;
+Referencia EABloques::buscarEspacioLibre(Ttamanio espacio,bool& encontrado){
+	Referencia nroBloque=0;
 	libres=capacBloque;
 	encontrado=false;
 	if(not archivoEspacioLibre)
@@ -165,7 +165,7 @@ bool EABloques::insertar(Componente*componente){
 	bool encontrado;
 	Registro*nuevo=dynamic_cast<Registro*>(componente);
 	if(nuevo!=NULL){
-		size_t posInsercion=buscarEspacioLibre(nuevo->tamanioSerializado(),encontrado);
+		Referencia posInsercion=buscarEspacioLibre(nuevo->tamanioSerializado(),encontrado);
 		if(encontrado){
 			posicionarComponente(posInsercion);
 			if(!leerBloque(bloque)) return false;
@@ -188,7 +188,7 @@ bool EABloques::insertar(Componente*componente){
 
 
 bool EABloques::modificar(Componente*componente){
-	size_t posModificado=nroBloque;
+	Referencia posModificado=nroBloque;
 	/*Si el bloque que sigue es valido*/
 	if(nroBloque<siguienteLibre){
 		/*leo el bloque que sigue*/
@@ -263,7 +263,7 @@ bool EABloques::buscarComponente(Clave*unaClave,Ttamanio & posicion){
 	return false;
 }
 bool EABloques::eliminar(Componente*componente){
-	size_t posBorrado=nroBloque;
+	Referencia posBorrado=nroBloque;
 	if(nroBloque<siguienteLibre){
 		if(not leerBloque(bloque))return false;
 		Ttamanio nroComponente;
@@ -297,7 +297,7 @@ bool EABloques::eliminar(Componente*componente){
 	return false;
 }
 bool EABloques::eliminar(Clave*unaClave){
-	size_t posBorrado=nroBloque;
+	Referencia posBorrado=nroBloque;
 	if(nroBloque<siguienteLibre){
 		if(not leerBloque(bloque))
 			return false;
@@ -376,7 +376,7 @@ bool EABloques::obtener(Componente*componente){
 	}
 	return false;
 }
-size_t EABloques::posicionComponente(){
+Referencia EABloques::posicionComponente(){
 	return nroBloque;
 }
 bool EABloques::buscar(Componente*componente){
@@ -386,7 +386,7 @@ bool EABloques::buscar(Componente*componente){
 	posicionarComponente(0);
 	while( (not fin) and not encontrado ){
 		Ttamanio pos;
-		size_t posComp=posicionComponente();
+		Referencia posComp=posicionComponente();
 		fin=leer(bloque);
 		if(buscarComponente((Registro*)componente,pos)){
 			encontrado=true;
@@ -414,7 +414,7 @@ bool EABloques::buscar(Clave*unaClave){
 	posicionarComponente(0);
 	while( (not fin) and not encontrado ){
 		Ttamanio pos;
-		size_t posComp=posicionComponente();
+		Referencia posComp=posicionComponente();
 		fin=leer(bloque);
 		if(buscarComponente(unaClave,pos)){
 			nroRegistro=pos-1;

@@ -117,7 +117,7 @@ bool EARegistros::modificar(Componente *componente ){
 bool EARegistros::eliminar(Componente *componente ){
 	Registro*eliminado=dynamic_cast<Registro*>(componente);
 	if(eliminado!=NULL && nroRegistro<siguienteRegLibre){
-		size_t borrado=nroRegistro;
+		Referencia borrado=nroRegistro;
 		leer(registro);
 		if(comparar(eliminado,registro)==0){
 			siguienteRegLibre--;
@@ -138,7 +138,7 @@ bool EARegistros::eliminar(Componente *componente ){
 }
 bool EARegistros::eliminar(Clave *unaClave ){
 	if(nroRegistro<siguienteRegLibre){
-		size_t borrado=nroRegistro;
+		Referencia borrado=nroRegistro;
 		leer(registro);
 		clave->set(registro);
 		if(comparador->Comparar(clave,unaClave)==0){
@@ -157,7 +157,7 @@ bool EARegistros::eliminar(Clave *unaClave ){
 	}
 	return false;
 }
-bool EARegistros::posicionarComponente(size_t nroCompuesto ){
+bool EARegistros::posicionarComponente(Referencia nroCompuesto ){
 	nroRegistro=nroCompuesto;
 	almacen->posicionar(nroCompuesto*tamanioRegistro+sizeof(tamanioRegistro)+sizeof(siguienteRegLibre));
 	if(almacen->fin()){
@@ -175,7 +175,7 @@ bool EARegistros::siguiente(Componente *componente){
 bool EARegistros::obtener(Componente*componente ){
 	return leer(componente);
 }
-size_t EARegistros::posicionComponente(){
+Referencia EARegistros::posicionComponente(){
 	return nroRegistro;
 }
 bool EARegistros::buscar(Componente*componente ){
@@ -198,7 +198,7 @@ bool EARegistros::buscar(Clave*unaClave){
 	bool fin=false;
 	posicionarComponente(0);
 	do{
-		size_t pos=posicionComponente();
+		Referencia pos=posicionComponente();
 		fin=leer((Componente*)registro);
 		clave->set(registro);
 		if(comparador->Comparar(unaClave,clave)==0){

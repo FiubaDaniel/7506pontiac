@@ -17,8 +17,8 @@
 
 class EARegistros: public EstrategiaAlmacenamiento {
 	Registro*registro;
-	size_t nroRegistro;
-	size_t siguienteRegLibre;
+	Referencia nroRegistro;
+	Referencia siguienteRegLibre;
 	Ttamanio tamanioRegistro;
 	char* registroSerializado;
 	int comparar(Registro*reg1,Registro*reg2);
@@ -31,7 +31,7 @@ public:
 	bool abrir();
 	void crear();
 	void cerrar();
-	bool posicionarComponente(size_t nroCompuesto);
+	bool posicionarComponente(Referencia nroCompuesto);
 	bool escribir(Componente*componente);
 	bool leer(Componente*componente);
 	bool insertar(Componente*componente);
@@ -40,7 +40,7 @@ public:
 	bool eliminar(Clave *unaClave);
 	bool siguiente(Componente*componente);
 	bool obtener(Componente*componente);
-	size_t posicionComponente();
+	Referencia posicionComponente();
 	bool buscar(Componente*componente);
 	bool buscar(Clave*unaClave);
 	Componente*getComponenteUsado();

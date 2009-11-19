@@ -15,7 +15,7 @@
 
 class EATexto: public EstrategiaAlmacenamiento {
 	Registro*registro;
-	size_t posComp;
+	Referencia posComp;
 	std::string linea;
 	bool ultimo;
 	int comparar(Registro*registro,Registro*registro2);
@@ -37,7 +37,7 @@ public:
 	void crear();
 	void cerrar();
 	Componente* getRegistro();
-	bool posicionarComponente(size_t nroCompuesto);
+	bool posicionarComponente(Referencia nroCompuesto);
 	bool escribir(Componente*componente);
 	bool leer(Componente*componente);
 	bool insertar(Componente*componente);
@@ -46,7 +46,7 @@ public:
 	bool eliminar(Clave*clave);
 	bool siguiente(Componente*componente);
 	bool obtener(Componente*componente);
-	size_t posicionComponente();
+	Referencia posicionComponente();
 	bool buscar(Componente*componente);
 	bool buscar(Clave*unaClave);
 	Componente*getComponenteUsado();

@@ -17,13 +17,13 @@ private:
 	Ttamanio nroRegistro;
 	Ttamanio siguienteLibre;
 	Ttamanio libres;
-	size_t nroBloque;
+	Referencia nroBloque;
 	Bloque* bloque;
 	Ttamanio capacBloque;
 	char* bloqueSerializado;
 	double porcCarga;
 	Almacenamiento *archivoEspacioLibre;
-	size_t buscarEspacioLibre(Ttamanio espacio,bool& encontrado);
+	Referencia buscarEspacioLibre(Ttamanio espacio,bool& encontrado);
 	bool buscarComponente(Registro*registro,Ttamanio&posicion);
 	bool buscarComponente(Clave*unaClave,Ttamanio & posicion);
 	bool leerBloque(Bloque*bloque);
@@ -35,7 +35,7 @@ public:
 	bool abrir();
 	void crear();
 	void cerrar();
-	bool posicionarComponente(size_t nroCompuesto);
+	bool posicionarComponente(Referencia nroCompuesto);
 	bool escribir(Componente*componente);
 	bool leer(Componente*componente);
 	bool insertar(Componente*componente);
@@ -44,7 +44,7 @@ public:
 	bool eliminar(Clave*unaClave);
 	bool siguiente(Componente*componente);
 	bool obtener(Componente*componente);
-	size_t posicionComponente();
+	Referencia posicionComponente();
 	bool buscar(Componente*componente);
 	bool buscar(Clave*unaClave);
 	void imprimirMetada(std::ostream&out);
