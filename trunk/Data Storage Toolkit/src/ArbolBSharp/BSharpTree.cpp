@@ -37,7 +37,7 @@ void BSharpTree::crear(string nombreArch,unsigned int tamanioDeBloque, Clave* cl
 		buffer.pubseekpos(0);
 		buffer.sputn ((char*)&numeroDeElementosXnodo,sizeof(numeroDeElementosXnodo));
 		buffer.sputn ((char*)&tamanioNodo,sizeof(tamanioNodo));
-		posicionRaiz = 3*sizeof(int);
+		posicionRaiz = 3*sizeof(unsigned int);
 		buffer.sputn ((char*)&posicionRaiz,sizeof(posicionRaiz));
 		archivoArbol.write(array,tamanio);
 		//Todo cambio la creacion de la raiz a una hoja
@@ -920,7 +920,7 @@ Nodo* BSharpTree::obtenerNodoPorPosiciones(Referencia posInicial){
 	std::stringbuf buffer(ios_base :: in | ios_base :: out | ios_base :: binary);
 	buffer.pubseekpos(0);
 	Nodo* nodo;
-	archivoArbol.seekp(posInicial);
+	archivoArbol.seekg(posInicial);
 	char array2[tamanioNodo];
 	archivoArbol.read(array2,tamanioNodo);
 	buffer.pubsetbuf(array2,tamanioNodo);
@@ -1004,6 +1004,20 @@ int BSharpTree::tamanioBloque(){
 }
 void BSharpTree::cerrar(){
 	grabarUnitario(Raiz,posicionRaiz);
+	archivoArbol.seekg(0);
+	std:: stringbuf buf(ios_base :: in | ios_base :: out | ios_base :: binary);
+	int tamanio = sizeof(int)*3;
+	char array[tamanio];
+	archivoArbol.read(array,tamanio);
+	buf.pubsetbuf(array,tamanio);
+	buf.pubseekpos(0);
+	int num,num2,num3;
+	buf.sgetn((char*)&num,sizeof(unsigned int));
+	buf.sgetn((char*)&num2,sizeof(unsigned int));
+	buf.sgetn((char*)&num3,sizeof(unsigned int));
+	cout<<"Numero de elementos por nodo: "<<num<<endl;
+	cout<<"Tamanio bloque: "<<num2<<endl;
+	cout<<"PosicionRaiz: "<<num3<<endl;
 	archivoArbol.close();
 	archivoEspaciosLibres.close();
 }
