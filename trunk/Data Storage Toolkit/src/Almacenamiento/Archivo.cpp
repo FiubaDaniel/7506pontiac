@@ -9,7 +9,7 @@ Archivo::Archivo (EstrategiaAlmacenamiento*estrategia){
 Archivo::~Archivo (){
 	archivo.close();
 }
-void Archivo::escribir(const void* bytes,size_t cantidad){
+void Archivo::escribir(const void* bytes,Referencia cantidad){
 
 	archivo.write((char*)bytes,cantidad);
 
@@ -18,14 +18,14 @@ void Archivo::escribir(const void* unByte){
 
 	archivo.put(*(char*)unByte);
 }
-void Archivo::leer(void* bytes,size_t cantidad){
+void Archivo::leer(void* bytes,Referencia cantidad){
 	archivo.read((char*)bytes,cantidad);
 }
 void Archivo::leer(void* unBytes){
 	*(char*)unBytes=archivo.get();
 
 }
-void Archivo::posicionar(size_t posicion){
+void Archivo::posicionar(Referencia posicion){
 	archivo.seekp(posicion,std::fstream::beg);
 	archivo.seekg(posicion,std::fstream::beg);
 	archivo.clear();
@@ -72,7 +72,7 @@ void Archivo::clear(){
 	archivo.clear();
 }
 
-size_t Archivo::posicionActual(){
+Referencia Archivo::posicionActual(){
 	return archivo.tellg();
 }
 Almacenamiento*Archivo::clonar(){

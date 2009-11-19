@@ -8,6 +8,7 @@
  * class Almacenamiento
  *
  */
+typedef unsigned int Referencia;
 class EstrategiaAlmacenamiento;
 
 class Almacenamiento{
@@ -24,13 +25,13 @@ public:
 	/*utilizado por la estrategiaAlmacenamiento*/
 	virtual bool abrir(const char* nombre)=0;
 	virtual void crear(const char *nombre)=0;
-	virtual void escribir(const void* bytes,size_t cantidad)=0;
+	virtual void escribir(const void* bytes,Referencia cantidad)=0;
 	virtual void escribir(const void* unByte)=0;
-	virtual void leer(void* bytes,size_t cantidad)=0;
+	virtual void leer(void* bytes,Referencia cantidad)=0;
 	virtual void leer(void* unBytes)=0;
-	virtual void posicionar(size_t posicion)=0;
+	virtual void posicionar(Referencia posicion)=0;
 	virtual void posicionarAlfinal()=0;
-	virtual size_t posicionActual()=0;
+	virtual Referencia posicionActual()=0;
 	virtual bool bien()=0;
 	virtual bool fin()=0;
 	/*Limpia los flags de fin de archivo y error*/
@@ -44,12 +45,12 @@ public:
 		this->estrategia=estrategia;
 	}
 	/*		*/
-	virtual bool posicionarComponente(size_t nroComponente){
+	virtual bool posicionarComponente(Referencia nroComponente){
 		if(estrategia)
 			return estrategia->posicionarComponente(nroComponente);
 		return false;
 	};
-	virtual size_t posicionComponente(){
+	virtual Referencia posicionComponente(){
 		if(estrategia)
 			return estrategia->posicionComponente();
 		return false;

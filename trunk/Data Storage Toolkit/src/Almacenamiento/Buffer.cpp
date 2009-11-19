@@ -34,7 +34,7 @@ void Buffer::crear(const char* nombre){
 	if(estrategia)
 		estrategia->crear();
 }
-void Buffer::escribir(const void* bytes,size_t cantidad){
+void Buffer::escribir(const void* bytes,Referencia cantidad){
 	if(archivo)
 		archivo->write((char*)bytes,cantidad);
 }
@@ -42,13 +42,13 @@ void Buffer::escribir(const void* unByte){
 	if(archivo) archivo->put(*(char*)unByte);
 
 }
-void Buffer::leer(void* bytes,size_t cantidad){
+void Buffer::leer(void* bytes,Referencia cantidad){
 	if(archivo) archivo->read((char*)bytes,cantidad);
 }
 void Buffer::leer(void* unBytes){
 	*(char*)unBytes=archivo->get();
 }
-void Buffer::posicionar(size_t posicion){
+void Buffer::posicionar(Referencia posicion){
 	if(archivo) {archivo->seekg(posicion);
 	archivo->seekp(posicion);}
 }
@@ -69,7 +69,7 @@ bool Buffer::fin(){
 void Buffer::clear(){
 	if(archivo) archivo->clear();
 }
-size_t Buffer::posicionActual(){
+Referencia Buffer::posicionActual(){
 	if(archivo)
 		return archivo->tellg();
 	else return 0;
