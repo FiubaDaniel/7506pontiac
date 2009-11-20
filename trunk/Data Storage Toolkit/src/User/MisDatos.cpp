@@ -22,7 +22,6 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 		{
 	/*inicializo el archivo y la estrategia*/
 	AtributoFijo<char*> mistringid("miStringID",16);
-	mistringid ="abarquillamiento";
 	AtributoFijo<int> miInt("miInt");
 	AtributoVariable<int> miListaInt("miListaInt");
 	registro1=new Registro(3,&mistringid,&miInt,&miListaInt);
