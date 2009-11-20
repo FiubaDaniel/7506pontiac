@@ -4,7 +4,7 @@ using namespace std;
 
 /********************************************************************************************************************************************/
 /********************************************************************************************************************************************/
-/***************************************************    M�todos privados   *******************************************************************/
+/***************************************************    Metodos privados   *******************************************************************/
 /********************************************************************************************************************************************/
 /********************************************************************************************************************************************/
 
@@ -12,7 +12,7 @@ void HashingExt::calcular_cantidad_cubos(const unsigned tam_clave_ref, const uns
 {
         int cant_esperado;
         /*
-           Se supone un 30% m�s de registros para evitar una mayor cantidad de sobreflujos
+           Se supone un 30% mas de registros para evitar una mayor cantidad de sobreflujos
         */
         incrementar30(cant_reg_ini, cant_esperado);
 
@@ -493,6 +493,26 @@ bool HashingExt::buscar_clave(Clave *clave, Referencia *referencia, unsigned rec
                                                         this->cubos_libres.write( (char*) &ref_cubo, sizeof(ref_cubo));
 
                                                         this->cant_cubos_libres ++;
+
+                                                        /************************SE VERIFICA QUE LA TABLA NO ESTE ESPEJADA******************************/
+                                                        int *referencias_a_cubos = new int[this->tam_tabla];
+                                                        bool mitades_iguales =true;
+                                                        this->tabla_dispersion.seekg(0, ios_base::beg);
+                                                        this->tabla_dispersion.read( (char*) referencias_a_cubos, (this->tam_tabla)*sizeof(int) );
+
+                                                        for( int v = 0; v  < ( (this->tam_tabla) /2 ) ; v++)
+                                                        {
+                                                                if ( referencias_a_cubos[v] == referencias_a_cubos[(this->tam_tabla)/2 + v])
+                                                                        mitades_iguales = false;
+                                                        }
+
+                                                        if (mitades_iguales)
+                                                        {
+                                                                (this->tam_tabla) /= 2;  //se "trunca" la tabla por la mitad
+                                                        }
+
+                                                        delete [] referencias_a_cubos;
+
                                                 }
 
                                         }else{
@@ -540,7 +560,7 @@ bool HashingExt::buscar_clave(Clave *clave, Referencia *referencia, unsigned rec
 
 /***********************************************************************************************************************************************/
 /***********************************************************************************************************************************************/
-/***************************************************    M�todos p�blicos   **********************************************************************/
+/***************************************************    Metodos publicos   **********************************************************************/
 /***********************************************************************************************************************************************/
 /***********************************************************************************************************************************************/
 
@@ -780,7 +800,6 @@ void HashingExt::crear(std::string nombreArch, unsigned int tamanioBloque, Clave
 
 bool HashingExt::abrir(std::string nombreArch,ComparadorClave* comp)
 {
-        cout<< "Se entro a abrir()" << endl;
         this->nom_tabla = nombreArch + "_tabla";
         this->nom_cubos = nombreArch + "_cubos";
         this->nom_libres = nombreArch + "_libres";
@@ -884,7 +903,8 @@ bool HashingExt::eliminar(const Clave* clave)
         {
                 //Se persiste los atributos que pudieron haber cambiado
 
-                this->persist.seekp(sizeof(this->tam_tabla), ios_base::beg);
+                this->persist.seekp(0, ios_base::beg);
+                this->persist.write( (char*) &(this->tam_tabla), sizeof(this->tam_tabla) );
                 this->persist.write( (char*) &(this->contador_cubos), sizeof(this->contador_cubos));
                 this->persist.write( (char*) &(this->cant_cubos_libres), sizeof(this->cant_cubos_libres));
 
