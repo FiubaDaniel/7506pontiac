@@ -113,9 +113,6 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer, int longi
 	estrategiaregistro->setClave(&claveEstructural);
 	Archivo* archivo=new Archivo(estrategiaregistro);
 
-
-	archivo->crear(path.c_str());
-	estrategiaregistro->crear();
 	if(!archivo->abrir(path.c_str()))
 		archivo->crear(path.c_str());
 	/*incializar indice*/
