@@ -71,7 +71,12 @@ int main() {
 	int cantElementos = 0;
 	int nroTermino = 0;
 	int claveRegFijo = 0;
-
+	//TODO sacar
+	filebuf archivo;
+	archivo.open("salida.txt",std::ios_base::out|std::ios_base::trunc);
+	streambuf*coutback=cout.rdbuf();
+	cout.rdbuf(&archivo);
+	//TODO hasta aca
 	// ARCHIVO 1
 	// INICIALIZO EL ARCHIVO 1
 	misDatos.inicializarArchivo1("MiArchivo1.dat", 256, true, 1024, true, ARBOL, 128);
@@ -106,6 +111,8 @@ int main() {
 	// BORRO REGISTROS VARIABLES
 	for (int i=MINBORRARVARIABLE; i<CENTENAMAXREGISTROS*100; ++i){
 		try{
+			if(i==56)
+				cout<<endl;
 			misDatos.eliminarRegistroArchivo1(Terminos::obtenerTermino(i));
 		}catch(ExcepcionMisDatos e){
 			cout << e.getMensaje() << endl;
@@ -238,6 +245,9 @@ int main() {
 
 	// CIERRO ARCHIVO 2
 	misDatos.cerrarArchivo2();
-
+	//TODO sacar
+	cout.rdbuf(coutback);
+	archivo.close();
+	//TODO hasta aca
 	return 0;
 }
