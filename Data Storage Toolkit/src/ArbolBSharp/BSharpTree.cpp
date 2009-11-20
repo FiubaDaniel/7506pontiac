@@ -333,7 +333,6 @@ void BSharpTree::grabar(Nodo* nodoOriginal,Nodo* nodoHermano,Referencia refOrigi
 }
 
 void BSharpTree::grabarUnitario(Nodo* nodo,Referencia ref){
-	cout<<ref<<endl;
 	std::stringbuf buff(ios_base :: in | ios_base :: out | ios_base :: binary);
 	char array2[tamanioNodo];
 	archivoArbol.seekp(ref);
