@@ -74,8 +74,9 @@ bool Registro::esfijo(){
 }
 void Registro::imprimir(std::ostream&salida)const{
 	for(Ttamanio i=0;i<atributos.size();i++){
-		salida<< atributos.at(i)->getNombre()<<" : ";
+		salida<< atributos.at(i)->getNombre()<<":";
 		atributos.at(i)->imprimir(salida);
+		salida<<" ";
 	}
 }
 std::ostream& operator<<(std::ostream&out,Registro& registro){
