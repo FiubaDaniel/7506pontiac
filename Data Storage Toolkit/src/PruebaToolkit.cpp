@@ -111,8 +111,7 @@ int main() {
 	// BORRO REGISTROS VARIABLES
 	for (int i=MINBORRARVARIABLE; i<CENTENAMAXREGISTROS*100; ++i){
 		try{
-			if(i==56)
-				cout<<endl;
+
 			misDatos.eliminarRegistroArchivo1(Terminos::obtenerTermino(i));
 		}catch(ExcepcionMisDatos e){
 			cout << e.getMensaje() << endl;
@@ -149,8 +148,6 @@ int main() {
 
 	// OBTENGO REGISTROS VARIABLES
 	for (int i=0; i<MINBORRARVARIABLE; ++i){
-		if(i==15)
-			cout<<endl;
 		try{
 			miRegVariable = misDatos.obtenerRegistroArchivo1(Terminos::obtenerTermino(i));
 			mostrarRegistroVariable(miRegVariable);
@@ -162,7 +159,7 @@ int main() {
 
 		//TODO corro para arriba mostrarRegistroVariable(miRegVariable);
 
-		//TDOO corro para arriba delete miRegVariable;
+		//TODO corro para arriba delete miRegVariable;
 	}
 
 	// CIERRO ARCHIVO 1
