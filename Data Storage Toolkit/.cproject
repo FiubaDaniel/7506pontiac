@@ -54,15 +54,16 @@
 </toolChain>
 </folderInfo>
 <sourceEntries>
-<entry excluding="User|ArbolBSharp|tests|Compuesto|RecursoAlmacenamiento|Almacenamiento|Indices" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
-<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Indices"/>
-<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/ArbolBSharp"/>
-<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests/Compuesto"/>
-<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Compuesto"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Compresor"/>
 <entry excluding="Compuesto" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests"/>
-<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/RecursoAlmacenamiento"/>
-<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Almacenamiento"/>
 <entry excluding="Copy of MisDatos.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/User"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/ArbolBSharp"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Compuesto"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests/Compuesto"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/RecursoAlmacenamiento"/>
+<entry excluding="tests|Compuesto|Compresor|Indices|main.cpp|User|ArbolBSharp|RecursoAlmacenamiento|Almacenamiento" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Almacenamiento"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Indices"/>
 </sourceEntries>
 </configuration>
 </storageModule>
@@ -627,13 +628,14 @@
 </toolChain>
 </folderInfo>
 <sourceEntries>
-<entry excluding="User|ArbolBSharp|tests|Indices|RecursoAlmacenamiento|Almacenamiento|Compuesto" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
-<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/ArbolBSharp"/>
-<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Almacenamiento"/>
-<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/RecursoAlmacenamiento"/>
-<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Compuesto"/>
-<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests/Compuesto"/>
 <entry excluding="Compuesto" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/RecursoAlmacenamiento"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Almacenamiento"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Compuesto"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/ArbolBSharp"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Compresor"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests/Compuesto"/>
+<entry excluding="Compresor|main.cpp|User|ArbolBSharp|tests|Indices|RecursoAlmacenamiento|Almacenamiento|Compuesto" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 <entry excluding="Copy of MisDatos.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/User"/>
 </sourceEntries>
 </configuration>
