@@ -16,9 +16,18 @@ public:
 	TablaDeProbabilidad();
 	/*A partir de simbolo, calcula techo y piso, copiando el resultado a techo y piso*/
 	void obtenerExtremos(const tipo_simbolo & simbolo,tipo_extremos&piso,tipo_extremos&techo);
-	/**/
-	tipo_simbolo obtenerSimbolo(const tipo_extremos codigo,tipo_extremos&piso,tipo_extremos&techo);
-
+	/*A partir de codigo , busca los extemos para el codigo dado, y
+	 *devuelve el simbolo que corresponde a los extremos
+	 */
+	tipo_simbolo obtenerSimbolo(const tipo_extremos &codigo,tipo_extremos&piso,tipo_extremos&techo);
+	/*
+	 * incremeta el numero de ocurrencias del simbolo pasado en 1
+	 */
+	void incremetarOcurrencias(const tipo_simbolo &simbolo);
+	/*
+	 * decremete el numero de ocurrencias del simbolo pasado en 1
+	 */
+	void decremetarOcurrencias(const tipo_simbolo &simbolo);
 
 	virtual ~TablaDeProbabilidad();
 };
