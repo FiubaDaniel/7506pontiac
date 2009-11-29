@@ -14,7 +14,7 @@
 typedef float tipo_frecuencia;
 
 struct ElementoContexto{
-	char simbolo;
+	unsigned char simbolo;
 	tipo_frecuencia frecuencia;
 };
 
@@ -25,7 +25,7 @@ struct Contexto{
 	tipo_frecuencia totalFrecuencias;
 };
 
-typedef std::map<char,Contexto> tipo_contextos;
+typedef std::map<unsigned char,Contexto> tipo_contextos;
 
 class TablaDeProbabilidad{
 	tipo_contextos contextos;
@@ -33,10 +33,10 @@ public:
 	TablaDeProbabilidad();
 	/*A partir de simbolo, calcula techo y piso, copiando el resultado a techo y piso*/
 	void obtenerExtremos(char contexto,char simbolo,unsigned & piso,unsigned &techo);
-	void incremtarOcurrencia(char contexto,char simbolo);
-	void decremetarOcurrencia(char contexto,char simbolo);
-	void agregarContexto(char contexto,char simbolo);
-	void ageragarElementoContexto(Contexto& contextoModificar,char simbolo);
+	void incremtarOcurrencia(unsigned char contexto,unsigned char simbolo);
+	void decremetarOcurrencia(unsigned char contexto,unsigned char simbolo);
+	void agregarContexto(unsigned char contexto,unsigned char simbolo);
+	void ageragarElementoContexto(Contexto& contextoModificar,unsigned char simbolo);
 	virtual ~TablaDeProbabilidad();
 };
 
