@@ -8,7 +8,7 @@
 #ifndef COMPRESOR_H_
 #define COMPRESOR_H_
 #include <iostream>
-#include "BitContainer.h"
+#include "bitFile.h"
 void imprimir(unsigned num);
 #define UINT_MAX 0xFFFFFFFF
 class Compresor {
@@ -21,7 +21,7 @@ class Compresor {
 	int U;
 	char overflow();
 	char underflow();
-	BitContainer contenedor;
+	bitFile buffer;
 	void emitir(unsigned fuente,char cantidad){}
 public:
 	Compresor(unsigned*array,unsigned tamanio);
