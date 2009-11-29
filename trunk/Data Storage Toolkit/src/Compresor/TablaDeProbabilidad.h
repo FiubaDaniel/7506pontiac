@@ -37,6 +37,9 @@ public:
 	void decremetarOcurrencia(unsigned char contexto,unsigned char simbolo);
 	void agregarContexto(unsigned char contexto,unsigned char simbolo);
 	void ageragarElementoContexto(Contexto& contextoModificar,unsigned char simbolo);
+	unsigned char calcularEmision(unsigned &piso,unsigned &techo,Contexto* contexto,unsigned codigo);
+	void rearmarExtremos(unsigned &piso,unsigned &techo,unsigned*buffer,int &posBuffer,unsigned &siguiente,unsigned &bitRestantes);
+	float buscarOcurrencias(Contexto* contexto,unsigned char buscado);
 	virtual ~TablaDeProbabilidad();
 };
 

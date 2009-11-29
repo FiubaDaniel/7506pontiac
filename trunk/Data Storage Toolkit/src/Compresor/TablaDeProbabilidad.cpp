@@ -129,3 +129,38 @@ void TablaDeProbabilidad::decremetarOcurrencia(unsigned char contexto,unsigned c
 	}
 }
 
+void TablaDeProbabilidad::rearmarExtremos(unsigned &piso,unsigned &techo,unsigned*buffer,int &posBuffer,unsigned &siguiente,unsigned &bitRestantes){
+
+}
+
+float TablaDeProbabilidad::buscarOcurrencias(Contexto* contexto,unsigned char buscado){
+	if(contexto==NULL){
+		return 1;
+	}
+	std::list<ElementoContexto*>::iterator it = contexto->listaFrecuencias.begin();
+	while(it =! contexto->listaFrecuencias.end()){
+		ElementoContexto* elemento = *it;
+		if(buscado==elemento->ch){
+			return elemento->ocurrecias;
+		}
+		++it;
+	}
+	return 1;
+}
+
+unsigned char TablaDeProbabilidad::calcularEmision(unsigned &piso,unsigned &techo,Contexto* contexto,unsigned codigo){
+	unsigned char retorno;
+	unsigned longitud = techo - piso;
+	unsigned temp=piso;
+	/*Ya que la lista puede no tener todos los simbolos el totalOcurrencias es el total de los simbolos q contiene la lista
+	 * como concecuencia para obtener probabilidades busco el total sumando los simbolos no exitentes en la lista
+	 */
+	float total = contexto->totalOcurrencias+(256-contexto->listaFrecuencias.size());
+	do{
+		piso=temp;
+		float ocurrencias=buscarOcurrencias(contexto,retorno);
+		temp=floor(piso+ocurrencias*((longitud/total)+(1/total)));//temp seria el piso siguiente.
+		techo=temp-1;//al piso siguiente le resto 1.
+	}while(piso<=codigo<=techo);
+	return retorno;
+}
