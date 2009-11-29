@@ -19,9 +19,11 @@ struct ElementoContexto{
 };
 
 typedef std::list<ElementoContexto> tipo_tabla_frecuencias;
+typedef std::map<char,tipo_tabla_frecuencias> tipo_contextos;
 
 class TablaDeProbabilidad{
-	std::map<char,tipo_tabla_frecuencias> contextos;
+	tipo_contextos contextos;
+public:
 public:
 	TablaDeProbabilidad();
 	/*A partir de simbolo, calcula techo y piso, copiando el resultado a techo y piso*/
