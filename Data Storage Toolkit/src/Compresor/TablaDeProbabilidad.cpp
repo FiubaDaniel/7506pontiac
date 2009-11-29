@@ -54,7 +54,7 @@ void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & 
  * agrega dicho contexto, y a su vez se lo actualiza con el valor emitido.
  * 3-)El contexto existe, pero el valor emitido no existe, en dicho caso se agrega el emitido a la lista del contexto.
  */
-void TablaDeProbabilidad::incremtarOcurrencia(char contexto,char simbolo){
+void TablaDeProbabilidad::incremtarOcurrencia(unsigned char contexto,unsigned char simbolo){
 	if(contextos.empty()){
 		agregarContexto(contexto,simbolo);
 	}else{
@@ -82,14 +82,14 @@ void TablaDeProbabilidad::incremtarOcurrencia(char contexto,char simbolo){
 	}
 }
 
-void TablaDeProbabilidad::agregarContexto(char contexto,char simbolo){
+void TablaDeProbabilidad::agregarContexto(unsigned char contexto,char unsigned simbolo){
 	Contexto contextoNuevo;
 	contextoNuevo.totalFrecuencias=1;
 	agregarElementoContexto(contextoNuevo,simbolo);
 	contextos.insert(simbolo,contextoNuevo);
 }
 
-void TablaDeProbabilidad::ageragarElementoContexto(Contexto& contextoModificar,char simbolo){
+void TablaDeProbabilidad::ageragarElementoContexto(Contexto& contextoModificar,unsigned char simbolo){
 	ElementoContexto elementoNuevo;
 	elementoNuevo.frecuencia=1;
 	elementoNuevo.simbolo=simbolo;
@@ -110,7 +110,7 @@ void TablaDeProbabilidad::ageragarElementoContexto(Contexto& contextoModificar,c
 		}
 	}
 }
-void TablaDeProbabilidad::decremetarOcurrencia(char contexto,char simbolo){
+void TablaDeProbabilidad::decremetarOcurrencia(unsigned char contexto,unsigned char simbolo){
 	if(!contextos.empty()){
 		tipo_contextos::iterator it = contextos.find(contexto);
 		if(it != contextos.end()){
@@ -128,3 +128,4 @@ void TablaDeProbabilidad::decremetarOcurrencia(char contexto,char simbolo){
 		}
 	}
 }
+
