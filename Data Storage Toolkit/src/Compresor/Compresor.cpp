@@ -19,14 +19,14 @@ void imprimirLSBs(unsigned num,int n){
 	}
 }
 
-Compresor::Compresor(unsigned*array,unsigned tamanio): contenedor(array,tamanio){
+Compresor::Compresor(unsigned*array,unsigned tamanio): buffer(array,tamanio){
 
 	techo=UINT_MAX;
 	piso=0;
 	U=0;
 }
 Compresor::~Compresor() {
-	std::cout<<contenedor.size()<<std::endl;
+	std::cout<<buffer.size()<<std::endl;
 	// TODO Auto-generated destructor stub
 }
 inline char Compresor::overflow(){
@@ -99,7 +99,7 @@ void Compresor::cerrar(char chr){
 		tempU-=MAX_BITS;
 	}
 	emitir((piso<<1)>>1,MAX_BITS-1);
-	char bits_libres_emision=MAX_BITS -contenedor.write_offset();
+	char bits_libres_emision=MAX_BITS -buffer.write_offset();
 	if(bits_libres_emision>0){
 		emitir(0x1<<(bits_libres_emision-1),bits_libres_emision);
 	}else{

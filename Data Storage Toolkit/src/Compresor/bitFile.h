@@ -5,10 +5,10 @@
  *      Author: paulo
  */
 
-#ifndef BITCONTAINER_H_
-#define BITCONTAINER_H_
+#ifndef BITFILE_H_
+#define BITFILE_H_
 
-class BitContainer {
+class bitFile {
 	static const char MAX_BITS=sizeof(unsigned)*8;
 	unsigned* buffer;
 	unsigned ultimo;
@@ -17,7 +17,7 @@ class BitContainer {
 	char bit_read_offset;
 	char bit_write_offset;
 public:
-	BitContainer(unsigned*buffer,unsigned tamanio);
+	bitFile(unsigned*buffer,unsigned tamanio);
 	void write_menos_significativos(unsigned fuente,char cantidad);
 	void write_mas_significativos(unsigned fuente,char cantidad);
 	void read_menos_significativos(unsigned &destino,char cantidad);
@@ -33,7 +33,7 @@ public:
 	/* cantidad de bits libres en el ultimo unsigned usado*/
 	char read_offset();
 	char write_offset();
-	virtual ~BitContainer();
+	virtual ~bitFile();
 };
 
 #endif /* BITCONTAINER_H_ */
