@@ -94,22 +94,37 @@ void TablaDeProbabilidad::ageragarElementoContexto(Contexto& contextoModificar,c
 	elementoNuevo.frecuencia=1;
 	elementoNuevo.simbolo=simbolo;
 	if(contextoModificar.tablaFrecuencias.empty()){
-         contextoModificar.tablaFrecuencias.insert(elementoNuevo);
+		contextoModificar.tablaFrecuencias.insert(elementoNuevo);
 	}else{
-         std::list<ElementoContexto>::reverse_iterator it = contextoModificar.tablaFrecuencias.rbegin();
-         bool encontrado = false;
-         while(!encontrado && it != contextoModificar.tablaFrecuencias.rend()){
-        	 ElementoContexto elemento = *it;
-        	 if(elemento.simbolo<simbolo){
-        		 contextoModificar.tablaFrecuencias.insert(elementoNuevo);
-        	 }
-        	 ++it;
-         }
-         if(!encontrado){
-        	 contextoModificar.tablaFrecuencias.push_front(elementoNuevo);
-         }
+		std::list<ElementoContexto>::reverse_iterator it = contextoModificar.tablaFrecuencias.rbegin();
+		bool encontrado = false;
+		while(!encontrado && it != contextoModificar.tablaFrecuencias.rend()){
+			ElementoContexto elemento = *it;
+			if(elemento.simbolo<simbolo){
+				contextoModificar.tablaFrecuencias.insert(elementoNuevo);
+			}
+			++it;
+		}
+		if(!encontrado){
+			contextoModificar.tablaFrecuencias.push_front(elementoNuevo);
+		}
 	}
 }
 void TablaDeProbabilidad::decremetarOcurrencia(char contexto,char simbolo){
-	//Busco el contexto a decrementar
+	if(!contextos.empty()){
+		tipo_contextos::iterator it = contextos.find(contexto);
+		if(it != contextos.end()){
+			Contexto  contextoAmodificar = it->second();
+			bool encontrado = false;
+			std::list<ElementoContexto>::iterator itLista = contextoAmodificar.tablaFrecuencias.begin();
+			while(!encontrado&&itLista!=contextoAmodificar.tablaFrecuencias.end()){
+				ElementoContexto elemento = *itLista;
+				if(elemento.simbolo==simbolo){
+					elemento.frecuencia=elemento.frecuencia-1;
+					encontrado=true;
+				}
+				itLista++;
+			}
+		}
+	}
 }
