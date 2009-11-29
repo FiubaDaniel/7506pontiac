@@ -11,19 +11,20 @@
 #include <list>
 #include <cmath>
 
-
 typedef float tipo_frecuencia;
 
 struct ElementoContexto{
 	char simbolo;
 	tipo_frecuencia frecuencia;
 };
+
 typedef std::list<ElementoContexto> tipo_tabla_frecuencias;
 
 struct Contexto{
 	tipo_tabla_frecuencias tablaFrecuencias;
 	tipo_frecuencia totalFrecuencias;
 };
+
 typedef std::map<char,Contexto> tipo_contextos;
 
 class TablaDeProbabilidad{
@@ -34,6 +35,8 @@ public:
 	void obtenerExtremos(char contexto,char simbolo,unsigned & piso,unsigned &techo);
 	void incremtarOcurrencia(char contexto,char simbolo);
 	void decremetarOcurrencia(char contexto,char simbolo);
+	void agregarContexto(char contexto,char simbolo);
+	void ageragarElementoContexto(Contexto& contextoModificar,char simbolo);
 	virtual ~TablaDeProbabilidad();
 };
 
