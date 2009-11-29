@@ -9,6 +9,7 @@
 #define TABLADEPROBABILIDAD_H_
 #include <map>
 #include <list>
+#include <cmath>
 
 
 typedef float tipo_frecuencia;
@@ -17,17 +18,16 @@ struct ElementoContexto{
 	char simbolo;
 	tipo_frecuencia frecuencia;
 };
+typedef std::list<ElementoContexto> tipo_tabla_frecuencias;
 
 struct Contexto{
-	tipo_Contexto Map_Contextos;
+	tipo_tabla_frecuencias tablaFrecuencias;
 	tipo_frecuencia totalFrecuencias;
 };
-
-typedef std::list<ElementoContexto> tipo_tabla_frecuencias;
-typedef std::map<char,tipo_tabla_frecuencias> tipo_contextos;
+typedef std::map<char,Contexto> tipo_contextos;
 
 class TablaDeProbabilidad{
-	Contexto contextos;
+	tipo_contextos contextos;
 public:
 	TablaDeProbabilidad();
 	/*A partir de simbolo, calcula techo y piso, copiando el resultado a techo y piso*/
