@@ -9,7 +9,7 @@
 
 bitFile::bitFile(unsigned*buffer,unsigned tamanio){
 	this->buffer=buffer;
-	ultimo=tamanio-1;
+	this->tamanio=tamanio;
 	write_posicion=0;
 	bit_write_offset=0;
 	read_posicion=0;
@@ -17,8 +17,8 @@ bitFile::bitFile(unsigned*buffer,unsigned tamanio){
 };
 
 bitFile::~bitFile() {}
-void bitFile::write_menos_significativos(unsigned fuente,char cantidad){
-	int bits_restantes=(ultimo-write_posicion+1)*MAX_BITS-bit_write_offset;
+void bitFile::write(unsigned fuente,char cantidad){
+	int bits_restantes=(tamanio-write_posicion)*MAX_BITS-bit_write_offset;
 	if(bits_restantes > cantidad){
 		fuente<<=MAX_BITS-cantidad;
 		bits_restantes=MAX_BITS-bit_write_offset;
@@ -41,7 +41,7 @@ void bitFile::write_menos_significativos(unsigned fuente,char cantidad){
 	}
 }
 void bitFile::write_mas_significativos(unsigned fuente,char cantidad){
-	int bits_restantes=(ultimo-write_posicion+1)*MAX_BITS-bit_write_offset;
+	int bits_restantes=(tamanio-write_posicion)*MAX_BITS-bit_write_offset;
 	if(bits_restantes > cantidad){
 		bits_restantes=MAX_BITS-bit_write_offset;
 		if(bits_restantes<cantidad){
@@ -59,8 +59,8 @@ void bitFile::write_mas_significativos(unsigned fuente,char cantidad){
 		}
 	}
 }
-void bitFile::read_menos_significativos(unsigned &fuente,char cantidad){
-	int bits_restantes=(ultimo-read_posicion+1)*MAX_BITS-bit_read_offset;
+void bitFile::read(unsigned &fuente,char cantidad){
+	int bits_restantes=(tamanio-read_posicion)*MAX_BITS-bit_read_offset;
 	if(bits_restantes>cantidad){
 		bits_restantes=MAX_BITS-bit_read_offset;
 		if(bits_restantes<cantidad){
@@ -78,7 +78,7 @@ void bitFile::read_menos_significativos(unsigned &fuente,char cantidad){
 	}
 }
 void bitFile::read_mas_significativos(unsigned &fuente,char cantidad){
-	int bits_restantes=(ultimo-read_posicion+1)*MAX_BITS-bit_read_offset;
+	int bits_restantes=(tamanio-read_posicion)*MAX_BITS-bit_read_offset;
 	if(bits_restantes>cantidad){
 		bits_restantes=MAX_BITS-bit_read_offset;
 		if(bits_restantes<cantidad){
@@ -108,35 +108,35 @@ void bitFile::seeg_w(char offset,unsigned posicion){
 	write_posicion=posicion;
 	bit_write_offset=offset;
 }
-void bitFile::jump_r(char offset){
+void bitFile::jump_bits_r(char offset){
 	bit_read_offset+=offset;
 	if(bit_read_offset>MAX_BITS){
 		bit_read_offset=bit_read_offset%MAX_BITS;
 		read_posicion+=offset/MAX_BITS;
 	}
 }
-void bitFile::jump_w(char offset){
+void bitFile::jump_bits_w(char offset){
 	bit_write_offset+=offset;
 	if(bit_write_offset>MAX_BITS){
 		bit_write_offset=bit_write_offset%MAX_BITS;
 		write_posicion+=offset/MAX_BITS;
 	}
 }
-unsigned bitFile::posicion_read(){
+unsigned bitFile::tell_unsigned_r(){
 	return read_posicion;
 }
-unsigned bitFile::posicion_write(){
+unsigned bitFile::tell_unsigned_write(){
 	return write_posicion;
 }
 /*tamanio del contenedor en bytes*/
 unsigned bitFile::size(){
-	return ultimo+1;
+	return tamanio;
 }
 /*cantidad de bits libres en el ultimo unsigned usado*/
-char bitFile::read_offset(){
+char bitFile::tell_bits_offset_r(){
 	return bit_read_offset;
 }
-char bitFile::write_offset(){
+char bitFile::tell_bits_offset_w(){
 	return bit_write_offset;
 }
 /*int bits_extra=(ultimo-write_posicion)*MAX_BITS;
