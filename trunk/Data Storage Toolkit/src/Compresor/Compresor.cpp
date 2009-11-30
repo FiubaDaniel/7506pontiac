@@ -211,7 +211,7 @@ void Compresor::descomprimir(unsigned * buffer,std::list<unsigned char>& descomp
 		tabla.incremtarOcurrencia(this->ultimoSimbolo,emision);//Se reestructura la tabla segun la ultima emision
 		this->ultimoSimbolo = emision;
 		descomprimido.push_back(emision);
-		rearmarExtremos(buffer,posBuffer,siguiente,contadorDeBits);
+		rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
 	}
 }
 
@@ -223,13 +223,13 @@ void Compresor::setExtremos(){
 void Compresor::rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,unsigned &siguiente,unsigned &contadorDeBits){
 	unsigned auxiliar;
 	//Primero overflow
-	char cont=overflow();
+	unsigned char cont=overflow();
 	if(cont>0){
 		this->piso=(this->piso<<cont);
 		this->techo=(this->techo<<cont)|(UNOS>>(MAX_BITS-cont));
 		//Restructuro el codigo
 		auxiliar = cont;
-		if(cont>contadorDeBits||cont==contadorDeBits){
+		if(cont>=contadorDeBits){
 			/*
 			 * Si cont es mayor a la cantidad de bit que tiene siguiente se prosesan
 			 * los bit que posea y se deja para procesar fuera aquellos que no se pudo seteando el
@@ -257,7 +257,7 @@ void Compresor::rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,
 		this->techo=(this->techo&MSB)|((this->techo<<(cont+1))>>1)|(UNOS>>(MAX_BITS-cont));
 		//Reestructuro codigo
 		auxiliar=cont;
-		if(cont>contadorDeBits||cont==contadorDeBits){
+		if(cont>=contadorDeBits){
 			auxiliar = cont-contadorDeBits;
 			restructuracionUnderflow(contadorDeBits,codigo,siguiente);
 			contadorDeBits=8;
