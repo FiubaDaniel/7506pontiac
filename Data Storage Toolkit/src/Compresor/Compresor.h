@@ -26,6 +26,7 @@ class Compresor {
 	unsigned piso;
 	unsigned techo;
 	unsigned char ultimoSimbolo;
+	unsigned bitRestantes;
 	int U;
 	char overflow();
 	char underflow();
@@ -61,8 +62,23 @@ public:
 	bool agregarReversible(char*simbolos,unsigned cantidad);
 	void descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido);
 	void setExtremos();
-	void rearmarExtremos(unsigned &piso,unsigned &techo,unsigned*buffer,int &posBuffer,unsigned &siguiente,unsigned &bitRestantes);
 	virtual ~Compresor();
+
+private:
+	/*-----------------Metodos privados de Descompresion------------------------------------------------------------*/
+	/*
+	 * Luego de una emision se re-estructura el piso, el techo al igual que el codigo usando el siguiente para obtener
+	 * bits necesarios debido a posibles overflow o underflow.
+	 */
+	void rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,unsigned &siguiente,unsigned &contadorDeBits);
+	/*
+	 * Permite llevar a cabo la re-estructuracion del codigo debido a un overflow.
+	 */
+	void restructuracionOverflow(unsigned cantidadIteraciones,unsigned& codigo,unsigned& siguiente);
+	/*
+	 * Permite llevar a cabo la re-estructuracion del codigo debido a un underflow.
+	 */
+	void restructuracionUnderflow(unsigned cantidadIteraciones,unsigned& codigo,unsigned& siguiente);
 };
 
 #endif /* COMPRESOR_H_ */
