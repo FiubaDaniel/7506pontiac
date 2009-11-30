@@ -9,6 +9,8 @@
 #define COMPRESOR_H_
 #include <iostream>
 #include "bitFile.h"
+#include <math.h>
+#include "TablaDeProbabilidad.h"
 void imprimir(unsigned num);
 #define UINT_MAX 0xFFFFFFFF
 class Compresor {
@@ -22,12 +24,16 @@ class Compresor {
 	char overflow();
 	char underflow();
 	bitFile buffer;
+	TablaDeProbabilidad tabla;
 	void emitir(unsigned fuente,char cantidad){}
 public:
 	Compresor(unsigned*array,unsigned tamanio);
 	void push(char chr);
 	void cerrar(char chr);
 	void abrirCierre();
+	void descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido);
+	void setExtremos();
+	void rearmarExtremos(unsigned &piso,unsigned &techo,unsigned*buffer,int &posBuffer,unsigned &siguiente,unsigned &bitRestantes);
 	virtual ~Compresor();
 };
 

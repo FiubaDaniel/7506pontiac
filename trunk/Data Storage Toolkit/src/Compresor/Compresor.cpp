@@ -107,7 +107,7 @@ void Compresor::cerrar(char chr){
 	}
 }
 void Compresor::abrirCierre(){
-/*	int cont_bits=0;
+	/*	int cont_bits=0;
 	unsigned pos=contenedor.size()-1;
 	unsigned temp;
 	contenedor.seek_r(0,pos);
@@ -130,7 +130,7 @@ void Compresor::abrirCierre(){
 		ocurrencias[ultimoSimbolo]++;
 	}
 	bits_libres_emision=cont_bits;
-	*buffer>>=bits_libres_emision;*/
+	 *buffer>>=bits_libres_emision;*/
 	/*OVERFLOW*/
 	char cont=overflow();
 	if(cont>0){
@@ -162,4 +162,39 @@ void Compresor::abrirCierre(){
 		piso=(piso<<(cont+1))>>1;
 		U+=cont;
 	}
+}
+
+void Compresor::descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido){
+	//Calculo Padding
+	//Primero busco el byte donde comienza el padding.
+	int nro_byte;
+	for(nro_byte=(tamanioComprimido-1);buffer[nro_byte]==0;nro_byte--);
+	int bit_comparado=0X1;
+	int nro_bit;
+	for(nro_bit=0;(bit_comparado&buffer[nro_byte])==0;nro_bit++)bit_comparado<<=1;
+	//Calculo cantidad de bits de compresion desde de los 32 iniciales
+	unsigned bitRestantes = ((nro_byte*8)-32)-(8-nro_bit);
+
+	//Establezco condiciones iniciales para descomprimir
+	unsigned codigoAdescomprimir = buffer[0];
+	int posBuffer = 1;
+	unsigned siguiente = buffer[posBuffer];
+
+	//Comienza descompresion
+	while(bitRestantes>0){
+		unsigned char emision = tabla.calcularEmision(piso,techo,codigoAdescomprimir,this->ultimoSimbolo);
+		tabla.incremtarOcurrencia(this->ultimoSimbolo,emision);//Se reestructura la tabla segun la ultima emision
+		this->ultimoSimbolo = emision;
+		descomprimido.push_back(emision);
+		rearmarExtremos(piso,techo,buffer,posBuffer,siguiente,bitRestantes);
+	}
+}
+
+void Compresor::setExtremos(){
+	this->techo = pow(2,32)-1;
+	this->piso = 0;
+}
+
+void Compresor::rearmarExtremos(unsigned &piso,unsigned &techo,unsigned*buffer,int &posBuffer,unsigned &siguiente,unsigned &bitRestantes){
+
 }

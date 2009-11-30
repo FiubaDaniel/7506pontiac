@@ -61,7 +61,7 @@ void TablaDeProbabilidad::incremtarOcurrencia(unsigned char contexto,unsigned ch
 		Contexto contextoAmodificar;
 		tipo_contextos::iterator it = contextos.find(contexto);
 		if(it != contextos.end()){//Existe contexto
-			contextoAmodificar = it->second();
+			contextoAmodificar = it->second;
 			std::list<ElementoContexto>::iterator itLista = contextoAmodificar.tablaFrecuencias.begin();
 			bool encontrado=false;
 			while(!encontrado&&itLista!=contextoAmodificar.tablaFrecuencias.end()){
@@ -73,7 +73,7 @@ void TablaDeProbabilidad::incremtarOcurrencia(unsigned char contexto,unsigned ch
 				itLista++;
 			}
 			if(encontrado==false){
-				ageragarElementoContexto(contextoAmodificar,contexto,simbolo);
+				this->ageragarElementoContexto(contextoAmodificar,simbolo);
 			}
 			contextoAmodificar.totalFrecuencias=contextoAmodificar.totalFrecuencias+1;
 		}else{//no existe contexto
@@ -82,11 +82,11 @@ void TablaDeProbabilidad::incremtarOcurrencia(unsigned char contexto,unsigned ch
 	}
 }
 
-void TablaDeProbabilidad::agregarContexto(unsigned char contexto,char unsigned simbolo){
+void TablaDeProbabilidad::agregarContexto(unsigned char contexto,unsigned char simbolo){
 	Contexto contextoNuevo;
 	contextoNuevo.totalFrecuencias=1;
-	agregarElementoContexto(contextoNuevo,simbolo);
-	contextos.insert(simbolo,contextoNuevo);
+	this->ageragarElementoContexto(contextoNuevo,simbolo);
+	contextos.insert(pair<unsigned char,Contexto>(contexto,contextoNuevo));
 }
 
 void TablaDeProbabilidad::ageragarElementoContexto(Contexto& contextoModificar,unsigned char simbolo){
@@ -94,14 +94,14 @@ void TablaDeProbabilidad::ageragarElementoContexto(Contexto& contextoModificar,u
 	elementoNuevo.frecuencia=1;
 	elementoNuevo.simbolo=simbolo;
 	if(contextoModificar.tablaFrecuencias.empty()){
-		contextoModificar.tablaFrecuencias.insert(elementoNuevo);
+		contextoModificar.tablaFrecuencias.push_back(elementoNuevo);
 	}else{
-		std::list<ElementoContexto>::reverse_iterator it = contextoModificar.tablaFrecuencias.rbegin();
+		std::list<ElementoContexto>::iterator it = contextoModificar.tablaFrecuencias.begin();
 		bool encontrado = false;
-		while(!encontrado && it != contextoModificar.tablaFrecuencias.rend()){
+		while(!encontrado && it != contextoModificar.tablaFrecuencias.end()){
 			ElementoContexto elemento = *it;
-			if(elemento.simbolo<simbolo){
-				contextoModificar.tablaFrecuencias.insert(elementoNuevo);
+			if(simbolo<elemento.simbolo){
+				contextoModificar.tablaFrecuencias.insert(it,elementoNuevo);
 			}
 			++it;
 		}
@@ -110,11 +110,12 @@ void TablaDeProbabilidad::ageragarElementoContexto(Contexto& contextoModificar,u
 		}
 	}
 }
+
 void TablaDeProbabilidad::decremetarOcurrencia(unsigned char contexto,unsigned char simbolo){
 	if(!contextos.empty()){
 		tipo_contextos::iterator it = contextos.find(contexto);
 		if(it != contextos.end()){
-			Contexto  contextoAmodificar = it->second();
+			Contexto  contextoAmodificar = it->second;
 			bool encontrado = false;
 			std::list<ElementoContexto>::iterator itLista = contextoAmodificar.tablaFrecuencias.begin();
 			while(!encontrado&&itLista!=contextoAmodificar.tablaFrecuencias.end()){
@@ -129,26 +130,25 @@ void TablaDeProbabilidad::decremetarOcurrencia(unsigned char contexto,unsigned c
 	}
 }
 
-void TablaDeProbabilidad::rearmarExtremos(unsigned &piso,unsigned &techo,unsigned*buffer,int &posBuffer,unsigned &siguiente,unsigned &bitRestantes){
-
-}
-
-float TablaDeProbabilidad::buscarOcurrencias(Contexto* contexto,unsigned char buscado){
-	if(contexto==NULL){
-		return 1;
-	}
-	std::list<ElementoContexto*>::iterator it = contexto->listaFrecuencias.begin();
-	while(it =! contexto->listaFrecuencias.end()){
-		ElementoContexto* elemento = *it;
-		if(buscado==elemento->ch){
-			return elemento->ocurrecias;
+tipo_frecuencia TablaDeProbabilidad::buscarOcurrencias(unsigned char anterior,unsigned char caracterBuscado){
+	if(!contextos.empty()){
+		tipo_contextos::iterator it = contextos.find(anterior);
+		if(it != contextos.end()){
+			Contexto  buscado = it->second;
+			std::list<ElementoContexto>::iterator itLista = buscado.tablaFrecuencias.begin();
+			while(itLista != buscado.tablaFrecuencias.end()){
+				ElementoContexto elemento = *itLista;
+				if(caracterBuscado == elemento.simbolo){
+					return elemento.frecuencia;
+				}
+				++itLista;
+			}
 		}
-		++it;
 	}
 	return 1;
 }
 
-unsigned char TablaDeProbabilidad::calcularEmision(unsigned &piso,unsigned &techo,Contexto* contexto,unsigned codigo){
+unsigned char TablaDeProbabilidad::calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior){
 	unsigned char retorno;
 	unsigned longitud = techo - piso;
 	unsigned temp=piso;
@@ -158,9 +158,9 @@ unsigned char TablaDeProbabilidad::calcularEmision(unsigned &piso,unsigned &tech
 	float total = contexto->totalOcurrencias+(256-contexto->listaFrecuencias.size());
 	do{
 		piso=temp;
-		float ocurrencias=buscarOcurrencias(contexto,retorno);
+		float ocurrencias=buscarOcurrencias(anterior,retorno);
 		temp=floor(piso+ocurrencias*((longitud/total)+(1/total)));//temp seria el piso siguiente.
 		techo=temp-1;//al piso siguiente le resto 1.
-	}while(piso<=codigo<=techo);
+	}while((piso<codigo<techo)||(piso==codigo)||(codigo==techo));
 	return retorno;
 }
