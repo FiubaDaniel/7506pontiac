@@ -40,6 +40,8 @@ public:
 	unsigned char calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior);
 	float buscarOcurrencias(unsigned char anterior,unsigned char buscado);
 	virtual ~TablaDeProbabilidad();
+private:
+	float obtenerTotalContexto(unsigned char simbolo);
 };
 
 #endif /* TABLADEPROBABILIDAD_H_ */
