@@ -25,7 +25,7 @@ class Compresor {
 	char underflow();
 	bitFile buffer;
 	TablaDeProbabilidad tabla;
-	void emitir(unsigned fuente,char cantidad){}
+	void emitir();
 public:
 	Compresor(unsigned*array,unsigned tamanio);
 	void push(char chr);

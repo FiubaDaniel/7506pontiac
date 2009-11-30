@@ -26,8 +26,6 @@ Compresor::Compresor(unsigned*array,unsigned tamanio): buffer(array,tamanio){
 	U=0;
 }
 Compresor::~Compresor() {
-	std::cout<<buffer.size()<<std::endl;
-	// TODO Auto-generated destructor stub
 }
 inline char Compresor::overflow(){
 	unsigned comparacion=techo^piso;
@@ -49,120 +47,9 @@ inline char Compresor::underflow(){
 	}
 	return cont;
 }
-void Compresor::push(char chr){
-	//TODO CalcularPisoyTecho((unsigned char)chr);
-	/*OVERFLOW*/
-	char cont=overflow();
-	if(cont>0){
-		unsigned relleno=(   (MSB  &   piso  )==  0 ) ? UINT_MAX :  0x0  ;
-		emitir(piso>>(MAX_BITS-1),1);
-		piso<<=1;
-		techo=(techo<<1)|0x1;
-		cont--;
-		/*emisiones por underflow*/
-		while(U>0){
-			if(MAX_BITS > U)
-				emitir(  relleno>>(MAX_BITS-U)  ,  U );
-			else
-				emitir(  relleno  ,  MAX_BITS  );
-			U-=MAX_BITS;
-		}
-		U=0;
-		/*resto del overflow*/
-		if(cont>0){
-			emitir(  piso  >>  (MAX_BITS-cont) , cont);
-			piso<<=cont;
-			techo=(techo<<cont)|(UINT_MAX>>(MAX_BITS-cont));
-		}
-	}
-	/*UNDERFLOW*/
-	cont=underflow();
-	if(cont>0){
-		techo=((techo<<(cont+1))>>1)| MSB |( UINT_MAX>>(MAX_BITS-cont));
-		piso=(piso<<(cont+1))>>1;
-		U+=cont;
-	}
-
-}
-void Compresor::cerrar(char chr){
-	//CalcularPisoyTecho((unsigned char)chr);
-	ultimoSimbolo=(unsigned char)chr;
-	unsigned relleno=((MSB  &   piso)==  0 ) ? UINT_MAX :  0x0  ;
-	emitir(piso>>(MAX_BITS-1),1);
-	/*emisiones por underflow*/
-	int tempU=U;
-	while(tempU>0){
-		if(MAX_BITS > tempU)
-			emitir(  relleno>>(MAX_BITS-tempU)  ,  tempU );
-		else
-			emitir(  relleno  ,  MAX_BITS  );
-		tempU-=MAX_BITS;
-	}
-	emitir((piso<<1)>>1,MAX_BITS-1);
-	char bits_libres_emision=MAX_BITS -buffer.write_offset();
-	if(bits_libres_emision>0){
-		emitir(0x1<<(bits_libres_emision-1),bits_libres_emision);
-	}else{
-		emitir(MSB,MAX_BITS);
-	}
-}
-void Compresor::abrirCierre(){
-	/*	int cont_bits=0;
-	unsigned pos=contenedor.size()-1;
-	unsigned temp;
-	contenedor.seek_r(0,pos);
-	do{
-		contenedor.read_menos_significativos(temp,MAX_BITS);
-		pos--;
-	}while(temp==0);
-	while((temp&(0x1<<cont_bits))==0)
-		cont_bits++;
-	cont_bits++;
-	contenedor.seek_r(0,contenedor.size()-2);
-	cont_bits=U+cont_bits;
-	//controlar desborde
-	while(cont_bits>MAX_BITS){
-		buffer--;//controlar desborde de buffer
-		cont_bits-=MAX_BITS;
-		tamanioBuffer--;	longitud=techo-piso;
-		longitud+=1;
-		total++;
-		ocurrencias[ultimoSimbolo]++;
-	}
-	bits_libres_emision=cont_bits;
-	 *buffer>>=bits_libres_emision;*/
-	/*OVERFLOW*/
-	char cont=overflow();
-	if(cont>0){
-		unsigned relleno=(   (MSB  &   piso  )==  0 ) ? UINT_MAX :  0x0  ;
-		emitir(piso>>(MAX_BITS-1),1);
-		piso<<=1;
-		techo=(techo<<1)|0x1;
-		cont--;
-		/*emisiones por underflow*/
-		while(U>0){
-			if(MAX_BITS > U)
-				emitir(  relleno>>(MAX_BITS-U)  ,  U );
-			else
-				emitir(  relleno  ,  MAX_BITS  );
-			U-=MAX_BITS;
-		}
-		U=0;
-		/*resto del overflow*/
-		if(cont>0){
-			emitir(  piso  >>  (MAX_BITS-cont) , cont);
-			piso<<=cont;
-			techo=(techo<<cont)|(UINT_MAX>>(MAX_BITS-cont));
-		}
-	}
-	/*UNDERFLOW*/
-	cont=underflow();
-	if(cont>0){
-		techo=((techo<<(cont+1))>>1)| MSB |( UINT_MAX>>(MAX_BITS-cont));
-		piso=(piso<<(cont+1))>>1;
-		U+=cont;
-	}
-}
+void Compresor::push(char chr){}
+void Compresor::cerrar(char chr){}
+void Compresor::abrirCierre(){}
 
 void Compresor::descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido){
 	//Calculo Padding
