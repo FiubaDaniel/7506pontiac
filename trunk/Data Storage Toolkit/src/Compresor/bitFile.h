@@ -92,6 +92,7 @@ public:
 	 */
 	void setBuffer(unsigned*buffer,unsigned tamanio);
 	unsigned* getBuffer();
+
 };
 
 

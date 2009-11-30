@@ -130,7 +130,7 @@ inline void Compresor::abrir_codigo(){
 	}
 	buffer.seek_w(MAX_BITS-cont_bits,pos);
 }
-unsigned Compresor::comprimir(char*simbolos,unsigned cantidad){
+unsigned Compresor::comprimirPrimeros(char*simbolos,unsigned cantidad){
 	unsigned cant_emitidos=0;
 	unsigned piso_anterior,techo_anterior;
 	try{
@@ -161,7 +161,7 @@ unsigned Compresor::comprimir(char*simbolos,unsigned cantidad){
 	};
 	return cant_emitidos;
 }
-bool Compresor::agregarReversible(char*simbolos,unsigned cantidad){
+bool Compresor::agregar(char*simbolos,unsigned cantidad){
 	unsigned cant_emitidos=0;
 	unsigned piso_anterior,techo_anterior;
 	int U_anterior=U;
@@ -210,6 +210,10 @@ void Compresor::cerrar(){
 	cerrar_codigo();
 	tabla.incremtarOcurrencia(ultimoSimbolo,cerrador);
 	ultimoSimbolo=cerrador;
+}
+void Compresor::setContinuacionCompresion(unsigned*buffer,unsigned tamanio){
+	this->buffer.setBuffer(buffer,tamanio);
+	this->buffer.seek_r(0,0);
 }
 /*---------------------------------------Descompresion--------------------------------------------------------*/
 void Compresor::descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido){
