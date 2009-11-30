@@ -86,7 +86,7 @@ void TablaDeProbabilidad::agregarContexto(unsigned char contexto,unsigned char s
 	Contexto contextoNuevo;
 	contextoNuevo.totalFrecuencias=1;
 	this->ageragarElementoContexto(contextoNuevo,simbolo);
-	contextos.insert(pair<unsigned char,Contexto>(contexto,contextoNuevo));
+	contextos.insert(std::pair<unsigned char,Contexto>(contexto,contextoNuevo));
 }
 
 void TablaDeProbabilidad::ageragarElementoContexto(Contexto& contextoModificar,unsigned char simbolo){
@@ -155,12 +155,16 @@ unsigned char TablaDeProbabilidad::calcularEmision(unsigned &piso,unsigned &tech
 	/*Ya que la lista puede no tener todos los simbolos el totalOcurrencias es el total de los simbolos q contiene la lista
 	 * como concecuencia para obtener probabilidades busco el total sumando los simbolos no exitentes en la lista
 	 */
-	float total = contexto->totalOcurrencias+(256-contexto->listaFrecuencias.size());
+	float total = obtenerTotalContexto(anterior);
 	do{
 		piso=temp;
 		float ocurrencias=buscarOcurrencias(anterior,retorno);
 		temp=floor(piso+ocurrencias*((longitud/total)+(1/total)));//temp seria el piso siguiente.
 		techo=temp-1;//al piso siguiente le resto 1.
-	}while((piso<codigo<techo)||(piso==codigo)||(codigo==techo));
+	}while(codigo>techo);
 	return retorno;
+}
+float TablaDeProbabilidad::obtenerTotalContexto(unsigned char simbolo){
+	tipo_contextos::iterator it = contextos.find(simbolo);
+	return it->second.totalFrecuencias+(256-it->second.tablaFrecuencias.size());
 }
