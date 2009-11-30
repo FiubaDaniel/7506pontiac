@@ -119,7 +119,7 @@ void TablaDeProbabilidad::decremetarOcurrencia(unsigned char contexto,unsigned c
 	if(!contextos.empty()){
 		tipo_contextos::iterator it = contextos.find(contexto);
 		if(it != contextos.end()){
-			Contexto  contextoAmodificar = it->second;
+			Contexto&  contextoAmodificar = it->second;
 			bool encontrado = false;
 			std::list<ElementoContexto>::iterator itLista = contextoAmodificar.tablaFrecuencias.begin();
 			while(!encontrado && itLista!=contextoAmodificar.tablaFrecuencias.end()){
@@ -142,7 +142,7 @@ tipo_frecuencia TablaDeProbabilidad::buscarOcurrencias(unsigned char anterior,un
 	if(!contextos.empty()){
 		tipo_contextos::iterator it = contextos.find(anterior);
 		if(it != contextos.end()){
-			Contexto  buscado = it->second;
+			Contexto&  buscado = it->second;
 			std::list<ElementoContexto>::iterator itLista = buscado.tablaFrecuencias.begin();
 			while(itLista != buscado.tablaFrecuencias.end()){
 				ElementoContexto elemento = *itLista;
