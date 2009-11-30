@@ -39,6 +39,7 @@ public:
 	void ageragarElementoContexto(Contexto& contextoModificar,unsigned char simbolo);
 	unsigned char calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior);
 	float buscarOcurrencias(unsigned char anterior,unsigned char buscado);
+	bool vacia();
 	virtual ~TablaDeProbabilidad();
 private:
 	float obtenerTotalContexto(unsigned char simbolo);

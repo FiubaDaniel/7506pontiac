@@ -8,7 +8,9 @@ TablaDeProbabilidad::TablaDeProbabilidad() {
 TablaDeProbabilidad::~TablaDeProbabilidad() {
 	// TODO Auto-generated destructor stub
 }
-
+bool TablaDeProbabilidad::vacia(){
+	return contextos.empty();
+}
 void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & piso,unsigned &techo){
 	unsigned longitud=techo-piso;
 	tipo_frecuencia incremento;

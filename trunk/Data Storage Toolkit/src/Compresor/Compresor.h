@@ -26,6 +26,7 @@ class Compresor {
 	unsigned piso;
 	unsigned techo;
 	unsigned char ultimoSimbolo;
+	unsigned char anteultimoSimbolo;
 	int U;
 	char overflow();
 	char underflow();
@@ -49,7 +50,10 @@ class Compresor {
 	TablaDeProbabilidad tabla;
 public:
 	Compresor(unsigned*array,unsigned tamanio);
-	unsigned comprimir(char*simbolos,unsigned tamanio);
+	/* dado el array de <simbolos> trata de comprimir los <cantidad> simbolos del array,
+	 * devuelve el numero de simbolos efectivamente comprimidos
+	 */
+	unsigned comprimir(char*simbolos,unsigned cantidad);
 	void descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido);
 	void setExtremos();
 	void rearmarExtremos(unsigned &piso,unsigned &techo,unsigned*buffer,int &posBuffer,unsigned &siguiente,unsigned &bitRestantes);

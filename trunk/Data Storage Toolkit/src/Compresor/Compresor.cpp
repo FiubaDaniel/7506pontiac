@@ -129,24 +129,25 @@ inline void Compresor::abrir_codigo(){
 	}
 	buffer.seek_w(MAX_BITS-cont_bits,pos);
 }
-unsigned Compresor::comprimir(char*simbolos,unsigned tamanio){
+unsigned Compresor::comprimir(char*simbolos,unsigned cantidad){
 	unsigned cant_emitidos=0;
 	unsigned piso_anterior,techo_anterior;
 	try{
-		if(1/*tabla.vacia()*/){
-			buffer.seek_w(0,0);
-			tabla.obtenerExtremos(0,simbolos[cant_emitidos],piso,techo);
+		if(tabla.vacia()){
 			piso_anterior=piso;
 			techo_anterior=techo;
+			buffer.seek_w(0,0);
+			tabla.obtenerExtremos(0,simbolos[cant_emitidos],piso,techo);
 			emitir_codigo();
 			cant_emitidos++;
 		}
-		while(cant_emitidos<tamanio){
-			tabla.obtenerExtremos(ultimoSimbolo,simbolos[cant_emitidos],piso,techo);
+		while(cant_emitidos<cantidad){
 			piso_anterior=piso;
 			techo_anterior=techo;
+			tabla.obtenerExtremos(ultimoSimbolo,simbolos[cant_emitidos],piso,techo);
 			emitir_codigo();
 			tabla.incremtarOcurrencia(ultimoSimbolo,simbolos[cant_emitidos]);
+			anteultimoSimbolo=ultimoSimbolo;
 			ultimoSimbolo=simbolos[cant_emitidos];
 			cant_emitidos++;
 		}
@@ -154,7 +155,7 @@ unsigned Compresor::comprimir(char*simbolos,unsigned tamanio){
 		piso=piso_anterior;
 		techo=techo_anterior;
 	};
-	return cant_emitidos;
+	return cant_emitidos+1;
 }
 void Compresor::descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido){
 	//Calculo Padding
