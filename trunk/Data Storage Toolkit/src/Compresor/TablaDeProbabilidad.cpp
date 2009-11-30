@@ -56,11 +56,13 @@ void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & 
  * agrega dicho contexto, y a su vez se lo actualiza con el valor emitido.
  * 3-)El contexto existe, pero el valor emitido no existe, en dicho caso se agrega el emitido a la lista del contexto.
  */
+
+//Todo Referencia para cuando obtengo el contexto
 void TablaDeProbabilidad::incremtarOcurrencia(unsigned char contexto,unsigned char simbolo){
 	if(contextos.empty()){
 		agregarContexto(contexto,simbolo);
 	}else{
-		Contexto contextoAmodificar;
+		Contexto& contextoAmodificar;
 		tipo_contextos::iterator it = contextos.find(contexto);
 		if(it != contextos.end()){//Existe contexto
 			contextoAmodificar = it->second;
