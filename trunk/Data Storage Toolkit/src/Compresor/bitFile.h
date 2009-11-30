@@ -7,6 +7,7 @@
 #ifndef BITFILE_H_
 #define BITFILE_H_
 
+#define UNOS ~0x0
 class bitFile {
 	/*Array de unsigned donde se escriben/leen los bits*/
 	unsigned* buffer;
@@ -70,9 +71,6 @@ public:
 	 * si fuente desborda el unsigned donde se esta escribiendo
 	 * se graban los bits de desborde en el siguiente unsigned, si existe un siguiente*/
 	void fill(unsigned fuente);
-	/*TODO eliminar estos metodos*/
-	void write_mas_significativos(unsigned fuente,char cantidad);
-	void read_mas_significativos(unsigned &destino,char cantidad);
 };
 
 #endif /* BITCONTAINER_H_ */
