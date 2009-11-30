@@ -25,7 +25,10 @@ class Compresor {
 	static const unsigned MSB=0x80000000;
 	unsigned piso;
 	unsigned techo;
+	/*para saber el contexto de las nuevas emisiones*/
 	unsigned char ultimoSimbolo;
+	/*usado para cerrar*/
+	unsigned char cerrador;
 	unsigned bitRestantes;
 	int U;
 	char overflow();
@@ -59,13 +62,14 @@ public:
 	 * desborde la capacidad, el codigo agregado es desechado.
 	 * pre: se usado comprimir previamente, almenos una vez.
 	 */
+	bool agregarReversible(char*simbolos,unsigned cantidad);
+	void cerrar();
 	unsigned* getbufferComprimido(){
-		return buffer.buffer;
+		return buffer.getBuffer();
 	};
 	unsigned tamanioBufferComprimido(){
 		return buffer.size();
 	};
-	bool agregarReversible(char*simbolos,unsigned cantidad);
 	void descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido);
 	void setExtremos();
 	virtual ~Compresor();

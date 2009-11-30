@@ -25,7 +25,7 @@ public:
 
 class bitFile {
 	/*Array de unsigned donde se escriben/leen los bits*/
-	//TODO unsigned* buffer;
+	unsigned* buffer;
 	/*tamanio del <buffer>, en cantidad de unsigned's*/
 	unsigned tamanio;
 	/*indice del unsigned donde se esta escribiendo*/
@@ -37,8 +37,6 @@ class bitFile {
 	/*indice de los bits leidos respecto de <read_position>*/
 	char bit_write_offset;
 public:
-	/*TODO Array de unsigned donde se escriben/leen los bits*/
-	unsigned* buffer;
 	static const char MAX_BITS=sizeof(unsigned)*8;
 	bitFile(unsigned*buffer,unsigned tamanio);
 	virtual ~bitFile();
