@@ -26,7 +26,6 @@ class Compresor {
 	unsigned piso;
 	unsigned techo;
 	unsigned char ultimoSimbolo;
-	unsigned char anteultimoSimbolo;
 	int U;
 	char overflow();
 	char underflow();
@@ -54,6 +53,12 @@ public:
 	 * devuelve el numero de simbolos efectivamente comprimidos
 	 */
 	unsigned comprimir(char*simbolos,unsigned cantidad);
+	/*
+	 * intenta agregar <cantidad> de <simbolos> al codigo actual, en caso de que
+	 * desborde la capacidad, el codigo agregado es desechado.
+	 * pre: se usado comprimir previamente, almenos una vez.
+	 */
+	bool agregarReversible(char*simbolos,unsigned cantidad);
 	void descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido);
 	void setExtremos();
 	void rearmarExtremos(unsigned &piso,unsigned &techo,unsigned*buffer,int &posBuffer,unsigned &siguiente,unsigned &bitRestantes);

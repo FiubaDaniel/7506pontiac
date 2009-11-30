@@ -137,8 +137,9 @@ unsigned Compresor::comprimir(char*simbolos,unsigned cantidad){
 			piso_anterior=piso;
 			techo_anterior=techo;
 			buffer.seek_w(0,0);
-			tabla.obtenerExtremos(0,simbolos[cant_emitidos],piso,techo);
+			tabla.obtenerExtremos(0,simbolos[0],piso,techo);
 			emitir_codigo();
+			ultimoSimbolo=simbolos[0];
 			cant_emitidos++;
 		}
 		while(cant_emitidos<cantidad){
@@ -147,15 +148,43 @@ unsigned Compresor::comprimir(char*simbolos,unsigned cantidad){
 			tabla.obtenerExtremos(ultimoSimbolo,simbolos[cant_emitidos],piso,techo);
 			emitir_codigo();
 			tabla.incremtarOcurrencia(ultimoSimbolo,simbolos[cant_emitidos]);
-			anteultimoSimbolo=ultimoSimbolo;
 			ultimoSimbolo=simbolos[cant_emitidos];
 			cant_emitidos++;
 		}
 	}catch(bitFileEOFException& e){
+		/*asumo que el codigo actual preserba el ultimoSimbolo*/
 		piso=piso_anterior;
 		techo=techo_anterior;
 	};
 	return cant_emitidos+1;
+}
+bool Compresor::agregarReversible(char*simbolos,unsigned cantidad){
+	unsigned cant_emitidos=0;
+	unsigned piso_anterior,techo_anterior;
+	unsigned pos=buffer.tell_unsigned_write();
+	char offset=buffer.tell_bits_offset_w();
+	char ultimo=ultimoSimbolo;
+	try{
+		while(cant_emitidos<cantidad){
+			piso_anterior=piso;
+			techo_anterior=techo;
+			tabla.obtenerExtremos(ultimoSimbolo,simbolos[cant_emitidos],piso,techo);
+			emitir_codigo();
+			tabla.incremtarOcurrencia(ultimoSimbolo,simbolos[cant_emitidos]);
+			ultimoSimbolo=simbolos[cant_emitidos];
+			cant_emitidos++;
+		}
+	}catch(bitFileEOFException& e){
+		buffer.seek_w(offset,pos);
+		ultimoSimbolo=ultimo;
+		piso=piso_anterior;
+		techo=techo_anterior;
+		tabla.decremetarOcurrencia(ultimo,simbolos[0]);
+		for(unsigned i=0;i<cant_emitidos;i++){
+			tabla.decremetarOcurrencia(simbolos[i],simbolos[i+1]);
+		}
+	};
+	return false;
 }
 void Compresor::descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido){
 	//Calculo Padding
