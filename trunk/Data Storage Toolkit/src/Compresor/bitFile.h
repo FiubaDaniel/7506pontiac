@@ -28,12 +28,18 @@ public:
 	 * y los graba en la posicion actual del <bitFile>
 	 * incrementando la posicion de escritura.
 	 * 0<=cantidad<=MAX_BITS
+	 * en caso de que la <cantidad> supera los bits de espacio que quedan
+	 * no se guarda nada.
+	 * TODO lanzar excepcion?
 	 */
 	void write(unsigned fuente,char cantidad);
 	/* Toma los <cantidad> bits siguiente de la posicion de lectura y los copia
 	 * y los copia en los bits menos significativos de <destino>
 	 * incrementando la posicion de escritura.
 	 * 0<=cantidad<=MAX_BITS
+	 * en caso de que la <cantidad> supera los bits de que puende ser leidos
+	 * no se lee nada.
+	 * TODO lanzar excepcion?
 	 */
 	void read(unsigned &destino,char cantidad);
 	/* posiciona para la lectura en el unsigned <posicion>
@@ -45,7 +51,7 @@ public:
 	 * del <buffer> , a partir del bit <offset>
 	 * 0<=offset<=MAX_BITS
 	 */
-	void seeg_w(char offset,unsigned posicion);
+	void seek_w(char offset,unsigned posicion);
 	/*salta de la posicion actual de lectura <offset> bits*/
 	void jump_bits_r(char offset);
 	/*salta de la posicion actual de escritura <offset> bits*/
@@ -60,6 +66,10 @@ public:
 	char tell_bits_offset_r();
 	/* posicion de escritura en bits respecto del unsigned donde se esta leyendo*/
 	char tell_bits_offset_w();
+	/*completa el unsigned donde se esta escribiendo con <fuente>
+	 * si fuente desborda el unsigned donde se esta escribiendo
+	 * se graban los bits de desborde en el siguiente unsigned, si existe un siguiente*/
+	void fill(unsigned fuente);
 	/*TODO eliminar estos metodos*/
 	void write_mas_significativos(unsigned fuente,char cantidad);
 	void read_mas_significativos(unsigned &destino,char cantidad);
