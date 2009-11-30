@@ -17,7 +17,7 @@ bitFile::bitFile(unsigned*buffer,unsigned tamanio){
 };
 
 bitFile::~bitFile() {}
-void bitFile::write(unsigned fuente,char cantidad){
+void bitFile::write(unsigned fuente,char cantidad)throw (bitFileEOFException){
 	int bits_restantes=(tamanio-write_posicion)*MAX_BITS-bit_write_offset;
 	//unsigned *p=&buffer[write_posicion];
 	if(bits_restantes > cantidad){
@@ -42,7 +42,7 @@ void bitFile::write(unsigned fuente,char cantidad){
 		}
 	}
 }
-void bitFile::read(unsigned &fuente,char cantidad){
+void bitFile::read(unsigned &fuente,char cantidad)throw (bitFileEOFException){
 	int bits_restantes=(tamanio-read_posicion)*MAX_BITS-bit_read_offset;
 	if(bits_restantes>=cantidad){
 		fuente&=~(UNOS>>(MAX_BITS-cantidad));

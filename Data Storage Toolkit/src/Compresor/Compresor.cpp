@@ -129,7 +129,33 @@ inline void Compresor::abrir_codigo(){
 	}
 	buffer.seek_w(MAX_BITS-cont_bits,pos);
 }
-
+unsigned Compresor::comprimir(char*simbolos,unsigned tamanio){
+	unsigned cant_emitidos=0;
+	unsigned piso_anterior,techo_anterior;
+	try{
+		if(1/*tabla.vacia()*/){
+			buffer.seek_w(0,0);
+			tabla.obtenerExtremos(0,simbolo[cant_emitidos],piso,techo);
+			piso_anterior=piso;
+			techo_anterior=techo;
+			emitir_codigo();
+			cant_emitidos++;
+		}
+		while(cant_emitidos<tamanio){
+			tabla.obtenerExtremos(ultimoSimbolo,simbolo[cant_emitidos],piso,techo);
+			piso_anterior=piso;
+			techo_anterior=techo;
+			emitir_codigo();
+			tabla.incremtarOcurrencia(ultimoSimbolo,simbolo[cant_emitidos]);
+			ultimoSimbolo=simbolo[cant_emitidos];
+			cant_emitidos++;
+		}
+	}catch(bitFileEOFException& e){
+		piso=piso_anterior;
+		techo=techo_anterior;
+	};
+	return cant_emitidos;
+}
 void Compresor::descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido){
 	//Calculo Padding
 	//Primero busco el byte donde comienza el padding.
@@ -164,3 +190,4 @@ void Compresor::setExtremos(){
 void Compresor::rearmarExtremos(unsigned &piso,unsigned &techo,unsigned*buffer,int &posBuffer,unsigned &siguiente,unsigned &bitRestantes){
 
 }
+

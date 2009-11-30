@@ -6,8 +6,23 @@
  */
 #ifndef BITFILE_H_
 #define BITFILE_H_
-
+#include <exception>
 #define UNOS ~0x0
+
+class bitFileEOFException: public std::exception{
+public:
+	bitFileEOFException() throw(){}
+	bitFileEOFException(const exception&) throw(){}
+	exception& operator= (const exception&) throw(){
+		return *this;
+	}
+	virtual ~bitFileEOFException() throw(){}
+	virtual const char* what() const throw(){
+		return "Se trato de leer/escribir mas halla del fin del bitFile";
+	}
+
+};
+
 class bitFile {
 	/*Array de unsigned donde se escriben/leen los bits*/
 	unsigned* buffer;
@@ -33,7 +48,7 @@ public:
 	 * no se guarda nada.
 	 * TODO lanzar excepcion?
 	 */
-	void write(unsigned fuente,char cantidad);
+	void write(unsigned fuente,char cantidad) throw (bitFileEOFException);
 	/* Toma los <cantidad> bits siguiente de la posicion de lectura y los copia
 	 * y los copia en los bits menos significativos de <destino>
 	 * incrementando la posicion de escritura.
@@ -42,7 +57,7 @@ public:
 	 * no se lee nada.
 	 * TODO lanzar excepcion?
 	 */
-	void read(unsigned &destino,char cantidad);
+	void read(unsigned &destino,char cantidad) throw (bitFileEOFException);
 	/* posiciona para la lectura en el unsigned <posicion>
 	 * del <buffer> , a partir del bit <offset>
 	 * 0<=offset<=MAX_BITS
@@ -72,5 +87,6 @@ public:
 	 * se graban los bits de desborde en el siguiente unsigned, si existe un siguiente*/
 	void fill(unsigned fuente);
 };
+
 
 #endif /* BITCONTAINER_H_ */

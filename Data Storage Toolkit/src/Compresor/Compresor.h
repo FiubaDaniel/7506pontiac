@@ -49,9 +49,7 @@ class Compresor {
 	TablaDeProbabilidad tabla;
 public:
 	Compresor(unsigned*array,unsigned tamanio);
-	/*void push(char chr);
-	void cerrar(char chr);
-	void abrirCierre();*/
+	unsigned comprimir(char*simbolos,unsigned tamanio);
 	void descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido);
 	void setExtremos();
 	void rearmarExtremos(unsigned &piso,unsigned &techo,unsigned*buffer,int &posBuffer,unsigned &siguiente,unsigned &bitRestantes);
