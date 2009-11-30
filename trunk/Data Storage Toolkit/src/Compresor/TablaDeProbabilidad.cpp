@@ -61,10 +61,9 @@ void TablaDeProbabilidad::incremtarOcurrencia(unsigned char contexto,unsigned ch
 	if(contextos.empty()){
 		agregarContexto(contexto,simbolo);
 	}else{
-		Contexto& contextoAmodificar;
 		tipo_contextos::iterator it = contextos.find(contexto);
 		if(it != contextos.end()){//Existe contexto
-			contextoAmodificar = it->second;
+			Contexto& contextoAmodificar = it->second;
 			std::list<ElementoContexto>::iterator itLista = contextoAmodificar.tablaFrecuencias.begin();
 			bool encontrado=false;
 			while(!encontrado&&itLista!=contextoAmodificar.tablaFrecuencias.end()){
@@ -76,6 +75,7 @@ void TablaDeProbabilidad::incremtarOcurrencia(unsigned char contexto,unsigned ch
 				itLista++;
 			}
 			if(encontrado==false){
+				Contexto& contextoAmodificar = it->second;
 				this->ageragarElementoContexto(contextoAmodificar,simbolo);
 			}
 			contextoAmodificar.totalFrecuencias=contextoAmodificar.totalFrecuencias+1;
