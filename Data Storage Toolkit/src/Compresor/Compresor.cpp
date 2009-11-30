@@ -47,9 +47,88 @@ inline char Compresor::underflow(){
 	}
 	return cont;
 }
-void Compresor::push(char chr){}
-void Compresor::cerrar(char chr){}
-void Compresor::abrirCierre(){}
+/************************MANEJO DE LA EMISIONES*****************************************************/
+inline void Compresor::emitir_codigo(){
+	/*OVERFLOW*/
+	char cont=overflow();
+	if(cont>0){
+		unsigned relleno=(   (MSB  &   piso  )==  0 ) ? UNOS :  0x0  ;
+		buffer.write(piso>>(MAX_BITS-1),1);
+		piso<<=1;
+		techo=(techo<<1)|0x1;
+		cont--;
+		/*emisiones por underflow*/
+		while(U>0){
+			if(MAX_BITS > U)
+				buffer.write(  relleno>>(MAX_BITS-U)  ,  U );
+			else
+				buffer.write(  relleno  ,  MAX_BITS  );
+			U-=MAX_BITS;
+		}
+		U=0;
+		/*resto del overflow*/
+		if(cont>0){
+			buffer.write(  piso  >>  (MAX_BITS-cont) , cont);
+			piso<<=cont;
+			techo=(techo<<cont)|(UNOS>>(MAX_BITS-cont));
+		}
+	}
+	/*UNDERFLOW*/
+	cont=underflow();
+	if(cont>0){
+		techo=((techo<<(cont+1))>>1)| MSB |( UNOS>>(MAX_BITS-cont));
+		piso=(piso<<(cont+1))>>1;
+		U+=cont;
+	}
+}
+
+inline void Compresor::cerrar_codigo(){
+	/*emito primer bit del piso, luego el underflow , luego el resto del piso*/
+	unsigned relleno=((MSB  &   piso)==  0 ) ? UNOS :  0x0  ;
+	buffer.write(piso>>(MAX_BITS-1),1);
+	int tempU=U;
+	while(tempU>0){
+		if(MAX_BITS > tempU)
+			buffer.write(  relleno>>(MAX_BITS-tempU)  ,  tempU );
+		else
+			buffer.write(  relleno  ,  MAX_BITS  );
+		tempU-=MAX_BITS;
+	}
+	buffer.write((piso<<1)>>1,MAX_BITS-1);
+
+	/*padding*/
+	char bits_libres_emision=MAX_BITS -buffer.tell_bits_offset_w();
+	if(bits_libres_emision>0){
+		buffer.write(0x1<<(bits_libres_emision-1),bits_libres_emision);
+	}else{
+		buffer.write(MSB,MAX_BITS);
+	}
+	/*relleno con 0*/
+	while(buffer.tell_unsigned_write()<buffer.size()){
+		buffer.fill(0x0);
+	}
+}
+
+inline void Compresor::abrir_codigo(){
+	unsigned pos=buffer.size();
+	unsigned temp=0;
+	while(temp==0){
+		pos--;
+		buffer.seek_r(0,pos);
+		buffer.read(temp,MAX_BITS);
+	};
+	int cont_bits=0;
+	while((temp&(0x1<<cont_bits))==0)
+		cont_bits++;
+	cont_bits++;
+	pos--;
+	cont_bits=U+cont_bits;
+	while(cont_bits>MAX_BITS){
+		cont_bits-=MAX_BITS;
+		pos--;
+	}
+	buffer.seek_w(MAX_BITS-cont_bits,pos);
+}
 
 void Compresor::descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido){
 	//Calculo Padding
