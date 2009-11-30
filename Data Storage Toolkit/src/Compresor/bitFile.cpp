@@ -19,6 +19,7 @@ bitFile::bitFile(unsigned*buffer,unsigned tamanio){
 bitFile::~bitFile() {}
 void bitFile::write(unsigned fuente,char cantidad){
 	int bits_restantes=(tamanio-write_posicion)*MAX_BITS-bit_write_offset;
+	unsigned *p=&buffer[write_posicion];
 	if(bits_restantes > cantidad){
 		fuente<<=MAX_BITS-cantidad;
 		bits_restantes=MAX_BITS-bit_write_offset;
@@ -31,12 +32,15 @@ void bitFile::write(unsigned fuente,char cantidad){
 			}
 			write_posicion++;
 			bit_write_offset=0;
+			p=&buffer[write_posicion];
 		}
 		if(cantidad>0){
 			unsigned aux=(0xFFFFFFFF<<(MAX_BITS-cantidad))>>bit_write_offset;
+
 			buffer[write_posicion]&=~aux;
 			buffer[write_posicion]|=fuente>>bit_write_offset;
 			bit_write_offset+=cantidad;
+
 		}
 	}
 }
@@ -61,7 +65,9 @@ void bitFile::write_mas_significativos(unsigned fuente,char cantidad){
 }
 void bitFile::read(unsigned &fuente,char cantidad){
 	int bits_restantes=(tamanio-read_posicion)*MAX_BITS-bit_read_offset;
-	if(bits_restantes>cantidad){
+	if(bits_restantes>=cantidad){
+		fuente&=~(0xFFFFFFFF>>(MAX_BITS-cantidad));
+		unsigned * p=&buffer[read_posicion];
 		bits_restantes=MAX_BITS-bit_read_offset;
 		if(bits_restantes<cantidad){
 			if(bits_restantes>0){
@@ -71,6 +77,7 @@ void bitFile::read(unsigned &fuente,char cantidad){
 			read_posicion++;
 			bit_read_offset=0;
 		}
+		p=&buffer[read_posicion];
 		if(cantidad>0){
 			fuente|=(buffer[read_posicion]<<bit_read_offset)>>(MAX_BITS-cantidad);
 			bit_read_offset+=cantidad;
@@ -104,7 +111,7 @@ void bitFile::seek_r(char offset,unsigned posicion){
 	read_posicion=posicion;
 	bit_read_offset=offset;
 }
-void bitFile::seeg_w(char offset,unsigned posicion){
+void bitFile::seek_w(char offset,unsigned posicion){
 	write_posicion=posicion;
 	bit_write_offset=offset;
 }
@@ -138,6 +145,23 @@ char bitFile::tell_bits_offset_r(){
 }
 char bitFile::tell_bits_offset_w(){
 	return bit_write_offset;
+}
+void bitFile::fill(unsigned fuente){
+	unsigned * p=&buffer[write_posicion];
+	if(write_posicion<tamanio){
+		if(bit_write_offset<MAX_BITS){
+			buffer[write_posicion]&=~(0xFFFFFFFF>>bit_write_offset);
+			buffer[write_posicion]|=fuente>>bit_write_offset;
+			fuente<<=(MAX_BITS-bit_write_offset);
+		}
+		write_posicion++;
+		if(write_posicion<tamanio){
+			p=&buffer[write_posicion];
+			buffer[write_posicion]&=~(0xFFFFFFFF>>bit_write_offset);
+			buffer[write_posicion]|=fuente;
+
+		}
+	}
 }
 /*int bits_extra=(ultimo-write_posicion)*MAX_BITS;
 if(bits_extra+bits_libres<cantidad){
