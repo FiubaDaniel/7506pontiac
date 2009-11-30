@@ -9,7 +9,7 @@
 #define COMPRESOR_H_
 #include <iostream>
 #include "bitFile.h"
-#include <math.h>
+#include <cmath>
 #include "TablaDeProbabilidad.h"
 
 void imprimir(unsigned num);
