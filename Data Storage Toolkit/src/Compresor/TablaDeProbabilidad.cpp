@@ -17,7 +17,7 @@ void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & 
 	tipo_frecuencia total;
 	tipo_contextos::iterator it=contextos.find(contexto);
 	if(it!=contextos.end()){
-		total=it->second.totalFrecuencias;
+		total=it->second.totalFrecuencias-(256-it->second.tablaFrecuencias.size());
 		tipo_tabla_frecuencias::iterator itTabla=it->second.tablaFrecuencias.begin();
 		unsigned char cant_elementos=0;
 		/*acumulacion de los que ESTAN en la tabla*/
@@ -120,10 +120,14 @@ void TablaDeProbabilidad::decremetarOcurrencia(unsigned char contexto,unsigned c
 			Contexto  contextoAmodificar = it->second;
 			bool encontrado = false;
 			std::list<ElementoContexto>::iterator itLista = contextoAmodificar.tablaFrecuencias.begin();
-			while(!encontrado&&itLista!=contextoAmodificar.tablaFrecuencias.end()){
+			while(!encontrado && itLista!=contextoAmodificar.tablaFrecuencias.end()){
 				ElementoContexto elemento = *itLista;
 				if(elemento.simbolo==simbolo){
-					elemento.frecuencia=elemento.frecuencia-1;
+					if(elemento.frecuencia > 1)
+						elemento.frecuencia=elemento.frecuencia-1;
+					else
+						contextoAmodificar.tablaFrecuencias.erase(itLista);
+					contextoAmodificar.totalFrecuencias--;
 					encontrado=true;
 				}
 				itLista++;
