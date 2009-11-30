@@ -56,14 +56,21 @@ public:
 	/* dado el array de <simbolos> trata de comprimir los <cantidad> simbolos del array,
 	 * devuelve el numero de simbolos efectivamente comprimidos
 	 */
-	unsigned comprimir(char*simbolos,unsigned cantidad);
+	unsigned comprimirPrimeros(char*simbolos,unsigned cantidad);
 	/*
 	 * intenta agregar <cantidad> de <simbolos> al codigo actual, en caso de que
 	 * desborde la capacidad, el codigo agregado es desechado.
 	 * pre: se usado comprimir previamente, almenos una vez.
 	 */
-	bool agregarReversible(char*simbolos,unsigned cantidad);
+	bool agregar(char*simbolos,unsigned cantidad);
+	/*
+	 * Para el buffer utilizado cierra el codigo.
+	 */
 	void cerrar();
+	/*
+	 *
+	 */
+	void setContinuacionCompresion(unsigned*buffer,unsigned tamanio);
 	unsigned* getbufferComprimido(){
 		return buffer.getBuffer();
 	};
