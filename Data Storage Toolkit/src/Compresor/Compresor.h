@@ -59,6 +59,12 @@ public:
 	 * desborde la capacidad, el codigo agregado es desechado.
 	 * pre: se usado comprimir previamente, almenos una vez.
 	 */
+	unsigned* getbufferComprimido(){
+		return buffer.buffer;
+	};
+	unsigned tamanioBufferComprimido(){
+		return buffer.size();
+	};
 	bool agregarReversible(char*simbolos,unsigned cantidad);
 	void descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido);
 	void setExtremos();
