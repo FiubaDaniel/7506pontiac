@@ -119,3 +119,10 @@ void bitFile::fill(unsigned fuente){
 		}
 	}
 }
+void bitFile::setBuffer(unsigned*buffer,unsigned tamanio){
+	this->tamanio=tamanio;
+	this->buffer=buffer;
+}
+unsigned* bitFile::getBuffer(){
+	return buffer;
+}

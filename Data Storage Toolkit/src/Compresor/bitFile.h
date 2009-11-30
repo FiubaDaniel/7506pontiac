@@ -86,6 +86,12 @@ public:
 	 * si fuente desborda el unsigned donde se esta escribiendo
 	 * se graban los bits de desborde en el siguiente unsigned, si existe un siguiente*/
 	void fill(unsigned fuente);
+	/* Seter y getter para el array donde se escriben los bits, el set no reposiciona
+	 * el get devuelve una referencia al array usado, cualquier modificacion sobre este afecta
+	 * el contenido del bitFile
+	 */
+	void setBuffer(unsigned*buffer,unsigned tamanio);
+	unsigned* getBuffer();
 };
 
 

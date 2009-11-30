@@ -135,19 +135,19 @@ unsigned Compresor::comprimir(char*simbolos,unsigned tamanio){
 	try{
 		if(1/*tabla.vacia()*/){
 			buffer.seek_w(0,0);
-			tabla.obtenerExtremos(0,simbolo[cant_emitidos],piso,techo);
+			tabla.obtenerExtremos(0,simbolos[cant_emitidos],piso,techo);
 			piso_anterior=piso;
 			techo_anterior=techo;
 			emitir_codigo();
 			cant_emitidos++;
 		}
 		while(cant_emitidos<tamanio){
-			tabla.obtenerExtremos(ultimoSimbolo,simbolo[cant_emitidos],piso,techo);
+			tabla.obtenerExtremos(ultimoSimbolo,simbolos[cant_emitidos],piso,techo);
 			piso_anterior=piso;
 			techo_anterior=techo;
 			emitir_codigo();
-			tabla.incremtarOcurrencia(ultimoSimbolo,simbolo[cant_emitidos]);
-			ultimoSimbolo=simbolo[cant_emitidos];
+			tabla.incremtarOcurrencia(ultimoSimbolo,simbolos[cant_emitidos]);
+			ultimoSimbolo=simbolos[cant_emitidos];
 			cant_emitidos++;
 		}
 	}catch(bitFileEOFException& e){
