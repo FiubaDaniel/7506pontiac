@@ -144,7 +144,7 @@ unsigned Compresor::comprimir(char*simbolos,unsigned cantidad){
 			ultimoSimbolo=simbolos[0];
 			cant_emitidos++;
 		}
-		while(cant_emitidos<cantidad){
+		while(cant_emitidos<cantidad+1){//TODO sacar -1
 			piso_anterior=piso;
 			techo_anterior=techo;
 			tabla.obtenerExtremos(ultimoSimbolo,simbolos[cant_emitidos],piso,techo);
@@ -153,6 +153,14 @@ unsigned Compresor::comprimir(char*simbolos,unsigned cantidad){
 			ultimoSimbolo=simbolos[cant_emitidos];
 			cant_emitidos++;
 		}
+		//TODO remover
+		piso_anterior=piso;
+		techo_anterior=techo;
+		tabla.obtenerExtremos(ultimoSimbolo,simbolos[cant_emitidos],piso,techo);
+		cerrar_codigo();
+		tabla.incremtarOcurrencia(ultimoSimbolo,simbolos[cant_emitidos]);
+		ultimoSimbolo=simbolos[cant_emitidos];
+		cant_emitidos++;
 	}catch(bitFileEOFException& e){
 		/*asumo que el codigo actual preserba el ultimoSimbolo*/
 		piso=piso_anterior;
