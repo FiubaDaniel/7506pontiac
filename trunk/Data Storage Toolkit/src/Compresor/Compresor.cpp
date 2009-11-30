@@ -130,12 +130,8 @@ inline void Compresor::abrir_codigo(){
 	}
 	buffer.seek_w(MAX_BITS-cont_bits,pos);
 }
-<<<<<<< .mine
-
-unsigned Compresor::comprimir(char*simbolos,unsigned tamanio){
-=======
 unsigned Compresor::comprimir(char*simbolos,unsigned cantidad){
->>>>>>> .r354
+
 	unsigned cant_emitidos=0;
 	unsigned piso_anterior,techo_anterior;
 	try{
