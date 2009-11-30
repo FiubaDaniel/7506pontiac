@@ -167,8 +167,16 @@ bool Compresor::agregarReversible(char*simbolos,unsigned cantidad){
 	int U_anterior=U;
 	unsigned pos=buffer.tell_unsigned_write();
 	char offset=buffer.tell_bits_offset_w();
-	char ultimo=ultimoSimbolo;
+	unsigned char ultimo=ultimoSimbolo;
+	unsigned char cerrador_anterior=cerrador;
 	try{
+		/* emito el ultimo */
+		piso_anterior=piso;
+		techo_anterior=techo;
+		tabla.obtenerExtremos(ultimoSimbolo,cerrador,piso,techo);
+		emitir_codigo();
+		tabla.incremtarOcurrencia(ultimoSimbolo,cerrador);
+		ultimoSimbolo=cerrador;
 		//-1 por q el simobolo q cierrar no se emite
 		while(cant_emitidos!=cantidad-1){
 			piso_anterior=piso;
@@ -183,6 +191,7 @@ bool Compresor::agregarReversible(char*simbolos,unsigned cantidad){
 	}catch(bitFileEOFException& e){
 		buffer.seek_w(offset,pos);
 		ultimoSimbolo=ultimo;
+		cerrador=cerrador_anterior;
 		piso=piso_anterior;
 		techo=techo_anterior;
 		U=U_anterior;
