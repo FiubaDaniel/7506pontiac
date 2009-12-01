@@ -134,7 +134,7 @@ unsigned Compresor::comprimirPrimeros(char*simbolos,unsigned cantidad){
 	unsigned cant_emitidos=0;
 	unsigned piso_anterior,techo_anterior;
 	try{
-		if(tabla.vacia() and cantidad>1){
+		/*if(tabla.vacia() and cantidad>1){
 			piso_anterior=piso;
 			techo_anterior=techo;
 			buffer.seek_w(0,0);
@@ -142,7 +142,7 @@ unsigned Compresor::comprimirPrimeros(char*simbolos,unsigned cantidad){
 			emitir_codigo();
 			ultimoSimbolo=simbolos[0];
 			cant_emitidos++;
-		}
+		}*/
 		//-1 por q el simobolo q cierrar no se emite
 		while(cant_emitidos<cantidad-1){
 			piso_anterior=piso;

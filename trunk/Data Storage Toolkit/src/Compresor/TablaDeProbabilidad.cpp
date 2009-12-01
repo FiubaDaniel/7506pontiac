@@ -7,7 +7,7 @@ TablaDeProbabilidad::~TablaDeProbabilidad() {
 bool TablaDeProbabilidad::vacia(){//Joya
 	return contextos.empty();
 }
-void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & piso,unsigned &techo){
+/*void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & piso,unsigned &techo){
 	//todo remover
 	if(techo<piso)
 		throw 8;
@@ -19,7 +19,7 @@ void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & 
 		total=256-it->second.tablaFrecuencias.size()+it->second.totalFrecuencias;
 		tipo_tabla_frecuencias::iterator itTabla=it->second.tablaFrecuencias.begin();
 		unsigned char cant_elementos=0;
-		/*acumulacion de los que ESTAN en la tabla antes del pedido */
+		acumulacion de los que ESTAN en la tabla antes del pedido
 		while(itTabla!=it->second.tablaFrecuencias.end() and itTabla->simbolo<simbolo){
 			incremento=float(longitud)/float(total);
 			incremento+=1/float(total);
@@ -28,7 +28,7 @@ void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & 
 			cant_elementos++;
 			itTabla++;
 		}
-		/*acumulacion de los que NO ESTAN en tabla antes q el pedido*/
+		acumulacion de los que NO ESTAN en tabla antes q el pedido
 		if(cant_elementos<(unsigned char)simbolo){
 			cant_elementos=((unsigned char)simbolo)-cant_elementos;
 			incremento=float(longitud)/float(total);
@@ -36,7 +36,7 @@ void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & 
 			incremento*=cant_elementos;
 			piso+=floor(piso+incremento);
 		}
-		/*incremento para el techo*/
+		incremento para el techo
 		if(itTabla!=it->second.tablaFrecuencias.end() and itTabla->simbolo==simbolo){
 			incremento=float(longitud)/float(total);
 			incremento+=1/float(total);
@@ -47,7 +47,7 @@ void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & 
 			incremento+=1/float(total);
 		}
 	}else{
-		/*tabla completamente vacia*/
+		tabla completamente vacia
 		total=256;
 		incremento=float(longitud)/float(total);
 		incremento+=1/float(total);
@@ -58,6 +58,22 @@ void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & 
 	}
 	techo=floor(piso+incremento)-1;
 	//TODO remover
+	if(techo<piso)
+		throw 8;
+}*/
+void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & piso,unsigned &techo){
+	int retorno=0;
+	unsigned longitud = techo - piso;
+	unsigned temp=piso;
+
+	float total = obtenerTotalContexto(contexto);
+	do{
+		piso=temp;
+		float ocurrencias=buscarOcurrencias(contexto,retorno);
+		temp=floor(piso+ocurrencias*((longitud/total)+(1/total)));
+		techo=temp-1;
+		retorno++;
+	}while(retorno<=simbolo);
 	if(techo<piso)
 		throw 8;
 }
@@ -187,7 +203,7 @@ unsigned char TablaDeProbabilidad::calcularEmision(unsigned &piso,unsigned &tech
 		temp=floor(piso+ocurrencias*((longitud/total)+(1/total)));//temp seria el piso siguiente.
 		techo=temp-1;//al piso siguiente le resto 1.
 		retorno++;
-	}while(codigo>techo&&retorno<256);
+	}while(codigo>=techo&&retorno<256);
 	return retorno-1;
 }
 
