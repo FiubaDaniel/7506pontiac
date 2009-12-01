@@ -4,13 +4,7 @@
  *  Created on: 30/11/2009
  *      Author: paulo
  */
-#include "Compresor.h"
-#include <iostream>
-#include <list>
-using namespace std;
-#define MAX_CANT_CHAR 122
-#define MIN_CANT_CHAR 36
-#define TAM_BUF_U_SIG 30
+#include "pruebas.h"
 
 int pruebacompresion(){
 	unsigned buffer[TAM_BUF_U_SIG];
@@ -25,3 +19,4 @@ int pruebacompresion(){
 	cout<<descomprimido<<endl;
 	return 0;
 }
+
