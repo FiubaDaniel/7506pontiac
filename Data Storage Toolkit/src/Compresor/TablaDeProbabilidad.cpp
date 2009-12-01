@@ -192,7 +192,10 @@ unsigned char TablaDeProbabilidad::calcularEmision(unsigned &piso,unsigned &tech
 
 float TablaDeProbabilidad::obtenerTotalContexto(unsigned char simbolo){
 	tipo_contextos::iterator it = contextos.find(simbolo);
+	if(it != contextos.end()){
 	return it->second.totalFrecuencias+(256-it->second.tablaFrecuencias.size());
+	}
+	return 256;
 }
 //TODO Esta funcion imprime la cantidad de ocurrencias de un caracter segun un contexto
 void TablaDeProbabilidad::imprimir(unsigned char contexto,unsigned char simbolo){
