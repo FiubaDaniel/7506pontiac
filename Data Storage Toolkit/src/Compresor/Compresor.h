@@ -30,7 +30,7 @@ class Compresor {
 	unsigned char ultimoSimbolo;
 	/*usado para cerrar*/
 	unsigned char cerrador;
-	unsigned bitRestantes;
+	int bitRestantes;
 	int U;
 	char overflow();
 	char underflow();
