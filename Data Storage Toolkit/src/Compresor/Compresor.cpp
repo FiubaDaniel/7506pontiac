@@ -297,7 +297,6 @@ void Compresor::rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,
 			this->bitRestantes=this->bitRestantes-contadorDeBits;
 			contadorDeBits=MAX_BITS;
 		}
-		std::cout<<(unsigned)auxiliar<<std::endl;
 		//Acomodo codigo usando auxiliar
 		restructuracionOverflow(auxiliar,codigo,siguiente);
 		//Setteo
@@ -326,7 +325,6 @@ void Compresor::rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,
 }
 
 void Compresor::restructuracionOverflow(unsigned char cantidadIteraciones,unsigned& codigo,unsigned& siguiente){
-	std::cout<<(unsigned)cantidadIteraciones<<std::endl;
 	codigo = (siguiente>>(MAX_BITS-cantidadIteraciones))|(codigo<<cantidadIteraciones);
 	siguiente<<=cantidadIteraciones;
 }
