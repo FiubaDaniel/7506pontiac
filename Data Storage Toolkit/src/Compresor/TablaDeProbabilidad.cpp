@@ -187,7 +187,7 @@ unsigned char TablaDeProbabilidad::calcularEmision(unsigned &piso,unsigned &tech
 		temp=floor(piso+ocurrencias*((longitud/total)+(1/total)));//temp seria el piso siguiente.
 		techo=temp-1;//al piso siguiente le resto 1.
 		retorno++;
-	}while(codigo>techo);
+	}while(codigo>techo&&retorno<256);
 	return retorno-1;
 }
 
