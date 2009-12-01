@@ -216,6 +216,32 @@ void Compresor::setContinuacionCompresion(unsigned*buffer,unsigned tamanio){
 	this->buffer.seek_r(0,0);
 }
 /*---------------------------------------Descompresion--------------------------------------------------------*/
+void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int tamanioComprimido){
+	//Calculo Padding
+	//Primero busco el byte donde comienza el padding.
+	int nro_byte;
+	for(nro_byte=(tamanioComprimido-1);buffer[nro_byte]==0;nro_byte--);
+	int bit_comparado=0X1;
+	int nro_bit;
+	for(nro_bit=0;(bit_comparado&buffer[nro_byte])==0;nro_bit++)bit_comparado<<=1;
+	//Calculo cantidad de bits de compresion desde de los 32 iniciales
+	this->bitRestantes = ((nro_byte*8)-32)-(8-nro_bit);
+
+	//Establezco condiciones iniciales para descomprimir
+	unsigned codigoAdescomprimir = buffer[0];
+	int posBuffer = 1;
+	unsigned siguiente = buffer[posBuffer];
+	unsigned contadorDeBits=32;
+	//Comienza descompresion
+	while(this->bitRestantes>0){
+		unsigned char emision = tabla.calcularEmision(piso,techo,codigoAdescomprimir,this->ultimoSimbolo);
+		tabla.incremtarOcurrencia(this->ultimoSimbolo,emision);//Se reestructura la tabla segun la ultima emision
+		this->ultimoSimbolo = emision;
+		descomprimido.push_back(emision);
+		rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
+	}
+}
+
 void Compresor::descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido){
 	//Calculo Padding
 	//Primero busco el byte donde comienza el padding.
