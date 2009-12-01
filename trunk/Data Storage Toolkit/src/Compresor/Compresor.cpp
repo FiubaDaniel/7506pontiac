@@ -328,7 +328,7 @@ void Compresor::rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,
 void Compresor::restructuracionOverflow(unsigned char cantidadIteraciones,unsigned& codigo,unsigned& siguiente){
 	std::cout<<(unsigned)cantidadIteraciones<<std::endl;
 	while(cantidadIteraciones>0){
-		codigo = ((siguiente|MSB)>>(MAX_BITS-1))|(codigo<<1);
+		codigo = ((siguiente&MSB)>>(MAX_BITS-1))|(codigo<<1);
 		siguiente<<=1;
 		cantidadIteraciones-=1;
 	}
@@ -341,7 +341,7 @@ void Compresor::restructuracionUnderflow(unsigned char cantidadIteraciones,unsig
 		 * 2-) Rescato el primero de codigo y elimino el segundo.
 		 * 3-) Meto al final de codigo el primero de siguiente.
 		 */
-			codigo = ((siguiente|MSB)>>(MAX_BITS-1))|((codigo|MSB)|((codigo<<2)>>1));
+			codigo = ((siguiente&MSB)>>(MAX_BITS-1))|((codigo&MSB)|((codigo<<2)>>1));
 			siguiente<<=1;
 			cantidadIteraciones-=1;
 		}
