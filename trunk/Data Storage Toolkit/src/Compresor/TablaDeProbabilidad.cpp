@@ -127,7 +127,7 @@ void TablaDeProbabilidad::decremetarOcurrencia(unsigned char contexto,unsigned c
 			bool encontrado = false;
 			std::list<ElementoContexto>::iterator itLista = contextoAmodificar.tablaFrecuencias.begin();
 			while(!encontrado && itLista!=contextoAmodificar.tablaFrecuencias.end()){
-				ElementoContexto elemento = *itLista;
+				ElementoContexto& elemento = *itLista;
 				if(elemento.simbolo==simbolo){
 					if(elemento.frecuencia > 1)
 						elemento.frecuencia=elemento.frecuencia-1;
