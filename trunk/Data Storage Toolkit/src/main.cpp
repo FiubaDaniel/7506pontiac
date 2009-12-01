@@ -9,7 +9,7 @@
 #include "Compresor/pruebas.h"
 
 using namespace std;
-
 int main(){
+	pruebacompresion();
 	return 0;
 }
