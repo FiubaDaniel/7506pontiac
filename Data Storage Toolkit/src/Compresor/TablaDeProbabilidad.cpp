@@ -8,13 +8,15 @@ bool TablaDeProbabilidad::vacia(){//Joya
 	return contextos.empty();
 }
 void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & piso,unsigned &techo){
+	//todo remover
+	if(techo<piso)
+		throw 8;
 	unsigned longitud=techo-piso;
 	tipo_frecuencia incremento;
 	tipo_frecuencia total;
 	tipo_contextos::iterator it=contextos.find(contexto);
 	if(it!=contextos.end()){
-		total=it->second.totalFrecuencias;
-		total-=(256-it->second.tablaFrecuencias.size());
+		total=256-it->second.tablaFrecuencias.size()+it->second.totalFrecuencias;
 		tipo_tabla_frecuencias::iterator itTabla=it->second.tablaFrecuencias.begin();
 		unsigned char cant_elementos=0;
 		/*acumulacion de los que ESTAN en la tabla antes del pedido */
@@ -55,6 +57,9 @@ void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & 
 		incremento+=1/float(total);
 	}
 	techo=floor(piso+incremento)-1;
+	//TODO remover
+	if(techo<piso)
+		throw 8;
 }
 /*
  * Posibles actualizaciones del map:
