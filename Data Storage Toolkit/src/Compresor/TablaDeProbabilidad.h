@@ -10,6 +10,7 @@
 #include <map>
 #include <list>
 #include <cmath>
+#include <iostream>
 
 typedef float tipo_frecuencia;
 
@@ -39,6 +40,7 @@ public:
 	void ageragarElementoContexto(Contexto& contextoModificar,unsigned char simbolo);
 	unsigned char calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior);
 	float buscarOcurrencias(unsigned char anterior,unsigned char buscado);
+	void imprimir(unsigned char contexto,unsigned char simbolo);
 	bool vacia();
 	virtual ~TablaDeProbabilidad();
 private:

@@ -1,14 +1,14 @@
 #include "TablaDeProbabilidad.h"
-
+using namespace std;
 TablaDeProbabilidad::TablaDeProbabilidad() {
-	// TODO Auto-generated constructor stub
+
 
 }
 
 TablaDeProbabilidad::~TablaDeProbabilidad() {
 	// TODO Auto-generated destructor stub
 }
-bool TablaDeProbabilidad::vacia(){
+bool TablaDeProbabilidad::vacia(){//Joya
 	return contextos.empty();
 }
 void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & piso,unsigned &techo){
@@ -59,7 +59,7 @@ void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & 
 
 void TablaDeProbabilidad::incremtarOcurrencia(unsigned char contexto,unsigned char simbolo){
 	if(contextos.empty()){
-		agregarContexto(contexto,simbolo);
+		agregarContexto(contexto,simbolo);//TODO aca ver lo del primer contexto ingresado
 	}else{
 		tipo_contextos::iterator it = contextos.find(contexto);
 		if(it != contextos.end()){//Existe contexto
@@ -67,7 +67,7 @@ void TablaDeProbabilidad::incremtarOcurrencia(unsigned char contexto,unsigned ch
 			std::list<ElementoContexto>::iterator itLista = contextoAmodificar.tablaFrecuencias.begin();
 			bool encontrado=false;
 			while(!encontrado&&itLista!=contextoAmodificar.tablaFrecuencias.end()){
-				ElementoContexto elemento = *itLista;
+				ElementoContexto& elemento = *itLista;
 				if(elemento.simbolo==simbolo){//Existe simbolo en el contexto
 					elemento.frecuencia=elemento.frecuencia+1;
 					encontrado=true;
@@ -87,9 +87,14 @@ void TablaDeProbabilidad::incremtarOcurrencia(unsigned char contexto,unsigned ch
 
 void TablaDeProbabilidad::agregarContexto(unsigned char contexto,unsigned char simbolo){
 	Contexto contextoNuevo;
-	contextoNuevo.totalFrecuencias=1;
-	this->ageragarElementoContexto(contextoNuevo,simbolo);
-	contextos.insert(std::pair<unsigned char,Contexto>(contexto,contextoNuevo));
+	if(!contextos.empty()){
+		contextoNuevo.totalFrecuencias=1;
+		this->ageragarElementoContexto(contextoNuevo,simbolo);
+		contextos.insert(std::pair<unsigned char,Contexto>(contexto,contextoNuevo));
+	}else{
+		contextoNuevo.totalFrecuencias=0;
+		contextos.insert(std::pair<unsigned char,Contexto>(simbolo,contextoNuevo));
+	}
 }
 
 void TablaDeProbabilidad::ageragarElementoContexto(Contexto& contextoModificar,unsigned char simbolo){
@@ -109,7 +114,7 @@ void TablaDeProbabilidad::ageragarElementoContexto(Contexto& contextoModificar,u
 			++it;
 		}
 		if(!encontrado){
-			contextoModificar.tablaFrecuencias.push_front(elementoNuevo);
+			contextoModificar.tablaFrecuencias.push_back(elementoNuevo);
 		}
 	}
 }
@@ -171,7 +176,24 @@ unsigned char TablaDeProbabilidad::calcularEmision(unsigned &piso,unsigned &tech
 	}while(codigo>techo);
 	return retorno;
 }
+
 float TablaDeProbabilidad::obtenerTotalContexto(unsigned char simbolo){
 	tipo_contextos::iterator it = contextos.find(simbolo);
 	return it->second.totalFrecuencias+(256-it->second.tablaFrecuencias.size());
+}
+//TODO Esta funcion imprime la cantidad de ocurrencias de un caracter segun un contexto
+void TablaDeProbabilidad::imprimir(unsigned char contexto,unsigned char simbolo){
+	tipo_contextos::iterator it = contextos.find(contexto);
+	if(it != contextos.end()){
+		Contexto buscado = it->second;
+		std::list<ElementoContexto>::iterator itLista = buscado.tablaFrecuencias.begin();
+		while(itLista != buscado.tablaFrecuencias.end()){
+			ElementoContexto elemento = *itLista;
+			if(simbolo == elemento.simbolo){
+				cout<<"Fercuencia del simbolo: "<<simbolo<<endl;
+				cout<<elemento.frecuencia<<endl;
+			}
+			++itLista;
+		}
+	}
 }
