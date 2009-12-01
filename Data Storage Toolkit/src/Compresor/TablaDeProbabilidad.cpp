@@ -150,7 +150,7 @@ void TablaDeProbabilidad::decremetarOcurrencia(unsigned char contexto,unsigned c
 	}
 }
 
-tipo_frecuencia TablaDeProbabilidad::buscarOcurrencias(unsigned char anterior,unsigned char& caracterBuscado){
+tipo_frecuencia TablaDeProbabilidad::buscarOcurrencias(unsigned char anterior,unsigned char caracterBuscado){
 	if(!contextos.empty()){
 		tipo_contextos::iterator it = contextos.find(anterior);
 		if(it != contextos.end()){
@@ -169,7 +169,7 @@ tipo_frecuencia TablaDeProbabilidad::buscarOcurrencias(unsigned char anterior,un
 }
 
 unsigned char TablaDeProbabilidad::calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior){
-	unsigned char retorno;
+	unsigned char retorno=0;
 	unsigned longitud = techo - piso;
 	unsigned temp=piso;
 	/*Ya que la lista puede no tener todos los simbolos el totalOcurrencias es el total de los simbolos q contiene la lista
@@ -182,7 +182,7 @@ unsigned char TablaDeProbabilidad::calcularEmision(unsigned &piso,unsigned &tech
 		temp=floor(piso+ocurrencias*((longitud/total)+(1/total)));//temp seria el piso siguiente.
 		techo=temp-1;//al piso siguiente le resto 1.
 	}while(codigo>techo);
-	return retorno;
+	return retorno-1;
 }
 
 float TablaDeProbabilidad::obtenerTotalContexto(unsigned char simbolo){

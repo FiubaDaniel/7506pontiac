@@ -37,7 +37,7 @@ public:
 	void incremtarOcurrencia(unsigned char contexto,unsigned char simbolo);
 	void decremetarOcurrencia(unsigned char contexto,unsigned char simbolo);
 	unsigned char calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior);
-	float buscarOcurrencias(unsigned char anterior,unsigned char &buscado);
+	float buscarOcurrencias(unsigned char anterior,unsigned char buscado);
 	void imprimir(unsigned char contexto,unsigned char simbolo);
 	bool vacia();
 	virtual ~TablaDeProbabilidad();
