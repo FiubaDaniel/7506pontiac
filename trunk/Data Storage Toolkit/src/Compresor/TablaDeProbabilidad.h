@@ -45,6 +45,6 @@ private:
 	float obtenerTotalContexto(unsigned char simbolo);
 	void agregarContexto(unsigned char contexto,unsigned char simbolo);
 	void ageragarElementoContexto(Contexto& contextoModificar,unsigned char simbolo);
-}
+};
 
 #endif /* TABLADEPROBABILIDAD_H_ */
