@@ -89,15 +89,15 @@ private:
 	 * Luego de una emision se re-estructura el piso, el techo al igual que el codigo usando el siguiente para obtener
 	 * bits necesarios debido a posibles overflow o underflow.
 	 */
-	void rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,unsigned &siguiente,unsigned &contadorDeBits);
+	void rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,unsigned &siguiente,unsigned char &contadorDeBits);
 	/*
 	 * Permite llevar a cabo la re-estructuracion del codigo debido a un overflow.
 	 */
-	void restructuracionOverflow(unsigned cantidadIteraciones,unsigned& codigo,unsigned& siguiente);
+	void restructuracionOverflow(unsigned char cantidadIteraciones,unsigned& codigo,unsigned& siguiente);
 	/*
 	 * Permite llevar a cabo la re-estructuracion del codigo debido a un underflow.
 	 */
-	void restructuracionUnderflow(unsigned cantidadIteraciones,unsigned& codigo,unsigned& siguiente);
+	void restructuracionUnderflow(unsigned char cantidadIteraciones,unsigned& codigo,unsigned& siguiente);
 };
 
 #endif /* COMPRESOR_H_ */

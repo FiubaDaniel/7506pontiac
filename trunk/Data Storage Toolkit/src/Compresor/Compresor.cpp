@@ -225,13 +225,13 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 	int nro_bit;
 	for(nro_bit=0;(bit_comparado&buffer[nro_unsigned])==0;nro_bit++)bit_comparado<<=1;
 	//Calculo cantidad de bits de compresion desde de los 32 iniciales
-	this->bitRestantes = ((nro_unsigned-1)*32)+(32-nro_bit);
+	this->bitRestantes = ((nro_unsigned-1)*MAX_BITS)+(MAX_BITS-nro_bit);
 
 	//Establezco condiciones iniciales para descomprimir
 	unsigned codigoAdescomprimir = buffer[0];
 	int posBuffer = 1;
 	unsigned siguiente = buffer[posBuffer];
-	unsigned contadorDeBits=32;
+	unsigned char contadorDeBits=MAX_BITS;
 	//Comienza descompresion
 	while(this->bitRestantes>0){
 		unsigned char emision = tabla.calcularEmision(piso,techo,codigoAdescomprimir,this->ultimoSimbolo);
@@ -241,23 +241,23 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 		rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
 	}
 }
-
-void Compresor::descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido){
+/*-------------------------------Version con list-----------------------------------------------------------*/
+/*void Compresor::descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido){
 	//Calculo Padding
 	//Primero busco el byte donde comienza el padding.
-	int nro_byte;
-	for(nro_byte=(tamanioComprimido-1);buffer[nro_byte]==0;nro_byte--);
+	int nro_unsigned;
+	for(nro_unsigned=(tamanioComprimido-1);buffer[nro_unsigned]==0;nro_unsigned--);
 	int bit_comparado=0X1;
 	int nro_bit;
-	for(nro_bit=0;(bit_comparado&buffer[nro_byte])==0;nro_bit++)bit_comparado<<=1;
+	for(nro_bit=0;(bit_comparado&buffer[nro_unsigned])==0;nro_bit++)bit_comparado<<=1;
 	//Calculo cantidad de bits de compresion desde de los 32 iniciales
-	this->bitRestantes = ((nro_byte*8)-32)-(8-nro_bit);
+	this->bitRestantes = ((nro_unsigned-1)*MAX_BITS)+(MAX_BITS-nro_bit);
 
 	//Establezco condiciones iniciales para descomprimir
 	unsigned codigoAdescomprimir = buffer[0];
 	int posBuffer = 1;
 	unsigned siguiente = buffer[posBuffer];
-	unsigned contadorDeBits=32;
+	unsigned char contadorDeBits=MAX_BITS;
 	//Comienza descompresion
 	while(this->bitRestantes>0){
 		unsigned char emision = tabla.calcularEmision(piso,techo,codigoAdescomprimir,this->ultimoSimbolo);
@@ -266,15 +266,15 @@ void Compresor::descomprimir(unsigned * buffer,std::list<unsigned char>& descomp
 		descomprimido.push_back(emision);
 		rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
 	}
-}
-
+}*/
+/*-----------------------------------------------------------------------------------------------------------------*/
 void Compresor::setExtremos(){
 	this->techo = pow(2,32)-1;
 	this->piso = 0;
 }
 
-void Compresor::rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,unsigned &siguiente,unsigned &contadorDeBits){
-	unsigned auxiliar;
+void Compresor::rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,unsigned &siguiente,unsigned char &contadorDeBits){
+	unsigned char auxiliar;
 	//Primero overflow
 	unsigned char cont=overflow();
 	if(cont>0){
@@ -292,11 +292,12 @@ void Compresor::rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,
 			//Acomodo codigo
 			restructuracionOverflow(contadorDeBits,codigo,siguiente);
 			//Setteo
-			contadorDeBits=8;
-			siguiente=buffer[posBuffer];
 			posBuffer=posBuffer+1;
+			siguiente=buffer[posBuffer];
 			this->bitRestantes=this->bitRestantes-contadorDeBits;
+			contadorDeBits=MAX_BITS;
 		}
+		std::cout<<(unsigned)auxiliar<<std::endl;
 		//Acomodo codigo usando auxiliar
 		restructuracionOverflow(auxiliar,codigo,siguiente);
 		//Setteo
@@ -313,10 +314,10 @@ void Compresor::rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,
 		if(cont>=contadorDeBits){
 			auxiliar = cont-contadorDeBits;
 			restructuracionUnderflow(contadorDeBits,codigo,siguiente);
-			contadorDeBits=8;
-			siguiente=buffer[posBuffer];
 			posBuffer=posBuffer+1;
+			siguiente=buffer[posBuffer];
 			this->bitRestantes=this->bitRestantes-contadorDeBits;
+			contadorDeBits=MAX_BITS;
 		}
 		restructuracionUnderflow(auxiliar,codigo,siguiente);
 		contadorDeBits=contadorDeBits-auxiliar;
@@ -324,7 +325,8 @@ void Compresor::rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,
 	}
 }
 
-void Compresor::restructuracionOverflow(unsigned cantidadIteraciones,unsigned& codigo,unsigned& siguiente){
+void Compresor::restructuracionOverflow(unsigned char cantidadIteraciones,unsigned& codigo,unsigned& siguiente){
+	std::cout<<(unsigned)cantidadIteraciones<<std::endl;
 	while(cantidadIteraciones>0){
 		codigo = ((siguiente|MSB)>>(MAX_BITS-1))|(codigo<<1);
 		siguiente<<=1;
@@ -332,7 +334,7 @@ void Compresor::restructuracionOverflow(unsigned cantidadIteraciones,unsigned& c
 	}
 }
 
-void Compresor::restructuracionUnderflow(unsigned cantidadIteraciones,unsigned& codigo,unsigned& siguiente){
+void Compresor::restructuracionUnderflow(unsigned char cantidadIteraciones,unsigned& codigo,unsigned& siguiente){
 	while(cantidadIteraciones>0){
 		/*
 		 * 1-) Rescato el primero de siguiente, para dejarlo como ultimo
