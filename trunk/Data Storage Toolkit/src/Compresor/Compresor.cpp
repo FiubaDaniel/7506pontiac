@@ -219,13 +219,13 @@ void Compresor::setContinuacionCompresion(unsigned*buffer,unsigned tamanio){
 void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int tamanioComprimido){
 	//Calculo Padding
 	//Primero busco el byte donde comienza el padding.
-	int nro_byte;
-	for(nro_byte=(tamanioComprimido-1);buffer[nro_byte]==0;nro_byte--);
+	int nro_unsigned;
+	for(nro_unsigned=(tamanioComprimido-1);buffer[nro_unsigned]==0;nro_unsigned--);
 	int bit_comparado=0X1;
 	int nro_bit;
-	for(nro_bit=0;(bit_comparado&buffer[nro_byte])==0;nro_bit++)bit_comparado<<=1;
+	for(nro_bit=0;(bit_comparado&buffer[nro_unsigned])==0;nro_bit++)bit_comparado<<=1;
 	//Calculo cantidad de bits de compresion desde de los 32 iniciales
-	this->bitRestantes = ((nro_byte*8)-32)-(8-nro_bit);
+	this->bitRestantes = ((nro_unsigned-1)*32)+(32-nro_bit);
 
 	//Establezco condiciones iniciales para descomprimir
 	unsigned codigoAdescomprimir = buffer[0];
@@ -295,7 +295,7 @@ void Compresor::rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,
 			contadorDeBits=8;
 			siguiente=buffer[posBuffer];
 			posBuffer=posBuffer+1;
-			this->bitRestantes=this->bitRestantes-auxiliar;
+			this->bitRestantes=this->bitRestantes-contadorDeBits;
 		}
 		//Acomodo codigo usando auxiliar
 		restructuracionOverflow(auxiliar,codigo,siguiente);
@@ -316,7 +316,7 @@ void Compresor::rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,
 			contadorDeBits=8;
 			siguiente=buffer[posBuffer];
 			posBuffer=posBuffer+1;
-			this->bitRestantes=this->bitRestantes-auxiliar;
+			this->bitRestantes=this->bitRestantes-contadorDeBits;
 		}
 		restructuracionUnderflow(auxiliar,codigo,siguiente);
 		contadorDeBits=contadorDeBits-auxiliar;
