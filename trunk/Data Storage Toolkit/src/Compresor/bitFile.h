@@ -7,7 +7,7 @@
 #ifndef BITFILE_H_
 #define BITFILE_H_
 #include <exception>
-#define UNOS ~0x0
+#define UNOS (~unsigned(0x0))
 
 class bitFileEOFException: public std::exception{
 public:
