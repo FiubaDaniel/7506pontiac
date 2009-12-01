@@ -63,7 +63,7 @@ char calcularChar(int valor){
 	return 35 + (valor%88);
 }
 
-int main() {
+int pruebaToolkit() {
 	int* miLista = NULL;
 	MiRegistroVariable* miRegVariable = NULL;
 	MiRegistroFijo* miRegFijo = NULL;
