@@ -17,7 +17,7 @@ void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & 
 		total-=(256-it->second.tablaFrecuencias.size());
 		tipo_tabla_frecuencias::iterator itTabla=it->second.tablaFrecuencias.begin();
 		unsigned char cant_elementos=0;
-		/*acumulacion de los que ESTAN en la tabla*/
+		/*acumulacion de los que ESTAN en la tabla antes del pedido */
 		while(itTabla!=it->second.tablaFrecuencias.end() and itTabla->simbolo<simbolo){
 			incremento=float(longitud)/float(total);
 			incremento+=1/float(total);
@@ -26,7 +26,7 @@ void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & 
 			cant_elementos++;
 			itTabla++;
 		}
-		/*acumulacion de los que NO ESTAN en tabla*/
+		/*acumulacion de los que NO ESTAN en tabla antes q el pedido*/
 		if(cant_elementos<(unsigned char)simbolo){
 			cant_elementos=((unsigned char)simbolo)-cant_elementos;
 			incremento=float(longitud)/float(total);
@@ -40,6 +40,7 @@ void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & 
 			incremento+=1/float(total);
 			incremento*=itTabla->frecuencia;
 		}else{
+			//no es el piso del simbolo
 			incremento=float(longitud)/float(total);
 			incremento+=1/float(total);
 		}
@@ -48,7 +49,7 @@ void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & 
 		total=256;
 		incremento=float(longitud)/float(total);
 		incremento+=1/float(total);
-		incremento*=((unsigned char)(simbolo-1));
+		incremento*=(unsigned char)simbolo;
 		piso+=floor(piso+incremento);
 		incremento=float(longitud)/float(total);
 		incremento+=1/float(total);
