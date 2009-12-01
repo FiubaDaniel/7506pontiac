@@ -1,12 +1,8 @@
 #include "TablaDeProbabilidad.h"
 using namespace std;
 TablaDeProbabilidad::TablaDeProbabilidad() {
-
-
 }
-
 TablaDeProbabilidad::~TablaDeProbabilidad() {
-	// TODO Auto-generated destructor stub
 }
 bool TablaDeProbabilidad::vacia(){//Joya
 	return contextos.empty();
@@ -17,12 +13,15 @@ void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & 
 	tipo_frecuencia total;
 	tipo_contextos::iterator it=contextos.find(contexto);
 	if(it!=contextos.end()){
-		total=it->second.totalFrecuencias-(256-it->second.tablaFrecuencias.size());
+		total=it->second.totalFrecuencias;
+		total-=(256-it->second.tablaFrecuencias.size());
 		tipo_tabla_frecuencias::iterator itTabla=it->second.tablaFrecuencias.begin();
 		unsigned char cant_elementos=0;
 		/*acumulacion de los que ESTAN en la tabla*/
 		while(itTabla!=it->second.tablaFrecuencias.end() and itTabla->simbolo<simbolo){
-			incremento=itTabla->frecuencia*((longitud/total)+(1/total));
+			incremento=float(longitud)/float(total);
+			incremento+=1/float(total);
+			incremento*=itTabla->frecuencia;
 			piso+=floor(piso+incremento);
 			cant_elementos++;
 			itTabla++;
@@ -30,21 +29,29 @@ void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & 
 		/*acumulacion de los que NO ESTAN en tabla*/
 		if(cant_elementos<(unsigned char)simbolo){
 			cant_elementos=((unsigned char)simbolo)-cant_elementos;
-			incremento=cant_elementos*((longitud/total)+(1/total));
+			incremento=float(longitud)/float(total);
+			incremento+=1/float(total);
+			incremento*=cant_elementos;
 			piso+=floor(piso+incremento);
 		}
 		/*incremento para el techo*/
 		if(itTabla!=it->second.tablaFrecuencias.end() and itTabla->simbolo==simbolo){
-			incremento=itTabla->frecuencia*((longitud/total)+(1/total));
+			incremento=float(longitud)/float(total);
+			incremento+=1/float(total);
+			incremento*=itTabla->frecuencia;
 		}else{
-			incremento=((longitud/total)+(1/total));
+			incremento=float(longitud)/float(total);
+			incremento+=1/float(total);
 		}
 	}else{
 		/*tabla completamente vacia*/
 		total=256;
-		incremento=((unsigned char)(simbolo-1))*((longitud/total)+(1/total));
+		incremento=float(longitud)/float(total);
+		incremento+=1/float(total);
+		incremento*=((unsigned char)(simbolo-1));
 		piso+=floor(piso+incremento);
-		incremento=((longitud/total)+(1/total));
+		incremento=float(longitud)/float(total);
+		incremento+=1/float(total);
 	}
 	techo=floor(piso+incremento)-1;
 }
