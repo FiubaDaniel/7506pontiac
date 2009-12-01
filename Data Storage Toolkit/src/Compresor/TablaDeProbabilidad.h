@@ -36,15 +36,15 @@ public:
 	void obtenerExtremos(char contexto,char simbolo,unsigned & piso,unsigned &techo);
 	void incremtarOcurrencia(unsigned char contexto,unsigned char simbolo);
 	void decremetarOcurrencia(unsigned char contexto,unsigned char simbolo);
-	void agregarContexto(unsigned char contexto,unsigned char simbolo);
-	void ageragarElementoContexto(Contexto& contextoModificar,unsigned char simbolo);
 	unsigned char calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior);
-	float buscarOcurrencias(unsigned char anterior,unsigned char buscado);
+	float buscarOcurrencias(unsigned char anterior,unsigned char &buscado);
 	void imprimir(unsigned char contexto,unsigned char simbolo);
 	bool vacia();
 	virtual ~TablaDeProbabilidad();
 private:
 	float obtenerTotalContexto(unsigned char simbolo);
-};
+	void agregarContexto(unsigned char contexto,unsigned char simbolo);
+	void ageragarElementoContexto(Contexto& contextoModificar,unsigned char simbolo);
+}
 
 #endif /* TABLADEPROBABILIDAD_H_ */
