@@ -78,8 +78,8 @@ public:
 	unsigned tamanioBufferComprimido(){
 		return buffer.size();
 	};
-	void descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido);
 	void descomprimir(unsigned * buffer,std::string& descomprimido,int tamanioComprimido);
+	void descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido);
 	void setExtremos();
 	virtual ~Compresor();
 
