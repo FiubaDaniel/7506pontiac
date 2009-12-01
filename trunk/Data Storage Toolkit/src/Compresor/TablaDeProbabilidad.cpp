@@ -72,7 +72,7 @@ void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & 
 
 void TablaDeProbabilidad::incremtarOcurrencia(unsigned char contexto,unsigned char simbolo){
 	if(contextos.empty()){
-		agregarContexto(contexto,simbolo);//TODO aca ver lo del primer contexto ingresado
+		agregarContexto(contexto,simbolo);
 	}else{
 		tipo_contextos::iterator it = contextos.find(contexto);
 		if(it != contextos.end()){//Existe contexto
