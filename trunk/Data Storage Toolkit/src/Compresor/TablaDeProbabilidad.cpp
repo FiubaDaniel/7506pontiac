@@ -150,7 +150,7 @@ void TablaDeProbabilidad::decremetarOcurrencia(unsigned char contexto,unsigned c
 	}
 }
 
-tipo_frecuencia TablaDeProbabilidad::buscarOcurrencias(unsigned char anterior,unsigned char caracterBuscado){
+tipo_frecuencia TablaDeProbabilidad::buscarOcurrencias(unsigned char anterior,unsigned char& caracterBuscado){
 	if(!contextos.empty()){
 		tipo_contextos::iterator it = contextos.find(anterior);
 		if(it != contextos.end()){
