@@ -14,10 +14,10 @@
 #include "TablaDeProbabilidad.h"
 
 void imprimir(unsigned num);
-#define UINT_MAX (~0x0)
+//#define UINT_MAX (~unsigned(0x0))
 
 #ifndef UNOS
-	#define UNOS (~0x0)
+	#define UNOS (~unsigned(0x0))
 #endif
 
 class Compresor {

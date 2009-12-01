@@ -20,7 +20,7 @@ void imprimirLSBs(unsigned num,int n){
 }
 
 Compresor::Compresor(unsigned*array,unsigned tamanio): buffer(array,tamanio){
-	techo=UINT_MAX;
+	techo=UNOS;
 	piso=0;
 	U=0;
 	ultimoSimbolo=0;
