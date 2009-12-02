@@ -33,7 +33,7 @@ class TablaDeProbabilidad{
 public:
 	TablaDeProbabilidad();
 	/*A partir de simbolo, calcula techo y piso, copiando el resultado a techo y piso*/
-	void obtenerExtremos(char contexto,char simbolo,unsigned & piso,unsigned &techo);
+	void obtenerExtremos(unsigned char contexto,unsigned char simbolo,unsigned & piso,unsigned &techo);
 	void incremtarOcurrencia(unsigned char contexto,unsigned char simbolo);
 	void decremetarOcurrencia(unsigned char contexto,unsigned char simbolo);
 	unsigned char calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior);

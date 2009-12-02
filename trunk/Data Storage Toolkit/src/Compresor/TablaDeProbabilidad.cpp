@@ -61,7 +61,7 @@ bool TablaDeProbabilidad::vacia(){//Joya
 	if(techo<piso)
 		throw 8;
 }*/
-void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & piso,unsigned &techo){
+void TablaDeProbabilidad::obtenerExtremos(unsigned char contexto,unsigned char simbolo,unsigned & piso,unsigned &techo){
 	int retorno=0;
 	unsigned longitud = techo - piso;
 	unsigned temp=piso;
