@@ -1,0 +1,27 @@
+	static const u_char MAX_BITS=sizeof(unsigned)*8;
+	static const unsigned MSB=~(UINT_MAX>>1);
+	
+	u_char overflow(unsigned techo,unsigned piso){
+		u_char cont=0;
+		unsigned compararcion=techo^piso;//XOR
+		while(comparacion& MSB == 0 and cont<MAX_BITS){
+			compararcion<<=1;
+			cont++;
+		}
+		return cont;
+	}
+	
+	u_char underflow(unsigned techo,unsigned piso){
+		u_char cont=0;
+		if((techo&MSB)!=0 and (piso&MSB)==0){
+			unsigned bit=MSB>>1;
+			/* techo=1AXXXXXXXXX
+			   piso =0BXXXXXXXXX    
+			   mientras A==0 y B==1
+			*/
+			while((techo & bit)==0 and (piso&bit)!=0  and cont<MAX_BITS){
+				bit>>=1;
+				cont++;
+			}
+		return cont;
+	}
