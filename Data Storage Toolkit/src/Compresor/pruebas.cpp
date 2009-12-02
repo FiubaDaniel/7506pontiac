@@ -20,7 +20,7 @@ int pruebacompresion(){
 	compresor.cerrar();
 	unsigned buffer2[TAM_BUF2];
 	compresor.setContinuacionCompresion(buffer2,TAM_BUF2);
-	compresor.comprimirPrimeros(str+2*MIN_CANT_CHAR,MIN_CANT_CHAR/2);
+	compresor.comprimirPrimeros(str+2*MIN_CANT_CHAR,MIN_CANT_CHAR);
 	compresor.cerrar();
 	Compresor descompresor(buffer,TAM_BUF1);
 	string descomprimido;
