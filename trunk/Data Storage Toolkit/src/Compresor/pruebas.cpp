@@ -7,15 +7,15 @@
 #include "pruebas.h"
 #define MAX_CANT_CHAR 122
 #define MIN_CANT_CHAR 35
-#define TAM_BUF1 30
+#define TAM_BUF1 20
 #define TAM_BUF2 10
 int pruebacompresion(){
 	unsigned buffer[TAM_BUF1];
-				 //1234567890123456789012345678901234512345678901234567890123456789012345
+				  //1234567890123456789012345678901234512345678901234567890123456789012345
 	unsigned char str[122]="Base class for standard exceptions. All objects thrown by components of the standard library are derived from this class.";
 	Compresor compresor(buffer,TAM_BUF1);
-	cout<<compresor.comprimirPrimeros(str,MIN_CANT_CHAR)<<endl;
-	compresor.agregar(str+MIN_CANT_CHAR,122);
+	compresor.comprimirPrimeros(str,MIN_CANT_CHAR);
+	compresor.agregar(str+MIN_CANT_CHAR,MIN_CANT_CHAR);
 	compresor.agregar(str+MIN_CANT_CHAR,MIN_CANT_CHAR);
 	compresor.cerrar();
 	unsigned buffer2[TAM_BUF2];
