@@ -40,6 +40,8 @@ void bitFile::write(unsigned fuente,char cantidad)throw (bitFileEOFException){
 			buffer[write_posicion]|=fuente>>bit_write_offset;
 			bit_write_offset+=cantidad;
 		}
+	}else {
+		throw bitFileEOFException();
 	}
 }
 void bitFile::read(unsigned &fuente,char cantidad)throw (bitFileEOFException){
@@ -61,6 +63,8 @@ void bitFile::read(unsigned &fuente,char cantidad)throw (bitFileEOFException){
 			fuente|=(buffer[read_posicion]<<bit_read_offset)>>(MAX_BITS-cantidad);
 			bit_read_offset+=cantidad;
 		}
+	}else {
+		throw bitFileEOFException();
 	}
 }
 void bitFile::seek_r(char offset,unsigned posicion){
