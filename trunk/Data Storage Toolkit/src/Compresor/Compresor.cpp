@@ -154,7 +154,7 @@ unsigned Compresor::comprimirPrimeros(char*simbolos,unsigned cantidad){
 			cant_emitidos++;
 		}
 		cerrador=simbolos[cant_emitidos];
-	}catch(bitFileEOFException& e){
+	}catch(bitFileEOFException e){
 		/*asumo que el codigo actual preserba el ultimoSimbolo*/
 		piso=piso_anterior;
 		techo=techo_anterior;
@@ -162,25 +162,22 @@ unsigned Compresor::comprimirPrimeros(char*simbolos,unsigned cantidad){
 	return cant_emitidos;
 }
 bool Compresor::agregar(char*simbolos,unsigned cantidad){
-	unsigned cant_emitidos=0;
-	unsigned piso_anterior,techo_anterior;
+	unsigned cant_emitidos=0,piso_anterior=piso,techo_anterior=techo;
+	unsigned char ultimo_anterior=ultimoSimbolo, cerrador_anterior=cerrador;
 	int U_anterior=U;
 	unsigned pos=buffer.tell_unsigned_write();
 	char offset=buffer.tell_bits_offset_w();
-	unsigned char ultimo=ultimoSimbolo;
-	unsigned char cerrador_anterior=cerrador;
+
 	try{
+		tabla.imprimir();
+		std::cout<<std::endl;
 		/* emito el ultimo */
-		piso_anterior=piso;
-		techo_anterior=techo;
 		tabla.obtenerExtremos(ultimoSimbolo,cerrador,piso,techo);
 		emitir_codigo();
 		tabla.incremtarOcurrencia(ultimoSimbolo,cerrador);
 		ultimoSimbolo=cerrador;
 		//-1 por q el simobolo q cierrar no se emite
 		while(cant_emitidos!=cantidad-1){
-			piso_anterior=piso;
-			techo_anterior=techo;
 			tabla.obtenerExtremos(ultimoSimbolo,simbolos[cant_emitidos],piso,techo);
 			emitir_codigo();
 			tabla.incremtarOcurrencia(ultimoSimbolo,simbolos[cant_emitidos]);
@@ -188,19 +185,23 @@ bool Compresor::agregar(char*simbolos,unsigned cantidad){
 			cant_emitidos++;
 		}
 		cerrador=simbolos[cant_emitidos];
-	}catch(bitFileEOFException& e){
+	}catch(bitFileEOFException e){
 		buffer.seek_w(offset,pos);
-		ultimoSimbolo=ultimo;
+		ultimoSimbolo=ultimo_anterior;
 		cerrador=cerrador_anterior;
 		piso=piso_anterior;
 		techo=techo_anterior;
 		U=U_anterior;
+		tabla.imprimir();
+		std::cout<<std::endl;
 		if(cant_emitidos!=0){
-			tabla.decremetarOcurrencia(ultimo,simbolos[0]);
-			for(unsigned i=0;i<cant_emitidos-1;i++){
-				tabla.decremetarOcurrencia(simbolos[i],simbolos[i+1]);
+			for(unsigned i=cant_emitidos;i>0;i--){
+				tabla.decremetarOcurrencia(simbolos[i-1],simbolos[i]);
 			}
+			tabla.decremetarOcurrencia(cerrador,simbolos[0]);
+			tabla.decremetarOcurrencia(ultimoSimbolo,cerrador);
 		}
+		tabla.imprimir();
 		return false;
 	}
 	return true;
