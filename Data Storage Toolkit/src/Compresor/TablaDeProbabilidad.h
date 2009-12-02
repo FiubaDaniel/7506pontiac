@@ -39,6 +39,7 @@ public:
 	unsigned char calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior);
 	float buscarOcurrencias(unsigned char anterior,unsigned char buscado);
 	void imprimir(unsigned char contexto,unsigned char simbolo);
+	void imprimir();
 	bool vacia();
 	virtual ~TablaDeProbabilidad();
 private:
