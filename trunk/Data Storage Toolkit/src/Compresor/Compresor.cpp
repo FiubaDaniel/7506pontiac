@@ -27,6 +27,7 @@ Compresor::Compresor(unsigned*array,unsigned tamanio): buffer(array,tamanio){
 	bitRestantes=0;
 }
 Compresor::~Compresor() {
+	//tabla.imprimir();
 }
 inline char Compresor::overflow(){
 	unsigned comparacion=techo^piso;
@@ -198,7 +199,10 @@ void Compresor::cerrar(){
 }
 void Compresor::setContinuacionCompresion(unsigned*buffer,unsigned tamanio){
 	this->buffer.setBuffer(buffer,tamanio);
-	this->buffer.seek_r(0,0);
+	this->buffer.seek_w(0,0);
+	piso=0;
+	techo=UNOS;
+	U=0;
 }
 /*---------------------------------------Descompresion--------------------------------------------------------*/
 void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int tamanioComprimido){
