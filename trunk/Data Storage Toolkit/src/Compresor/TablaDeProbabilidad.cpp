@@ -117,18 +117,18 @@ void TablaDeProbabilidad::incremtarOcurrencia(unsigned char contexto,unsigned ch
 void TablaDeProbabilidad::agregarContexto(unsigned char contexto,unsigned char simbolo){
 	Contexto contextoNuevo;
 	if(!contextos.empty()){
-		contextoNuevo.totalFrecuencias=1;
+		contextoNuevo.totalFrecuencias=0;//Tiene q ser dos pq se su
 		this->ageragarElementoContexto(contextoNuevo,simbolo);
 		contextos.insert(std::pair<unsigned char,Contexto>(contexto,contextoNuevo));
 	}else{
-		contextoNuevo.totalFrecuencias=0;
+		contextoNuevo.totalFrecuencias=2;
 		contextos.insert(std::pair<unsigned char,Contexto>(simbolo,contextoNuevo));
 	}
 }
 
 void TablaDeProbabilidad::ageragarElementoContexto(Contexto& contextoModificar,unsigned char simbolo){
 	ElementoContexto elementoNuevo;
-	elementoNuevo.frecuencia=1;
+	elementoNuevo.frecuencia=2;
 	elementoNuevo.simbolo=simbolo;
 	if(contextoModificar.tablaFrecuencias.empty()){
 		contextoModificar.tablaFrecuencias.push_back(elementoNuevo);
@@ -139,6 +139,7 @@ void TablaDeProbabilidad::ageragarElementoContexto(Contexto& contextoModificar,u
 			ElementoContexto elemento = *it;
 			if(simbolo<elemento.simbolo){
 				contextoModificar.tablaFrecuencias.insert(it,elementoNuevo);
+				encontrado=true;
 			}
 			++it;
 		}
