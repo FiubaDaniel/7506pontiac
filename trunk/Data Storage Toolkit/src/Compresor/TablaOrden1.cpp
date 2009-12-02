@@ -1,10 +1,11 @@
 #include "TablaOrden1.h"
 using namespace std;
 TablaOrden1::TablaOrden1() {
+	this->alerta_escape=false;
 }
 TablaOrden1::~TablaOrden1() {
 }
-bool TablaOrden1::vacia(){//Joya
+bool TablaOrden1::vacia(){
 	return contextos.empty();
 }
 /*void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & piso,unsigned &techo){
@@ -61,6 +62,9 @@ bool TablaOrden1::vacia(){//Joya
 	if(techo<piso)
 		throw 8;
 }*/
+bool TablaOrden1::esEscape(){
+	return this->alerta_escape;
+}
 void TablaOrden1::obtenerExtremos(unsigned char contexto,unsigned char simbolo,unsigned & piso,unsigned &techo){
 	int retorno=0;
 	unsigned longitud = techo - piso;
@@ -197,9 +201,9 @@ tipo_frecuencia TablaOrden1::buscarOcurrencias(unsigned char anterior,unsigned c
 	}
 	return 1;
 }
-
+//Todo ACA
 unsigned char TablaOrden1::calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior){
-	unsigned char retorno=0;
+	unsigned char retorno=0;//Todo ACA
 	unsigned longitud = techo - piso;
 	unsigned temp=piso;
 	/*Ya que la lista puede no tener todos los simbolos el totalOcurrencias es el total de los simbolos q contiene la lista
