@@ -52,12 +52,9 @@ class Compresor {
 	 */
 	void abrir_codigo();
 
-<<<<<<< .mine
 	//TablaOrden1 tabla;
 	PPMC::TablaPPMC tabla;
-=======
-	 TablaOrden1 tabla;
->>>>>>> .r416
+
 public:
 	Compresor();
 	Compresor(unsigned*array,unsigned tamanio);
