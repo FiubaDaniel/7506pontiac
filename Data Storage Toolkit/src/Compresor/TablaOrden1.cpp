@@ -91,23 +91,25 @@ void TablaOrden1::incremtarOcurrencia(unsigned char contexto,unsigned char simbo
 		agregarContexto(contexto,simbolo);
 	}else{
 		tipo_contextos::iterator it = contextos.find(contexto);
-		if(it != contextos.end()){//Existe contexto
+		if(it != contextos.end()){
+			//Existe contexto
 			Contexto& contextoAmodificar = it->second;
 			std::list<ElementoContexto>::iterator itLista = contextoAmodificar.tablaFrecuencias.begin();
 			bool encontrado=false;
 			while(!encontrado&&itLista!=contextoAmodificar.tablaFrecuencias.end()){
 				ElementoContexto& elemento = *itLista;
 				if(elemento.simbolo==simbolo){//Existe simbolo en el contexto
-					elemento.frecuencia=elemento.frecuencia+1;
+					elemento.frecuencia++;
+					contextoAmodificar.totalFrecuencias++;
 					encontrado=true;
 				}
 				itLista++;
 			}
 			if(encontrado==false){
-				Contexto& contextoAmodificar = it->second;
 				this->ageragarElementoContexto(contextoAmodificar,simbolo);
+				contextoAmodificar.totalFrecuencias+=2;
 			}
-			contextoAmodificar.totalFrecuencias=contextoAmodificar.totalFrecuencias+1;
+
 		}else{//no existe contexto
 			agregarContexto(contexto,simbolo);
 		}
@@ -117,11 +119,11 @@ void TablaOrden1::incremtarOcurrencia(unsigned char contexto,unsigned char simbo
 void TablaOrden1::agregarContexto(unsigned char contexto,unsigned char simbolo){
 	Contexto contextoNuevo;
 	if(!contextos.empty()){
-		contextoNuevo.totalFrecuencias=0;//Tiene q ser dos pq se su
+		contextoNuevo.totalFrecuencias=2;
 		this->ageragarElementoContexto(contextoNuevo,simbolo);
 		contextos.insert(std::pair<unsigned char,Contexto>(contexto,contextoNuevo));
 	}else{
-		contextoNuevo.totalFrecuencias=2;
+		contextoNuevo.totalFrecuencias=0;
 		contextos.insert(std::pair<unsigned char,Contexto>(simbolo,contextoNuevo));
 	}
 }

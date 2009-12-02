@@ -57,13 +57,13 @@ public:
 	/* dado el array de <simbolos> trata de comprimir los <cantidad> simbolos del array,
 	 * devuelve el numero de simbolos efectivamente comprimidos
 	 */
-	unsigned comprimirPrimeros(char*simbolos,unsigned cantidad);
+	unsigned comprimirPrimeros(unsigned char*simbolos,unsigned cantidad);
 	/*
 	 * intenta agregar <cantidad> de <simbolos> al codigo actual, en caso de que
 	 * desborde la capacidad, el codigo agregado es desechado.
 	 * pre: se usado comprimir previamente, almenos una vez.
 	 */
-	bool agregar(char*simbolos,unsigned cantidad);
+	bool agregar(unsigned char*simbolos,unsigned cantidad);
 	/*
 	 * Para el buffer utilizado cierra el codigo.
 	 */
