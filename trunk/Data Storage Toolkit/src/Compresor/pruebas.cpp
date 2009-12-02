@@ -16,7 +16,7 @@ int pruebacompresion(){
 	Compresor compresor(buffer,TAM_BUF1);
 	cout<<compresor.comprimirPrimeros(str,MIN_CANT_CHAR)<<endl;
 	compresor.agregar(str+MIN_CANT_CHAR,122);
-	//compresor.agregar(str+MIN_CANT_CHAR,MIN_CANT_CHAR);
+	compresor.agregar(str+MIN_CANT_CHAR,MIN_CANT_CHAR);
 	compresor.cerrar();
 	unsigned buffer2[TAM_BUF2];
 	compresor.setContinuacionCompresion(buffer2,TAM_BUF2);
