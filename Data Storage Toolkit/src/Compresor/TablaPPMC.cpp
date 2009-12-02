@@ -6,7 +6,11 @@
  */
 
 #include "TablaPPMC.h"
+<<<<<<< .mine
+namespace PPMC{
+=======
 namespace PPMC{ //inicio NAMESPACE
+>>>>>>> .r416
 TablaPPMC::TablaPPMC() {
 	this->alerta_escape=false;
 }
@@ -249,7 +253,7 @@ tipo_frecuencia TablaPPMC::buscarOcurrencias(unsigned char anterior,int caracter
 	}
 	}
  */
-int TablaPPMC::calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior){
+unsigned char TablaPPMC::calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior){
 	unsigned char retorno=0;
 	unsigned longitud = techo - piso;
 	unsigned temp=piso;
@@ -271,7 +275,7 @@ int TablaPPMC::calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,un
 		tipo_contextos::iterator it = contextos.find(anterior);
 		if(contextos.empty()||it == contextos.end()){//Si no existe contexto paso dirtectamente a contexto -1
 			this->alerta_escape=true;
-			return -1;
+			return 0;
 		}else{//Existe el contexto, recorro elementos exiistentes del contexo
 			Contexto contextoAmodificar = it->second;
 			std::list<ElementoContexto>::iterator it_contexto = contextoAmodificar.tablaFrecuencias.begin();
@@ -288,7 +292,7 @@ int TablaPPMC::calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,un
 			float ocurrencias=contextoAmodificar.frecuencia_escape;//ocurrecia debe devolver frecuencia de escape
 			techo=floor(piso+ocurrencias*((longitud/total)+(1/total)))-1;
 			this->alerta_escape=true;
-			return -1;
+			return 0;
 		}
 	}
 }
@@ -321,4 +325,8 @@ void TablaPPMC::imprimir(unsigned char contexto,unsigned char simbolo){
 		}
 	}
 }
+<<<<<<< .mine
+}
+=======
 }//fin NAMESPACE
+>>>>>>> .r416
