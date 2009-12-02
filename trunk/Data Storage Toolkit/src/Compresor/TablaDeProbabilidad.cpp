@@ -151,23 +151,29 @@ void TablaDeProbabilidad::ageragarElementoContexto(Contexto& contextoModificar,u
 
 void TablaDeProbabilidad::decremetarOcurrencia(unsigned char contexto,unsigned char simbolo){
 	if(!contextos.empty()){
-		tipo_contextos::iterator it = contextos.find(contexto);
-		if(it != contextos.end()){
-			Contexto&  contextoAmodificar = it->second;
-			bool encontrado = false;
-			std::list<ElementoContexto>::iterator itLista = contextoAmodificar.tablaFrecuencias.begin();
-			while(!encontrado && itLista!=contextoAmodificar.tablaFrecuencias.end()){
-				ElementoContexto& elemento = *itLista;
-				if(elemento.simbolo==simbolo){
-					if(elemento.frecuencia > 1)
-						elemento.frecuencia=elemento.frecuencia-1;
-					else
-						contextoAmodificar.tablaFrecuencias.erase(itLista);
-					contextoAmodificar.totalFrecuencias--;
-					encontrado=true;
+		tipo_contextos::iterator it_contexto = contextos.find(contexto);
+		if(it_contexto != contextos.end()){
+			tipo_tabla_frecuencias::iterator it_elemento_ctx = it_contexto->second.tablaFrecuencias.begin();
+
+			while((it_elemento_ctx->simbolo!=simbolo) and it_elemento_ctx!=it_contexto->second.tablaFrecuencias.end())
+				it_elemento_ctx++;
+
+			if(it_elemento_ctx!=it_contexto->second.tablaFrecuencias.end()){
+				tipo_frecuencia frec=it_elemento_ctx->frecuencia;
+				frec=it_contexto->second.totalFrecuencias;
+				if(it_elemento_ctx->frecuencia > 2){
+					it_elemento_ctx->frecuencia--;
+					it_contexto->second.totalFrecuencias--;
+				}else{
+					it_contexto->second.totalFrecuencias-=it_elemento_ctx->frecuencia;
+					it_contexto->second.tablaFrecuencias.erase(it_elemento_ctx);
+
 				}
-				itLista++;
+				if(it_contexto->second.tablaFrecuencias.empty()){
+					contextos.erase(it_contexto);
+				}
 			}
+
 		}
 	}
 }
@@ -211,7 +217,7 @@ unsigned char TablaDeProbabilidad::calcularEmision(unsigned &piso,unsigned &tech
 float TablaDeProbabilidad::obtenerTotalContexto(unsigned char simbolo){
 	tipo_contextos::iterator it = contextos.find(simbolo);
 	if(it != contextos.end()){
-	return it->second.totalFrecuencias+(256-it->second.tablaFrecuencias.size());
+		return it->second.totalFrecuencias+(256-it->second.tablaFrecuencias.size());
 	}
 	return 256;
 }
@@ -229,5 +235,19 @@ void TablaDeProbabilidad::imprimir(unsigned char contexto,unsigned char simbolo)
 			}
 			++itLista;
 		}
+	}
+}
+void TablaDeProbabilidad::imprimir(){
+	tipo_contextos::iterator contexto = contextos.begin();
+	while(contexto!=contextos.end()){
+		tipo_tabla_frecuencias::iterator elemento_contexto = contexto->second.tablaFrecuencias.begin();
+		cout<<"CTX("<< contexto->second.totalFrecuencias<<"):"<<contexto->first<<" ";
+		while(elemento_contexto != contexto->second.tablaFrecuencias.end()){
+			cout<<"("<<elemento_contexto->simbolo<<" , ";
+			cout<<elemento_contexto->frecuencia<<") ";
+			++elemento_contexto;
+		}
+		contexto++;
+		cout<<endl;
 	}
 }
