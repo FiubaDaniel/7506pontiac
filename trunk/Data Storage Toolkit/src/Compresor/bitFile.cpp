@@ -107,19 +107,21 @@ char bitFile::tell_bits_offset_w(){
 	return bit_write_offset;
 }
 void bitFile::fill(unsigned fuente){
-	unsigned * p=&buffer[write_posicion];
+	//unsigned * p=&buffer[write_posicion];
 	if(write_posicion<tamanio){
 		if(bit_write_offset<MAX_BITS){
 			buffer[write_posicion]&=~(UNOS>>bit_write_offset);
 			buffer[write_posicion]|=fuente>>bit_write_offset;
 			fuente<<=(MAX_BITS-bit_write_offset);
-		}
-		write_posicion++;
-		if(write_posicion<tamanio){
-			p=&buffer[write_posicion];
-			buffer[write_posicion]&=~(UNOS>>bit_write_offset);
+			write_posicion++;
+			if(write_posicion<tamanio){
+				buffer[write_posicion]&=UNOS>>(bit_write_offset);
+				buffer[write_posicion]|=fuente>>bit_write_offset;
+			}
+		}else{
+			//p=&buffer[write_posicion];
+			buffer[write_posicion]&=~(UNOS);
 			buffer[write_posicion]|=fuente;
-
 		}
 	}
 }
