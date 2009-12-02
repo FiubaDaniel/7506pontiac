@@ -238,6 +238,9 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 		tabla.incremtarOcurrencia(this->ultimoSimbolo,emision);//Se reestructura la tabla segun la ultima emision
 		this->ultimoSimbolo = emision;
 		descomprimido.push_back(emision);
+		if(emision==65){
+			std::cout<<std::endl;
+		}
 		rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
 	}
 }
