@@ -38,15 +38,17 @@ public:
 	void obtenerExtremos(unsigned char contexto,unsigned char simbolo,unsigned & piso,unsigned &techo);
 	void incremtarOcurrencia(unsigned char contexto,unsigned char simbolo);
 	void decremetarOcurrencia(unsigned char contexto,unsigned char simbolo);
-	unsigned char calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior);
-	float buscarOcurrencias(unsigned char anterior,unsigned char buscado);
+	int calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior);
+	float buscarOcurrencias(unsigned char anterior,int buscado);
 	void imprimir(unsigned char contexto,unsigned char simbolo);
 	bool vacia();
+	bool esEscape();
 	virtual ~TablaPPMC();
 private:
 	float obtenerTotalContexto(unsigned char simbolo);
 	void agregarContexto(unsigned char contexto,unsigned char simbolo);
 	void ageragarElementoContexto(Contexto& contextoModificar,unsigned char simbolo);
+	bool alerta_escape;
 };
 
 #endif /* TABLAPPMC_H_ */
