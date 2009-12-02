@@ -11,11 +11,9 @@
 #include <list>
 #include <cmath>
 #include <iostream>
-<<<<<<< .mine
-namespace PPMC{
-=======
+
 namespace PPMC{ //inicio NAMESPACE
->>>>>>> .r416
+
 typedef float tipo_frecuencia;
 
 struct ElementoContexto{
@@ -54,9 +52,7 @@ private:
 	void ageragarElementoContexto(Contexto& contextoModificar,unsigned char simbolo);
 	bool alerta_escape;
 };
-<<<<<<< .mine
+
 }
-=======
-}//fin NAMESPACE
->>>>>>> .r416
+
 #endif /* TABLAPPMC_H_ */
