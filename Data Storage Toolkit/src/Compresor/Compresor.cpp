@@ -142,8 +142,8 @@ unsigned Compresor::comprimirPrimeros(unsigned char*simbolos,unsigned cantidad){
 			piso_anterior=piso;
 			techo_anterior=techo;
 			tabla.obtenerExtremos(ultimoSimbolo,simbolos[cant_emitidos],piso,techo);
-			emitir_codigo();
 			tabla.incremtarOcurrencia(ultimoSimbolo,simbolos[cant_emitidos]);
+			emitir_codigo();
 			ultimoSimbolo=simbolos[cant_emitidos];
 			cant_emitidos++;
 		}
@@ -163,7 +163,7 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 	unsigned pos=buffer.tell_unsigned_write();
 	char offset=buffer.tell_bits_offset_w();
 	try{
-		tabla.imprimir();std::cout<<std::endl;
+		//tabla.imprimir();std::cout<<std::endl;
 		/* emito el ultimo */
 		tabla.obtenerExtremos(ultimoSimbolo,cerrador,piso,techo);
 		emitir_codigo();
@@ -172,13 +172,12 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 		//-1 por q el simobolo q cierrar no se emite
 		while(cant_emitidos!=cantidad-1){
 			tabla.obtenerExtremos(ultimoSimbolo,simbolos[cant_emitidos],piso,techo);
-			emitir_codigo();
 			tabla.incremtarOcurrencia(ultimoSimbolo,simbolos[cant_emitidos]);
+			emitir_codigo();
 			ultimoSimbolo=simbolos[cant_emitidos];
 			cant_emitidos++;
 		}
 		cerrador=simbolos[cant_emitidos];
-
 		if((buffer.size()-buffer.tell_unsigned_write())*MAX_BITS-buffer.tell_bits_offset_w() < MAX_BITS+U){
 			throw bitFileEOFException();
 		}
@@ -198,7 +197,7 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 			tabla.decremetarOcurrencia(cerrador,simbolos[0]);
 			tabla.decremetarOcurrencia(ultimoSimbolo,cerrador);
 		}
-		tabla.imprimir();std::cout<<std::endl;
+		//tabla.imprimir();std::cout<<std::endl;
 		return false;
 	}
 	return true;
@@ -240,9 +239,9 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 		tabla.incremtarOcurrencia(this->ultimoSimbolo,emision);//Se reestructura la tabla segun la ultima emision
 		this->ultimoSimbolo = emision;
 		descomprimido.push_back(emision);
-		if(emision==65){
+/*		if(emision==65){
 			std::cout<<std::endl;
-		}
+		}*/
 		rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
 	}
 }
