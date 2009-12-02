@@ -8,19 +8,20 @@
 #ifndef TABLAORDEN0_H_
 #define TABLAORDEN0_H_
 #include <cmath>
-
+#define tipo_long float
 class TablaOrden0 {
-	char ocurrencias[256];
-	long total;
+	unsigned ocurrencias[256];
+	unsigned total;
 public:
 	TablaOrden0(){
 		for(int i=0;i<256;i++){
 			ocurrencias[i]=1;
 		}
-		total=0;
+		total=256;
 	}
 	void obtenerExtremos(unsigned char contexto,unsigned char simbolo,unsigned & piso,unsigned &techo){
-		double longitud=techo-piso;
+		//unsigned long longitud=techo-piso;
+		tipo_long longitud=techo-piso;
 		longitud+=1;
 		double prob;
 		for(unsigned char i=0;i<simbolo;i++){
@@ -45,7 +46,8 @@ public:
 		}
 	}
 	unsigned char calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior){
-		double longitud=techo-piso;
+		//unsigned long longitud=techo-piso;
+		tipo_long longitud=techo-piso;
 		longitud+=1;
 		bool encontrado=false;
 		unsigned short i=0;
@@ -57,8 +59,6 @@ public:
 		while(not encontrado and i<256){
 			if(piso<=codigo and  codigo<=techo){
 				encontrado=true;
-				total++;
-				ocurrencias[i]++;
 			}else{
 				i++;
 				piso=techo+1;
