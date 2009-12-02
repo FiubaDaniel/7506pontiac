@@ -105,6 +105,7 @@ inline void Compresor::cerrar_codigo(){
 	}else{
 		buffer.write(MSB,MAX_BITS);
 	}
+	//buffer.fill(MSB);
 	/*relleno con 0*/
 	while(buffer.tell_unsigned_write()<buffer.size()){
 		buffer.fill(0x0);
@@ -131,9 +132,11 @@ inline void Compresor::abrir_codigo(){
 	}
 	buffer.seek_w(MAX_BITS-cont_bits,pos);
 }
-unsigned Compresor::comprimirPrimeros(char*simbolos,unsigned cantidad){
+unsigned Compresor::comprimirPrimeros(unsigned char*simbolos,unsigned cantidad){
 	unsigned cant_emitidos=0;
 	unsigned piso_anterior,techo_anterior;
+	unsigned pos=buffer.tell_unsigned_write();
+	char offset=buffer.tell_bits_offset_w();
 	try{
 		while(cant_emitidos<cantidad-1){
 			piso_anterior=piso;
@@ -147,18 +150,20 @@ unsigned Compresor::comprimirPrimeros(char*simbolos,unsigned cantidad){
 		cerrador=simbolos[cant_emitidos];
 	}catch(bitFileEOFException e){
 		/*asumo que el codigo actual preserba el ultimoSimbolo*/
+		buffer.seek_w(offset,pos);
 		piso=piso_anterior;
 		techo=techo_anterior;
 	};
 	return cant_emitidos;
 }
-bool Compresor::agregar(char*simbolos,unsigned cantidad){
+bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 	unsigned cant_emitidos=0,piso_anterior=piso,techo_anterior=techo;
 	unsigned char ultimo_anterior=ultimoSimbolo, cerrador_anterior=cerrador;
 	int U_anterior=U;
 	unsigned pos=buffer.tell_unsigned_write();
 	char offset=buffer.tell_bits_offset_w();
 	try{
+		tabla.imprimir();std::cout<<std::endl;
 		/* emito el ultimo */
 		tabla.obtenerExtremos(ultimoSimbolo,cerrador,piso,techo);
 		emitir_codigo();
@@ -173,13 +178,19 @@ bool Compresor::agregar(char*simbolos,unsigned cantidad){
 			cant_emitidos++;
 		}
 		cerrador=simbolos[cant_emitidos];
+
+		if((buffer.size()-buffer.tell_unsigned_write())*MAX_BITS-buffer.tell_bits_offset_w() < MAX_BITS+U){
+			throw bitFileEOFException();
+		}
 	}catch(bitFileEOFException e){
+		//tabla.imprimir();std::cout<<std::endl;
 		buffer.seek_w(offset,pos);
 		ultimoSimbolo=ultimo_anterior;
 		cerrador=cerrador_anterior;
 		piso=piso_anterior;
 		techo=techo_anterior;
 		U=U_anterior;
+
 		if(cant_emitidos!=0){
 			for(unsigned i=cant_emitidos;i>0;i--){
 				tabla.decremetarOcurrencia(simbolos[i-1],simbolos[i]);
@@ -187,6 +198,7 @@ bool Compresor::agregar(char*simbolos,unsigned cantidad){
 			tabla.decremetarOcurrencia(cerrador,simbolos[0]);
 			tabla.decremetarOcurrencia(ultimoSimbolo,cerrador);
 		}
+		tabla.imprimir();std::cout<<std::endl;
 		return false;
 	}
 	return true;
@@ -213,6 +225,7 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 	int bit_comparado=0X1;
 	int nro_bit;
 	for(nro_bit=0;(bit_comparado&buffer[nro_unsigned])==0;nro_bit++)bit_comparado<<=1;
+	//nro_bit++;
 	//Calculo cantidad de bits de compresion desde de los 32 iniciales
 	this->bitRestantes = ((nro_unsigned-1)*MAX_BITS)+(MAX_BITS-nro_bit);
 
