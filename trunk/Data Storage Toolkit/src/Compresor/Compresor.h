@@ -51,8 +51,9 @@ class Compresor {
 	 */
 	void abrir_codigo();
 
-	TablaOrden1 tabla;
+	 TablaOrden1 tabla;
 public:
+	Compresor();
 	Compresor(unsigned*array,unsigned tamanio);
 	/* dado el array de <simbolos> trata de comprimir los <cantidad> simbolos del array,
 	 * devuelve el numero de simbolos efectivamente comprimidos

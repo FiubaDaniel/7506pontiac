@@ -7,6 +7,7 @@
 #ifndef BITFILE_H_
 #define BITFILE_H_
 #include <exception>
+#include <cstddef>
 #define UNOS (~unsigned(0x0))
 
 class bitFileEOFException: public std::exception{
@@ -38,6 +39,7 @@ class bitFile {
 	char bit_write_offset;
 public:
 	static const char MAX_BITS=sizeof(unsigned)*8;
+	bitFile();
 	bitFile(unsigned*buffer,unsigned tamanio);
 	virtual ~bitFile();
 	/* Toma los <cantidad> bits de menos significativos de <fuente>

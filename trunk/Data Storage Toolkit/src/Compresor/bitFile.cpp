@@ -15,7 +15,14 @@ bitFile::bitFile(unsigned*buffer,unsigned tamanio){
 	read_posicion=0;
 	bit_read_offset=0;
 };
-
+bitFile::bitFile(){
+	buffer=NULL;
+	tamanio=0;
+	write_posicion=0;
+	bit_write_offset=0;
+	read_posicion=0;
+	bit_read_offset=0;
+};
 bitFile::~bitFile() {}
 void bitFile::write(unsigned fuente,char cantidad)throw (bitFileEOFException){
 	int bits_restantes=(tamanio-write_posicion)*MAX_BITS-bit_write_offset;
