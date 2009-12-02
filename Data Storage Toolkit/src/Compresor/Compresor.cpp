@@ -134,16 +134,6 @@ unsigned Compresor::comprimirPrimeros(char*simbolos,unsigned cantidad){
 	unsigned cant_emitidos=0;
 	unsigned piso_anterior,techo_anterior;
 	try{
-		/*if(tabla.vacia() and cantidad>1){
-			piso_anterior=piso;
-			techo_anterior=techo;
-			buffer.seek_w(0,0);
-			tabla.obtenerExtremos(0,simbolos[0],piso,techo);
-			emitir_codigo();
-			ultimoSimbolo=simbolos[0];
-			cant_emitidos++;
-		}*/
-		//-1 por q el simobolo q cierrar no se emite
 		while(cant_emitidos<cantidad-1){
 			piso_anterior=piso;
 			techo_anterior=techo;
@@ -167,10 +157,7 @@ bool Compresor::agregar(char*simbolos,unsigned cantidad){
 	int U_anterior=U;
 	unsigned pos=buffer.tell_unsigned_write();
 	char offset=buffer.tell_bits_offset_w();
-
 	try{
-		tabla.imprimir();
-		std::cout<<std::endl;
 		/* emito el ultimo */
 		tabla.obtenerExtremos(ultimoSimbolo,cerrador,piso,techo);
 		emitir_codigo();
@@ -192,8 +179,6 @@ bool Compresor::agregar(char*simbolos,unsigned cantidad){
 		piso=piso_anterior;
 		techo=techo_anterior;
 		U=U_anterior;
-		tabla.imprimir();
-		std::cout<<std::endl;
 		if(cant_emitidos!=0){
 			for(unsigned i=cant_emitidos;i>0;i--){
 				tabla.decremetarOcurrencia(simbolos[i-1],simbolos[i]);
@@ -201,7 +186,6 @@ bool Compresor::agregar(char*simbolos,unsigned cantidad){
 			tabla.decremetarOcurrencia(cerrador,simbolos[0]);
 			tabla.decremetarOcurrencia(ultimoSimbolo,cerrador);
 		}
-		tabla.imprimir();
 		return false;
 	}
 	return true;
