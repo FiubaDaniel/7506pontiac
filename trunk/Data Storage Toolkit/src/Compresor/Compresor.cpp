@@ -251,8 +251,8 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 	char offset=buffer.tell_bits_offset_w();
 	try{
 		tabla.imprimir();std::cout<<std::endl;*/
-		/* emito el ultimo */
-		/*tabla.obtenerExtremos(ultimoSimbolo,cerrador,piso,techo);
+/* emito el ultimo */
+/*tabla.obtenerExtremos(ultimoSimbolo,cerrador,piso,techo);
 		emitir_codigo();
 		tabla.incremtarOcurrencia(ultimoSimbolo,cerrador);
 		ultimoSimbolo=cerrador;
@@ -334,16 +334,11 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 		tabla.incremtarOcurrencia(this->ultimoSimbolo,emision);
 		this->ultimoSimbolo = emision;
 		descomprimido.push_back(emision);
-		<<<<<<< .mine
-		=======
-				/*		if(emision==65){
-			std::cout<<std::endl;
-		}*/
-				>>>>>>> .r416
-				rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
-		cant++;
 	}
+	rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
+	cant++;
 }
+
 /*-------------------------------Version con list-----------------------------------------------------------*/
 /*void Compresor::descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido){
 	//Calculo Padding
