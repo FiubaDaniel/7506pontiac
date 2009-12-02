@@ -8,7 +8,7 @@
 #include "TablaPPMC.h"
 
 TablaPPMC::TablaPPMC() {
-
+	this->alerta_escape=false;
 }
 TablaPPMC::~TablaPPMC() {
 
@@ -70,19 +70,53 @@ bool TablaPPMC::vacia(){
 	if(techo<piso)
 		throw 8;
 }*/
+bool TablaPPMC::esEscape(){
+	return this->alerta_escape;
+}
+/*Metodo para q use el PPMC inicialmente solo recorriendo lo elementos existentes*/
+
 void TablaPPMC::obtenerExtremos(unsigned char contexto,unsigned char simbolo,unsigned & piso,unsigned &techo){
 	int retorno=0;
 	unsigned longitud = techo - piso;
 	unsigned temp=piso;
 
-	float total = obtenerTotalContexto(contexto);
-	do{
-		piso=temp;
-		float ocurrencias=buscarOcurrencias(contexto,retorno);
-		temp=floor(piso+ocurrencias*((longitud/total)+(1/total)));
-		techo=temp-1;
-		retorno++;
-	}while(retorno<=simbolo);
+	float total = obtenerTotalContexto(contexto);//Se obtiene segun condicones iguales a q while  tomar
+	if(this->alerta_escape){//Contexto -1
+		do{
+			piso=temp;
+			float ocurrencias=1;
+			temp=floor(piso+ocurrencias*((longitud/total)+(1/total)));
+			techo=temp-1;
+			retorno++;
+		}while(retorno<=simbolo&&retorno<257);
+		this->alerta_escape=false;
+	}else{//Recorro solo los simbolos del contexto existente
+		tipo_contextos::iterator it = contextos.find(contexto);
+		if(contextos.empty()||it == contextos.end()){//Si no existe contexto paso dirtectamente a contexto -1
+			this->alerta_escape=true;
+		}else{//Existe el contexto, recorro elementos existentes del contexo
+			Contexto contextoBuscado = it->second;
+			std::list<ElementoContexto>::iterator it_contexto = contextoBuscado.tablaFrecuencias.begin();
+			bool encontrado=false;
+			while(!encontrado&&it_contexto!=contextoBuscado.tablaFrecuencias.end()){
+				ElementoContexto elemento = *it_contexto;
+				if(elemento.simbolo==simbolo){
+					encontrado=true;
+				}
+				piso=temp;
+				float ocurrencias=elemento.frecuencia;
+				temp=floor(piso+ocurrencias*((longitud/total)+(1/total)));
+				techo=temp-1;
+				++it_contexto;
+			}
+			if(!encontrado){
+				piso=temp;
+				float ocurrencias=contextoBuscado.frecuencia_escape;//Buscar ocurrencia debe devolver frecuencia de escape
+				techo=floor(piso+ocurrencias*((longitud/total)+(1/total)))-1;
+				this->alerta_escape=true;
+			}
+		}
+	}
 	if(techo<piso)
 		throw 8;
 }
@@ -113,7 +147,7 @@ void TablaPPMC::incremtarOcurrencia(unsigned char contexto,unsigned char simbolo
 				}
 				itLista++;
 			}
-			if(encontrado==false){
+			if(encontrado==false){//No existe simbolo
 				Contexto& contextoAmodificar = it->second;
 				this->ageragarElementoContexto(contextoAmodificar,simbolo);
 				contextoAmodificar.frecuencia_escape++;
@@ -189,29 +223,33 @@ void TablaPPMC::decremetarOcurrencia(unsigned char contexto,unsigned char simbol
 		}
 	}
 }
-
-tipo_frecuencia TablaPPMC::buscarOcurrencias(unsigned char anterior,unsigned char caracterBuscado){
-	if(!contextos.empty()){
-		tipo_contextos::iterator it = contextos.find(anterior);
-		if(it != contextos.end()){
-			Contexto&  buscado = it->second;
-			std::list<ElementoContexto>::iterator itLista = buscado.tablaFrecuencias.begin();
-			while(itLista != buscado.tablaFrecuencias.end()){
-				ElementoContexto elemento = *itLista;
-				if(caracterBuscado == elemento.simbolo){
-					return elemento.frecuencia;
+/*-------------------NO SE USA----------------------------------------
+tipo_frecuencia TablaPPMC::buscarOcurrencias(unsigned char anterior,int caracterBuscado){
+	if(this->alerta_escape){
+		this->alerta_escape=false;
+		return 1;
+		if(!contextos.empty()){
+			tipo_contextos::iterator it = contextos.find(anterior);
+			if(it != contextos.end()){
+				Contexto buscado = it->second;
+				if(caracterBuscado==-1){
+					return buscado.frecuencia_escape;
 				}
-				++itLista;
+				std::list<ElementoContexto>::iterator itLista = buscado.tablaFrecuencias.begin();
+				while(itLista != buscado.tablaFrecuencias.end()){
+					ElementoContexto elemento = *itLista;
+					if(caracterBuscado == elemento.simbolo){
+						return elemento.frecuencia;
+					}
+					++itLista;
+				}
 			}
-			return buscado.frecuencia_escape;
-		}else{
-			return 1;
 		}
+		return 0;
 	}
-	return 1;
-}
-
-unsigned char TablaPPMC::calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior){
+	}
+ */
+int TablaPPMC::calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior){
 	unsigned char retorno=0;
 	unsigned longitud = techo - piso;
 	unsigned temp=piso;
@@ -219,23 +257,53 @@ unsigned char TablaPPMC::calcularEmision(unsigned &piso,unsigned &techo,unsigned
 	 * como concecuencia para obtener probabilidades busco el total sumando los simbolos no exitentes en la lista
 	 */
 	float total = obtenerTotalContexto(anterior);
-	do{
-		piso=temp;
-		float ocurrencias=buscarOcurrencias(anterior,retorno);
-		temp=floor(piso+ocurrencias*((longitud/total)+(1/total)));//temp seria el piso siguiente.
-		techo=temp-1;//al piso siguiente le resto 1.
-		retorno++;
-	}while(codigo>=techo&&retorno<256);
-	return retorno-1;
+	if(this->alerta_escape){
+		do{
+			piso=temp;
+			float ocurrencias=1;
+			temp=floor(piso+ocurrencias*((longitud/total)+(1/total)));//temp seria el piso siguiente.
+			techo=temp-1;//al piso siguiente le resto 1.
+			retorno++;
+		}while(codigo>=techo&&retorno<256);
+		this->alerta_escape=false;
+		return retorno-1;
+	}else{
+		tipo_contextos::iterator it = contextos.find(anterior);
+		if(contextos.empty()||it == contextos.end()){//Si no existe contexto paso dirtectamente a contexto -1
+			this->alerta_escape=true;
+			return -1;
+		}else{//Existe el contexto, recorro elementos exiistentes del contexo
+			Contexto contextoAmodificar = it->second;
+			std::list<ElementoContexto>::iterator it_contexto = contextoAmodificar.tablaFrecuencias.begin();
+			while(it_contexto!=contextoAmodificar.tablaFrecuencias.end()){
+				ElementoContexto elemento = *it_contexto;
+				piso=temp;
+				float ocurrencias=elemento.simbolo;
+				temp=floor(piso+ocurrencias*((longitud/total)+(1/total)));
+				techo=temp-1;
+				if(codigo>=techo)return elemento.simbolo;
+				++it_contexto;
+			}
+			piso=temp;
+			float ocurrencias=contextoAmodificar.frecuencia_escape;//ocurrecia debe devolver frecuencia de escape
+			techo=floor(piso+ocurrencias*((longitud/total)+(1/total)))-1;
+			this->alerta_escape=true;
+			return -1;
+		}
+	}
 }
-
 float TablaPPMC::obtenerTotalContexto(unsigned char simbolo){
 	tipo_contextos::iterator it = contextos.find(simbolo);
-	if(it != contextos.end()){
+	if(it != contextos.end()){//Existe contexto
 		Contexto contexto = it->second;
+		if(this->alerta_escape){
+			return 256-contexto.tablaFrecuencias.size();//Elimino los de la lista por exclusion.
+		}
 		return contexto.frecuencia_escape+contexto.frecuencias_simbolos;
+	}else{
+		return 256;
 	}
-	return 256;
+	return 1;//No existe contexto, no impòrta lo devuelto ya q no se usará.
 }
 //TODO Esta funcion imprime la cantidad de ocurrencias de un caracter segun un contexto
 void TablaPPMC::imprimir(unsigned char contexto,unsigned char simbolo){
