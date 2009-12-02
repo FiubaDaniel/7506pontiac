@@ -282,16 +282,18 @@ void Compresor::rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,
 		this->techo=(this->techo<<cont)|(UNOS>>(MAX_BITS-cont));
 		//Restructuro el codigo
 		auxiliar = cont;
-		if(cont>=contadorDeBits){
+		if(cont>contadorDeBits){
 			/*
 			 * Si cont es mayor a la cantidad de bit que tiene siguiente se prosesan
 			 * los bit que posea y se deja para procesar fuera aquellos que no se pudo seteando el
 			 * siguiente.
 			 */
-			auxiliar = cont-contadorDeBits;
+			if(contadorDeBits>0){
+				auxiliar = cont-contadorDeBits;
 			//Acomodo codigo
-			restructuracionOverflow(contadorDeBits,codigo,siguiente);
+				restructuracionOverflow(contadorDeBits,codigo,siguiente);
 			//Setteo
+			}
 			posBuffer=posBuffer+1;
 			siguiente=buffer[posBuffer];
 			this->bitRestantes=this->bitRestantes-contadorDeBits;
@@ -310,9 +312,11 @@ void Compresor::rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,
 		this->techo=(this->techo&MSB)|((this->techo<<(cont+1))>>1)|(UNOS>>(MAX_BITS-cont));
 		//Reestructuro codigo
 		auxiliar=cont;
-		if(cont>=contadorDeBits){
-			auxiliar = cont-contadorDeBits;
-			restructuracionUnderflow(contadorDeBits,codigo,siguiente);
+		if(cont>contadorDeBits){
+			if(contadorDeBits>0){
+				auxiliar = cont-contadorDeBits;
+				restructuracionUnderflow(contadorDeBits,codigo,siguiente);
+			}
 			posBuffer=posBuffer+1;
 			siguiente=buffer[posBuffer];
 			this->bitRestantes=this->bitRestantes-contadorDeBits;
