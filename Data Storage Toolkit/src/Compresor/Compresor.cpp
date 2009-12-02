@@ -99,13 +99,13 @@ inline void Compresor::cerrar_codigo(){
 	buffer.write((piso<<1)>>1,MAX_BITS-1);
 
 	/*padding*/
-	char bits_libres_emision=MAX_BITS -buffer.tell_bits_offset_w();
+	/*char bits_libres_emision=MAX_BITS -buffer.tell_bits_offset_w();
 	if(bits_libres_emision>0){
 		buffer.write(0x1<<(bits_libres_emision-1),bits_libres_emision);
 	}else{
 		buffer.write(MSB,MAX_BITS);
-	}
-	//buffer.fill(MSB);
+	}*/
+	buffer.fill(MSB);
 	/*relleno con 0*/
 	while(buffer.tell_unsigned_write()<buffer.size()){
 		buffer.fill(0x0);
