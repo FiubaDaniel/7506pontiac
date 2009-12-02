@@ -6,11 +6,8 @@
  */
 
 #include "TablaPPMC.h"
-<<<<<<< .mine
-namespace PPMC{
-=======
+
 namespace PPMC{ //inicio NAMESPACE
->>>>>>> .r416
 TablaPPMC::TablaPPMC() {
 	this->alerta_escape=false;
 }
@@ -325,8 +322,8 @@ void TablaPPMC::imprimir(unsigned char contexto,unsigned char simbolo){
 		}
 	}
 }
-<<<<<<< .mine
+
 }
-=======
-}//fin NAMESPACE
->>>>>>> .r416
+
+
+
