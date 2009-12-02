@@ -11,11 +11,27 @@
 #define TAM_BUF2 10
 int pruebacompresion(){
 	unsigned buffer[TAM_BUF1];
+<<<<<<< .mine
+	//1234567890123456789012345678901234512345678901234567890123456789012345
+=======
 				  //1234567890123456789012345678901234512345678901234567890123456789012345
+>>>>>>> .r416
 	unsigned char str[122]="Base class for standard exceptions. All objects thrown by components of the standard library are derived from this class.";
 	Compresor compresor(buffer,TAM_BUF1);
+<<<<<<< .mine
+	compresor.comprimirPrimeros(str,30);// CANT_Char es el numero de caracteres q queres comprimir
+	compresor.cerrar();
+	Compresor descompresor(buffer,TAM_BUF1);
+	string descomprimido;
+	descompresor.descomprimir(buffer,descomprimido,TAM_BUF1);
+	cout<<str<<endl;
+	cout<<descomprimido<<endl;
+	/*cout<<compresor.comprimirPrimeros(str,MIN_CANT_CHAR)<<endl;
+	compresor.agregar(str+MIN_CANT_CHAR,122);
+=======
 	compresor.comprimirPrimeros(str,MIN_CANT_CHAR);
 	compresor.agregar(str+MIN_CANT_CHAR,MIN_CANT_CHAR);
+>>>>>>> .r416
 	compresor.agregar(str+MIN_CANT_CHAR,MIN_CANT_CHAR);
 	compresor.cerrar();
 	unsigned buffer2[TAM_BUF2];
@@ -26,12 +42,12 @@ int pruebacompresion(){
 	string descomprimido;
 	descompresor.descomprimir(buffer,descomprimido,TAM_BUF1);
 	cout<<str<<endl;
-	cout<<descomprimido<<endl;
+	cout<<descomprimido<<endl;*/
 	/*segundo buffer*/
-	descomprimido.clear();
+	/*descomprimido.clear();
 	descompresor.setExtremos();
 	descompresor.descomprimir(buffer2,descomprimido,TAM_BUF2);
-	cout<<descomprimido<<endl;
+	cout<<descomprimido<<endl;*/
 	/*fin segundo buffer*/
 	return 0;
 }
