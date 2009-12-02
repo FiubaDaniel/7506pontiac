@@ -11,7 +11,7 @@
 #include "bitFile.h"
 #include <cmath>
 #include <string>
-#include "TablaDeProbabilidad.h"
+#include "TablaOrden1.h"
 
 void imprimir(unsigned num);
 //#define UINT_MAX (~unsigned(0x0))
@@ -51,7 +51,7 @@ class Compresor {
 	 */
 	void abrir_codigo();
 
-	TablaDeProbabilidad tabla;
+	TablaOrden1 tabla;
 public:
 	Compresor(unsigned*array,unsigned tamanio);
 	/* dado el array de <simbolos> trata de comprimir los <cantidad> simbolos del array,
