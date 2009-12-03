@@ -272,6 +272,9 @@ bool EATexto::buscar(Clave*unaClave){
 Componente*EATexto::getComponenteUsado(){
 	return registro;
 }
+unsigned EATexto::getTamanioComponenteUsado(){
+	return registro->tamanioSerializado();
+};
 void EATexto::imprimirMetada(std::ostream&out){
 	out<<"Estrategia Texto:"<<std::endl;
 }

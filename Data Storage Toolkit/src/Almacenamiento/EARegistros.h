@@ -44,7 +44,9 @@ public:
 	bool buscar(Componente*componente);
 	bool buscar(Clave*unaClave);
 	Componente*getComponenteUsado();
+	unsigned getTamanioComponenteUsado();
 	void imprimirMetada(std::ostream&out);
+	std::string imprimirMetada();
 };
 
 #endif /* EAREGISTROS_H_ */

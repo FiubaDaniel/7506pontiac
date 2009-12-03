@@ -211,9 +211,26 @@ bool EARegistros::buscar(Clave*unaClave){
 Componente*EARegistros::getComponenteUsado(){
 	return registro;
 }
+unsigned EARegistros::getTamanioComponenteUsado(){
+	return tamanioRegistro;
+}
 void EARegistros::imprimirMetada(std::ostream&out){
 	out<<"Estrategia Registros: "<<std::endl;
 	out<< " tamanio Registro: "<< tamanioRegistro ;
 	out<< " cantidad Registros: "<< siguienteRegLibre;
 	out<<std::endl;
 }
+std::string EARegistros::imprimirMetada(){
+	std::string resultado;
+	char*p=(char*)&tamanioRegistro;
+	for(unsigned i=0;i<sizeof(tamanioRegistro);i++){
+		resultado.push_back(*p);
+		p++;
+	}
+	p=(char*)&siguienteRegLibre;
+	for(unsigned i=0;i<sizeof(siguienteRegLibre);i++){
+		resultado.push_back(*p);
+		p++;
+	}
+	return resultado;
+};
