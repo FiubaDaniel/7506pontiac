@@ -174,12 +174,12 @@ unsigned Compresor::comprimirPrimeros(unsigned char*simbolos,unsigned cantidad){
 			piso_anterior=piso;
 			techo_anterior=techo;
 			tabla.obtenerExtremos(ultimoSimbolo,simbolos[cant_emitidos],piso,techo);
+			emitir_codigo();
 			if(tabla.esEscape()){
 				emitir_codigo();
 				tabla.obtenerExtremos(ultimoSimbolo,simbolos[cant_emitidos],piso,techo);
 			}
 			tabla.incremtarOcurrencia(ultimoSimbolo,simbolos[cant_emitidos]);
-			emitir_codigo();
 			ultimoSimbolo=simbolos[cant_emitidos];
 			cant_emitidos++;
 		}
