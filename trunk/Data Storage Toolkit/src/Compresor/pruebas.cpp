@@ -15,13 +15,20 @@ int pruebacompresion1(){
 
 	//1234567890123456789012345678901234512345678901234567890123456789012345
 
-	unsigned char str[122]="Base class for standard exceptions. All objects thrown by components of the standard library are derived from this class.";
+	unsigned char str[MAX_CANT_CHAR]="Base class for standard exceptions. All objects thrown by components of the standard library are derived from this class.";
+	/*********************************************************/
+	/*                      COMPRIMIENDO                     */
+	/*********************************************************/
 	Compresor compresor(buffer,TAM_BUF1);
-	compresor.comprimirPrimeros(str,122);// CANT_Char es el numero de caracteres q queres comprimir
+	compresor.comprimirPrimeros(str,MAX_CANT_CHAR);
 	compresor.cerrar();
+	/*********************************************************/
+	/*                   DESCOMPRIMIENDO                     */
+	/*********************************************************/
 	Compresor descompresor(buffer,TAM_BUF1);
 	string descomprimido;
 	descompresor.descomprimir(buffer,descomprimido,TAM_BUF1);
+	/*Mostrando resultados*/
 	cout<<str<<endl;
 	cout<<descomprimido<<endl;
 	return 0;
@@ -30,26 +37,26 @@ int pruebacompresion2(){
 	unsigned primer_buffer_comprimido[TAM_BUF1];
 	unsigned segundo_buffer_comprimido[TAM_BUF2];
 						             //1234567890123456789012345678901234512345678901234567890123456789012345
-	unsigned char fuente_de_caracteres[MAX_CANT_CHAR]="Base class for standard exceptions. All objects thrown by components of the standard library are derived from this class.";
+	string fuente_de_caracteres="Base class for standard exceptions. All objects thrown by components of the standard library are derived from this class.";
 	/*********************************************************/
 	/*                      COMPRIMIENDO                     */
 	/*********************************************************/
 	Compresor compresor(primer_buffer_comprimido,TAM_BUF1);
 	/*USANDO EL PRIMER BUFFER*/
-	compresor.comprimirPrimeros(fuente_de_caracteres,MIN_CANT_CHAR);
+	compresor.comprimirPrimeros((unsigned char*)fuente_de_caracteres.c_str(),MIN_CANT_CHAR);
 	/*intenta agregar mas de los q pueden entrar*/
-	compresor.agregar(fuente_de_caracteres,MAX_CANT_CHAR);
+	compresor.agregar((unsigned char*)fuente_de_caracteres.c_str(),MAX_CANT_CHAR);
 	/*intena agregar una cantidad menor*/
-    compresor.agregar(fuente_de_caracteres+MIN_CANT_CHAR,MIN_CANT_CHAR);
+    compresor.agregar((unsigned char*)fuente_de_caracteres.c_str()+MIN_CANT_CHAR,MIN_CANT_CHAR);
     /*termina de usar el buffer*/
 	compresor.cerrar();
 	/*USANDO EL SEGUNDO BUFFER*/
 	/*setea el segundo buffer para escribir*/
 	compresor.setContinuacionCompresion(segundo_buffer_comprimido,TAM_BUF2);
 	/*escribo los primero bits en el nuevo buffer*/
-	compresor.comprimirPrimeros(fuente_de_caracteres+2*MIN_CANT_CHAR,MIN_CANT_CHAR);
+	compresor.comprimirPrimeros((unsigned char*)fuente_de_caracteres.c_str()+2*MIN_CANT_CHAR,MIN_CANT_CHAR);
 	/*agrego el resto de los caracteres*/
-	compresor.agregar(fuente_de_caracteres+3*MIN_CANT_CHAR,MAX_CANT_CHAR-3*MIN_CANT_CHAR);
+	compresor.agregar((unsigned char*)fuente_de_caracteres.c_str()+3*MIN_CANT_CHAR,fuente_de_caracteres.size()-3*MIN_CANT_CHAR);
 	/*ternimo de usar el segundo buffer*/
 	compresor.cerrar();
 	/*********************************************************/
