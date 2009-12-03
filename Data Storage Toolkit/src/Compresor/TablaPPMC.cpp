@@ -171,7 +171,7 @@ void TablaPPMC::agregarContexto(unsigned char contexto,unsigned char simbolo){
 		contextos.insert(std::pair<unsigned char,Contexto>(contexto,contextoNuevo));
 	}else{
 		contextoNuevo.frecuencias_simbolos=0;
-		contextoNuevo.frecuencia_escape=1;
+		contextoNuevo.frecuencia_escape=0;
 		contextos.insert(std::pair<unsigned char,Contexto>(simbolo,contextoNuevo));
 	}
 }
