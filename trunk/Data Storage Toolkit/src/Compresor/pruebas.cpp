@@ -7,7 +7,7 @@
 #include "pruebas.h"
 #define MAX_CANT_CHAR 122
 #define MIN_CANT_CHAR 35
-#define TAM_BUF1 20
+#define TAM_BUF1 30
 #define TAM_BUF2 10
 int pruebacompresion(){
 	unsigned buffer[TAM_BUF1];
@@ -16,7 +16,7 @@ int pruebacompresion(){
 
 	unsigned char str[122]="Base class for standard exceptions. All objects thrown by components of the standard library are derived from this class.";
 	Compresor compresor(buffer,TAM_BUF1);
-	compresor.comprimirPrimeros(str,30);// CANT_Char es el numero de caracteres q queres comprimir
+	compresor.comprimirPrimeros(str,122);// CANT_Char es el numero de caracteres q queres comprimir
 	compresor.cerrar();
 	Compresor descompresor(buffer,TAM_BUF1);
 	string descomprimido;

@@ -176,8 +176,8 @@ unsigned Compresor::comprimirPrimeros(unsigned char*simbolos,unsigned cantidad){
 			tabla.obtenerExtremos(ultimoSimbolo,simbolos[cant_emitidos],piso,techo);
 			emitir_codigo();
 			if(tabla.esEscape()){
-				emitir_codigo();
 				tabla.obtenerExtremos(ultimoSimbolo,simbolos[cant_emitidos],piso,techo);
+				emitir_codigo();
 			}
 			tabla.incremtarOcurrencia(ultimoSimbolo,simbolos[cant_emitidos]);
 			ultimoSimbolo=simbolos[cant_emitidos];
@@ -323,23 +323,17 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 	unsigned siguiente = buffer[posBuffer];
 	unsigned char contadorDeBits=MAX_BITS;
 	//Comienza descompresion
-	//Todo sacar contador
-	int cant=0;
 	while(this->bitRestantes>0){
 		unsigned char emision = tabla.calcularEmision(piso,techo,codigoAdescomprimir,this->ultimoSimbolo);
 		if(tabla.esEscape()){
-
 			rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
 			emision=tabla.calcularEmision(piso,techo,codigoAdescomprimir,this->ultimoSimbolo);
-
 		}
 		//tabla.imprimir();
-		std::cout<<emision<<std::flush;
 		tabla.incremtarOcurrencia(this->ultimoSimbolo,emision);
 		this->ultimoSimbolo = emision;
 		descomprimido.push_back(emision);
 		rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
-		cant++;
 	}
 }
 

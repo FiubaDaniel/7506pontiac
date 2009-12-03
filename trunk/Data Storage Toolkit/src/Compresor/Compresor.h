@@ -11,8 +11,9 @@
 #include "bitFile.h"
 #include <cmath>
 #include <string>
-//#include "TablaOrden1.h"
+#include "TablaOrden1.h"
 #include "TablaPPMC.h"
+#include "TablaOrden0.h"
 
 void imprimir(unsigned num);
 //#define UINT_MAX (~unsigned(0x0))
