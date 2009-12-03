@@ -201,7 +201,7 @@ unsigned Compresor::comprimirPrimeros(unsigned char*simbolos,unsigned cantidad){
 				if(isalnum(simbolos[cant_emitidos]))
 					(*salida)<<simbolos[cant_emitidos];
 				else
-					(*salida)<<(int)simbolos[cant_emitidos];
+					(*salida)<<"("<<(int)simbolos[cant_emitidos]<<")";
 				(*salida)<<std::endl;
 			}
 			tabla.incremtarOcurrencia(ultimoSimbolo,simbolos[cant_emitidos]);
@@ -248,7 +248,7 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 			if(isalnum(cerrador))
 				(*salida)<<cerrador;
 			else
-				(*salida)<<cerrador;
+				(*salida)<<"("<<cerrador<<")";
 			(*salida)<<std::endl;
 		}
 		tabla.incremtarOcurrencia(ultimoSimbolo,cerrador);
@@ -269,7 +269,7 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 				if(isalnum(simbolos[cant_emitidos]))
 					(*salida)<<simbolos[cant_emitidos];
 				else
-					(*salida)<<(int)simbolos[cant_emitidos];
+					(*salida)<<"("<<(int)simbolos[cant_emitidos]<<")";
 				(*salida)<<std::endl;
 			}
 			tabla.incremtarOcurrencia(ultimoSimbolo,simbolos[cant_emitidos]);
