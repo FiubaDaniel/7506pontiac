@@ -259,15 +259,16 @@ unsigned char TablaPPMC::calcularEmision(unsigned &piso,unsigned &techo,unsigned
 	 */
 	float total = obtenerTotalContexto(anterior);
 	if(this->alerta_escape){
+		int retorno2=0;
 		do{
 			piso=temp;
 			float ocurrencias=1;
 			temp=floor(piso+ocurrencias*((longitud/total)+(1/total)));//temp seria el piso siguiente.
 			techo=temp-1;//al piso siguiente le resto 1.
-			retorno++;
-		}while(codigo>=techo&&retorno<256);
+			retorno2++;
+		}while(codigo>=techo&&retorno2<256);
 		this->alerta_escape=false;
-		return retorno-1;
+		return retorno2-1;
 	}else{
 		tipo_contextos::iterator it = contextos.find(anterior);
 		if(contextos.empty()||it == contextos.end()){//Si no existe contexto paso dirtectamente a contexto -1
@@ -282,7 +283,8 @@ unsigned char TablaPPMC::calcularEmision(unsigned &piso,unsigned &techo,unsigned
 				float ocurrencias=elemento.simbolo;
 				temp=floor(piso+ocurrencias*((longitud/total)+(1/total)));
 				techo=temp-1;
-				if(piso<=codigo and codigo<=techo)return elemento.simbolo;
+				if(piso<=codigo and codigo<=techo)
+					return elemento.simbolo;
 				++it_contexto;
 			}
 			piso=temp;
@@ -327,7 +329,7 @@ void TablaPPMC::imprimir(){
 	tipo_contextos::iterator contexto = contextos.begin();
 	while(contexto!=contextos.end()){
 		tipo_tabla_frecuencias::iterator elemento_contexto = contexto->second.tablaFrecuencias.begin();
-		std::cout<<"CTX("<< contexto->second.frecuencias_simbolos<<"):"<<contexto->first<<" ";
+		std::cout<<"CTX("<< contexto->second.frecuencias_simbolos<<","<< contexto->second.frecuencia_escape<<"):"<<contexto->first<<" ";
 		while(elemento_contexto != contexto->second.tablaFrecuencias.end()){
 			std::cout<<"("<<elemento_contexto->simbolo<<" , ";
 			std::cout<<elemento_contexto->frecuencia<<") ";
