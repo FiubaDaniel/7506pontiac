@@ -97,6 +97,10 @@ void TablaPPMC::obtenerExtremos(unsigned char contexto,unsigned char simbolo,uns
 			this->alerta_escape=true;
 		}else{//Existe el contexto, recorro elementos existentes del contexo
 			Contexto contextoBuscado = it->second;
+			if(contextoBuscado.tablaFrecuencias.empty()){
+				this->alerta_escape=true;
+				return;
+			}
 			std::list<ElementoContexto>::iterator it_contexto = contextoBuscado.tablaFrecuencias.begin();
 			bool encontrado=false;
 			while(!encontrado&&it_contexto!=contextoBuscado.tablaFrecuencias.end()){
@@ -158,7 +162,7 @@ void TablaPPMC::incremtarOcurrencia(unsigned char contexto,unsigned char simbolo
 			agregarContexto(contexto,simbolo);
 		}
 	}
-	std::cout<<"NUevo "<<std::endl;
+	std::cout<<"Nuevo "<<std::endl;
 	this->imprimir();
 }
 
@@ -252,8 +256,8 @@ tipo_frecuencia TablaPPMC::buscarOcurrencias(unsigned char anterior,int caracter
 	}
 	}
  */
-unsigned char TablaPPMC::calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior){
-	unsigned char retorno=0;
+int TablaPPMC::calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior){
+	//unsigned char retorno=0;
 	unsigned longitud = techo - piso;
 	unsigned temp=piso;
 	/*Ya que la lista puede no tener todos los simbolos el totalOcurrencias es el total de los simbolos q contiene la lista
@@ -277,12 +281,16 @@ unsigned char TablaPPMC::calcularEmision(unsigned &piso,unsigned &techo,unsigned
 			this->alerta_escape=true;
 			return 0;
 		}else{//Existe el contexto, recorro elementos exiistentes del contexo
-			Contexto contextoAmodificar = it->second;
-			std::list<ElementoContexto>::iterator it_contexto = contextoAmodificar.tablaFrecuencias.begin();
-			while(it_contexto!=contextoAmodificar.tablaFrecuencias.end()){
+			Contexto contextoBuscado = it->second;
+			if(contextoBuscado.tablaFrecuencias.empty()){
+				this->alerta_escape=true;
+				return 0;
+			}
+			std::list<ElementoContexto>::iterator it_contexto = contextoBuscado.tablaFrecuencias.begin();
+			while(it_contexto!=contextoBuscado.tablaFrecuencias.end()){
 				ElementoContexto elemento = *it_contexto;
 				piso=temp;
-				float ocurrencias=elemento.simbolo;
+				float ocurrencias=elemento.frecuencia;
 				temp=floor(piso+ocurrencias*((longitud/total)+(1/total)));
 				techo=temp-1;
 				if(piso<=codigo and codigo<=techo)
@@ -290,7 +298,7 @@ unsigned char TablaPPMC::calcularEmision(unsigned &piso,unsigned &techo,unsigned
 				++it_contexto;
 			}
 			piso=temp;
-			float ocurrencias=contextoAmodificar.frecuencia_escape;//ocurrecia debe devolver frecuencia de escape
+			float ocurrencias=contextoBuscado.frecuencia_escape;//ocurrecia debe devolver frecuencia de escape
 			techo=floor(piso+ocurrencias*((longitud/total)+(1/total)))-1;
 			this->alerta_escape=true;
 			return 0;
@@ -341,7 +349,6 @@ void TablaPPMC::imprimir(){
 		std::cout<<std::endl;
 	}
 }
-
 
 }
 
