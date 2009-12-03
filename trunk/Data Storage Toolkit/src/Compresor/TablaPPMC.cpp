@@ -18,9 +18,6 @@ bool TablaPPMC::vacia(){
 	return contextos.empty();
 }
 /*void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & piso,unsigned &techo){
-	//todo remover
-	if(techo<piso)
-		throw 8;
 	unsigned longitud=techo-piso;
 	tipo_frecuencia incremento;
 	tipo_frecuencia total;
@@ -67,7 +64,6 @@ bool TablaPPMC::vacia(){
 		incremento+=1/float(total);
 	}
 	techo=floor(piso+incremento)-1;
-	//TODO remover
 	if(techo<piso)
 		throw 8;
 }*/

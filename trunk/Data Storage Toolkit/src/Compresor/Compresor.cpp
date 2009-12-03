@@ -184,6 +184,10 @@ unsigned Compresor::comprimirPrimeros(unsigned char*simbolos,unsigned cantidad){
 			cant_emitidos++;
 		}
 		cerrador=simbolos[cant_emitidos];
+		/*TODO unsigned bits_necesarios=MAX_BITS+U;
+		if((buffer.size()-buffer.tell_unsigned_write())*MAX_BITS-buffer.tell_bits_offset_w() < bits_necesarios){
+			throw bitFileEOFException();
+		}*/
 	}catch(bitFileEOFException e){
 
 		buffer.seek_w(offset,pos);
@@ -218,7 +222,8 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 			cant_emitidos++;
 		}
 		cerrador=simbolos[cant_emitidos];
-		if((buffer.size()-buffer.tell_unsigned_write())*MAX_BITS-buffer.tell_bits_offset_w() < MAX_BITS+U){
+		unsigned bits_necesarios=MAX_BITS+U;
+		if((buffer.size()-buffer.tell_unsigned_write())*MAX_BITS-buffer.tell_bits_offset_w() < bits_necesarios){
 			throw bitFileEOFException();
 		}
 	}catch(bitFileEOFException e){
