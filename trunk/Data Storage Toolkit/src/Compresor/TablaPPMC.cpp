@@ -323,6 +323,22 @@ void TablaPPMC::imprimir(unsigned char contexto,unsigned char simbolo){
 	}
 }
 
+void TablaPPMC::imprimir(){
+	tipo_contextos::iterator contexto = contextos.begin();
+	while(contexto!=contextos.end()){
+		tipo_tabla_frecuencias::iterator elemento_contexto = contexto->second.tablaFrecuencias.begin();
+		std::cout<<"CTX("<< contexto->second.frecuencias_simbolos<<"):"<<contexto->first<<" ";
+		while(elemento_contexto != contexto->second.tablaFrecuencias.end()){
+			std::cout<<"("<<elemento_contexto->simbolo<<" , ";
+			std::cout<<elemento_contexto->frecuencia<<") ";
+			++elemento_contexto;
+		}
+		contexto++;
+		std::cout<<std::endl;
+	}
+}
+
+
 }
 
 
