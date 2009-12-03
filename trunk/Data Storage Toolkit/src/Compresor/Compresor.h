@@ -77,6 +77,7 @@ public:
 	/*
 	 *
 	 */
+	void reiniciarBuffer();
 	void setContinuacionCompresion(unsigned*buffer,unsigned tamanio);
 	/*
 	 * Setea la salida para imprimir las estadisticas.

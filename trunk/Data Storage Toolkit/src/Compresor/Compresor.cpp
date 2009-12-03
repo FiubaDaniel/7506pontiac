@@ -378,6 +378,12 @@ void Compresor::cerrar(){
 	tabla.incremtarOcurrencia(ultimoSimbolo,cerrador);
 	ultimoSimbolo=cerrador;
 }
+void Compresor::reiniciarBuffer(){
+	buffer.seek_w(0,0);
+	piso=0;
+	techo=UNOS;
+	U=0;
+}
 void Compresor::setContinuacionCompresion(unsigned*buffer,unsigned tamanio){
 	this->buffer.setBuffer(buffer,tamanio);
 	this->buffer.seek_w(0,0);
