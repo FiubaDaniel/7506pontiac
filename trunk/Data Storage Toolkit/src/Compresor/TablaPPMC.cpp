@@ -252,7 +252,7 @@ tipo_frecuencia TablaPPMC::buscarOcurrencias(unsigned char anterior,int caracter
 	}
 	}
  */
-int TablaPPMC::calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior){
+unsigned char TablaPPMC::calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior){
 	//unsigned char retorno=0;
 	unsigned longitud = techo - piso;
 	unsigned temp=piso;

@@ -36,7 +36,6 @@ public:
 	void obtenerExtremos(unsigned char contexto,unsigned char simbolo,unsigned & piso,unsigned &techo);
 	void incremtarOcurrencia(unsigned char contexto,unsigned char simbolo);
 	void decremetarOcurrencia(unsigned char contexto,unsigned char simbolo);
-	//TODO ACA
 	unsigned char calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior);
 	float buscarOcurrencias(unsigned char anterior,unsigned char buscado);
 	void imprimir(unsigned char contexto,unsigned char simbolo);

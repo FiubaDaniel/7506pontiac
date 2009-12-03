@@ -31,7 +31,7 @@ struct Contexto{
 
 typedef std::map<unsigned char,Contexto> tipo_contextos;
 
-class TablaPPMC {
+class TablaPPMC{
 	tipo_contextos contextos;
 public:
 
@@ -40,7 +40,7 @@ public:
 	void obtenerExtremos(unsigned char contexto,unsigned char simbolo,unsigned & piso,unsigned &techo);
 	void incremtarOcurrencia(unsigned char contexto,unsigned char simbolo);
 	void decremetarOcurrencia(unsigned char contexto,unsigned char simbolo);
-	int calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior);
+	unsigned char calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior);
 	float buscarOcurrencias(unsigned char anterior,int buscado);
 	void imprimir(unsigned char contexto,unsigned char simbolo);
 	void imprimir();
