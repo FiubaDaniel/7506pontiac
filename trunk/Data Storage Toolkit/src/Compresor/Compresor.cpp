@@ -184,17 +184,17 @@ unsigned Compresor::comprimirPrimeros(unsigned char*simbolos,unsigned cantidad){
 			cant_emitidos++;
 		}
 		cerrador=simbolos[cant_emitidos];
-		/*TODO unsigned bits_necesarios=MAX_BITS+U;
+		unsigned bits_necesarios=MAX_BITS+U;
 		if((buffer.size()-buffer.tell_unsigned_write())*MAX_BITS-buffer.tell_bits_offset_w() < bits_necesarios){
 			throw bitFileEOFException();
-		}*/
+		}
 	}catch(bitFileEOFException e){
 
 		buffer.seek_w(offset,pos);
 		piso=piso_anterior;
 		techo=techo_anterior;
 	};
-	return cant_emitidos;
+	return cant_emitidos+1;
 }
 bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 	unsigned cant_emitidos=0,piso_anterior=piso,techo_anterior=techo;
@@ -202,26 +202,31 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 	int U_anterior=U;
 	unsigned pos=buffer.tell_unsigned_write();
 	char offset=buffer.tell_bits_offset_w();
-
 	try{
 		//tabla.imprimir();std::cout<<std::endl;
 		/* emito el ultimo */
 		tabla.obtenerExtremos(ultimoSimbolo,cerrador,piso,techo);
 		emitir_codigo();
+		if(tabla.esEscape()){
+			tabla.obtenerExtremos(ultimoSimbolo,cerrador,piso,techo);
+			emitir_codigo();
+		}
 		tabla.incremtarOcurrencia(ultimoSimbolo,cerrador);
 		ultimoSimbolo=cerrador;
-		while(cant_emitidos!=cantidad-1){
+		/**/
+		while(cant_emitidos<cantidad-1){
 			tabla.obtenerExtremos(ultimoSimbolo,simbolos[cant_emitidos],piso,techo);
+			emitir_codigo();
 			if(tabla.esEscape()){
 				tabla.obtenerExtremos(ultimoSimbolo,simbolos[cant_emitidos],piso,techo);
 				emitir_codigo();
 			}
 			tabla.incremtarOcurrencia(ultimoSimbolo,simbolos[cant_emitidos]);
-			emitir_codigo();
 			ultimoSimbolo=simbolos[cant_emitidos];
 			cant_emitidos++;
 		}
 		cerrador=simbolos[cant_emitidos];
+
 		unsigned bits_necesarios=MAX_BITS+U;
 		if((buffer.size()-buffer.tell_unsigned_write())*MAX_BITS-buffer.tell_bits_offset_w() < bits_necesarios){
 			throw bitFileEOFException();
