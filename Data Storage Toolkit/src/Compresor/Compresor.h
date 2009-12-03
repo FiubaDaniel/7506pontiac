@@ -8,9 +8,9 @@
 #ifndef COMPRESOR_H_
 #define COMPRESOR_H_
 #include <iostream>
-#include "bitFile.h"
 #include <cmath>
 #include <string>
+#include "bitFile.h"
 #include "TablaOrden1.h"
 #include "TablaPPMC.h"
 #include "TablaOrden0.h"
@@ -23,6 +23,7 @@ void imprimir(unsigned num);
 #endif
 
 class Compresor {
+	std::ostream* salida;
 	/*MANEJO DE UNDERFLOW Y OVERFLOW*/
 	static const char MAX_BITS=sizeof(unsigned)*8;
 	static const unsigned MSB=0x80000000;
@@ -77,6 +78,24 @@ public:
 	 *
 	 */
 	void setContinuacionCompresion(unsigned*buffer,unsigned tamanio);
+	/*
+	 * Setea la salida para imprimir las estadisticas.
+	 * <salida> esta lista para imprimir caracteres tipo texto, y es administrada exteriormente;
+	 * devuelve la salida anterior, NULL si no habia una salida seteada previamente
+	 */
+	std::ostream* setSalida(std::ostream*salida){
+		std::ostream* anterior=this->salida;
+		this->salida=salida;
+		return anterior;
+	};
+	/*
+	 * Deja de usar la salida actual y la devuelve.
+	 */
+	std::ostream* quitarSalida(){
+		std::ostream* anterior=this->salida;
+		this->salida=NULL;
+		return anterior;
+	};
 	unsigned* getbufferComprimido(){
 		return buffer.getBuffer();
 	};

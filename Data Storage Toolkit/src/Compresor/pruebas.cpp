@@ -7,7 +7,7 @@
 #include "pruebas.h"
 #define MAX_CANT_CHAR 122
 #define MIN_CANT_CHAR 35
-#define TAM_BUF1 30
+#define TAM_BUF1 28
 #define TAM_BUF2 10
 
 int pruebacompresion1(){
@@ -20,6 +20,7 @@ int pruebacompresion1(){
 	/*                      COMPRIMIENDO                     */
 	/*********************************************************/
 	Compresor compresor(buffer,TAM_BUF1);
+	compresor.setSalida(&cout);
 	compresor.comprimirPrimeros(str,MAX_CANT_CHAR);
 	compresor.cerrar();
 	/*********************************************************/
