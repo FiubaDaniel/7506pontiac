@@ -7,11 +7,15 @@
 
 #ifndef ESTRATEGIACOMPRESION_H_
 #define ESTRATEGIACOMPRESION_H_
-
+#include "../Almacenamiento/Almacenamiento.h"
+#include "Compresor.h"
+#include <fstream>
+#include <string>
 class EstrategiaCompresion {
 public:
 	EstrategiaCompresion();
 	void compresion();
+	void compresion(Almacenamiento*almacen,string archivoComprimido,unsigned tamanio);
 	void compresionArbol();
 	void compresionHash();
 	virtual ~EstrategiaCompresion();
