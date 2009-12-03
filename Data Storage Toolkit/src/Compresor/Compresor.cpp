@@ -302,6 +302,12 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 }*/
 void Compresor::cerrar(){
 	tabla.obtenerExtremos(ultimoSimbolo,cerrador,piso,techo);
+	/*nuevo*/
+	if(tabla.esEscape()){
+		emitir_codigo();
+		tabla.obtenerExtremos(ultimoSimbolo,cerrador,piso,techo);
+	}
+	/*fin nuevo*/
 	cerrar_codigo();
 	tabla.incremtarOcurrencia(ultimoSimbolo,cerrador);
 	ultimoSimbolo=cerrador;
