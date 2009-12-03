@@ -48,6 +48,8 @@ public:
 	bool buscar(Componente*componente);
 	bool buscar(Clave*unaClave);
 	void imprimirMetada(std::ostream&out);
+	std::string imprimirMetada();
+	unsigned getTamanioComponenteUsado();
 	 /*------------------------------------------------------------*/
 	Componente* getRegistro();
 	Componente*getComponenteUsado();

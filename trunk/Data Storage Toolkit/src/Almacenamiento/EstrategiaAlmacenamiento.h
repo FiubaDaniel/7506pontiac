@@ -1,6 +1,7 @@
 #ifndef ESTRATEGIAALMACENAMIENTO_H_
 #define ESTRATEGIAALMACENAMIENTO_H_
 #include <queue>
+#include <string>
 #include "../ArbolBSharp/ComparadorClave.h"
 #include "../ArbolBSharp/Clave.h"
 
@@ -83,6 +84,8 @@ public:
 		this->colaDeCambios=cambiosLog;
 	}
 	virtual Componente*getComponenteUsado()=0;
+	virtual unsigned getTamanioComponenteUsado()=0;
 	virtual void imprimirMetada(std::ostream&out)=0;
+	virtual std::string imprimirMetada()=0;
 };
 #endif /* ESTRATEGIAALMACENAMIENTO_H_ */

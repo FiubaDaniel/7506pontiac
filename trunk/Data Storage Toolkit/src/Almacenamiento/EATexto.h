@@ -51,6 +51,8 @@ public:
 	bool buscar(Clave*unaClave);
 	Componente*getComponenteUsado();
 	void imprimirMetada(std::ostream&out);
+	std::string imprimirMetada(){};
+	unsigned getTamanioComponenteUsado();
 };
 
 #endif /* EATEXTO_H_ */
