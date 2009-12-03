@@ -9,6 +9,7 @@
 #define MIN_CANT_CHAR 35
 #define TAM_BUF1 30
 #define TAM_BUF2 10
+
 int pruebacompresion1(){
 	unsigned buffer[TAM_BUF1];
 
@@ -37,7 +38,7 @@ int pruebacompresion2(){
 	/*USANDO EL PRIMER BUFFER*/
 	compresor.comprimirPrimeros(fuente_de_caracteres,MIN_CANT_CHAR);
 	/*intenta agregar mas de los q pueden entrar*/
-	compresor.agregar(fuente_de_caracteres+MIN_CANT_CHAR,MAX_CANT_CHAR);
+	compresor.agregar(fuente_de_caracteres,MAX_CANT_CHAR);
 	/*intena agregar una cantidad menor*/
     compresor.agregar(fuente_de_caracteres+MIN_CANT_CHAR,MIN_CANT_CHAR);
     /*termina de usar el buffer*/
@@ -47,6 +48,8 @@ int pruebacompresion2(){
 	compresor.setContinuacionCompresion(segundo_buffer_comprimido,TAM_BUF2);
 	/*escribo los primero bits en el nuevo buffer*/
 	compresor.comprimirPrimeros(fuente_de_caracteres+2*MIN_CANT_CHAR,MIN_CANT_CHAR);
+	/*agrego el resto de los caracteres*/
+	compresor.agregar(fuente_de_caracteres+3*MIN_CANT_CHAR,MAX_CANT_CHAR-3*MIN_CANT_CHAR);
 	/*ternimo de usar el segundo buffer*/
 	compresor.cerrar();
 	/*********************************************************/
@@ -57,9 +60,9 @@ int pruebacompresion2(){
 	/*Descomprimo los caracteres del primer buffer y muestro*/
 	descompresor.descomprimir(primer_buffer_comprimido,caracteres_descomprimidos,TAM_BUF1);
 	cout<<fuente_de_caracteres<<endl;
-	cout<<caracteres_descomprimidos<<endl;
+	cout<<caracteres_descomprimidos;
 	/*Descomprimo los caracteres del siguiente buffer y muestro*/
-	caracteres_descomprimidos.clear();//borrar los anterior
+	caracteres_descomprimidos.clear();//borrar los anteriores
 	descompresor.setExtremos();//reiniciar
 	descompresor.descomprimir(segundo_buffer_comprimido,caracteres_descomprimidos,TAM_BUF2);
 	cout<<caracteres_descomprimidos<<endl;

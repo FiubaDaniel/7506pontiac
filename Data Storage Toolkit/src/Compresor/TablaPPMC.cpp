@@ -158,8 +158,8 @@ void TablaPPMC::incremtarOcurrencia(unsigned char contexto,unsigned char simbolo
 			agregarContexto(contexto,simbolo);
 		}
 	}
-	std::cout<<"Nuevo "<<std::endl;
-	this->imprimir();
+	/*std::cout<<"Nuevo "<<std::endl;
+	this->imprimir();*/
 }
 
 void TablaPPMC::agregarContexto(unsigned char contexto,unsigned char simbolo){
@@ -335,7 +335,7 @@ void TablaPPMC::imprimir(){
 	tipo_contextos::iterator contexto = contextos.begin();
 	while(contexto!=contextos.end()){
 		tipo_tabla_frecuencias::iterator elemento_contexto = contexto->second.tablaFrecuencias.begin();
-		std::cout<<"CTX("<< contexto->second.frecuencias_simbolos<<","<< contexto->second.frecuencia_escape<<"):"<<contexto->first<<" ";
+		std::cout<<"CTX "<<contexto->first<<" (S:"<< contexto->second.frecuencias_simbolos<<",E:"<< contexto->second.frecuencia_escape<<"): ";
 		while(elemento_contexto != contexto->second.tablaFrecuencias.end()){
 			std::cout<<"("<<elemento_contexto->simbolo<<" , ";
 			std::cout<<elemento_contexto->frecuencia<<") ";
