@@ -334,9 +334,9 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 		tabla.incremtarOcurrencia(this->ultimoSimbolo,emision);
 		this->ultimoSimbolo = emision;
 		descomprimido.push_back(emision);
+		rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
+		cant++;
 	}
-	rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
-	cant++;
 }
 
 /*-------------------------------Version con list-----------------------------------------------------------*/
