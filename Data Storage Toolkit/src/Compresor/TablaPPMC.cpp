@@ -158,6 +158,8 @@ void TablaPPMC::incremtarOcurrencia(unsigned char contexto,unsigned char simbolo
 			agregarContexto(contexto,simbolo);
 		}
 	}
+	std::cout<<"NUevo "<<std::endl;
+	this->imprimir();
 }
 
 void TablaPPMC::agregarContexto(unsigned char contexto,unsigned char simbolo){
