@@ -79,7 +79,7 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 	EstrategiaRecursos* estrategiaRecurso=NULL;
 	if(tieneBuffer){
 		BloqueMemoria bloqueMem(registro1);
-		EABloques * estrategiaBuffer=new EABloques(&bloqueMem,longitudBloque,0.8);//TODO delete
+		EABloques * estrategiaBuffer=new EABloques(&bloqueMem,longitudBloque,0.8);
 		Buffer* buffer=new Buffer(estrategiaBuffer,longitudBuffer);
 		buffer->crear("buffer");
 		long nroElem=longitudBuffer/longitudBloque;
@@ -308,7 +308,7 @@ MiRegistroVariable* MisDatos::obtenerRegistroArchivo1(std::string clave) throw (
 		pLista[i]=miListaInt->getVector().at(i);
 	}
 
-	//TODO anterio return MiRegistroVariable(*mistringid,*miInt,pLista,miListaInt->getVector().size());
+	//anterior return MiRegistroVariable(*mistringid,*miInt,pLista,miListaInt->getVector().size());
 	return new MiRegistroVariable(*mistringid,*miInt,pLista,miListaInt->getVector().size());
 }
 /*
@@ -330,7 +330,7 @@ MiRegistroFijo* MisDatos::obtenerRegistroArchivo2(int claveInt, char claveChar) 
 	miIntID=(AtributoFijo<int>*)registro2->get(0);
 	miCharID=(AtributoFijo<char>*)registro2->get(1);
 	miInt=(AtributoFijo<int>*)registro2->get(2);
-	//TODO anterior return MiRegistroFijo(*miIntID,*miCharID,*miInt);
+	//anterior return MiRegistroFijo(*miIntID,*miCharID,*miInt);
 	return new MiRegistroFijo(*miIntID,*miCharID,*miInt);
 }
 /*

@@ -151,9 +151,9 @@ int pruebaToolkit() {
 			cout << "*****ERROR CON CLAVE: " << Terminos::obtenerTermino(i) << " *****" << endl;
 		}
 
-		//TODO corro para arriba mostrarRegistroVariable(miRegVariable);
+		//corro para arriba mostrarRegistroVariable(miRegVariable);
 
-		//TODO corro para arriba delete miRegVariable;
+		//corro para arriba delete miRegVariable;
 	}
 
 	// CIERRO ARCHIVO 1
@@ -230,8 +230,8 @@ int pruebaToolkit() {
 			cout << e.getMensaje() << endl;
 			cout << "*****ERROR CON CLAVE: " << i << " " << calcularChar(i) << " *****" << endl;
 		}
-		//TODO corro al try mostrarRegistroFijo(miRegFijo);
-		//TODO corro para hacia el try delete miRegFijo;
+		//corro al try mostrarRegistroFijo(miRegFijo);
+		//corro para hacia el try delete miRegFijo;
 	}
 
 	// CIERRO ARCHIVO 2

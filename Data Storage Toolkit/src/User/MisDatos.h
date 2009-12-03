@@ -115,7 +115,6 @@ public:
 	  * Retorna el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
 	  *  lanza una excepcion con el mensaje de error correspondiente.
 	  */
-	 //TODO cambio el return a tipo puntero
 	 MiRegistroVariable *obtenerRegistroArchivo1(std::string clave) throw (ExcepcionMisDatos);
 	 /*
 	  * Pre: Archivo inicializado.
