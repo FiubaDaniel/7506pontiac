@@ -164,12 +164,12 @@ void TablaPPMC::agregarContexto(unsigned char contexto,unsigned char simbolo){
 	Contexto contextoNuevo;
 	if(!contextos.empty()){
 		contextoNuevo.frecuencias_simbolos=1;
-		contextoNuevo.frecuencia_escape=2;
+		contextoNuevo.frecuencia_escape=1;//Poner en 1
 		this->ageragarElementoContexto(contextoNuevo,simbolo);
 		contextos.insert(std::pair<unsigned char,Contexto>(contexto,contextoNuevo));
 	}else{
 		contextoNuevo.frecuencias_simbolos=0;
-		contextoNuevo.frecuencia_escape=2;
+		contextoNuevo.frecuencia_escape=1;
 		contextos.insert(std::pair<unsigned char,Contexto>(simbolo,contextoNuevo));
 	}
 }
@@ -282,7 +282,7 @@ unsigned char TablaPPMC::calcularEmision(unsigned &piso,unsigned &techo,unsigned
 				float ocurrencias=elemento.simbolo;
 				temp=floor(piso+ocurrencias*((longitud/total)+(1/total)));
 				techo=temp-1;
-				if(codigo>=techo)return elemento.simbolo;
+				if(piso<=codigo and codigo<=techo)return elemento.simbolo;
 				++it_contexto;
 			}
 			piso=temp;
