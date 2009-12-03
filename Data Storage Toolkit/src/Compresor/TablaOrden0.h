@@ -19,6 +19,9 @@ public:
 		}
 		total=256;
 	}
+	bool esEscape(){
+		return false;
+	}
 	void obtenerExtremos(unsigned char contexto,unsigned char simbolo,unsigned & piso,unsigned &techo){
 		//unsigned long longitud=techo-piso;
 		tipo_long longitud=techo-piso;
