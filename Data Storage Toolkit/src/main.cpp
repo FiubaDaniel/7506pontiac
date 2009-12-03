@@ -10,6 +10,6 @@
 
 using namespace std;
 int main(){
-	pruebacompresion();
+	pruebacompresion1();
 	return 0;
 }

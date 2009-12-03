@@ -12,5 +12,7 @@
 #include <list>
 using namespace std;
 
-int pruebacompresion();
+int pruebacompresion1();
+int pruebacompresion2();
+
 #endif
