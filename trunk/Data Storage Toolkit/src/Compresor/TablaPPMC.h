@@ -46,6 +46,8 @@ public:
 	void imprimir();
 	bool vacia();
 	bool esEscape();
+	TablaPPMC* clonar();
+	void copiar(TablaPPMC&tabla);
 	virtual ~TablaPPMC();
 private:
 	float obtenerTotalContexto(unsigned char simbolo);

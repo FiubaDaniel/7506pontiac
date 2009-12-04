@@ -8,7 +8,7 @@
 #define MAX_CANT_CHAR 121
 #define MIN_CANT_CHAR 35
 #define TAM_BUF1 28
-#define TAM_BUF2 10
+#define TAM_BUF2 100
 
 int pruebacompresion1(){
 	unsigned buffer[TAM_BUF1];
@@ -46,7 +46,7 @@ int pruebacompresion2(){
 	/*USANDO EL PRIMER BUFFER*/
 	compresor.comprimirPrimeros((unsigned char*)fuente_de_caracteres.c_str(),MIN_CANT_CHAR);
 	/*intenta agregar mas de los q pueden entrar*/
-	compresor.agregar((unsigned char*)fuente_de_caracteres.c_str(),MAX_CANT_CHAR);
+	compresor.agregar((unsigned char*)fuente_de_caracteres.c_str(),MIN_CANT_CHAR*3);
 	/*intena agregar una cantidad menor*/
     compresor.agregar((unsigned char*)fuente_de_caracteres.c_str()+MIN_CANT_CHAR,MIN_CANT_CHAR);
     /*termina de usar el buffer*/
@@ -78,7 +78,10 @@ int pruebacompresion2(){
 }
 int pruebaCompresion3(){
 
-	unsigned buffer[TAM_BUF2];
+
+	unsigned buffer1[TAM_BUF2];
+	unsigned buffer2[TAM_BUF2];
+	unsigned *buffer=buffer1;
 	Compresor descompresor(buffer,TAM_BUF2);
 	string descomprimido;
 	/*********************************************************/
@@ -86,7 +89,7 @@ int pruebaCompresion3(){
 	/*********************************************************/
 	Compresor compresor(buffer,TAM_BUF2);
 	compresor.comprimirPrimeros((unsigned char*)Terminos::obtenerTermino(0).c_str(),Terminos::obtenerTermino(0).size());
-	for(int i=1;i<300;i++){
+	for(int i=1;i<30;i++){
 		if(!compresor.agregar((unsigned char*)Terminos::obtenerTermino(i).c_str(),Terminos::obtenerTermino(i).size())){
 			compresor.cerrar();
 			/*********************************************************/
@@ -95,7 +98,8 @@ int pruebaCompresion3(){
 			descomprimido.clear();
 			descompresor.descomprimir(buffer,descomprimido,TAM_BUF2);
 			cout<<descomprimido<<endl;
-			compresor.reiniciarBuffer();
+			buffer=buffer2;
+			compresor.setContinuacionCompresion(buffer,TAM_BUF2);
 			/*********************************************************/
 			compresor.comprimirPrimeros((unsigned char*)Terminos::obtenerTermino(i).c_str(),Terminos::obtenerTermino(i).size());
 		}
