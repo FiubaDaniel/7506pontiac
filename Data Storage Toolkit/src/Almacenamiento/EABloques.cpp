@@ -441,7 +441,7 @@ void EABloques::imprimirMetada(std::ostream&out){
 	out<< " cantidad bloques "<<siguienteLibre;
 	out<<std::endl;
 }
-std::string EABloques::imprimirMetada(){
+std::string EABloques::getMetadata(){
 	std::string resultado;
 	char*p=(char*)&capacBloque;
 	for(unsigned i=0;i<sizeof(capacBloque);i++){
@@ -462,4 +462,11 @@ std::string EABloques::imprimirMetada(){
 };
 unsigned EABloques::getTamanioComponenteUsado(){
 	return capacBloque;
+}
+void EABloques::setMetadata(char* metadata){
+	capacBloque=*(Ttamanio*)metadata;
+	metadata+=sizeof(Ttamanio);
+	porcCarga=*(double*)metadata;
+	metadata+=sizeof(double);
+	siguienteLibre=*(Ttamanio*)siguienteLibre;
 }

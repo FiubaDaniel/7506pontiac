@@ -220,7 +220,7 @@ void EARegistros::imprimirMetada(std::ostream&out){
 	out<< " cantidad Registros: "<< siguienteRegLibre;
 	out<<std::endl;
 }
-std::string EARegistros::imprimirMetada(){
+std::string EARegistros::getMetadata(){
 	std::string resultado;
 	char*p=(char*)&tamanioRegistro;
 	for(unsigned i=0;i<sizeof(tamanioRegistro);i++){
@@ -233,4 +233,9 @@ std::string EARegistros::imprimirMetada(){
 		p++;
 	}
 	return resultado;
-};
+}
+void EARegistros::setMetadata(char* metadata){
+	tamanioRegistro=*(Ttamanio*)metadata;
+	metadata+=sizeof(Ttamanio);
+	siguienteRegLibre=*(Referencia*)metadata;
+}
