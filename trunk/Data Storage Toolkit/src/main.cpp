@@ -10,11 +10,12 @@
 
 using namespace std;
 int main(){
-	cout<<"Prueba1"<<endl;
+	/*cout<<"Prueba1"<<endl;
 	pruebacompresion1();
-	cout<<"Prueba2"<<endl;
-	pruebacompresion2();
+	cout<<"Prueba2"<<endl;*/
+
 	cout<<"Prueba3"<<endl;
-	pruebaEstragiaCompresionAlmacenamiento();
+	pruebaCompresion3();
+	//pruebaEstragiaCompresionAlmacenamiento();
 	return 0;
 }
