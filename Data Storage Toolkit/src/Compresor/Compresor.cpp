@@ -205,6 +205,7 @@ unsigned Compresor::comprimirPrimeros(unsigned char*simbolos,unsigned cantidad){
 				(*salida)<<std::endl;
 			}
 			tabla.incremtarOcurrencia(ultimoSimbolo,simbolos[cant_emitidos]);
+			tabla.imprimir();std::cout<<std::endl;
 			ultimoSimbolo=simbolos[cant_emitidos];
 			cant_emitidos++;
 		}
@@ -253,6 +254,7 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 			(*salida)<<std::endl;
 		}
 		tabla.incremtarOcurrencia(ultimoSimbolo,cerrador);
+		tabla.imprimir();std::cout<<std::endl;
 		ultimoSimbolo=cerrador;
 		/**/
 		while(cant_emitidos<cantidad-1){
@@ -284,7 +286,6 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 			throw bitFileEOFException();
 		}
 	}catch(bitFileEOFException e){
-		//tabla.imprimir();std::cout<<std::endl;
 		if(salida){
 			(*salida)<<"Demaciados Caracteres recuperando estado anterior"<<std::endl;
 		}
@@ -305,6 +306,9 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 			tabla.decremetarOcurrencia(cerrador,simbolos[0]);
 			tabla.decremetarOcurrencia(ultimoSimbolo,cerrador);
 		}
+
+		tabla.imprimir();std::cout<<std::endl;
+
 		*/
 		tabla.copiar(*clon);
 		tabla.imprimir();std::cout<<std::endl;
@@ -401,7 +405,7 @@ void Compresor::setContinuacionCompresion(unsigned*buffer,unsigned tamanio){
 }
 /*---------------------------------------Descompresion--------------------------------------------------------*/
 void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int tamanioComprimido){
-    this->setExtremos();
+	this->setExtremos();
 	//Calculo Padding
 	//Primero busco el byte donde comienza el padding.
 	int nro_unsigned;
@@ -419,6 +423,7 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 	unsigned siguiente = buffer[posBuffer];
 	unsigned char contadorDeBits=MAX_BITS;
 	//Comienza descompresion
+	int cant = 1;
 	while(this->bitRestantes>0){
 		unsigned char emision = tabla.calcularEmision(piso,techo,codigoAdescomprimir,this->ultimoSimbolo);
 		if(tabla.esEscape()){
@@ -427,9 +432,12 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 		}
 		//tabla.imprimir();
 		tabla.incremtarOcurrencia(this->ultimoSimbolo,emision);
+		tabla.imprimir();std::cout<<std::endl;
+		std::cout<<cant<<std::endl;
 		this->ultimoSimbolo = emision;
 		descomprimido.push_back(emision);
 		rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
+		cant++;
 	}
 }
 
@@ -461,7 +469,7 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 }*/
 /*-----------------------------------------------------------------------------------------------------------------*/
 void Compresor::setExtremos(){
-	this->techo = pow(2,32)-1;
+	this->techo = UNOS;
 	this->piso = 0;
 }
 
