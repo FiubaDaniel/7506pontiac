@@ -16,6 +16,7 @@ public:
 	EstrategiaCompresion();
 	void compresion();
 	void compresion(Almacenamiento*almacen,string archivoComprimido,unsigned tamanio);
+	void descompresion(Almacenamiento*almacen,string archivoComprimido);
 	void compresionArbol();
 	void compresionHash();
 	virtual ~EstrategiaCompresion();
