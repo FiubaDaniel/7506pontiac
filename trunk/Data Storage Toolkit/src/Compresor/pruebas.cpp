@@ -77,22 +77,23 @@ int pruebacompresion2(){
 	return 0;
 }
 int pruebaCompresion3(){
-	unsigned buffer[10];
-	Compresor descompresor(buffer,20);
+
+	unsigned buffer[TAM_BUF2];
+	Compresor descompresor(buffer,TAM_BUF2);
 	string descomprimido;
 	/*********************************************************/
 	/*                      COMPRIMIENDO                     */
 	/*********************************************************/
-	Compresor compresor(buffer,20);
+	Compresor compresor(buffer,TAM_BUF2);
 	compresor.comprimirPrimeros((unsigned char*)Terminos::obtenerTermino(0).c_str(),Terminos::obtenerTermino(0).size());
-	for(int i=1;i<30;i++){
+	for(int i=1;i<300;i++){
 		if(!compresor.agregar((unsigned char*)Terminos::obtenerTermino(i).c_str(),Terminos::obtenerTermino(i).size())){
 			compresor.cerrar();
 			/*********************************************************/
 			/*                   DESCOMPRIMIENDO                     */
 			/*********************************************************/
 			descomprimido.clear();
-			descompresor.descomprimir(buffer,descomprimido,20);
+			descompresor.descomprimir(buffer,descomprimido,TAM_BUF2);
 			cout<<descomprimido<<endl;
 			compresor.reiniciarBuffer();
 			/*********************************************************/
@@ -101,7 +102,7 @@ int pruebaCompresion3(){
 	}
 	compresor.cerrar();
 	descomprimido.clear();
-	descompresor.descomprimir(buffer,descomprimido,20);
+	descompresor.descomprimir(buffer,descomprimido,TAM_BUF2);
 	cout<<descomprimido<<endl;
 
 	return 0;
