@@ -114,7 +114,7 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,string archivoCompr
 	/*los siguiente componente*/
 	while(almacen->leer(componente)){
 
-		serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
+		serializado.pubseekpos(0,ios::out|ios::binary|ios::in);//TODO estaba abajo
 
 		componente->serializar(serializado);
 
@@ -150,7 +150,7 @@ void EstrategiaCompresion::descompresion(Almacenamiento*almacen,string archivoCo
 	std::fstream archivo_comprimido;
 
 	std::stringbuf serializado;
-
+	//TODO saque trunc
 	archivo_comprimido.open(archivoComprimido.c_str(),fstream::in|fstream::binary);
 	/*todo checkear si abierto*/
 
@@ -197,6 +197,8 @@ void EstrategiaCompresion::descompresion(Almacenamiento*almacen,string archivoCo
 			descomprimido.clear();
 
 			contenedor.descomprimir(buffer,descomprimido,tamanio_comprimido);
+
+			serializado.pubseekpos(0,ios::out|ios::binary|ios::in);//TODO
 
 			serializado.pubsetbuf((char*)descomprimido.data(),descomprimido.size());
 
