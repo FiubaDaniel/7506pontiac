@@ -13,7 +13,7 @@ EstrategiaCompresion::EstrategiaCompresion() {
 }
 
 EstrategiaCompresion::~EstrategiaCompresion() {
-	// TODO Auto-generated destructor stub
+
 }
 void EstrategiaCompresion::compresion(Almacenamiento*almacen,string archivoComprimido,unsigned tamanio_buffer_comprimido){
 	/**/
@@ -113,7 +113,7 @@ void EstrategiaCompresion::descompresion(Almacenamiento*almacen,string archivoCo
 
 	archivo_comprimido.read(metadata,tamanio_meta);
 
-	//almacen->getEstrategia()->setMetadata(metadata);
+	almacen->getEstrategia()->setMetadata(metadata);
 
 	/*Recupero los componentes*/
 
