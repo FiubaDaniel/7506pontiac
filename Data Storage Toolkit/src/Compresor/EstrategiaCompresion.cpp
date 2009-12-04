@@ -164,8 +164,10 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,string archivoCompr
 	//componente->imprimir(cout);cout<<endl;
 
 	contenedor.comprimirPrimeros((unsigned char*)serializado.str().data(),tamanioSerializado);
+
 	int cont=1;//TODO sacar
 	/*los siguiente componente*/
+
 	while(almacen->leer(componente)){
 
 		serializado.pubseekpos(0,ios::out|ios::binary|ios::in);//TODO estaba abajo
@@ -178,7 +180,7 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,string archivoCompr
 
 			/*no pudo agregar,cierra el contenedor , graba y empieza uno nuevo */
 			contenedor.cerrar();
-
+			cout<<cont<<endl;
 			archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
 
 			contenedor.reiniciarBuffer();
@@ -239,32 +241,39 @@ void EstrategiaCompresion::descompresion(Almacenamiento*almacen,string archivoCo
 	almacen->posicionarComponente(0);
 
 	std::string descomprimido;
+	//todo agregado
+	unsigned tamanio_serializado=almacen->getEstrategia()->getTamanioComponenteUsado();
 
 	try{
+
+		descomprimido.clear();
 
 		while(archivo_comprimido.peek()!= EOF and not archivo_comprimido.eof()){
 			/*recupero una tira de componentes serializados*/
 
 			archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_comprimido);
 
-			contenedor.setExtremos();
-
+			//contenedor.setExtremos();
 			descomprimido.clear();
 
 			contenedor.descomprimir(buffer,descomprimido,tamanio_comprimido);
 
-			serializado.str(descomprimido);//TODO cambio
-
-			serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
-
-			while(serializado.sgetc()!=EOF){
+			while(/*trucho not descomprimido.empty() */descomprimido.size()>=tamanio_serializado){
 				/*escribo los componentes q recupere*/
+
+				serializado.str(descomprimido);//TODO cambio
+
+				cout<<descomprimido.size()<<endl;
+
+				serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
 
 				componente->deserializar(serializado);
 
 				componente->imprimir(cout);cout<<endl;
 
 				almacen->escribir(componente);
+
+				descomprimido.erase(0,tamanio_serializado);
 
 			}
 		}

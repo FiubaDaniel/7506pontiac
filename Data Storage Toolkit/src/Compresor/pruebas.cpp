@@ -5,7 +5,7 @@
  *      Author: paulo
  */
 #include "pruebas.h"
-#define MAX_CANT_CHAR 122
+#define MAX_CANT_CHAR 121
 #define MIN_CANT_CHAR 35
 #define TAM_BUF1 28
 #define TAM_BUF2 10
@@ -15,12 +15,12 @@ int pruebacompresion1(){
 
 	//1234567890123456789012345678901234512345678901234567890123456789012345
 
-	unsigned char str[MAX_CANT_CHAR]="Base class for standard exceptions. All objects thrown by components of the standard library are derived from this class.";
+	unsigned char str[MAX_CANT_CHAR+1]="Base class for standard exceptions. All objects thrown by components of the standard library are derived from this class.";
 	/*********************************************************/
 	/*                      COMPRIMIENDO                     */
 	/*********************************************************/
 	Compresor compresor(buffer,TAM_BUF1);
-	compresor.setSalida(&cout);
+	//compresor.setSalida(&cout);
 	compresor.comprimirPrimeros(str,MAX_CANT_CHAR);
 	compresor.cerrar();
 	/*********************************************************/
@@ -38,7 +38,7 @@ int pruebacompresion2(){
 	unsigned primer_buffer_comprimido[TAM_BUF1];
 	unsigned segundo_buffer_comprimido[TAM_BUF2];
 						             //1234567890123456789012345678901234512345678901234567890123456789012345
-	string fuente_de_caracteres="Base class for standard exceptions. All objects thrown by components of the standard library are derived from this class.";
+	string fuente_de_caracteres="Base class for standard exceptions. All objects thrown by components of the standard library are derived from this classa";
 	/*********************************************************/
 	/*                      COMPRIMIENDO                     */
 	/*********************************************************/
@@ -67,15 +67,45 @@ int pruebacompresion2(){
 	string caracteres_descomprimidos;
 	/*Descomprimo los caracteres del primer buffer y muestro*/
 	descompresor.descomprimir(primer_buffer_comprimido,caracteres_descomprimidos,TAM_BUF1);
-	cout<<fuente_de_caracteres<<endl;
+	cout<<fuente_de_caracteres<<"!"<<endl;
 	cout<<caracteres_descomprimidos;
 	/*Descomprimo los caracteres del siguiente buffer y muestro*/
 	caracteres_descomprimidos.clear();//borrar los anteriores
 	descompresor.setExtremos();//reiniciar
 	descompresor.descomprimir(segundo_buffer_comprimido,caracteres_descomprimidos,TAM_BUF2);
-	cout<<caracteres_descomprimidos<<endl;
+	cout<<caracteres_descomprimidos<<"!"<<endl;
 	return 0;
 }
+int pruebaCompresion3(){
+	unsigned buffer[10];
+	Compresor descompresor(buffer,20);
+	string descomprimido;
+	/*********************************************************/
+	/*                      COMPRIMIENDO                     */
+	/*********************************************************/
+	Compresor compresor(buffer,20);
+	compresor.comprimirPrimeros((unsigned char*)Terminos::obtenerTermino(0).c_str(),Terminos::obtenerTermino(0).size());
+	for(int i=1;i<30;i++){
+		if(!compresor.agregar((unsigned char*)Terminos::obtenerTermino(i).c_str(),Terminos::obtenerTermino(i).size())){
+			compresor.cerrar();
+			/*********************************************************/
+			/*                   DESCOMPRIMIENDO                     */
+			/*********************************************************/
+			descomprimido.clear();
+			descompresor.descomprimir(buffer,descomprimido,20);
+			cout<<descomprimido<<endl;
+			compresor.reiniciarBuffer();
+			/*********************************************************/
+			compresor.comprimirPrimeros((unsigned char*)Terminos::obtenerTermino(i).c_str(),Terminos::obtenerTermino(i).size());
+		}
+	}
+	compresor.cerrar();
+	descomprimido.clear();
+	descompresor.descomprimir(buffer,descomprimido,20);
+	cout<<descomprimido<<endl;
+
+	return 0;
+};
 int pruebaEstragiaCompresionAlmacenamiento(){
 	stringbuf buffer;
 	buffer.str("hola");
