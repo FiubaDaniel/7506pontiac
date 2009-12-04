@@ -26,7 +26,7 @@ bitFile::bitFile(){
 bitFile::~bitFile() {}
 void bitFile::write(unsigned fuente,char cantidad)throw (bitFileEOFException){
 	int bits_restantes=(tamanio-write_posicion)*MAX_BITS-bit_write_offset;
-	//unsigned *p=&buffer[write_posicion];
+	unsigned *p=&buffer[write_posicion];
 	if(bits_restantes >= cantidad){
 		fuente<<=MAX_BITS-cantidad;
 		bits_restantes=MAX_BITS-bit_write_offset;
@@ -39,7 +39,7 @@ void bitFile::write(unsigned fuente,char cantidad)throw (bitFileEOFException){
 			}
 			write_posicion++;
 			bit_write_offset=0;
-			//p=&buffer[write_posicion];
+			p=&buffer[write_posicion];
 		}
 		if(cantidad>0){
 			unsigned aux=(UNOS<<(MAX_BITS-cantidad))>>bit_write_offset;
@@ -69,7 +69,12 @@ void bitFile::read(unsigned &fuente,char cantidad)throw (bitFileEOFException){
 		if(cantidad>0){
 			fuente|=(buffer[read_posicion]<<bit_read_offset)>>(MAX_BITS-cantidad);
 			bit_read_offset+=cantidad;
+
 		}
+		/*if(bit_read_offset==MAX_BITS){
+			read_posicion++;
+			bit_read_offset=0;
+		}*/
 	}else {
 		throw bitFileEOFException();
 	}
@@ -114,7 +119,7 @@ char bitFile::tell_bits_offset_w(){
 	return bit_write_offset;
 }
 void bitFile::fill(unsigned fuente){
-	//unsigned * p=&buffer[write_posicion];
+	unsigned * p=&buffer[write_posicion];
 	if(write_posicion<tamanio){
 		if(bit_write_offset<MAX_BITS){
 			buffer[write_posicion]&=~(UNOS>>bit_write_offset);
@@ -126,10 +131,10 @@ void bitFile::fill(unsigned fuente){
 				buffer[write_posicion]|=fuente>>bit_write_offset;
 			}
 		}else{
-			//p=&buffer[write_posicion];
+			write_posicion++;
+			p=&buffer[write_posicion];
 			buffer[write_posicion]&=~(UNOS);
 			buffer[write_posicion]|=fuente;
-			write_posicion++;
 		}
 	}
 }
