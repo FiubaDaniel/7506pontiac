@@ -51,7 +51,10 @@ public:
 	bool buscar(Clave*unaClave);
 	Componente*getComponenteUsado();
 	void imprimirMetada(std::ostream&out);
-	std::string imprimirMetada(){};
+	std::string getMetadata(){
+		return "";
+	}
+	void setMetadata(char* metadata){}
 	unsigned getTamanioComponenteUsado();
 };
 

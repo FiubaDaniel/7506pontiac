@@ -86,6 +86,7 @@ public:
 	virtual Componente*getComponenteUsado()=0;
 	virtual unsigned getTamanioComponenteUsado()=0;
 	virtual void imprimirMetada(std::ostream&out)=0;
-	virtual std::string imprimirMetada()=0;
+	virtual std::string getMetadata()=0;
+	virtual void setMetadata(char* metadata)=0;
 };
 #endif /* ESTRATEGIAALMACENAMIENTO_H_ */
