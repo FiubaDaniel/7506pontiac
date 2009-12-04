@@ -56,7 +56,7 @@ void EARegistros::escribir(Registro*registro ){
 		nroRegistro++;
 	}
 }
-void EARegistros::leer(Registro*registro ){
+bool EARegistros::leer(Registro*registro ){
 	if(!almacen->fin()){
 		almacen->leer(registroSerializado,tamanioRegistro);
 		std::stringbuf buf;
@@ -64,7 +64,9 @@ void EARegistros::leer(Registro*registro ){
 		buf.pubsetbuf(registroSerializado,tamanioRegistro);
 		registro->deserializar(buf);
 		nroRegistro++;
+		return true;
 	}
+	return false;
 }
 bool EARegistros::escribir(Componente *componente ){
 	Registro*registro=dynamic_cast<Registro*>(componente);
@@ -84,8 +86,7 @@ bool EARegistros::escribir(Componente *componente ){
 bool EARegistros::leer(Componente *componente ){
 	Registro*registro=dynamic_cast<Registro*>(componente);
 	if(registro!=NULL&&nroRegistro<siguienteRegLibre){
-		leer(registro);
-		return true;
+		return leer(registro);
 	}
 	return false;
 }

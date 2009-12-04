@@ -145,7 +145,7 @@ void EstrategiaCompresion::descompresion(Almacenamiento*almacen,string archivoCo
 
 	std::stringbuf serializado;
 
-	archivo_comprimido.open(archivoComprimido.c_str(),fstream::trunc|fstream::in|fstream::binary);
+	archivo_comprimido.open(archivoComprimido.c_str(),fstream::in|fstream::binary);
 	/*todo checkear si abierto*/
 
 	if(not archivo_comprimido.is_open())
@@ -179,29 +179,37 @@ void EstrategiaCompresion::descompresion(Almacenamiento*almacen,string archivoCo
 
 	std::string descomprimido;
 
-	while(archivo_comprimido.peek()!= EOF){
-		/*recupero una tira de componentes serializados*/
+	try{
 
-		archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_comprimido);
+		while(archivo_comprimido.peek()!= EOF and not archivo_comprimido.eof()){
+			/*recupero una tira de componentes serializados*/
 
-		contenedor.setExtremos();
+			archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_comprimido);
 
-		contenedor.descomprimir(buffer,descomprimido,tamanio_comprimido);
+			contenedor.setExtremos();
 
-		serializado.pubsetbuf((char*)descomprimido.data(),descomprimido.size());
+			descomprimido.clear();
 
-		serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
+			contenedor.descomprimir(buffer,descomprimido,tamanio_comprimido);
 
-		while(serializado.sgetc()!=EOF){
-			/*escribo los componentes q recupere*/
+			serializado.pubsetbuf((char*)descomprimido.data(),descomprimido.size());
 
-			componente->deserializar(serializado);
+			serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
 
-			almacen->escribir(componente);
+			while(serializado.sgetc()!=EOF){
+				/*escribo los componentes q recupere*/
 
+				componente->deserializar(serializado);
+
+				componente->imprimir(cout);cout<<endl;
+
+				almacen->escribir(componente);
+
+			}
 		}
+	}catch(...){
+		cout<<"ERROR: DESERIALIZAR"<<endl;
 	}
-
 	archivo_comprimido.close();
 
 	delete componente;
