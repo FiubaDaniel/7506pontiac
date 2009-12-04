@@ -71,6 +71,18 @@ public:
 
 	int tamanioBloque();
 
+	bool siguienteAlmacenado(Nodo* &nodo);
+
+	void escribirSiguienteAlmacenado(char* array);
+
+	void posicionarArchivo();
+
+	std::string getMetadata();
+
+	void setMetadata(char* metadata);
+
+	void recomponerRaiz();
+
 	virtual ~BSharpTree();
 private:
 
@@ -131,8 +143,6 @@ private:
 	Nodo* obtenerHermanoXsuBflujo(int nivel,Referencia ref);
 
 	Nodo* obtenerNodoPorPosiciones(Referencia posInicial);
-
-	void recomponerRaiz();
 
 	void imprimirIterativo(Nodo* nodo);
 
