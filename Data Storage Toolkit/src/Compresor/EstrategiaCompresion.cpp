@@ -107,12 +107,18 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,string archivoCompr
 
 	componente->serializar(serializado);
 
+	//componente->imprimir(cout);cout<<endl;
+
 	contenedor.comprimirPrimeros((unsigned char*)serializado.str().data(),tamanioSerializado);
 
 	/*los siguiente componente*/
 	while(almacen->leer(componente)){
 
+		serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
+
 		componente->serializar(serializado);
+
+		//componente->imprimir(cout);cout<<endl;
 
 		if(not contenedor.agregar((unsigned char*)serializado.str().data(),tamanioSerializado)){
 
@@ -125,7 +131,7 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,string archivoCompr
 
 			contenedor.comprimirPrimeros((unsigned char*)serializado.str().data(),tamanioSerializado);
 		}
-		serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
+
 	}
 
 	contenedor.cerrar();
