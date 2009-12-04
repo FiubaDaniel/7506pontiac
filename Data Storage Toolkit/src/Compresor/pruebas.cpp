@@ -77,6 +77,10 @@ int pruebacompresion2(){
 	return 0;
 }
 int pruebaEstragiaCompresionAlmacenamiento(){
+	stringbuf buffer;
+	buffer.str("hola");
+	buffer.str("hola");
+	cout<<buffer.str()<<endl;
 	AtributoFijo<char*> nombre("N",10);
 	Registro registro(1,&nombre);
 	EARegistros estrategia(&registro);

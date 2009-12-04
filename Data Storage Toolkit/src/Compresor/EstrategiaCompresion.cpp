@@ -110,7 +110,7 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,string archivoCompr
 	//componente->imprimir(cout);cout<<endl;
 
 	contenedor.comprimirPrimeros((unsigned char*)serializado.str().data(),tamanioSerializado);
-
+	int cont=1;//TODO sacar
 	/*los siguiente componente*/
 	while(almacen->leer(componente)){
 
@@ -131,9 +131,10 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,string archivoCompr
 
 			contenedor.comprimirPrimeros((unsigned char*)serializado.str().data(),tamanioSerializado);
 		}
+		cont++;
 
 	}
-
+	cout<<cont<<endl;
 	contenedor.cerrar();
 
 	archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
@@ -198,9 +199,7 @@ void EstrategiaCompresion::descompresion(Almacenamiento*almacen,string archivoCo
 
 			contenedor.descomprimir(buffer,descomprimido,tamanio_comprimido);
 
-			serializado.pubseekpos(0,ios::out|ios::binary|ios::in);//TODO
-
-			serializado.pubsetbuf((char*)descomprimido.data(),descomprimido.size());
+			serializado.str(descomprimido);//TODO cambio
 
 			serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
 
