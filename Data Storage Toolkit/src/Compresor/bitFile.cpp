@@ -129,6 +129,7 @@ void bitFile::fill(unsigned fuente){
 			//p=&buffer[write_posicion];
 			buffer[write_posicion]&=~(UNOS);
 			buffer[write_posicion]|=fuente;
+			write_posicion++;
 		}
 	}
 }

@@ -227,8 +227,9 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 	int U_anterior=U;
 	unsigned pos=buffer.tell_unsigned_write();
 	char offset=buffer.tell_bits_offset_w();
+	PPMC::TablaPPMC*clon=tabla.clonar();
 	try{
-		//tabla.imprimir();std::cout<<std::endl;
+		tabla.imprimir();std::cout<<std::endl;
 		if(salida){
 			(*salida)<<"Tratando de agregar:"<<std::endl;
 			(*salida)<<"#bits  Caracter"<<std::endl;
@@ -294,16 +295,23 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 		techo=techo_anterior;
 		U=U_anterior;
 
-		if(cant_emitidos!=0){
+		/*if(cant_emitidos!=0){
+			if(ultimoSimbolo!=simbolos[cant_emitidos])
+				cant_emitidos--;
+			ultimoSimbolo=ultimo_anterior;
 			for(unsigned i=cant_emitidos;i>0;i--){
 				tabla.decremetarOcurrencia(simbolos[i-1],simbolos[i]);
 			}
 			tabla.decremetarOcurrencia(cerrador,simbolos[0]);
 			tabla.decremetarOcurrencia(ultimoSimbolo,cerrador);
 		}
-		//tabla.imprimir();std::cout<<std::endl;
+		*/
+		tabla.copiar(*clon);
+		tabla.imprimir();std::cout<<std::endl;
+		delete clon;
 		return false;
 	}
+	delete clon;
 	return true;
 }
 /*--------Funcion original de agregar----------------------------*/

@@ -335,9 +335,9 @@ void TablaPPMC::imprimir(){
 	tipo_contextos::iterator contexto = contextos.begin();
 	while(contexto!=contextos.end()){
 		tipo_tabla_frecuencias::iterator elemento_contexto = contexto->second.tablaFrecuencias.begin();
-		std::cout<<"CTX "<<contexto->first<<" (S:"<< contexto->second.frecuencias_simbolos<<",E:"<< contexto->second.frecuencia_escape<<"): ";
+		std::cout<<"CTX "<<(int)contexto->first<<" (S:"<< contexto->second.frecuencias_simbolos<<",E:"<< contexto->second.frecuencia_escape<<"): ";
 		while(elemento_contexto != contexto->second.tablaFrecuencias.end()){
-			std::cout<<"("<<elemento_contexto->simbolo<<" , ";
+			std::cout<<"("<<(int)elemento_contexto->simbolo<<" , ";
 			std::cout<<elemento_contexto->frecuencia<<") ";
 			++elemento_contexto;
 		}
@@ -345,7 +345,38 @@ void TablaPPMC::imprimir(){
 		std::cout<<std::endl;
 	}
 }
-
+TablaPPMC* TablaPPMC::clonar(){
+	TablaPPMC* clon=new TablaPPMC;
+	tipo_contextos::iterator contexto = contextos.begin();
+	clon->alerta_escape=alerta_escape;
+	while(contexto!=contextos.end()){
+		clon->contextos[contexto->first];
+		clon->contextos[contexto->first].frecuencia_escape=contexto->second.frecuencia_escape;
+		clon->contextos[contexto->first].frecuencias_simbolos=contexto->second.frecuencias_simbolos;
+		clon->contextos[contexto->first].tablaFrecuencias=contexto->second.tablaFrecuencias;
+		contexto++;
+	}
+	return clon;
+};
+void TablaPPMC::copiar(TablaPPMC&tabla){
+	/*Borro lo anterior*/
+	tipo_contextos::iterator contexto = contextos.begin();
+	while(contexto!=contextos.end()){
+		contexto->second.tablaFrecuencias.clear();
+		contexto++;
+	}
+	contextos.clear();
+	/*Copiando*/
+	alerta_escape=tabla.alerta_escape;
+	contexto = tabla.contextos.begin();
+	while(contexto!=tabla.contextos.end()){
+			contextos[contexto->first];
+			contextos[contexto->first].frecuencia_escape=contexto->second.frecuencia_escape;
+			contextos[contexto->first].frecuencias_simbolos=contexto->second.frecuencias_simbolos;
+			contextos[contexto->first].tablaFrecuencias=contexto->second.tablaFrecuencias;
+			contexto++;
+	}
+}
 }
 
 
