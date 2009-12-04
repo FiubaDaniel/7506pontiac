@@ -125,6 +125,7 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,string archivoCompr
 
 			contenedor.comprimirPrimeros((unsigned char*)serializado.str().data(),tamanioSerializado);
 		}
+		serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
 	}
 
 	contenedor.cerrar();
@@ -188,6 +189,8 @@ void EstrategiaCompresion::descompresion(Almacenamiento*almacen,string archivoCo
 		contenedor.descomprimir(buffer,descomprimido,tamanio_comprimido);
 
 		serializado.pubsetbuf((char*)descomprimido.data(),descomprimido.size());
+
+		serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
 
 		while(serializado.sgetc()!=EOF){
 			/*escribo los componentes q recupere*/
