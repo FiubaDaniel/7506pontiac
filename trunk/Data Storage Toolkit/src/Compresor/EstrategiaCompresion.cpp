@@ -27,7 +27,8 @@ void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivoCompr
 	//abro el archivo comprimido. Su nombre será el nombre del archivo original + _Comprimido.
 	std::fstream archivo_comprimido;
 	archivo_comprimido.open(archivoComprimido.c_str(),fstream::trunc|fstream::out|fstream::binary);
-
+	archivo_comprimido.seekp(0);
+	archivo_comprimido.write((char*)&tamanio_buffer_comprimido,sizeof(tamanio_buffer_comprimido));
 	if(archivo_comprimido.is_open()){
 		Nodo* nodo;
 		//Paso la metadata (que no se comprime) al archivo de datos comprimido
@@ -35,14 +36,18 @@ void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivoCompr
 		unsigned tamanio_meta=metadata.size();
 		archivo_comprimido.write((char*)&tamanio_meta,sizeof(tamanio_meta));
 		archivo_comprimido.write(metadata.data(),tamanio_meta);
-
+		//TODO Borrar impresion
+		cout<<*(int*)metadata.c_str()<<endl;//primer int
+		cout<<*(int*)(metadata.c_str()+sizeof(int))<<endl;//2do int
+		cout<<*(int*)(metadata.c_str()+2*sizeof(int))<<endl;//3ro int
 		//Comienzo la compresion
 
 		//Comprimo el primero
 		arbol->posicionarArchivo();
+		arbol->siguienteAlmacenado(nodo);
 		nodo->serializate(&serializado);
 		contenedor.comprimirPrimeros((unsigned char*)serializado.str().data(),tamanioSerializado);
-
+		arbol->imprimir();
 		//Comprimo los siguiente
 		while(arbol->siguienteAlmacenado(nodo)){
 			serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
@@ -63,7 +68,6 @@ void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivoCompr
 		contenedor.cerrar();
 		archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
 		archivo_comprimido.close();
-		delete nodo;
 	}
 	delete[] buffer;
 }
@@ -72,16 +76,15 @@ void EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivoCom
 
 	std::fstream archivo_comprimido;
 	std::stringbuf serializado;
-
+	archivo_comprimido.open(archivoComprimido.c_str(),fstream::in|fstream::binary);
 	unsigned tamanio_comprimido;//Tamanio del contenedor.
 	/*recuperao tamanio del buffer */
+	archivo_comprimido.seekg(0);
 	archivo_comprimido.read((char*)&tamanio_comprimido,sizeof(tamanio_comprimido));
 	unsigned *buffer=new unsigned[tamanio_comprimido];
 
 	//Creo el contenedor segun datos recuperados
 	Compresor contenedor(buffer,tamanio_comprimido);
-	//Abro el archivo comprimido
-	archivo_comprimido.open(archivoComprimido.c_str(),fstream::in|fstream::binary);
 	//Comienza la descompresion
 	if(archivo_comprimido.is_open()){
 
@@ -121,7 +124,6 @@ void EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivoCom
 			cout<<"ERROR: DESERIALIZAR"<<endl;
 		}
 		archivo_comprimido.close();
-
 	}
 }
 
