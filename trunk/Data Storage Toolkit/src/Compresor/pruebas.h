@@ -14,6 +14,9 @@
 #include "../Almacenamiento/EABloques.h"
 #include "../Compuesto/Registro.h"
 #include "../Compuesto/AtributoFijo.h"
+#include "../ArbolBSharp/BSharpTree.h"
+#include "../ArbolBSharp/Clave.h"
+#include "../ArbolBSharp/ComparadorRegistroVariable.h"
 #include "../Terminos.h"
 #include <iostream>
 #include <list>
@@ -23,5 +26,6 @@ int pruebacompresion1();
 int pruebacompresion2();
 int pruebaCompresion3();
 int pruebaEstragiaCompresionAlmacenamiento();
+int pruebaEstrategiaCompresionArbol();
 
 #endif

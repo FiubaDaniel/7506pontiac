@@ -7,8 +7,13 @@
 #include "pruebas.h"
 #define MAX_CANT_CHAR 121
 #define MIN_CANT_CHAR 35
-#define TAM_BUF1 28
-#define TAM_BUF2 100
+
+#define TAM_BUF1 50
+#define TAM_BUF2 50
+#include <cstring>
+#include <cstdlib>
+#include <stdio.h>
+
 
 int pruebacompresion1(){
 	unsigned buffer[TAM_BUF1];
@@ -37,7 +42,7 @@ int pruebacompresion1(){
 int pruebacompresion2(){
 	unsigned primer_buffer_comprimido[TAM_BUF1];
 	unsigned segundo_buffer_comprimido[TAM_BUF2];
-						             //1234567890123456789012345678901234512345678901234567890123456789012345
+	//1234567890123456789012345678901234512345678901234567890123456789012345
 	string fuente_de_caracteres="Base class for standard exceptions. All objects thrown by components of the standard library are derived from this classa";
 	/*********************************************************/
 	/*                      COMPRIMIENDO                     */
@@ -48,8 +53,8 @@ int pruebacompresion2(){
 	/*intenta agregar mas de los q pueden entrar*/
 	compresor.agregar((unsigned char*)fuente_de_caracteres.c_str(),MIN_CANT_CHAR*3);
 	/*intena agregar una cantidad menor*/
-    compresor.agregar((unsigned char*)fuente_de_caracteres.c_str()+MIN_CANT_CHAR,MIN_CANT_CHAR);
-    /*termina de usar el buffer*/
+	compresor.agregar((unsigned char*)fuente_de_caracteres.c_str()+MIN_CANT_CHAR,MIN_CANT_CHAR);
+	/*termina de usar el buffer*/
 	compresor.cerrar();
 	/*USANDO EL SEGUNDO BUFFER*/
 	/*setea el segundo buffer para escribir*/
@@ -89,7 +94,7 @@ int pruebaCompresion3(){
 	/*********************************************************/
 	Compresor compresor(buffer,TAM_BUF2);
 	compresor.comprimirPrimeros((unsigned char*)Terminos::obtenerTermino(0).c_str(),Terminos::obtenerTermino(0).size());
-	for(int i=1;i<30;i++){
+	for(int i=1;i<296;i++){
 		if(!compresor.agregar((unsigned char*)Terminos::obtenerTermino(i).c_str(),Terminos::obtenerTermino(i).size())){
 			compresor.cerrar();
 			/*********************************************************/
@@ -137,5 +142,39 @@ int pruebaEstragiaCompresionAlmacenamiento(){
 	compresion.descompresion(&archivo,"prueba.zip");
 	archivo.imprimir(cout);
 	archivo.cerrar();
+	return 0;
+}
+
+int pruebaEstrategiaCompresionArbol(){
+	/*************************Creacion Arbol***************************/
+	Referencia ref=0;
+	AtributoFijo<char*> nombre("miStringID",15);
+	char unNombre[15]="abaco";
+	nombre.set(unNombre);
+	Registro reg(1,&nombre);
+	Clave clave(&reg,1,"miStringID");
+	BSharpTree* arbol = new BSharpTree(&clave);
+	ComparadorClave* comparador = new ComparadorRegistroVariable();
+	string nombreArchivo = "Arbol";
+	unsigned int tamanioBloque = 128;
+	arbol->crear(nombreArchivo,tamanioBloque,&clave,comparador);
+	for(int i=0;i<MIN_CANT_CHAR;i++){
+		strncpy(unNombre,Terminos::obtenerTermino(i).data(),15);
+		nombre.set(unNombre);
+		Registro reg1(1,&nombre);
+		Clave clave1(&reg1,1,"miStringID");
+		//std::cout<<clave1.getAtributo("miStringID")<<std::endl;
+		arbol->insertar(ref,&clave1);
+	}
+	arbol->imprimir();
+	/************************COMPRIMIENDO*****************************/
+	EstrategiaCompresion compresion;
+	compresion.compresionArbol(arbol,"pruebaArbolzip",10);
+	/************************DESCOMPRIMIENDO**************************/
+	BSharpTree* arbol2 = new BSharpTree(&clave);
+	string nombreArchivo2 = "Arbol2";
+	arbol2->crear(nombreArchivo2,200,&clave,comparador);
+	compresion.descompresionArbol(arbol2,"pruebaArbolzip");
+	arbol2->imprimir();
 	return 0;
 }
