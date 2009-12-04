@@ -15,7 +15,64 @@ EstrategiaCompresion::EstrategiaCompresion() {
 EstrategiaCompresion::~EstrategiaCompresion() {
 
 }
+
+void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivoComprimido,unsigned tamanio_buffer_comprimido){
+
+	//Creo el contenedor adecuado a las condiciones dadas.
+	unsigned *buffer=new unsigned[tamanio_buffer_comprimido];
+	Compresor contenedor(buffer,tamanio_buffer_comprimido);
+	unsigned tamanioSerializado = arbol->tamanioBloque();
+	std::stringbuf serializado;
+
+	//abro el archivo comprimido. Su nombre será el nombre del archivo original + _Comprimido.
+	std::fstream archivo_comprimido;
+	archivo_comprimido.open(archivoComprimido.c_str(),fstream::trunc|fstream::out|fstream::binary);
+
+	if(archivo_comprimido.is_open()){
+		Nodo* nodo;
+		//Paso la metadata (que no se comprime) al archivo de datos comprimido
+		std::string metadata=arbol->getMetadata();
+		unsigned tamanio_meta=metadata.size();
+		archivo_comprimido.write((char*)&tamanio_meta,sizeof(tamanio_meta));
+		archivo_comprimido.write(metadata.data(),tamanio_meta);
+
+		//Comienzo la compresion
+
+		//Comprimo el primero
+		arbol->posicionarArchivo();
+		nodo->serializate(&serializado);
+		contenedor.comprimirPrimeros((unsigned char*)serializado.str().data(),tamanioSerializado);
+
+		//Comprimo los siguiente
+		while(arbol->siguienteAlmacenado(nodo)){
+			nodo->serializate(&serializado);
+			if(not contenedor.agregar((unsigned char*)serializado.str().data(),tamanioSerializado)){
+				/*no pudo agregar,cierra el contenedor , graba y empieza uno nuevo */
+				contenedor.cerrar();
+
+				archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
+
+				contenedor.setContinuacionCompresion(buffer,tamanio_buffer_comprimido);
+
+				contenedor.comprimirPrimeros((unsigned char*)serializado.str().data(),tamanioSerializado);
+			}
+			//delete nodo;//Todo ver
+		}
+
+		contenedor.cerrar();
+
+		archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
+
+		archivo_comprimido.close();
+
+		delete nodo;
+
+		delete[] buffer;
+	}
+}
+
 void EstrategiaCompresion::compresion(Almacenamiento*almacen,string archivoComprimido,unsigned tamanio_buffer_comprimido){
+
 	/**/
 	std::fstream archivo_comprimido;
 
