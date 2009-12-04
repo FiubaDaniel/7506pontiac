@@ -393,7 +393,7 @@ void Compresor::setContinuacionCompresion(unsigned*buffer,unsigned tamanio){
 }
 /*---------------------------------------Descompresion--------------------------------------------------------*/
 void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int tamanioComprimido){
-
+    this->setExtremos();
 	//Calculo Padding
 	//Primero busco el byte donde comienza el padding.
 	int nro_unsigned;
