@@ -14,5 +14,7 @@ int main(){
 	pruebacompresion1();
 	cout<<"Prueba2"<<endl;
 	pruebacompresion2();
+	cout<<"Prueba3"<<endl;
+	pruebaEstragiaCompresionAlmacenamiento();
 	return 0;
 }

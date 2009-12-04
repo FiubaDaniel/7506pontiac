@@ -24,7 +24,7 @@ class EARegistros: public EstrategiaAlmacenamiento {
 	int comparar(Registro*reg1,Registro*reg2);
 	/*escribe el registro en la posicion.*/
 	void escribir(Registro*registro);
-	void leer(Registro*registro);
+	bool leer(Registro*registro);
 public:
 	EARegistros(Registro*registro);
 	virtual ~EARegistros();
