@@ -75,9 +75,14 @@ public:
 	 */
 	void cerrar();
 	/*
-	 *
+	 * reinicia el buffer usado, los proximos codigos generados se grabaran
+	 * al principio del buffer
 	 */
 	void reiniciarBuffer();
+	/*
+	 * setea el buffer usado, los proximos codigos generados se grabaran
+	 * al principio del buffer seteado
+	 */
 	void setContinuacionCompresion(unsigned*buffer,unsigned tamanio);
 	/*
 	 * Setea la salida para imprimir las estadisticas.
