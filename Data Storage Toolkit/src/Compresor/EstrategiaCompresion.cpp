@@ -45,6 +45,7 @@ void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivoCompr
 
 		//Comprimo los siguiente
 		while(arbol->siguienteAlmacenado(nodo)){
+			serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
 			nodo->serializate(&serializado);
 			if(not contenedor.agregar((unsigned char*)serializado.str().data(),tamanioSerializado)){
 				/*no pudo agregar,cierra el contenedor , graba y empieza uno nuevo */
@@ -56,18 +57,71 @@ void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivoCompr
 
 				contenedor.comprimirPrimeros((unsigned char*)serializado.str().data(),tamanioSerializado);
 			}
-			//delete nodo;//Todo ver
+			delete nodo;
 		}
 
 		contenedor.cerrar();
-
 		archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
+		archivo_comprimido.close();
+		delete nodo;
+	}
+	delete[] buffer;
+}
 
+void EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivoComprimido){
+
+	std::fstream archivo_comprimido;
+	std::stringbuf serializado;
+
+	unsigned tamanio_comprimido;//Tamanio del contenedor.
+	/*recuperao tamanio del buffer */
+	archivo_comprimido.read((char*)&tamanio_comprimido,sizeof(tamanio_comprimido));
+	unsigned *buffer=new unsigned[tamanio_comprimido];
+
+	//Creo el contenedor segun datos recuperados
+	Compresor contenedor(buffer,tamanio_comprimido);
+	//Abro el archivo comprimido
+	archivo_comprimido.open(archivoComprimido.c_str(),fstream::in|fstream::binary);
+	//Comienza la descompresion
+	if(archivo_comprimido.is_open()){
+
+		//Obtengo metadata
+		unsigned tamanio_meta;
+		archivo_comprimido.read((char*)&tamanio_meta,sizeof(tamanio_meta));
+		char* metadata=new char[tamanio_meta];
+		archivo_comprimido.read(metadata,tamanio_meta);
+		arbol->setMetadata(metadata);
+
+		//Descompresion de Nodos
+		arbol->posicionarArchivo();
+		std::string descomprimido;
+		try{
+			while(archivo_comprimido.peek()!= EOF and not archivo_comprimido.eof()){
+				/*recupero una tira de componentes serializados*/
+				archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_comprimido);
+
+				descomprimido.clear();
+
+				contenedor.descomprimir(buffer,descomprimido,tamanio_comprimido);
+
+				while(not descomprimido.empty()){
+					/*escribo los componentes q recupere*/
+
+					serializado.str(descomprimido);//inicializo el buff con el string descomprimido
+
+					serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
+
+					arbol->escribir(&serializado);
+
+					descomprimido.erase(0,arbol->tamanioBloque());//elimino el primer registro/bloque del string
+
+				}
+			}
+		}catch(...){
+			cout<<"ERROR: DESERIALIZAR"<<endl;
+		}
 		archivo_comprimido.close();
 
-		delete nodo;
-
-		delete[] buffer;
 	}
 }
 
