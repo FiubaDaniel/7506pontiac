@@ -17,56 +17,6 @@ TablaPPMC::~TablaPPMC() {
 bool TablaPPMC::vacia(){
 	return contextos.empty();
 }
-/*void TablaDeProbabilidad::obtenerExtremos(char contexto,char simbolo,unsigned & piso,unsigned &techo){
-	unsigned longitud=techo-piso;
-	tipo_frecuencia incremento;
-	tipo_frecuencia total;
-	tipo_contextos::iterator it=contextos.find(contexto);
-	if(it!=contextos.end()){
-		total=256-it->second.tablaFrecuencias.size()+it->second.frecuencias_simbolos;
-		tipo_tabla_frecuencias::iterator itTabla=it->second.tablaFrecuencias.begin();
-		unsigned char cant_elementos=0;
-		acumulacion de los que ESTAN en la tabla antes del pedido
-		while(itTabla!=it->second.tablaFrecuencias.end() and itTabla->simbolo<simbolo){
-			incremento=float(longitud)/float(total);
-			incremento+=1/float(total);
-			incremento*=itTabla->frecuencia;
-			piso+=floor(piso+incremento);
-			cant_elementos++;
-			itTabla++;
-		}
-		acumulacion de los que NO ESTAN en tabla antes q el pedido
-		if(cant_elementos<(unsigned char)simbolo){
-			cant_elementos=((unsigned char)simbolo)-cant_elementos;
-			incremento=float(longitud)/float(total);
-			incremento+=1/float(total);
-			incremento*=cant_elementos;
-			piso+=floor(piso+incremento);
-		}
-		incremento para el techo
-		if(itTabla!=it->second.tablaFrecuencias.end() and itTabla->simbolo==simbolo){
-			incremento=float(longitud)/float(total);
-			incremento+=1/float(total);
-			incremento*=itTabla->frecuencia;
-		}else{
-			//no es el piso del simbolo
-			incremento=float(longitud)/float(total);
-			incremento+=1/float(total);
-		}
-	}else{
-		tabla completamente vacia
-		total=256;
-		incremento=float(longitud)/float(total);
-		incremento+=1/float(total);
-		incremento*=(unsigned char)simbolo;
-		piso+=floor(piso+incremento);
-		incremento=float(longitud)/float(total);
-		incremento+=1/float(total);
-	}
-	techo=floor(piso+incremento)-1;
-	if(techo<piso)
-		throw 8;
-}*/
 bool TablaPPMC::esEscape(){
 	return this->alerta_escape;
 }
@@ -226,32 +176,6 @@ void TablaPPMC::decremetarOcurrencia(unsigned char contexto,unsigned char simbol
 		}
 	}
 }
-/*-------------------NO SE USA----------------------------------------
-tipo_frecuencia TablaPPMC::buscarOcurrencias(unsigned char anterior,int caracterBuscado){
-	if(this->alerta_escape){
-		this->alerta_escape=false;
-		return 1;
-		if(!contextos.empty()){
-			tipo_contextos::iterator it = contextos.find(anterior);
-			if(it != contextos.end()){
-				Contexto buscado = it->second;
-				if(caracterBuscado==-1){
-					return buscado.frecuencia_escape;
-				}
-				std::list<ElementoContexto>::iterator itLista = buscado.tablaFrecuencias.begin();
-				while(itLista != buscado.tablaFrecuencias.end()){
-					ElementoContexto elemento = *itLista;
-					if(caracterBuscado == elemento.simbolo){
-						return elemento.frecuencia;
-					}
-					++itLista;
-				}
-			}
-		}
-		return 0;
-	}
-	}
- */
 unsigned char TablaPPMC::calcularEmision(unsigned &piso,unsigned &techo,unsigned codigo,unsigned char anterior){
 	//unsigned char retorno=0;
 	unsigned longitud = techo - piso;
