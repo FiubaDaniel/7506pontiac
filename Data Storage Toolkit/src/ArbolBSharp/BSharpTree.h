@@ -73,7 +73,7 @@ public:
 
 	bool siguienteAlmacenado(Nodo* &nodo);
 
-	void escribirSiguienteAlmacenado(char* array);
+	void escribir(std::stringbuf* buffer);
 
 	void posicionarArchivo();
 
@@ -82,6 +82,8 @@ public:
 	void setMetadata(char* metadata);
 
 	void recomponerRaiz();
+
+	void deserializar(std::stringbuf* buffer);
 
 	virtual ~BSharpTree();
 private:

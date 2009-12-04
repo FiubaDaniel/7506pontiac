@@ -968,6 +968,7 @@ void BSharpTree::imprimirIterativo(Nodo* nodoE){
 
 void BSharpTree::posicionarArchivo(){
 	archivoArbol.seekg(posicionRaiz);
+	archivoArbol.seekp(posicionRaiz);
 }
 
 bool BSharpTree::siguienteAlmacenado(Nodo*& nodo){
@@ -989,8 +990,21 @@ bool BSharpTree::siguienteAlmacenado(Nodo*& nodo){
 	return true;
 }
 
-void BSharpTree::escribirSiguienteAlmacenado(char* array){
-	//Ver
+void BSharpTree::escribir(std::stringbuf* buffer){
+	int nivel;
+	Nodo* nodo;
+	buffer.sgetn((char*)&nivel,sizeof(int));
+	if(nivel==0){
+		nodo =new  NodoHoja(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
+	}else{
+		nodo = new NodoIntermedio(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
+	}
+	char array[tamanioNodo];
+	buff.pubsetbuf(array,tamanioNodo);
+	buff.pubseekpos(0);
+	nodo.serializate(&buff);
+	archivoArbol.write(array2,tamanioNodo);
+	delete nodo;
 }
 std::string BSharpTree::getMetadata(){
 	std::string resultado;
