@@ -990,19 +990,19 @@ bool BSharpTree::siguienteAlmacenado(Nodo*& nodo){
 	return true;
 }
 
-void BSharpTree::escribir(std::stringbuf buffer){
+void BSharpTree::escribir(std::stringbuf* buffer){
 	int nivel;
 	Nodo* nodo;
-	buffer.sgetn((char*)&nivel,sizeof(int));
+	buffer->sgetn((char*)&nivel,sizeof(int));
 	if(nivel==0){
-		nodo =new  NodoHoja(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
+		nodo =new  NodoHoja(buffer,numeroDeElementosXnodo,comparador,claveEstructural);
 	}else{
-		nodo = new NodoIntermedio(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
+		nodo = new NodoIntermedio(buffer,numeroDeElementosXnodo,comparador,claveEstructural);
 	}
 	char array[tamanioNodo];
-	buffer.pubsetbuf(array,tamanioNodo);
-	buffer.pubseekpos(0);
-	nodo.serializate(&buffer);
+	buffer->pubsetbuf(array,tamanioNodo);
+	buffer->pubseekpos(0);
+	nodo->serializate(buffer);
 	archivoArbol.write(array,tamanioNodo);
 	delete nodo;
 }
