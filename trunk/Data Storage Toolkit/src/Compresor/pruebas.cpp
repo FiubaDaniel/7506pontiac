@@ -76,4 +76,6 @@ int pruebacompresion2(){
 	cout<<caracteres_descomprimidos<<endl;
 	return 0;
 }
+int pruebaEstragiaCompresionAlmacenamiento(){
 
+}

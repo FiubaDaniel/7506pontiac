@@ -14,5 +14,6 @@ using namespace std;
 
 int pruebacompresion1();
 int pruebacompresion2();
+int pruebaEstragiaCompresionAlmacenamiento();
 
 #endif
