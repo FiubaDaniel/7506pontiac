@@ -48,8 +48,8 @@ void BSharpTree::crear(string nombreArch,unsigned int tamanioDeBloque, Clave* cl
 		Raiz->serializate(&buffer);
 		archivoArbol.write(array2,tamanioNodo);
 		archivoEspaciosLibres.seekp(0);
-				int Siguiente = 0;
-				archivoEspaciosLibres.write((char*)&Siguiente,sizeof(Siguiente));
+		int Siguiente = 0;
+		archivoEspaciosLibres.write((char*)&Siguiente,sizeof(Siguiente));
 	}
 }
 /*Abre un arbol ya existente*/
@@ -880,10 +880,10 @@ Referencia BSharpTree::buscarEspacioLibre(){
 		return 0;
 	}else{
 		archivoEspaciosLibres.seekg(sizeof(Siguiente)+(Siguiente-1)*sizeof(Referencia));
-        archivoEspaciosLibres.read((char*)&retorno,sizeof(Referencia));
-        Siguiente--;
-        archivoEspaciosLibres.seekp(0);
-        archivoEspaciosLibres.write((char*)&Siguiente,sizeof(Siguiente));
+		archivoEspaciosLibres.read((char*)&retorno,sizeof(Referencia));
+		Siguiente--;
+		archivoEspaciosLibres.seekp(0);
+		archivoEspaciosLibres.write((char*)&Siguiente,sizeof(Siguiente));
 	}
 	return retorno;
 }
@@ -964,6 +964,61 @@ void BSharpTree::imprimirIterativo(Nodo* nodoE){
 		}
 		cout<<" "<<endl;
 	}
+}
+
+void BSharpTree::posicionarArchivo(){
+	archivoArbol.seekg(posicionRaiz);
+}
+
+bool BSharpTree::siguienteAlmacenado(Nodo*& nodo){
+	std::stringbuf buffer(ios_base :: in | ios_base :: out | ios_base :: binary);
+	if(archivoArbol.peek()==EOF){
+		archivoArbol.clear();// saca el flag de eof
+		return false;
+	}
+	char array2[tamanioNodo];
+	archivoArbol.read(array2,tamanioNodo);
+	buffer.pubsetbuf(array2,tamanioNodo);
+	int nivel;
+	buffer.sgetn((char*)&nivel,sizeof(int));
+	if(nivel==0){
+		nodo =new  NodoHoja(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
+	}else{
+		nodo = new NodoIntermedio(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
+	}
+	return true;
+}
+
+void BSharpTree::escribirSiguienteAlmacenado(char* array){
+	//Ver
+}
+std::string BSharpTree::getMetadata(){
+	std::string resultado;
+	char*p=(char*)&numeroDeElementosXnodo;
+	for(unsigned i=0;i<sizeof(numeroDeElementosXnodo);i++){
+		resultado.push_back(*p);
+		p++;
+	}
+	p=(char*)&tamanioNodo;
+	for(unsigned i=0;i<sizeof(tamanioNodo);i++){
+		resultado.push_back(*p);
+		p++;
+	}
+	p=(char*)&posicionRaiz;
+	for(unsigned i=0;i<sizeof(posicionRaiz);i++){
+		resultado.push_back(*p);
+		p++;
+	}
+	return resultado;
+};
+
+void BSharpTree::setMetadata(char* metadata){
+	numeroDeElementosXnodo=*(unsigned int *)metadata;
+	metadata+=sizeof(unsigned int);
+	tamanioNodo=*(unsigned int*)metadata;
+	metadata+=sizeof(unsigned int);
+	posicionRaiz=*(unsigned int*)metadata;
+	cantidadMinimaDeElementos = (unsigned int) ((numeroDeElementosXnodo)*2)/3;
 }
 
 bool BSharpTree::estaVacio(){
