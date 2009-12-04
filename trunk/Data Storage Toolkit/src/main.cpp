@@ -10,6 +10,9 @@
 
 using namespace std;
 int main(){
+	cout<<"Prueba1"<<endl;
 	pruebacompresion1();
+	cout<<"Prueba2"<<endl;
+	pruebacompresion2();
 	return 0;
 }

@@ -77,5 +77,26 @@ int pruebacompresion2(){
 	return 0;
 }
 int pruebaEstragiaCompresionAlmacenamiento(){
-
+	AtributoFijo<char*> nombre("N",10);
+	Registro registro(1,&nombre);
+	EARegistros estrategia(&registro);
+	Archivo archivo(&estrategia);
+	/*archivo original*/
+	archivo.crear("resgitroIniciales.dat");
+	for(int i=0;i<MIN_CANT_CHAR;i++){
+		*(AtributoFijo<char*>*)registro.get(0)=Terminos::obtenerTermino(i).c_str();
+		((Almacenamiento&)archivo).escribir(&registro);
+	}
+	archivo.imprimir(cout);
+	/***************COMPRIMIENDO************************/
+	EstrategiaCompresion compresion;
+	compresion.compresion(&archivo,"prueba.zip",10);
+	archivo.cerrar();
+	/*creo un archivo para los descomprimidos*/
+	/***************DESCOMPRIMIENDO************************/
+	archivo.crear("registroDescomprimido.dat");
+	compresion.descompresion(&archivo,"prueba.zip");
+	archivo.imprimir(cout);
+	archivo.cerrar();
+	return 0;
 }
