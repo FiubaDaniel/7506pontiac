@@ -73,7 +73,7 @@ public:
 
 	bool siguienteAlmacenado(Nodo* &nodo);
 
-	void escribir(std::stringbuf* buffer);
+	void escribir(std::stringbuf buffer);
 
 	void posicionarArchivo();
 
