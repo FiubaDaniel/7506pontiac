@@ -6,7 +6,7 @@
  */
 #include "pruebas.h"
 #define MAX_CANT_CHAR 121
-#define MIN_CANT_CHAR 35
+#define MIN_CANT_CHAR 50
 
 #define TAM_BUF1 50
 #define TAM_BUF2 50
@@ -83,7 +83,6 @@ int pruebacompresion2(){
 }
 int pruebaCompresion3(){
 
-
 	unsigned buffer1[TAM_BUF2];
 	unsigned buffer2[TAM_BUF2];
 	unsigned *buffer=buffer1;
@@ -158,7 +157,7 @@ int pruebaEstrategiaCompresionArbol(){
 	string nombreArchivo = "Arbol";
 	unsigned int tamanioBloque = 128;
 	arbol->crear(nombreArchivo,tamanioBloque,&clave,comparador);
-	for(int i=0;i<MIN_CANT_CHAR;i++){
+	for(int i=0;i<4;i++){
 		strncpy(unNombre,Terminos::obtenerTermino(i).data(),15);
 		nombre.set(unNombre);
 		Registro reg1(1,&nombre);
@@ -169,12 +168,22 @@ int pruebaEstrategiaCompresionArbol(){
 	arbol->imprimir();
 	/************************COMPRIMIENDO*****************************/
 	EstrategiaCompresion compresion;
-	compresion.compresionArbol(arbol,"pruebaArbolzip",10);
+	compresion.compresionArbol(arbol,"pruebaArbolzip",100);
+	delete arbol;
+	delete comparador;
 	/************************DESCOMPRIMIENDO**************************/
 	BSharpTree* arbol2 = new BSharpTree(&clave);
+	ComparadorClave* comparador2 = new ComparadorRegistroVariable();
 	string nombreArchivo2 = "Arbol2";
-	arbol2->crear(nombreArchivo2,200,&clave,comparador);
+	arbol2->crear(nombreArchivo2,200,&clave,comparador2);
 	compresion.descompresionArbol(arbol2,"pruebaArbolzip");
 	arbol2->imprimir();
+	delete arbol2;
+	delete comparador2;
 	return 0;
 }
+/*int PruebaComprimirNodo(){
+	ComparadorClave* comparador = new ComparadorRegistroVariable();
+	NodoIntermedio* nodo = new NodoIntermedio(2,4,comparador);
+	ElementoNodo* elemento = new ElementoNodo();
+}*/
