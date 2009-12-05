@@ -131,8 +131,10 @@ int pruebaEstragiaCompresionAlmacenamiento(){
 		((Almacenamiento&)archivo).escribir(&registro);
 	}
 	archivo.imprimir(cout);
+	archivo.cerrar();
 	/***************COMPRIMIENDO************************/
 	EstrategiaCompresion compresion;
+	archivo.abrir("resgitroIniciales.dat");
 	compresion.compresion(&archivo,"prueba.zip",10);
 	archivo.cerrar();
 	/*creo un archivo para los descomprimidos*/
