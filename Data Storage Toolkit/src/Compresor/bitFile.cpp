@@ -31,6 +31,8 @@ bitFile::~bitFile() {}
 void bitFile::write(unsigned fuente,char cantidad)throw (bitFileEOFException){
 	imprimir(fuente,cantidad);
 	int bits_restantes=(tamanio-write_posicion)*MAX_BITS-bit_write_offset;
+	long int bits_previos=write_posicion*MAX_BITS+bit_write_offset;
+	long int cantidad_inicial=cantidad;
 	unsigned *p=&buffer[write_posicion];
 	if(bits_restantes >= cantidad){
 		fuente<<=MAX_BITS-cantidad;
@@ -55,6 +57,9 @@ void bitFile::write(unsigned fuente,char cantidad)throw (bitFileEOFException){
 	}else {
 		throw bitFileEOFException();
 	}
+	bits_previos=(write_posicion*MAX_BITS+bit_write_offset)-bits_previos;
+	if(bits_previos!=cantidad_inicial)
+		std::cout<<"Problema"<<std::endl;
 }
 void bitFile::read(unsigned &fuente,char cantidad)throw (bitFileEOFException){
 	int bits_restantes=(tamanio-read_posicion)*MAX_BITS-bit_read_offset;
