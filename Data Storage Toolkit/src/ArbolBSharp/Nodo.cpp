@@ -57,6 +57,7 @@ int Nodo::Eliminar(const Clave* clave){
 	if(noExiste || !encontrado){retorno = 0;}
 	return retorno;
 }
+
 Nodo::~Nodo() {
 	std::list<ElementoNodo*>::iterator it = listaElementos.begin();
 	while(it!=listaElementos.end()){
