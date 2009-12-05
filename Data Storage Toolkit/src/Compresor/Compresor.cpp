@@ -345,6 +345,7 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 			emision=tabla.calcularEmision(piso,techo,codigoAdescomprimir,this->ultimoSimbolo);
 		}
 		tabla.incremtarOcurrencia(this->ultimoSimbolo,emision);
+		std::cout<<cant<<std::endl;
 		this->ultimoSimbolo = emision;
 		descomprimido.push_back(emision);
 		rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
