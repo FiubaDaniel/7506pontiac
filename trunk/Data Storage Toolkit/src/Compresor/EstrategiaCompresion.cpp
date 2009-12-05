@@ -77,8 +77,8 @@ void EstrategiaCompresion::compresionIndice(string nombreIndice,string archivoCo
 	std::fstream archivo_indice;
 	std::fstream archivo_comprimido;
 
-	unsigned *buffer=new unsigned[tamanio_buffer_comprimido];
-	Compresor contenedor(buffer,tamanio_buffer_comprimido);
+	unsigned *comprimido=new unsigned[tamanio_buffer_comprimido];
+	Compresor contenedor(comprimido,tamanio_buffer_comprimido);
 
 	archivo_indice.open(nombreIndice.c_str(),fstream::in|fstream::binary);
 	archivo_comprimido.open(archivoComprimido.c_str(),fstream::trunc|fstream::out|fstream::binary);
@@ -91,26 +91,27 @@ void EstrategiaCompresion::compresionIndice(string nombreIndice,string archivoCo
 
 		//Comienza compresion.
 		//Gurado primero.
+		unsigned tamanio_sin_comprimir=tamanio_buffer_comprimido;
 
-		unsigned array[tamanio_buffer_comprimido];
-		archivo_indice.read((char*)array,tamanio_buffer_comprimido*sizeof(unsigned));
-		contenedor.comprimirPrimeros((unsigned char*)array,tamanio_buffer_comprimido);
+		unsigned char sin_comprimir[tamanio_sin_comprimir];
+		archivo_indice.read((char*)sin_comprimir,tamanio_sin_comprimir);
+		contenedor.comprimirPrimeros(sin_comprimir,tamanio_sin_comprimir);
 
 		//Comprimo el resto
 
 		while(archivo_indice.peek()!= EOF and not archivo_indice.eof()){
 
-			archivo_indice.read((char*)array,tamanio_buffer_comprimido*sizeof(unsigned));
+			archivo_indice.read((char*)sin_comprimir,tamanio_sin_comprimir);
 
-			if(not contenedor.agregar((unsigned char*)array,tamanio_buffer_comprimido)){
+			if(not contenedor.agregar(sin_comprimir,tamanio_sin_comprimir)){
 
 				contenedor.cerrar();
 
-				archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
+				archivo_comprimido.write((char*)comprimido,sizeof(unsigned)*tamanio_buffer_comprimido);
 
 				contenedor.reiniciarBuffer();
 
-				contenedor.comprimirPrimeros((unsigned char*)array,tamanio_buffer_comprimido);
+				contenedor.comprimirPrimeros(sin_comprimir,tamanio_sin_comprimir);
 			}
 		}
 
@@ -118,13 +119,13 @@ void EstrategiaCompresion::compresionIndice(string nombreIndice,string archivoCo
 
 		contenedor.cerrar();
 
-		archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
+		archivo_comprimido.write((char*)comprimido,sizeof(unsigned)*tamanio_buffer_comprimido);
 
 		archivo_comprimido.close();
 
 		archivo_indice.close();
 
-		delete[] buffer;
+		delete[] comprimido;
 	}
 }
 
