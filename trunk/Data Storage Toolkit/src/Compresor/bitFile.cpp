@@ -6,7 +6,11 @@
  */
 
 #include "bitFile.h"
-
+void imprimir(unsigned num,int n){
+	for(int j=n-1;j>=0;j--){
+		std::cout<<(((num &(0x1<<j))==0)?0:1);
+	}
+}
 bitFile::bitFile(unsigned*buffer,unsigned tamanio){
 	this->buffer=buffer;
 	this->tamanio=tamanio;
@@ -25,6 +29,7 @@ bitFile::bitFile(){
 };
 bitFile::~bitFile() {}
 void bitFile::write(unsigned fuente,char cantidad)throw (bitFileEOFException){
+	imprimir(fuente,cantidad);
 	int bits_restantes=(tamanio-write_posicion)*MAX_BITS-bit_write_offset;
 	unsigned *p=&buffer[write_posicion];
 	if(bits_restantes >= cantidad){
