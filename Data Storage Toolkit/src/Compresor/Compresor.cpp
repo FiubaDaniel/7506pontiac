@@ -333,31 +333,32 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 
 	//Establezco condiciones iniciales para descomprimir
 	unsigned codigoAdescomprimir = buffer[0];
+	imprimirLSBs(codigoAdescomprimir,MAX_BITS);
 	int posBuffer = 1;
 	unsigned siguiente = buffer[posBuffer];
 	unsigned char contadorDeBits=MAX_BITS;
 	//Comienza descompresion
 	int cant = 1;
-	while(this->bitRestantes>0){
+	while(this->bitRestantes>=0){
 		unsigned char emision = tabla.calcularEmision(piso,techo,codigoAdescomprimir,this->ultimoSimbolo);
 		if(tabla.esEscape()){
 			rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
 			emision=tabla.calcularEmision(piso,techo,codigoAdescomprimir,this->ultimoSimbolo);
 		}
 		tabla.incremtarOcurrencia(this->ultimoSimbolo,emision);
-		std::cout<<cant<<std::endl;
+		//std::cout<<cant<<std::endl;
 		this->ultimoSimbolo = emision;
 		descomprimido.push_back(emision);
 		rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
 		cant++;
 	}
 	//TODO NUEVO if
-	if(bitRestantes==0){
+	/*if(bitRestantes==0){
 		unsigned char emision = tabla.calcularEmision(piso,techo,codigoAdescomprimir,this->ultimoSimbolo);
 		tabla.incremtarOcurrencia(this->ultimoSimbolo,emision);
 		ultimoSimbolo = emision;
 		descomprimido.push_back(emision);
-	}
+	}*/
 	std::cout<<int(ultimoSimbolo)<<std::endl;
 }
 /*-----------------------------------------------------------------------------------------------------------------*/
@@ -422,11 +423,13 @@ void Compresor::rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,
 }
 
 void Compresor::restructuracionOverflow(unsigned char cantidadIteraciones,unsigned& codigo,unsigned& siguiente){
+	imprimirLSBs(siguiente>>(MAX_BITS-cantidadIteraciones),cantidadIteraciones);
 	codigo = (siguiente>>(MAX_BITS-cantidadIteraciones))|(codigo<<cantidadIteraciones);
 	siguiente<<=cantidadIteraciones;
 }
 
 void Compresor::restructuracionUnderflow(unsigned char cantidadIteraciones,unsigned& codigo,unsigned& siguiente){
+	imprimirLSBs(siguiente>>(MAX_BITS-cantidadIteraciones),cantidadIteraciones);
 	codigo=(codigo & MSB )|((codigo<<(cantidadIteraciones+1))>>1)|(siguiente>>(MAX_BITS-cantidadIteraciones));
 	siguiente<<=cantidadIteraciones;
 }

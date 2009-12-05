@@ -6,6 +6,7 @@
  */
 #ifndef BITFILE_H_
 #define BITFILE_H_
+#include <iostream>
 #include <exception>
 #include <cstddef>
 #define UNOS (~unsigned(0x0))
