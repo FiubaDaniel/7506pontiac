@@ -134,7 +134,7 @@ int pruebaEstragiaCompresionAlmacenamiento(){
 	compresion.compresion(&archivo,"prueba.zip",10);
 	archivo.cerrar();
 	/*creo un archivo para los descomprimidos*/
-	cout<<"/***************DESCOMPRIMIENDO************************/"<<endl;
+	cout<<endl<<"/***************DESCOMPRIMIENDO************************/"<<endl;
 	archivo.crear("registroDescomprimido.dat");
 	compresion.descompresion(&archivo,"prueba.zip");
 	archivo.imprimir(cout);
