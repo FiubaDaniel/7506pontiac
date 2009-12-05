@@ -27,5 +27,6 @@ int pruebacompresion2();
 int pruebaCompresion3();
 int pruebaEstragiaCompresionAlmacenamiento();
 int pruebaEstrategiaCompresionArbol();
+int PruebaComprimirNodo();
 
 #endif
