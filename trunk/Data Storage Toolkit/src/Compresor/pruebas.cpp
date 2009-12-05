@@ -157,6 +157,7 @@ int pruebaEstrategiaCompresionArbol(){
 	BSharpTree* arbol = new BSharpTree(&clave);
 	ComparadorClave* comparador = new ComparadorRegistroVariable();
 	string nombreArchivo = "Arbol";
+	string nombreComprimido = "ArbolComprimido";
 	unsigned int tamanioBloque = 128;
 	arbol->crear(nombreArchivo,tamanioBloque,&clave,comparador);
 	for(int i=0;i<4;i++){
@@ -168,17 +169,18 @@ int pruebaEstrategiaCompresionArbol(){
 		arbol->insertar(ref,&clave1);
 	}
 	arbol->imprimir();
+	arbol->cerrar();
 	/************************COMPRIMIENDO*****************************/
 	EstrategiaCompresion compresion;
-	compresion.compresionArbol(arbol,"pruebaArbolzip",100);
-	delete arbol;
+	compresion.compresionIndice(nombreArchivo,nombreComprimido,128);
 	delete comparador;
+	delete arbol;
 	/************************DESCOMPRIMIENDO**************************/
 	BSharpTree* arbol2 = new BSharpTree(&clave);
 	ComparadorClave* comparador2 = new ComparadorRegistroVariable();
 	string nombreArchivo2 = "Arbol2";
-	arbol2->crear(nombreArchivo2,200,&clave,comparador2);
-	compresion.descompresionArbol(arbol2,"pruebaArbolzip");
+	compresion.descompresionInsdice(nombreArchivo2,nombreComprimido);
+    arbol2->abrir(nombreArchivo2,comparador2);
 	arbol2->imprimir();
 	delete arbol2;
 	delete comparador2;

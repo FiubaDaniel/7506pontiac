@@ -21,6 +21,8 @@ public:
 	void descompresion(Almacenamiento*almacen,string archivoComprimido);
 	void compresionArbol(BSharpTree* arbol,string archivoComprimido,unsigned tamanio_buffer_comprimido);
 	void descompresionArbol(BSharpTree*arbol,string archivoComprimido);
+	void compresionIndice(string nombre_inidice,string archivoComprimido,unsigned tamanio_buffer_comprimido);
+	void descompresionInsdice(string nombre_indice,string nombre_comprimido);
 	void compresionHash();
 	virtual ~EstrategiaCompresion();
 };
