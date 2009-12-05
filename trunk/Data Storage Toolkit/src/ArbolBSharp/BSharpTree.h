@@ -83,7 +83,12 @@ public:
 
 	void recomponerRaiz();
 
+	void imprimirNodo(Nodo* nodoE);
+
+	void observarNodo(std::stringbuf* buffer);
+
 	virtual ~BSharpTree();
+
 private:
 
 	NodoHoja* buscarPrimerNodoHoja(Nodo* nodoE);

@@ -969,6 +969,9 @@ void BSharpTree::imprimirIterativo(Nodo* nodoE){
 void BSharpTree::posicionarArchivo(){
 	archivoArbol.seekg(posicionRaiz);
 	archivoArbol.seekp(posicionRaiz);
+	//Todo borrar impresion
+	cout<<archivoArbol.tellp()<<endl;
+	cout<<archivoArbol.tellg()<<endl;
 }
 
 bool BSharpTree::siguienteAlmacenado(Nodo*& nodo){
@@ -982,16 +985,26 @@ bool BSharpTree::siguienteAlmacenado(Nodo*& nodo){
 	buffer.pubsetbuf(array2,tamanioNodo);
 	int nivel;
 	buffer.sgetn((char*)&nivel,sizeof(int));
+	buffer.pubseekpos(0,ios::out|ios::binary|ios::in);
 	if(nivel==0){
+		this->observarNodo(&buffer);
 		nodo =new  NodoHoja(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
 	}else{
+		this->observarNodo(&buffer);
 		nodo = new NodoIntermedio(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
 	}
+	//Todo borrar impresion
+	cout<<archivoArbol.tellp()<<endl;
+	cout<<archivoArbol.tellg()<<endl;
 	return true;
 }
 
 void BSharpTree::escribir(std::stringbuf* buffer){
-	int nivel;
+	char array[tamanioNodo];
+	buffer->pubsetbuf(array,tamanioNodo);
+	archivoArbol.write(array,tamanioNodo);
+	this->recomponerRaiz();
+	/*int nivel;
 	Nodo* nodo;
 	buffer->sgetn((char*)&nivel,sizeof(int));
 	if(nivel==0){
@@ -999,13 +1012,30 @@ void BSharpTree::escribir(std::stringbuf* buffer){
 	}else{
 		nodo = new NodoIntermedio(buffer,numeroDeElementosXnodo,comparador,claveEstructural);
 	}
+	this->imprimirNodo(nodo);
 	char array[tamanioNodo];
 	buffer->pubsetbuf(array,tamanioNodo);
 	buffer->pubseekpos(0);
 	nodo->serializate(buffer);
 	archivoArbol.write(array,tamanioNodo);
+	this->recomponerRaiz();
+	delete nodo;*/
+}
+
+void BSharpTree::observarNodo(std::stringbuf* buffer){
+	int nivel;
+	Nodo* nodo;
+
+	buffer->sgetn((char*)&nivel,sizeof(int));
+	if(nivel==0){
+		nodo =new  NodoHoja(buffer,numeroDeElementosXnodo,comparador,claveEstructural);
+	}else{
+		nodo = new NodoIntermedio(buffer,numeroDeElementosXnodo,comparador,claveEstructural);
+	}
+	this->imprimirNodo(nodo);
 	delete nodo;
 }
+
 std::string BSharpTree::getMetadata(){
 	std::string resultado;
 	char*p=(char*)&numeroDeElementosXnodo;
@@ -1033,6 +1063,49 @@ void BSharpTree::setMetadata(char* metadata){
 	metadata+=sizeof(unsigned int);
 	posicionRaiz=*(unsigned int*)metadata;
 	cantidadMinimaDeElementos = (unsigned int) ((numeroDeElementosXnodo)*2)/3;
+}
+
+void BSharpTree::imprimirNodo(Nodo* nodoE){
+	cout<<" "<<endl;
+	if(nodoE->getNumeroNivel()!=0){
+		NodoIntermedio* nodo = dynamic_cast<NodoIntermedio*>(nodoE);
+		cout <<"Nodo Intermedio ";
+		cout <<"Nivel: " << nodo->getNumeroNivel()<<" ";
+		cout <<"Referencia Izquierda: " << nodo->getReferenciaIzq()<<endl;
+		cout <<"Elementos: ";
+		std::list<ElementoNodo*>::iterator it = nodo->getListaElementos()->begin();
+		while(it!=nodo->getListaElementos()->end()){
+			ElementoNodo* elem = *it;
+			for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
+				cout<<" ";
+				elem->getClave()->getAtributo(i)->imprimir(cout);
+				cout<<" ";
+			}
+			cout << elem->getReferencia();
+			cout<<"   ";
+			++it;
+		}
+		cout<<" "<<endl;
+	}else{
+		NodoHoja* nodo = dynamic_cast<NodoHoja*>(nodoE);
+		cout <<"Nodo Hoja ";
+		cout <<"Nivel: " << nodo->getNumeroNivel()<<" ";
+		cout <<"Referencia Siguente: " << nodo->getReferenciaSiguiente()<<endl;;
+		cout <<"Elementos: ";
+		std::list<ElementoNodo*>::iterator it = nodo->getListaElementos()->begin();
+		while(it!=nodo->getListaElementos()->end()){
+			ElementoNodo* elem = *it;
+			for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
+				cout<<" ";
+				elem->getClave()->getAtributo(i)->imprimir(cout);
+				cout<<" ";
+			}
+			cout << elem->getReferencia();
+			cout<<"   ";
+			++it;
+		}
+		cout<<" "<<endl;
+	}
 }
 
 bool BSharpTree::estaVacio(){
