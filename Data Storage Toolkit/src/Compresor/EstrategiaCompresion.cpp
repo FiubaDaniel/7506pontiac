@@ -16,7 +16,7 @@ EstrategiaCompresion::~EstrategiaCompresion() {
 
 }
 
-void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivoComprimido,unsigned tamanio_buffer_comprimido){
+/*void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivoComprimido,unsigned tamanio_buffer_comprimido){
 
 	//Creo el contenedor adecuado a las condiciones dadas.
 	unsigned *buffer=new unsigned[tamanio_buffer_comprimido];
@@ -50,11 +50,13 @@ void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivoCompr
 		while(arbol->siguienteAlmacenado(nodo)){
 
 			serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
-			nodo->serializate(&serializado);
-			if(not contenedor.agregar((unsigned char*)serializado.str().data(),tamanioSerializado)){
 
-				/*no pudo agregar,cierra el contenedor , graba y empieza uno nuevo */
-				contenedor.cerrar();
+			nodo->serializate(&serializado);
+
+			if(not contenedor.agregar((unsigned char*)serializado.str().data(),tamanioSerializado)){*/
+
+/*no pudo agregar,cierra el contenedor , graba y empieza uno nuevo */
+/*              contenedor.cerrar();
 
 				archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
 
@@ -70,16 +72,111 @@ void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivoCompr
 		archivo_comprimido.close();
 	}
 	delete[] buffer;
+}*/
+void EstrategiaCompresion::compresionIndice(string nombreIndice,string archivoComprimido,unsigned tamanio_buffer_comprimido){
+	std::fstream archivo_indice;
+	std::fstream archivo_comprimido;
+
+	unsigned *buffer=new unsigned[tamanio_buffer_comprimido];
+	Compresor contenedor(buffer,tamanio_buffer_comprimido);
+
+	archivo_indice.open(nombreIndice.c_str(),fstream::in|fstream::binary);
+	archivo_comprimido.open(archivoComprimido.c_str(),fstream::trunc|fstream::out|fstream::binary);
+
+	if(archivo_indice.is_open()&&archivo_comprimido.is_open()){
+
+		archivo_indice.seekg(0);
+		archivo_comprimido.seekp(0);
+		archivo_comprimido.write((char*)&tamanio_buffer_comprimido,sizeof(tamanio_buffer_comprimido));
+
+		//Comienza compresion.
+		//Gurado primero.
+
+		unsigned array[tamanio_buffer_comprimido];
+		archivo_indice.read((char*)array,tamanio_buffer_comprimido*sizeof(unsigned));
+		contenedor.comprimirPrimeros((unsigned char*)array,tamanio_buffer_comprimido);
+
+		//Comprimo el resto
+
+		while(archivo_indice.peek()!= EOF and not archivo_indice.eof()){
+
+			archivo_indice.read((char*)array,tamanio_buffer_comprimido*sizeof(unsigned));
+
+			if(not contenedor.agregar((unsigned char*)array,tamanio_buffer_comprimido)){
+
+				contenedor.cerrar();
+
+				archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
+
+				contenedor.reiniciarBuffer();
+
+				contenedor.comprimirPrimeros((unsigned char*)array,tamanio_buffer_comprimido);
+			}
+		}
+
+		archivo_indice.clear();
+
+		contenedor.cerrar();
+
+		archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
+
+		archivo_comprimido.close();
+
+		archivo_indice.close();
+
+		delete[] buffer;
+	}
 }
 
-void EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivoComprimido){
+void EstrategiaCompresion::descompresionInsdice(string nombre_indice,string nombre_comprimido){
 
+    std::string descomprimido;
+	std::fstream archivo_indice;
+	std::fstream archivo_comprimido;
+
+	archivo_indice.open(nombre_indice.c_str(),fstream::trunc|fstream::out|fstream::binary);
+	archivo_comprimido.open(nombre_comprimido.c_str(),fstream::in|fstream::binary);
+
+	if(archivo_indice.is_open()&&archivo_comprimido.is_open()){
+
+		archivo_indice.seekp(0);
+		archivo_comprimido.seekg(0);
+
+		//Obtenego el tamaño de los contenedores
+		unsigned tamanio_buffer_comprimido;
+		archivo_comprimido.read((char*)&tamanio_buffer_comprimido,sizeof(tamanio_buffer_comprimido));
+
+		//Creo el contenedor
+		unsigned *buffer=new unsigned[tamanio_buffer_comprimido];
+		Compresor contenedor(buffer,tamanio_buffer_comprimido);
+
+		//Comienzo a descomprimir
+
+		while(archivo_comprimido.peek()!= EOF and not archivo_comprimido.eof()){
+
+			archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
+
+			contenedor.descomprimir(buffer,descomprimido,tamanio_buffer_comprimido);
+
+			archivo_comprimido.write(descomprimido.data(),descomprimido.size());
+		}
+		delete[] buffer;
+		archivo_comprimido.clear();// saca el flag de eof
+	}
+	archivo_comprimido.close();
+	archivo_indice.close();
+}
+
+/*void EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivoComprimido){
+
+	//Todo sacar
+	int tamanio_serializado = arbol->tamanioBloque();
 	std::fstream archivo_comprimido;
 	std::stringbuf serializado;
 	archivo_comprimido.open(archivoComprimido.c_str(),fstream::in|fstream::binary);
 	unsigned tamanio_comprimido;//Tamanio del contenedor.
 	/*recuperao tamanio del buffer */
-	archivo_comprimido.seekg(0);
+/*archivo_comprimido.seekg(0);
 	archivo_comprimido.read((char*)&tamanio_comprimido,sizeof(tamanio_comprimido));
 	unsigned *buffer=new unsigned[tamanio_comprimido];
 
@@ -99,22 +196,25 @@ void EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivoCom
 		arbol->posicionarArchivo();
 		std::string descomprimido;
 		try{
+			descomprimido.clear();
+
 			while(archivo_comprimido.peek()!= EOF and not archivo_comprimido.eof()){
 				/*recupero una tira de componentes serializados*/
-				archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_comprimido);
+/*archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_comprimido);
 
 				descomprimido.clear();
 
 				contenedor.descomprimir(buffer,descomprimido,tamanio_comprimido);
 
-				while(not descomprimido.empty()){
+				while(/*Trucho not descomprimido.empty()*//*descomprimido.size()>=tamanio_serializado){
 					/*escribo los componentes q recupere*/
 
-					serializado.str(descomprimido);//inicializo el buff con el string descomprimido
+/*serializado.str(descomprimido);//inicializo el buff con el string descomprimido
+
+					cout<<descomprimido.size()<<endl;
 
 					serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
 
-					//arbol->observarNodo(&serializado);
 					arbol->escribir(&serializado);
 
 					descomprimido.erase(0,arbol->tamanioBloque());//elimino el primer registro/bloque del string
@@ -127,7 +227,7 @@ void EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivoCom
 		archivo_comprimido.close();
 		delete buffer;
 	}
-}
+}*/
 
 void EstrategiaCompresion::compresion(Almacenamiento*almacen,string archivoComprimido,unsigned tamanio_buffer_comprimido){
 
