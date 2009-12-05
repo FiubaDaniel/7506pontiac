@@ -116,10 +116,6 @@ int pruebaCompresion3(){
 	return 0;
 };
 int pruebaEstragiaCompresionAlmacenamiento(){
-	stringbuf buffer;
-	buffer.str("hola");
-	buffer.str("hola");
-	cout<<buffer.str()<<endl;
 	AtributoFijo<char*> nombre("N",10);
 	Registro registro(1,&nombre);
 	EARegistros estrategia(&registro);
@@ -132,13 +128,13 @@ int pruebaEstragiaCompresionAlmacenamiento(){
 	}
 	archivo.imprimir(cout);
 	archivo.cerrar();
-	/***************COMPRIMIENDO************************/
+	cout<<"/***************COMPRIMIENDO************************/"<<endl;
 	EstrategiaCompresion compresion;
 	archivo.abrir("resgitroIniciales.dat");
 	compresion.compresion(&archivo,"prueba.zip",10);
 	archivo.cerrar();
 	/*creo un archivo para los descomprimidos*/
-	/***************DESCOMPRIMIENDO************************/
+	cout<<"/***************DESCOMPRIMIENDO************************/"<<endl;
 	archivo.crear("registroDescomprimido.dat");
 	compresion.descompresion(&archivo,"prueba.zip");
 	archivo.imprimir(cout);
