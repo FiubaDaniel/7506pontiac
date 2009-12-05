@@ -158,7 +158,7 @@ void EstrategiaCompresion::descompresionInsdice(string nombre_indice,string nomb
 
 			contenedor.descomprimir(buffer,descomprimido,tamanio_buffer_comprimido);
 
-			archivo_comprimido.write(descomprimido.data(),descomprimido.size());
+			archivo_indice.write(descomprimido.data(),descomprimido.size());
 		}
 		delete[] buffer;
 		archivo_comprimido.clear();// saca el flag de eof
