@@ -23,7 +23,8 @@ void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivoCompr
 	Compresor contenedor(buffer,tamanio_buffer_comprimido);
 	unsigned tamanioSerializado = arbol->tamanioBloque();
 	std::stringbuf serializado;
-
+    /*****************************Sacar es para prueba descompresion******************/
+	Compresor contenedor2(buffer,tamanio_buffer_comprimido);
 	//abro el archivo comprimido. Su nombre será el nombre del archivo original + _Comprimido.
 	std::fstream archivo_comprimido;
 	archivo_comprimido.open(archivoComprimido.c_str(),fstream::trunc|fstream::out|fstream::binary);
@@ -36,23 +37,25 @@ void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivoCompr
 		unsigned tamanio_meta=metadata.size();
 		archivo_comprimido.write((char*)&tamanio_meta,sizeof(tamanio_meta));
 		archivo_comprimido.write(metadata.data(),tamanio_meta);
-		//TODO Borrar impresion
-		cout<<*(int*)metadata.c_str()<<endl;//primer int
-		cout<<*(int*)(metadata.c_str()+sizeof(int))<<endl;//2do int
-		cout<<*(int*)(metadata.c_str()+2*sizeof(int))<<endl;//3ro int
-		//Comienzo la compresion
 
+		//Comienzo la compresion
 		//Comprimo el primero
+		arbol->imprimir();
 		arbol->posicionarArchivo();
 		arbol->siguienteAlmacenado(nodo);
+
 		nodo->serializate(&serializado);
+		arbol->observarNodo(&serializado);
 		contenedor.comprimirPrimeros((unsigned char*)serializado.str().data(),tamanioSerializado);
-		arbol->imprimir();
+
 		//Comprimo los siguiente
 		while(arbol->siguienteAlmacenado(nodo)){
+
 			serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
 			nodo->serializate(&serializado);
+			arbol->observarNodo(&serializado);
 			if(not contenedor.agregar((unsigned char*)serializado.str().data(),tamanioSerializado)){
+
 				/*no pudo agregar,cierra el contenedor , graba y empieza uno nuevo */
 				contenedor.cerrar();
 
@@ -114,7 +117,8 @@ void EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivoCom
 
 					serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
 
-					arbol->escribir(&serializado);
+					arbol->observarNodo(&serializado);
+					//arbol->escribir(&serializado);
 
 					descomprimido.erase(0,arbol->tamanioBloque());//elimino el primer registro/bloque del string
 
@@ -124,6 +128,7 @@ void EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivoCom
 			cout<<"ERROR: DESERIALIZAR"<<endl;
 		}
 		archivo_comprimido.close();
+		delete buffer;
 	}
 }
 
