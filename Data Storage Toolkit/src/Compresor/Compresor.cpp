@@ -302,7 +302,7 @@ void Compresor::cerrar(){
 	}
 	tabla.incremtarOcurrencia(ultimoSimbolo,cerrador);
 	ultimoSimbolo=cerrador;
-	std::cout<<int(ultimoSimbolo)<<std::endl;
+	//std::cout<<int(ultimoSimbolo)<<std::endl;
 }
 void Compresor::reiniciarBuffer(){
 	buffer.seek_w(0,0);
@@ -359,7 +359,7 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 		ultimoSimbolo = emision;
 		descomprimido.push_back(emision);
 	}*/
-	std::cout<<int(ultimoSimbolo)<<std::endl;
+	//std::cout<<int(ultimoSimbolo)<<std::endl;
 }
 /*-----------------------------------------------------------------------------------------------------------------*/
 void Compresor::setExtremos(){

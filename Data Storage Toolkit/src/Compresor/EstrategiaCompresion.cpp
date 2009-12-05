@@ -81,6 +81,7 @@ void EstrategiaCompresion::compresionIndice(string nombreIndice,string archivoCo
 	Compresor contenedor(comprimido,tamanio_buffer_comprimido);
 
 	archivo_indice.open(nombreIndice.c_str(),fstream::in|fstream::binary);
+
 	archivo_comprimido.open(archivoComprimido.c_str(),fstream::trunc|fstream::out|fstream::binary);
 
 	if(archivo_indice.is_open()&&archivo_comprimido.is_open()){
@@ -285,7 +286,7 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,string archivoCompr
 
 			/*no pudo agregar,cierra el contenedor , graba y empieza uno nuevo */
 			contenedor.cerrar();
-			cout<<cont<<endl;
+			//cout<<cont<<endl;
 			archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
 
 			contenedor.reiniciarBuffer();
@@ -295,7 +296,7 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,string archivoCompr
 		cont++;
 
 	}
-	cout<<cont<<endl;
+	//cout<<cont<<endl;
 	contenedor.cerrar();
 
 	archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
@@ -368,13 +369,13 @@ void EstrategiaCompresion::descompresion(Almacenamiento*almacen,string archivoCo
 
 				serializado.str(descomprimido);//TODO cambio
 
-				cout<<descomprimido.size()<<endl;
+				//cout<<descomprimido.size()<<endl;
 
 				serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
 
 				componente->deserializar(serializado);
 
-				componente->imprimir(cout);cout<<endl;
+				//componente->imprimir(cout);cout<<endl;
 
 				almacen->escribir(componente);
 
