@@ -26,6 +26,7 @@ Compresor::Compresor(){
 	U=0;
 	ultimoSimbolo=0;
 	bitRestantes=0;
+	caracteres=0;
 }
 Compresor::Compresor(unsigned*array,unsigned tamanio): buffer(array,tamanio){
 	salida=NULL;
@@ -34,6 +35,7 @@ Compresor::Compresor(unsigned*array,unsigned tamanio): buffer(array,tamanio){
 	U=0;
 	ultimoSimbolo=0;
 	bitRestantes=0;
+	caracteres=0;
 }
 Compresor::~Compresor() {}
 
@@ -195,7 +197,9 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 	int U_anterior=U;
 	unsigned pos=buffer.tell_unsigned_write();
 	char offset=buffer.tell_bits_offset_w();
-	TablaOrden1*clon=tabla.clonar();
+	PPMC::TablaPPMC*clon=tabla.clonar();
+	//TablaOrden1*clon=tabla.clonar();
+
 	try{
 		if(salida){
 			(*salida)<<"Tratando de agregar:"<<std::endl;
@@ -323,9 +327,9 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 	unsigned siguiente = buffer[posBuffer];
 	unsigned char contadorDeBits=MAX_BITS;
 	//Comienza descompresion
+
 	int cant = 0;
-	//while(cant<100){
-	while(this->bitRestantes>=0 and cant<100){
+	while(this->bitRestantes>=0 and cant<this->caracteres){
 		unsigned char emision = tabla.calcularEmision(piso,techo,codigoAdescomprimir,this->ultimoSimbolo);
 		if(tabla.esEscape()){
 			rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
@@ -410,3 +414,6 @@ void Compresor::restructuracionUnderflow(unsigned char cantidadIteraciones,unsig
 	siguiente<<=cantidadIteraciones;
 }
 
+void Compresor::setCaracteres(int caracteres){
+	this->caracteres=caracteres;
+}
