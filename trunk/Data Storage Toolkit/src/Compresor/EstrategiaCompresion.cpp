@@ -87,7 +87,9 @@ void EstrategiaCompresion::compresionIndice(string nombreIndice,string archivoCo
 	if(archivo_indice.is_open()&&archivo_comprimido.is_open()){
 
 		archivo_indice.seekg(0);
+
 		archivo_comprimido.seekp(0);
+
 		archivo_comprimido.write((char*)&tamanio_buffer_comprimido,sizeof(tamanio_buffer_comprimido));
 
 		//Comienza compresion.
@@ -100,7 +102,7 @@ void EstrategiaCompresion::compresionIndice(string nombreIndice,string archivoCo
 
 		//Comprimo el resto
 
-		while(archivo_indice.peek()!= EOF and not archivo_indice.eof()){
+		while(not archivo_indice.eof()){
 
 			archivo_indice.read((char*)sin_comprimir,tamanio_sin_comprimir);
 
@@ -116,23 +118,21 @@ void EstrategiaCompresion::compresionIndice(string nombreIndice,string archivoCo
 			}
 		}
 
-		archivo_indice.clear();
-
 		contenedor.cerrar();
 
 		archivo_comprimido.write((char*)comprimido,sizeof(unsigned)*tamanio_buffer_comprimido);
 
-		archivo_comprimido.close();
-
-		archivo_indice.close();
-
 		delete[] comprimido;
+
+		archivo_indice.clear();
 	}
+	archivo_comprimido.close();
+	archivo_indice.close();
 }
 
 void EstrategiaCompresion::descompresionInsdice(string nombre_indice,string nombre_comprimido){
 
-    std::string descomprimido;
+	std::string descomprimido;
 	std::fstream archivo_indice;
 	std::fstream archivo_comprimido;
 
@@ -154,7 +154,7 @@ void EstrategiaCompresion::descompresionInsdice(string nombre_indice,string nomb
 
 		//Comienzo a descomprimir
 
-		while(archivo_comprimido.peek()!= EOF and not archivo_comprimido.eof()){
+		while(not archivo_comprimido.eof()){
 
 			archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
 
