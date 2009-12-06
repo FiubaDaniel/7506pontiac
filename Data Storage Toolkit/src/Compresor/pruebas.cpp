@@ -12,7 +12,7 @@
 #define TAM_BUF2 50
 #include <cstring>
 #include <cstdlib>
-#include <stdio.h>
+#include <cstdio>
 
 
 int pruebacompresion1(){
@@ -114,7 +114,7 @@ int pruebaCompresion3(){
 	cout<<descomprimido<<endl;
 
 	return 0;
-};
+}
 int pruebaEstragiaCompresionAlmacenamiento(){
 	AtributoFijo<char*> nombre("N",10);
 	Registro registro(1,&nombre);
@@ -126,9 +126,9 @@ int pruebaEstragiaCompresionAlmacenamiento(){
 		*(AtributoFijo<char*>*)registro.get(0)=Terminos::obtenerTermino(i).c_str();
 		((Almacenamiento&)archivo).escribir(&registro);
 	}
+	cout<<"/***************COMPRIMIENDO************************/"<<endl;
 	archivo.imprimir(cout);
 	archivo.cerrar();
-	cout<<"/***************COMPRIMIENDO************************/"<<endl;
 	EstrategiaCompresion compresion;
 	archivo.abrir("resgitroIniciales.dat");
 	compresion.compresion(&archivo,"prueba.zip",10);
@@ -141,7 +141,39 @@ int pruebaEstragiaCompresionAlmacenamiento(){
 	archivo.cerrar();
 	return 0;
 }
-
+int pruebaEstragiaCompresionAlmacenamiento1(){
+	char nombre_archivo[]="bloques.dat";
+	char nombre_comprimido[]="bloques.zip";
+	AtributoVariable<string> nombre("N");
+	Registro registro(1,&nombre);
+	Bloque bloque(&registro);
+	Clave clave(&registro,1,"N");
+	ComparadorRegistroVariable comparador;
+	EABloques estrategia(&bloque,25,0.8f);
+	estrategia.setClave(&clave);
+	estrategia.setComparador(&comparador);
+	Archivo archivo(&estrategia);
+	/*archivo original*/
+	archivo.crear(nombre_archivo);
+	for(int i=0;i<MIN_CANT_CHAR*2;i++){
+		*(AtributoVariable<string>*)registro.get(0)=Terminos::obtenerTermino(i).c_str();
+		((Almacenamiento&)archivo).insertar(&registro);
+	}
+	cout<<"/***************COMPRIMIENDO************************/"<<endl;
+	archivo.imprimir(cout);
+	archivo.cerrar();
+	EstrategiaCompresion compresion;
+	archivo.abrir(nombre_archivo);
+	compresion.compresion(&archivo,nombre_comprimido,25);
+	archivo.cerrar();
+	/*creo un archivo para los descomprimidos*/
+	cout<<endl<<"/***************DESCOMPRIMIENDO************************/"<<endl;
+	archivo.crear(nombre_archivo);
+	compresion.descompresion(&archivo,nombre_comprimido);
+	archivo.imprimir(cout);
+	archivo.cerrar();
+	return 0;
+}
 int pruebaEstrategiaCompresionArbol(){
 	/*************************Creacion Arbol***************************/
 	Referencia ref=0;
