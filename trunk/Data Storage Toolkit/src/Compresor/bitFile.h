@@ -9,8 +9,10 @@
 #include <iostream>
 #include <exception>
 #include <cstddef>
+#define MAXBITS 32
 #define UNOS (~unsigned(0x0))
-
+using namespace std;
+void imprimir(unsigned num,char n=MAXBITS);
 class bitFileEOFException: public std::exception{
 public:
 	bitFileEOFException() throw(){}
@@ -35,9 +37,9 @@ class bitFile {
 	/*indice del unsigned donde se esta leyendo*/
 	unsigned read_posicion;
 	/*indice de los bits escritos respecto de <write_position>*/
-	char bit_read_offset;
+	char bit_r;
 	/*indice de los bits leidos respecto de <read_position>*/
-	char bit_write_offset;
+	char bit_w;
 public:
 	static const char MAX_BITS=sizeof(unsigned)*8;
 	bitFile();
