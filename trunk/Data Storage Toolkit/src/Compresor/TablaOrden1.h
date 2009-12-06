@@ -42,6 +42,8 @@ public:
 	void imprimir();
 	bool vacia();
 	bool esEscape();
+	TablaOrden1* clonar();
+	void copiar(TablaOrden1&tabla);
 	virtual ~TablaOrden1();
 private:
 	float obtenerTotalContexto(unsigned char simbolo);
