@@ -329,7 +329,9 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 	//Comienza descompresion
 
 	int cant = 0;
+	//while(cant<100){
 	while(this->bitRestantes>=0 and cant<this->caracteres){
+
 		unsigned char emision = tabla.calcularEmision(piso,techo,codigoAdescomprimir,this->ultimoSimbolo);
 		if(tabla.esEscape()){
 			rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
