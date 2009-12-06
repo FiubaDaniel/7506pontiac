@@ -26,9 +26,7 @@ public:
 		this->miLista = miLista;
 		this->cantidadElementosLista = cantidadElementosLista;
 	}
-	virtual ~MiRegistroVariable(){
-
-	};
+	virtual ~MiRegistroVariable(){};
     int getCantidadElementosLista()
     {
         return cantidadElementosLista;
