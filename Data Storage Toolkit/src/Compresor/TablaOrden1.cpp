@@ -203,3 +203,32 @@ void TablaOrden1::imprimir(){
 		cout<<endl;
 	}
 }
+TablaOrden1* TablaOrden1::clonar(){
+	TablaOrden1* clon=new TablaOrden1;
+	tipo_contextos::iterator contexto = contextos.begin();
+	clon->alerta_escape=alerta_escape;
+	while(contexto!=contextos.end()){
+		clon->contextos[contexto->first];
+		clon->contextos[contexto->first].totalFrecuencias=contexto->second.totalFrecuencias;
+		clon->contextos[contexto->first].tablaFrecuencias=contexto->second.tablaFrecuencias;
+		contexto++;
+	}
+	return clon;
+}
+void TablaOrden1::copiar(TablaOrden1&tabla){
+	tipo_contextos::iterator contexto = contextos.begin();
+	while(contexto!=contextos.end()){
+		contexto->second.tablaFrecuencias.clear();
+		contexto++;
+	}
+	contextos.clear();
+	/*Copiando*/
+	alerta_escape=tabla.alerta_escape;
+	contexto = tabla.contextos.begin();
+	while(contexto!=tabla.contextos.end()){
+			contextos[contexto->first];
+			contextos[contexto->first].totalFrecuencias=contexto->second.totalFrecuencias;
+			contextos[contexto->first].tablaFrecuencias=contexto->second.tablaFrecuencias;
+			contexto++;
+	}
+}

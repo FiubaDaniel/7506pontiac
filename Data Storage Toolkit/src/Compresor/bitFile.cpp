@@ -63,7 +63,7 @@ void bitFile::write(unsigned fuente,char cantidad)throw (bitFileEOFException){
 	if(write_posicion>=tamanio){
 		throw bitFileEOFException();
 	}
-	imprimir(fuente,cantidad);
+	//imprimir(fuente,cantidad);
 	fuente<<=(MAX_BITS-cantidad);
 	while(cantidad>0 and write_posicion<tamanio){
 		int libres=MAX_BITS-bit_w;
@@ -87,7 +87,7 @@ void bitFile::write(unsigned fuente,char cantidad)throw (bitFileEOFException){
 }
 void bitFile::fill(unsigned fuente){
 	int cantidad=MAX_BITS;
-	imprimir(fuente);
+	//imprimir(fuente);
 	while(cantidad>0 and write_posicion<tamanio){
 		int libres=MAX_BITS-bit_w;
 		if( cantidad >= libres ){
