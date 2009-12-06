@@ -468,5 +468,5 @@ void EABloques::setMetadata(char* metadata){
 	metadata+=sizeof(Ttamanio);
 	porcCarga=*(double*)metadata;
 	metadata+=sizeof(double);
-	siguienteLibre=*(Ttamanio*)siguienteLibre;
+	siguienteLibre=*(Ttamanio*)metadata;
 }

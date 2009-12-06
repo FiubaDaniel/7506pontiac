@@ -35,12 +35,14 @@ int main(){
 	pruebacompresion1();
 	cout<<"Prueba2"<<endl;
 	pruebacompresion2();
-		//pruebaEstragiaCompresionAlmacenamiento();
+		//
 	cout<<"Prueba3"<<endl;
 	pruebaCompresion3();*/
     cout<<"Prueba4"<<endl;
-	//pruebaEstragiaCompresionAlmacenamiento();
+
+    //pruebaEstragiaCompresionAlmacenamiento();
+    pruebaEstragiaCompresionAlmacenamiento1();
     //pruebaEstrategiaCompresionArbol();
-	pruebaCompresion5();
+	//pruebaCompresion5();
     return 0;
 }
