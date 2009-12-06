@@ -19,8 +19,8 @@ int pruebacompresion1(){
 	unsigned buffer[TAM_BUF1];
 
 	//1234567890123456789012345678901234512345678901234567890123456789012345
-
 	unsigned char str[MAX_CANT_CHAR+1]="Base class for standard exceptions. All objects thrown by components of the standard library are derived from this class.";
+	/*unsigned char str[MAX_CANT_CHAR+1]="Base class for standard exceptions. All objects thrown by components of the standard library are derived from this class. Ella esta sentadita en el limbo diciendome  donde no hay que ir. Hoy la luna me invita a seguir. Determinadas cosas con la que nos sentimos identificados y nos distinguen de otros que no.";
 	/*********************************************************/
 	/*                      COMPRIMIENDO                     */
 	/*********************************************************/
@@ -152,11 +152,11 @@ int pruebaEstrategiaCompresionArbol(){
 	Clave clave(&reg,1,"miStringID");
 	BSharpTree* arbol = new BSharpTree(&clave);
 	ComparadorClave* comparador = new ComparadorRegistroVariable();
-	string nombreArchivo = "Arbol";
+	string nombreArbol = "Arbol";
 	string nombreComprimido = "ArbolComprimido";
 	unsigned int tamanioBloque = 128;
-	arbol->crear(nombreArchivo,tamanioBloque,&clave,comparador);
-	for(int i=0;i<4;i++){
+	arbol->crear(nombreArbol,tamanioBloque,&clave,comparador);
+	for(int i=0;i<30;i++){
 		strncpy(unNombre,Terminos::obtenerTermino(i).data(),15);
 		nombre.set(unNombre);
 		Registro reg1(1,&nombre);
@@ -166,17 +166,17 @@ int pruebaEstrategiaCompresionArbol(){
 	}
 	arbol->imprimir();
 	arbol->cerrar();
+	string nombreArchivo = arbol->getNombreArchivo();
+	delete comparador;
+	delete arbol;
 	/************************COMPRIMIENDO*****************************/
 	EstrategiaCompresion compresion;
 	compresion.compresionIndice(nombreArchivo,nombreComprimido,128);
-	delete comparador;
-	delete arbol;
 	/************************DESCOMPRIMIENDO**************************/
 	BSharpTree* arbol2 = new BSharpTree(&clave);
 	ComparadorClave* comparador2 = new ComparadorRegistroVariable();
-	string nombreArchivo2 = "Arbol2";
-	compresion.descompresionInsdice(nombreArchivo2,nombreComprimido);
-    arbol2->abrir(nombreArchivo2,comparador2);
+	compresion.descompresionInsdice(nombreArchivo,nombreComprimido);
+    arbol2->abrir(nombreArbol,comparador2);
 	arbol2->imprimir();
 	delete arbol2;
 	delete comparador2;
@@ -195,6 +195,7 @@ int pruebaCompresion5(){
 	Compresor compresor(array,CANT_UNSIGNED);
 	Compresor descompresor(array,CANT_UNSIGNED);
 	string descomprimido;
+	descompresor.setCaracteres(100);
 	for(int i=0;i<NUMERO_ITERACIONES;i++){
 		compresor.reiniciarBuffer();
 		compresor.comprimirPrimeros(str,25);
