@@ -204,7 +204,8 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 	int U_anterior=U;
 	unsigned pos=buffer.tell_unsigned_write();
 	char offset=buffer.tell_bits_offset_w();
-	PPMC::TablaPPMC*clon=tabla.clonar();
+	//PPMC::TablaPPMC*clon=tabla.clonar();
+	TablaOrden1*clon=tabla.clonar();
 	try{
 		//tabla.imprimir();std::cout<<std::endl;
 		if(salida){
@@ -230,7 +231,7 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 			(*salida)<<std::endl;
 		}
 		tabla.incremtarOcurrencia(ultimoSimbolo,cerrador);
-		//tabla.imprimir();std::cout<<std::endl;
+		//tabla.imprimir();std::cout<<std::endl;//todo aca
 		ultimoSimbolo=cerrador;
 		/**/
 		while(cant_emitidos<cantidad-1){
@@ -324,12 +325,15 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 	//Primero busco el byte donde comienza el padding.
 	int nro_unsigned;
 	for(nro_unsigned=(tamanioComprimido-1);buffer[nro_unsigned]==0;nro_unsigned--);
+	/*if(nro_unsigned==(tamanioComprimido-2)){
+		this->bitRestantes = ((nro_unsigned-1)*MAX_BITS)-1;
+	}else{*/
 	int bit_comparado=0X1;
 	int nro_bit;
 	for(nro_bit=0;(bit_comparado&buffer[nro_unsigned])==0;nro_bit++)bit_comparado<<=1;
 	nro_bit++;//TODO nuevo paddin+1
 	//Calculo cantidad de bits de compresion desde de los 32 iniciales
-	this->bitRestantes = ((nro_unsigned-1)*MAX_BITS)+(MAX_BITS-nro_bit);
+	this->bitRestantes = (nro_unsigned*MAX_BITS)-nro_bit;
 
 	//Establezco condiciones iniciales para descomprimir
 	unsigned codigoAdescomprimir = buffer[0];
@@ -339,6 +343,7 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 	unsigned char contadorDeBits=MAX_BITS;
 	//Comienza descompresion
 	int cant = 1;
+	//while(cant<100){
 	while(this->bitRestantes>=0){
 		unsigned char emision = tabla.calcularEmision(piso,techo,codigoAdescomprimir,this->ultimoSimbolo);
 		if(tabla.esEscape()){
@@ -352,6 +357,7 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 		rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
 		cant++;
 	}
+	cout<<"Esto es bit restantes "<<(int)this->bitRestantes<<endl;
 	//TODO NUEVO if
 	/*if(bitRestantes==0){
 		unsigned char emision = tabla.calcularEmision(piso,techo,codigoAdescomprimir,this->ultimoSimbolo);
@@ -413,7 +419,7 @@ void Compresor::rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,
 			}
 			posBuffer=posBuffer+1;
 			siguiente=buffer[posBuffer];
-			this->bitRestantes=this->bitRestantes-contadorDeBits;
+			this->bitRestantes=this->bitRestantes-contadorDeBits;;
 			contadorDeBits=MAX_BITS;
 		}
 		restructuracionUnderflow(auxiliar,codigo,siguiente);
