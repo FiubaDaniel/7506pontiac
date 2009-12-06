@@ -108,13 +108,6 @@ inline void Compresor::cerrar_codigo(){
 		tempU-=MAX_BITS;
 	}
 	buffer.write((piso<<1)>>1,MAX_BITS-1);
-	/*padding*/
-	/*char bits_libres_emision=MAX_BITS -buffer.tell_bits_offset_w();
-	if(bits_libres_emision>0){
-		buffer.write(0x1<<(bits_libres_emision-1),bits_libres_emision);
-	}else{
-		buffer.write(MSB,MAX_BITS);
-	}*/
 	char bits_paddin=MAX_BITS -buffer.tell_bits_offset_w();
 	buffer.fill(MSB);
 	unsigned posicion=buffer.tell_unsigned_write();
@@ -125,7 +118,6 @@ inline void Compresor::cerrar_codigo(){
 	if(salida){
 		(*salida)<< MAX_BITS+U <<" fin "<< (int)bits_paddin <<" paddin "<< (buffer.size()-posicion)*MAX_BITS <<" 0's";
 	}
-	// agrego U=0;
 	U=0;
 }
 
@@ -182,7 +174,6 @@ unsigned Compresor::comprimirPrimeros(unsigned char*simbolos,unsigned cantidad){
 				(*salida)<<std::endl;
 			}
 			tabla.incremtarOcurrencia(ultimoSimbolo,simbolos[cant_emitidos]);
-			//tabla.imprimir();std::cout<<std::endl;
 			ultimoSimbolo=simbolos[cant_emitidos];
 			cant_emitidos++;
 		}
@@ -204,10 +195,8 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 	int U_anterior=U;
 	unsigned pos=buffer.tell_unsigned_write();
 	char offset=buffer.tell_bits_offset_w();
-	//PPMC::TablaPPMC*clon=tabla.clonar();
 	TablaOrden1*clon=tabla.clonar();
 	try{
-		//tabla.imprimir();std::cout<<std::endl;
 		if(salida){
 			(*salida)<<"Tratando de agregar:"<<std::endl;
 			(*salida)<<"#bits  Caracter"<<std::endl;
@@ -231,7 +220,6 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 			(*salida)<<std::endl;
 		}
 		tabla.incremtarOcurrencia(ultimoSimbolo,cerrador);
-		//tabla.imprimir();std::cout<<std::endl;//todo aca
 		ultimoSimbolo=cerrador;
 		/**/
 		while(cant_emitidos<cantidad-1){
@@ -273,7 +261,6 @@ bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
 		techo=techo_anterior;
 		U=U_anterior;
 		tabla.copiar(*clon);
-		//tabla.imprimir();std::cout<<std::endl;
 		delete clon;
 		return false;
 	}
@@ -303,7 +290,6 @@ void Compresor::cerrar(){
 	}
 	tabla.incremtarOcurrencia(ultimoSimbolo,cerrador);
 	ultimoSimbolo=cerrador;
-	std::cout<<" "<<int(ultimoSimbolo)<<std::endl;
 }
 void Compresor::reiniciarBuffer(){
 	buffer.seek_w(0,0);
@@ -325,47 +311,33 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
 	//Primero busco el byte donde comienza el padding.
 	int nro_unsigned;
 	for(nro_unsigned=(tamanioComprimido-1);buffer[nro_unsigned]==0;nro_unsigned--);
-	/*if(nro_unsigned==(tamanioComprimido-2)){
-		this->bitRestantes = ((nro_unsigned-1)*MAX_BITS)-1;
-	}else{*/
 	int bit_comparado=0X1;
 	int nro_bit;
 	for(nro_bit=0;(bit_comparado&buffer[nro_unsigned])==0;nro_bit++)bit_comparado<<=1;
 	nro_bit++;//TODO nuevo paddin+1
 	//Calculo cantidad de bits de compresion desde de los 32 iniciales
 	this->bitRestantes = (nro_unsigned*MAX_BITS)-nro_bit;
-
 	//Establezco condiciones iniciales para descomprimir
 	unsigned codigoAdescomprimir = buffer[0];
-	imprimirLSBs(codigoAdescomprimir,MAX_BITS);
 	int posBuffer = 1;
 	unsigned siguiente = buffer[posBuffer];
 	unsigned char contadorDeBits=MAX_BITS;
 	//Comienza descompresion
-	int cant = 1;
+	int cant = 0;
 	//while(cant<100){
-	while(this->bitRestantes>=0){
+	while(this->bitRestantes>=0 and cant<100){
 		unsigned char emision = tabla.calcularEmision(piso,techo,codigoAdescomprimir,this->ultimoSimbolo);
 		if(tabla.esEscape()){
 			rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
 			emision=tabla.calcularEmision(piso,techo,codigoAdescomprimir,this->ultimoSimbolo);
 		}
 		tabla.incremtarOcurrencia(this->ultimoSimbolo,emision);
-		//std::cout<<cant<<std::endl;
+
 		this->ultimoSimbolo = emision;
 		descomprimido.push_back(emision);
 		rearmarExtremos(buffer,posBuffer,codigoAdescomprimir,siguiente,contadorDeBits);
 		cant++;
 	}
-	cout<<"Esto es bit restantes "<<(int)this->bitRestantes<<endl;
-	//TODO NUEVO if
-	/*if(bitRestantes==0){
-		unsigned char emision = tabla.calcularEmision(piso,techo,codigoAdescomprimir,this->ultimoSimbolo);
-		tabla.incremtarOcurrencia(this->ultimoSimbolo,emision);
-		ultimoSimbolo = emision;
-		descomprimido.push_back(emision);
-	}*/
-	std::cout<<"  "<<int(ultimoSimbolo)<<std::endl;
 }
 /*-----------------------------------------------------------------------------------------------------------------*/
 void Compresor::setExtremos(){
@@ -429,13 +401,11 @@ void Compresor::rearmarExtremos(unsigned*buffer,int &posBuffer,unsigned& codigo,
 }
 
 void Compresor::restructuracionOverflow(unsigned char cantidadIteraciones,unsigned& codigo,unsigned& siguiente){
-	imprimirLSBs(siguiente>>(MAX_BITS-cantidadIteraciones),cantidadIteraciones);
 	codigo = (siguiente>>(MAX_BITS-cantidadIteraciones))|(codigo<<cantidadIteraciones);
 	siguiente<<=cantidadIteraciones;
 }
 
 void Compresor::restructuracionUnderflow(unsigned char cantidadIteraciones,unsigned& codigo,unsigned& siguiente){
-	imprimirLSBs(siguiente>>(MAX_BITS-cantidadIteraciones),cantidadIteraciones);
 	codigo=(codigo & MSB )|((codigo<<(cantidadIteraciones+1))>>1)|(siguiente>>(MAX_BITS-cantidadIteraciones));
 	siguiente<<=cantidadIteraciones;
 }
