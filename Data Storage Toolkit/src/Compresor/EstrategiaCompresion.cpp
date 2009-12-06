@@ -267,12 +267,9 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,string archivoCompr
 
 	componente->serializar(serializado);
 
-	//componente->imprimir(cout);cout<<endl;
-
 	contenedor.comprimirPrimeros((unsigned char*)serializado.str().data(),tamanioSerializado);
 
-	int cont=1;//TODO sacar
-	/*los siguiente componente*/
+	short cont=1;//TODO sacar
 
 	while(almacen->leer(componente)){
 
@@ -280,24 +277,28 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,string archivoCompr
 
 		componente->serializar(serializado);
 
-		//componente->imprimir(cout);cout<<endl;
-
 		if(not contenedor.agregar((unsigned char*)serializado.str().data(),tamanioSerializado)){
 
 			/*no pudo agregar,cierra el contenedor , graba y empieza uno nuevo */
 			contenedor.cerrar();
-			//cout<<cont<<endl;
+
+			archivo_comprimido.write((char*)&cont,sizeof(cont));
+
 			archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
 
 			contenedor.reiniciarBuffer();
 
 			contenedor.comprimirPrimeros((unsigned char*)serializado.str().data(),tamanioSerializado);
-		}
-		cont++;
+
+			cont=1;
+
+		}else cont++;
 
 	}
-	//cout<<cont<<endl;
+
 	contenedor.cerrar();
+
+	archivo_comprimido.write((char*)&cont,sizeof(cont));
 
 	archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
 
@@ -356,26 +357,28 @@ void EstrategiaCompresion::descompresion(Almacenamiento*almacen,string archivoCo
 
 		while(archivo_comprimido.peek()!= EOF and not archivo_comprimido.eof()){
 			/*recupero una tira de componentes serializados*/
+			short cont;
+
+			archivo_comprimido.read((char*)&cont,sizeof(cont));
 
 			archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_comprimido);
 
 			//contenedor.setExtremos();
 			descomprimido.clear();
 
+			contenedor.setCaracteres(tamanio_serializado*cont);
+
 			contenedor.descomprimir(buffer,descomprimido,tamanio_comprimido);
 
-			while(/*trucho not descomprimido.empty() */descomprimido.size()>=tamanio_serializado){
+			while(not descomprimido.empty() ){
 				/*escribo los componentes q recupere*/
 
-				serializado.str(descomprimido);//TODO cambio
-
-				//cout<<descomprimido.size()<<endl;
+				serializado.str(descomprimido);
 
 				serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
 
 				componente->deserializar(serializado);
 
-				//componente->imprimir(cout);cout<<endl;
 
 				almacen->escribir(componente);
 
