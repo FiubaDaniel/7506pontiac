@@ -2,6 +2,7 @@
 #include "../Indices/Set.h"
 #include "../Compuesto/BloqueMemoria.h"
 #include "../Compuesto/RegistroMemoria.h"
+
 MisDatos::MisDatos(){
 	recurso1=NULL;
 	recurso2=NULL;
@@ -17,9 +18,8 @@ MisDatos::~MisDatos(){}
  * tipo y longitud de bloque indice (si es que tiene), que si no correspondieran, lanza una excepcion.
  * En caso de fallar la inicializacion, se lanza una ExcepcionMisDatos con el mensaje de error.
  */
-void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool tieneBuffer,
-		int longitudBuffer, bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice) throw (ExcepcionMisDatos)
-		{
+void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool tieneBuffer, TipoBuffer tipoBuffer, int longitudBuffer, bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice, bool comprime, int longitudContenedor) throw (ExcepcionMisDatos){
+
 	/*inicializo el archivo y la estrategia*/
 	AtributoFijo<char*> mistringid("miStringID",16);
 	AtributoFijo<int> miInt("miInt");
@@ -97,9 +97,7 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
  * longitud de bloque indice (si es que tiene), que si no correspondieran, lanza una excepcion.
  * En caso de fallar la inicializacion, se lanza una ExcepcionMisDatos con el mensaje de error.
  */
-void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer, int longitudBuffer,
-		bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice) throw (ExcepcionMisDatos)
-		{
+void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuffer tipoBuffer, int longitudBuffer, bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice, bool comprime, int longitudContenedor) throw (ExcepcionMisDatos){
 	/*creo una clave estructural*/
 	ComparadorClave* comparador = new ComparadorRegistroFijo();
 	AtributoFijo<int> miIntID("miIntID");
@@ -179,7 +177,7 @@ void MisDatos::inicializarArchivo3(std::string path) throw (ExcepcionMisDatos){
  * Agrega un registro al archivo1. Si ya existe un registro con ese id, lanza una excepcion
  * con el mensaje de error correspondiente.
  */
-void MisDatos::agregarRegistroArchivo1(MiRegistroVariable registro) throw (ExcepcionMisDatos){
+void MisDatos::agregarRegistroArchivo1(MiRegistroVariable& registro) throw (ExcepcionMisDatos){
 	AtributoFijo<char*>* mistringid=(AtributoFijo<char*>*)registro1->get(0);
 	AtributoFijo<int>* miInt=(AtributoFijo<int>*)registro1->get(1);
 	AtributoVariable<int>* miListaInt=(AtributoVariable<int>* )registro1->get(2);
@@ -198,7 +196,7 @@ void MisDatos::agregarRegistroArchivo1(MiRegistroVariable registro) throw (Excep
  * Agrega un registro al archivo2. Si ya existe un registro con ese id, lanza una excepcion
  * con el mensaje de error correspondiente.
  */
-void MisDatos::agregarRegistroArchivo2(MiRegistroFijo registro) throw (ExcepcionMisDatos){
+void MisDatos::agregarRegistroArchivo2(MiRegistroFijo& registro) throw (ExcepcionMisDatos){
 	AtributoFijo<int>* miIntID=(AtributoFijo<int>*)registro2->get(0);
 	AtributoFijo<char>* miCharID=(AtributoFijo<char>*)registro2->get(1);
 	AtributoFijo<int>* miInt=(AtributoFijo<int>*)registro2->get(2);
@@ -214,7 +212,7 @@ void MisDatos::agregarRegistroArchivo2(MiRegistroFijo registro) throw (Excepcion
  * Pre: Archivo inicializado.
  * Agrega un registro al final del archivo3.
  */
-void MisDatos::agregarRegistroArchivo3(MiRegistroTexto registro) throw (ExcepcionMisDatos){
+void MisDatos::agregarRegistroArchivo3(MiRegistroTexto& registro) throw (ExcepcionMisDatos){
 	AtributoVariable<string>* mistring=(AtributoVariable<string>*)registro3->get(0);
 	*mistring=registro.getTexto();
 	if(not recurso2->insertar(registro3))
@@ -253,7 +251,7 @@ void MisDatos::eliminarRegistroArchivo2(int claveInt, char claveChar) throw (Exc
  * Modifica el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
  *  lanza una excepcion con el mensaje de error correspondiente.
  */
-void MisDatos::modificarRegistroArchivo1(MiRegistroVariable registro) throw (ExcepcionMisDatos){
+void MisDatos::modificarRegistroArchivo1(MiRegistroVariable& registro) throw (ExcepcionMisDatos){
 	AtributoFijo<char*>* mistringid=(AtributoFijo<char*>*)registro1->get(0);
 	AtributoFijo<int>* miInt=(AtributoFijo<int>*)registro1->get(1);
 	AtributoVariable<int>* miListaInt=(AtributoVariable<int>* )registro1->get(2);
@@ -273,7 +271,7 @@ void MisDatos::modificarRegistroArchivo1(MiRegistroVariable registro) throw (Exc
  * Modifica el registro correspondiente a la clave indicada. Si no existiera el registro con esa clave,
  * lanza una excepcion con el mensaje de error correspondiente.
  */
-void MisDatos::modificarRegistroArchivo2(MiRegistroFijo registro) throw (ExcepcionMisDatos){
+void MisDatos::modificarRegistroArchivo2(MiRegistroFijo& registro) throw (ExcepcionMisDatos){
 	AtributoFijo<int>* miIntID=(AtributoFijo<int>*)registro2->get(0);
 	AtributoFijo<char>* miCharID=(AtributoFijo<char>*)registro2->get(1);
 	AtributoFijo<int>* miInt=(AtributoFijo<int>*)registro2->get(2);
