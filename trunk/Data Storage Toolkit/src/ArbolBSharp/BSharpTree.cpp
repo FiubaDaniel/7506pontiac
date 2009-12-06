@@ -203,9 +203,10 @@ bool BSharpTree::modificar(const Clave* clave,Referencia refNueva){
 bool BSharpTree::insertar(Referencia ref,Clave* clave){
 	std::stringbuf buf(ios_base :: in | ios_base :: out | ios_base :: binary);
 	ElementoNodo* elemento = new ElementoNodo(ref,clave);
-	//Todo cambio la parte de insertar para rearmar l arbol
+
 	if(Raiz->getNumeroNivel()==0){
 		int retorno = Raiz->agregarElemento(elemento);
+		this->grabarUnitario(Raiz,posicionRaiz);
 		if(retorno==0){return false;}
 		if(retorno==2){
 			NodoHoja* hojaIzq = new NodoHoja(numeroDeElementosXnodo,0,comparador);
@@ -985,12 +986,9 @@ bool BSharpTree::siguienteAlmacenado(Nodo*& nodo){
 	buffer.pubsetbuf(array2,tamanioNodo);
 	int nivel;
 	buffer.sgetn((char*)&nivel,sizeof(int));
-	buffer.pubseekpos(0,ios::out|ios::binary|ios::in);
 	if(nivel==0){
-		this->observarNodo(&buffer);
 		nodo =new  NodoHoja(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
 	}else{
-		this->observarNodo(&buffer);
 		nodo = new NodoIntermedio(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
 	}
 	//Todo borrar impresion
@@ -1000,9 +998,8 @@ bool BSharpTree::siguienteAlmacenado(Nodo*& nodo){
 }
 
 void BSharpTree::escribir(std::stringbuf* buffer){
-	char array[tamanioNodo];
-	buffer->pubsetbuf(array,tamanioNodo);
-	archivoArbol.write(array,tamanioNodo);
+	archivoArbol.write(buffer->str().data(),tamanioNodo);
+	delete Raiz;
 	this->recomponerRaiz();
 	/*int nivel;
 	Nodo* nodo;
@@ -1012,14 +1009,14 @@ void BSharpTree::escribir(std::stringbuf* buffer){
 	}else{
 		nodo = new NodoIntermedio(buffer,numeroDeElementosXnodo,comparador,claveEstructural);
 	}
-	this->imprimirNodo(nodo);
 	char array[tamanioNodo];
 	buffer->pubsetbuf(array,tamanioNodo);
 	buffer->pubseekpos(0);
 	nodo->serializate(buffer);
 	archivoArbol.write(array,tamanioNodo);
 	this->recomponerRaiz();
-	delete nodo;*/
+	delete nodo;
+	this->recomponerRaiz();*/
 }
 
 void BSharpTree::observarNodo(std::stringbuf* buffer){
@@ -1108,6 +1105,9 @@ void BSharpTree::imprimirNodo(Nodo* nodoE){
 	}
 }
 
+std::string BSharpTree::getNombreArchivo(){
+	return this->nombreArchivo;
+}
 bool BSharpTree::estaVacio(){
 	if(Raiz->getListaElementos()->empty())return true;
 	return false;

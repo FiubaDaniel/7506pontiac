@@ -87,6 +87,8 @@ public:
 
 	void observarNodo(std::stringbuf* buffer);
 
+	std::string getNombreArchivo();
+
 	virtual ~BSharpTree();
 
 private:
