@@ -35,6 +35,7 @@ class Compresor {
 	unsigned char cerrador;
 	int bitRestantes;
 	int U;
+	int caracteres;
 	char overflow();
 	char underflow();
 	//void emitir();
@@ -54,8 +55,8 @@ class Compresor {
 	 */
 	void abrir_codigo();
     //TablaOrden0 tabla;
-	TablaOrden1 tabla;
-	//PPMC::TablaPPMC tabla;
+	//TablaOrden1 tabla;
+	PPMC::TablaPPMC tabla;
 
 public:
 	Compresor();
@@ -111,6 +112,7 @@ public:
 	void descomprimir(unsigned * buffer,std::string& descomprimido,int tamanioComprimido);
 	void descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido);
 	void setExtremos();
+	void setCaracteres(int caracteres);
 	virtual ~Compresor();
 
 private:
