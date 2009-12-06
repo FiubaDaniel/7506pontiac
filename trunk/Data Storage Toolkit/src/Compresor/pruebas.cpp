@@ -182,6 +182,34 @@ int pruebaEstrategiaCompresionArbol(){
 	delete comparador2;
 	return 0;
 }
+int pruebaCompresion5(){
+	//AAAAAABBBBBBPPPPPPDSAZXCVBNN�
+	//12345678901234567890123456789012345678901234567890
+	//AAAAAABBBBBBPPPPPPDSAZXCVBNMqweeeeeeeeetttttttttty
+	          //123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+#define CANT_AGREGAR 2
+#define CANT_UNSIGNED 30
+#define NUMERO_ITERACIONES 20
+	unsigned char str[]="AAAAAABBBBBBPPPPPPDSAZXCBNMqweeeeeeeeettttttttttuiopasdfghjklzxcvbnm12345678901234567890123456789012345678901234567890";
+	unsigned array[CANT_UNSIGNED];
+	Compresor compresor(array,CANT_UNSIGNED);
+	Compresor descompresor(array,CANT_UNSIGNED);
+	string descomprimido;
+	for(int i=0;i<NUMERO_ITERACIONES;i++){
+		compresor.reiniciarBuffer();
+		compresor.comprimirPrimeros(str,25);
+		compresor.agregar(str+25,25);
+		compresor.agregar(str+2*25,25);
+		compresor.agregar(str+3*25,25);
+		compresor.cerrar();
+		descomprimido.clear();
+		descompresor.reiniciarBuffer();
+		descompresor.descomprimir(array,descomprimido,CANT_UNSIGNED);
+		cout<<str<<endl;
+		cout<<descomprimido<<endl;
+	}
+	return 0;
+}
 /*int PruebaComprimirNodo(){
 	ComparadorClave* comparador = new ComparadorRegistroVariable();
 	NodoIntermedio* nodo = new NodoIntermedio(2,4,comparador);
