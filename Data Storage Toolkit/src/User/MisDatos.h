@@ -52,6 +52,8 @@ class MisDatos {
 	Registro*registro1;
 	Registro*registro2;
 	Registro*registro3;
+	bool hay_que_comprimir;
+	unsigned tamanio_contendor;
 public:
 	MisDatos();
 	virtual ~MisDatos();

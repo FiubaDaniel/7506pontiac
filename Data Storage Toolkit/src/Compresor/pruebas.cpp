@@ -17,10 +17,13 @@
 
 int pruebacompresion1(){
 	unsigned buffer[TAM_BUF1];
-
 	//1234567890123456789012345678901234512345678901234567890123456789012345
 	unsigned char str[MAX_CANT_CHAR+1]="Base class for standard exceptions. All objects thrown by components of the standard library are derived from this class.";
-	/*unsigned char str[MAX_CANT_CHAR+1]="Base class for standard exceptions. All objects thrown by components of the standard library are derived from this class. Ella esta sentadita en el limbo diciendome  donde no hay que ir. Hoy la luna me invita a seguir. Determinadas cosas con la que nos sentimos identificados y nos distinguen de otros que no.";
+	/*unsigned char str[MAX_CANT_CHAR+1]="Base class for standard exceptions.
+	 All objects thrown by components of the standard library are derived from
+	 this class. Ella esta sentadita en el limbo diciendome  donde no hay que ir.
+	 Hoy la luna me invita a seguir. Determinadas cosas con la que nos sentimos
+	 identificados y nos distinguen de otros que no.";*/
 	/*********************************************************/
 	/*                      COMPRIMIENDO                     */
 	/*********************************************************/
@@ -115,7 +118,7 @@ int pruebaCompresion3(){
 
 	return 0;
 }
-int pruebaEstragiaCompresionAlmacenamiento(char nombre_archivo[],char nombre_comprimido[]){
+int pruebaEstragiaCompresionAlmacenamiento(char nombre_archivo[]){
 	AtributoFijo<char*> nombre("N",10);
 	Registro registro(1,&nombre);
 	EARegistros estrategia(&registro);
@@ -131,17 +134,18 @@ int pruebaEstragiaCompresionAlmacenamiento(char nombre_archivo[],char nombre_com
 	archivo.cerrar();
 	EstrategiaCompresion compresion;
 	archivo.abrir(nombre_archivo);
-	compresion.compresion(&archivo,nombre_comprimido,10);
+	compresion.compresion(&archivo,10);
 	archivo.cerrar();
 	/*creo un archivo para los descomprimidos*/
 	cout<<endl<<"/***************DESCOMPRIMIENDO************************/"<<endl;
+	remove(nombre_archivo);
 	archivo.crear(nombre_archivo);
-	compresion.descompresion(&archivo,nombre_comprimido);
+	compresion.descompresion(&archivo);
 	archivo.imprimir(cout);
 	archivo.cerrar();
 	return 0;
 }
-int pruebaEstragiaCompresionAlmacenamiento1(char nombre_archivo[],char nombre_comprimido[]){
+int pruebaEstragiaCompresionAlmacenamiento1(char* nombre_archivo){
 	AtributoVariable<string> nombre("N");
 	Registro registro(1,&nombre);
 	Bloque bloque(&registro);
@@ -162,12 +166,13 @@ int pruebaEstragiaCompresionAlmacenamiento1(char nombre_archivo[],char nombre_co
 	archivo.cerrar();
 	EstrategiaCompresion compresion;
 	archivo.abrir(nombre_archivo);
-	compresion.compresion(&archivo,nombre_comprimido,25);
+	compresion.compresion(&archivo,25);
 	archivo.cerrar();
 	/*creo un archivo para los descomprimidos*/
 	cout<<endl<<"/***************DESCOMPRIMIENDO************************/"<<endl;
+	remove(nombre_archivo);
 	archivo.crear(nombre_archivo);
-	compresion.descompresion(&archivo,nombre_comprimido);
+	compresion.descompresion(&archivo);
 	archivo.imprimir(cout);
 	archivo.cerrar();
 	return 0;
@@ -218,7 +223,7 @@ int pruebaEstrategiaCompresionArbol(){
 	BSharpTree* arbol2 = new BSharpTree(&clave);
 	ComparadorClave* comparador2 = new ComparadorRegistroVariable();
     //compresion.descompresionInsdice(nombreComprimido,nombreArchivo);
-	arbol2->abrir(nombreArbol2,nombreArbol,comparador2);
+	//arbol2->abrir(nombreArbol2,nombreArbol,comparador2);
 	//arbol2->abrir(nombreArbol2,nombreArbol,comparador2);
 	compresion.descompresionArbol(arbol2,nombreComprimido);
 	arbol2->imprimir();

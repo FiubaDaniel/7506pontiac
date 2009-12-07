@@ -17,8 +17,8 @@ class EstrategiaCompresion {
 public:
 	EstrategiaCompresion();
 	void compresion();
-	void compresion(Almacenamiento*almacen,string archivoComprimido,unsigned tamanio);
-	void descompresion(Almacenamiento*almacen,string archivoComprimido);
+	void compresion(Almacenamiento*almacen,unsigned tamanio);
+	bool descompresion(Almacenamiento*almacen);
 	void compresionArbol(BSharpTree* arbol,string archivoComprimido,unsigned tamanio_buffer_comprimido);
 	void descompresionArbol(BSharpTree*arbol,string archivoComprimido);
 	void compresionIndice(string nombre_inidice,string archivoComprimido,unsigned tamanio_buffer_comprimido);

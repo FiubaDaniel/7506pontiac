@@ -2,6 +2,7 @@
 #include "../Indices/Set.h"
 #include "../Compuesto/BloqueMemoria.h"
 #include "../Compuesto/RegistroMemoria.h"
+#include "../Compresor/EstrategiaCompresion.h"
 
 MisDatos::MisDatos(){
 	recurso1=NULL;
@@ -34,10 +35,22 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 	estrategiaBloques->setClave(&claveEstructural);
 	/*inicializo el archivo*/
 	Archivo* archivo=new Archivo(estrategiaBloques);
+	hay_que_comprimir=comprime;
+	tamanio_contendor=longitudContenedor;
 
-	if(!archivo->abrir(path.c_str())){
+	bool existia=true;
+	if(comprime){
 		archivo->crear(path.c_str());
+		EstrategiaCompresion compresor;
+		existia=compresor.descompresion(archivo);
 	}else{
+		if( not archivo->abrir(path.c_str())){
+			archivo->crear(path.c_str());
+			existia=false;
+		}
+	}
+
+	if(existia){
 		long longitud=longitudBloque;
 		if(estrategiaBloques->getCapacBloque()!=longitud){
 			archivo->cerrar();
@@ -47,9 +60,7 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 			delete estrategiaBloques;
 			throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
 		}
-
 	}
-
 	/*incializar indice*/
 	EstrategiaIndice* Indice=NULL;
 	if(tieneIndice){
@@ -90,7 +101,7 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 	};
 
 	recurso1=new Recurso(estrategiaRecurso);
-		}
+}
 /*
  * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe,
  * lo crea. Si existe previamente, verifica que se correspondan los parametros de tipo y
@@ -111,8 +122,16 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 	estrategiaregistro->setClave(&claveEstructural);
 	Archivo* archivo=new Archivo(estrategiaregistro);
 
-	if(!archivo->abrir(path.c_str()))
+	hay_que_comprimir=comprime;
+	tamanio_contendor=longitudContenedor;
+	if(comprime){
 		archivo->crear(path.c_str());
+		EstrategiaCompresion compresor;
+		compresor.descompresion(archivo);
+	}else if( not archivo->abrir(path.c_str()))
+			archivo->crear(path.c_str());
+
+
 	/*incializar indice*/
 	EstrategiaIndice* Indice=NULL;
 	if(tieneIndice){
@@ -154,7 +173,7 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 
 
 	recurso2=new Recurso(estrategiaRecurso);
-		}
+}
 /*
  * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe, lo crea.
  * En caso de fallar la inicializacion, se lanza una ExcepcionMisDatos con el mensaje de error.
@@ -422,7 +441,16 @@ void MisDatos::mostrarDatosArchivo2(){
 void MisDatos::cerrarArchivo1(){
 	if(recurso1!=NULL){
 		EREscrituraDirecta* estrategiaDirecta = dynamic_cast<EREscrituraDirecta*>(recurso1->getEstrategia());
-		recurso1->getEstrategia()->cerrar();
+		if(hay_que_comprimir){
+			Almacenamiento* almacen=recurso1->getEstrategia()->getAlmacenamiento();
+			string nombre_archivo=almacen->getNombre();
+			EstrategiaCompresion compresor;
+			compresor.compresion(almacen,tamanio_contendor);
+			recurso1->cerrar();
+			remove(nombre_archivo.c_str());
+		}else
+			recurso1->cerrar();
+
 		EABloques* estrategia=NULL;
 		if(estrategiaDirecta!=NULL){
 			estrategia=(EABloques*)estrategiaDirecta->getBuffer()->getEstrategia();
@@ -448,7 +476,17 @@ void MisDatos::cerrarArchivo1(){
 void MisDatos::cerrarArchivo2(){
 	if(recurso2!=NULL){
 		EREscrituraDirecta* estrategiaDirecta = dynamic_cast<EREscrituraDirecta*>(recurso2->getEstrategia());
-		recurso2->getEstrategia()->cerrar();
+
+		if(hay_que_comprimir){
+			Almacenamiento* almacen=recurso2->getEstrategia()->getAlmacenamiento();
+			string nombre_archivo=almacen->getNombre();
+			EstrategiaCompresion compresor;
+			compresor.compresion(almacen,tamanio_contendor);
+			recurso2->cerrar();
+			remove(nombre_archivo.c_str());
+		}else
+			recurso2->cerrar();
+
 		EABloques* estrategia=NULL;
 		if(estrategiaDirecta!=NULL){
 			estrategia=(EABloques*)estrategiaDirecta->getBuffer()->getEstrategia();
@@ -474,6 +512,16 @@ void MisDatos::cerrarArchivo2(){
 void MisDatos::cerrarArchivo3(){
 	if(recurso3!=NULL){
 		Almacenamiento * almacen=recurso3->getEstrategia()->getAlmacenamiento();
+
+		if(hay_que_comprimir){
+			recurso3->cerrar();
+			/*string nombre_archivo=recurso3->getEstrategia()->getAlmacenamiento()->getNombre();
+			EstrategiaCompresion compresor;
+			compresor.compresion(almacen,tamanio_contendor);
+			remove(nombre_archivo.c_str());*/
+		}else
+			recurso3->cerrar();
+
 		delete almacen->getEstrategia()->getComparador();
 		delete almacen->getEstrategia();
 		delete almacen;
@@ -484,6 +532,7 @@ void MisDatos::cerrarArchivo3(){
 		registro3=NULL;
 	}
 }
+
 
 
 
