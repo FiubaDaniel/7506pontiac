@@ -16,7 +16,7 @@ EstrategiaCompresion::~EstrategiaCompresion() {
 
 }
 
-void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivo,unsigned tamanio_buffer_comprimido){
+bool EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivo,unsigned tamanio_buffer_comprimido){
 	std::fstream archivo_comprimido;
 
 	//Creo el contenedor adecuado a las condiciones dadas.
@@ -28,12 +28,12 @@ void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivo,unsi
 	string archivoComprimido = archivo +"_comprimido";
 	archivo_comprimido.open(archivoComprimido.c_str(),fstream::trunc|fstream::out|fstream::binary);
 	if(!archivo_comprimido.is_open()){
-		return;
+		return false;
 	}
 	archivo_comprimido.seekp(0);
 	//cout<<archivo_comprimido.tellp()<<endl;
 	archivo_comprimido.write((char*)&tamanio_buffer_comprimido,sizeof(tamanio_buffer_comprimido));
-    //cout<<archivo_comprimido.tellp()<<endl;
+	//cout<<archivo_comprimido.tellp()<<endl;
 	Nodo* nodo;
 
 	//Paso la metadata (que no se comprime) al archivo de datos comprimido
@@ -99,9 +99,11 @@ void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivo,unsi
 	archivo_comprimido.close();
 
 	delete[] buffer;
+
+	return true;
 }
 
-void EstrategiaCompresion::compresionIndice(string nombreIndice,string archivoComprimido,unsigned tamanio_buffer_comprimido){
+bool EstrategiaCompresion::compresionHash(string nombreIndice,unsigned tamanio_buffer_comprimido){
 	std::fstream archivo_indice;
 	std::fstream archivo_comprimido;
 
@@ -109,115 +111,133 @@ void EstrategiaCompresion::compresionIndice(string nombreIndice,string archivoCo
 
 	Compresor contenedor(comprimido,tamanio_buffer_comprimido);
 
-	archivo_indice.open(nombreIndice.c_str(),fstream::in|fstream::binary);
+	string nombreHash = nombreIndice+"_cubos";
+	string nombreComprimido = nombreIndice+"_Comprimido";
 
-	archivo_comprimido.open(archivoComprimido.c_str(),fstream::trunc|fstream::out|fstream::binary);
+	archivo_indice.open(nombreHash.c_str(),fstream::in|fstream::binary);
 
-	if(archivo_indice.is_open()&&archivo_comprimido.is_open()){
+	archivo_comprimido.open(nombreComprimido.c_str(),fstream::trunc|fstream::out|fstream::binary);
 
-		archivo_indice.seekg(0);
+	if(!archivo_indice.is_open()or!archivo_comprimido.is_open()){
+		return false;
+	}
 
-		archivo_comprimido.seekp(0);
+	archivo_indice.seekg(0);
 
-		archivo_comprimido.write((char*)&tamanio_buffer_comprimido,sizeof(tamanio_buffer_comprimido));
+	archivo_comprimido.seekp(0);
 
-		//Comienza compresion.
-		//Gurado primero.
-		unsigned tamanio_sin_comprimir=tamanio_buffer_comprimido;
+	archivo_comprimido.write((char*)&tamanio_buffer_comprimido,sizeof(tamanio_buffer_comprimido));
 
-		unsigned char sin_comprimir[tamanio_sin_comprimir];
+	//Comienza compresion.
+	//Gurado primero.
+	unsigned tamanio_sin_comprimir=tamanio_buffer_comprimido;
+
+	unsigned char sin_comprimir[tamanio_sin_comprimir];
+
+	archivo_indice.read((char*)sin_comprimir,tamanio_sin_comprimir);
+
+	contenedor.comprimirPrimeros(sin_comprimir,tamanio_sin_comprimir);
+
+	//Comprimo el resto
+	short cont = 1;
+
+	while(archivo_indice.peek()!= EOF and not archivo_indice.eof()){
 
 		archivo_indice.read((char*)sin_comprimir,tamanio_sin_comprimir);
 
-		contenedor.comprimirPrimeros(sin_comprimir,tamanio_sin_comprimir);
+		if(not contenedor.agregar(sin_comprimir,tamanio_sin_comprimir)){
 
-		//Comprimo el resto
-		short cont = 1;
+			contenedor.cerrar();
 
-		while(archivo_indice.peek()!= EOF and not archivo_indice.eof()){
+			archivo_comprimido.write((char*)&cont,sizeof(cont));
 
-			archivo_indice.read((char*)sin_comprimir,tamanio_sin_comprimir);
+			archivo_comprimido.write((char*)comprimido,sizeof(unsigned)*tamanio_buffer_comprimido);
 
-			if(not contenedor.agregar(sin_comprimir,tamanio_sin_comprimir)){
+			contenedor.reiniciarBuffer();
 
-				contenedor.cerrar();
+			contenedor.comprimirPrimeros(sin_comprimir,tamanio_sin_comprimir);
 
-				archivo_comprimido.write((char*)&cont,sizeof(cont));
+			cont=1;
 
-				archivo_comprimido.write((char*)comprimido,sizeof(unsigned)*tamanio_buffer_comprimido);
-
-				contenedor.reiniciarBuffer();
-
-				contenedor.comprimirPrimeros(sin_comprimir,tamanio_sin_comprimir);
-
-				cont=1;
-			}else cont++;
-		}
-
-		contenedor.cerrar();
-
-		archivo_comprimido.write((char*)&cont,sizeof(cont));
-
-		archivo_comprimido.write((char*)comprimido,sizeof(unsigned)*tamanio_buffer_comprimido);
-
-		delete[] comprimido;
-
-		archivo_comprimido.clear();
-
-		archivo_indice.clear();
+		}else cont++;
 	}
+
+	contenedor.cerrar();
+
+	archivo_comprimido.write((char*)&cont,sizeof(cont));
+
+	archivo_comprimido.write((char*)comprimido,sizeof(unsigned)*tamanio_buffer_comprimido);
+
+	delete[] comprimido;
+
+	archivo_comprimido.clear();
+
+	archivo_indice.clear();
+
 	archivo_comprimido.close();
 	archivo_indice.close();
+
+	return true;
 }
 
-void EstrategiaCompresion::descompresionInsdice(string nombre_indice,string nombre_comprimido){
+bool EstrategiaCompresion::descompresionHash(string nombreIndice){
 
 	std::string descomprimido;
 	std::fstream archivo_indice;
 	std::fstream archivo_comprimido;
 
-	archivo_indice.open(nombre_indice.c_str(),fstream::trunc|fstream::out|fstream::binary);
-	archivo_comprimido.open(nombre_comprimido.c_str(),fstream::in|fstream::binary);
+	string nombreHash = nombreIndice+"_cubos";
+	string nombreComprimido = nombreIndice+"_Comprimido";
 
-	if(archivo_indice.is_open()&&archivo_comprimido.is_open()){
+	archivo_indice.open(nombreHash.c_str(),fstream::trunc|fstream::out|fstream::binary);
+	archivo_comprimido.open(nombreComprimido.c_str(),fstream::in|fstream::binary);
 
-		archivo_indice.seekp(0);
-		archivo_comprimido.seekg(0);
-
-		//Obtenego el tamaño de los contenedores
-		unsigned tamanio_buffer_comprimido;
-		//cout<<archivo_comprimido.tellg()<<endl;
-		archivo_comprimido.read((char*)&tamanio_buffer_comprimido,sizeof(tamanio_buffer_comprimido));
-
-		//Creo el contenedor
-		unsigned *buffer=new unsigned[tamanio_buffer_comprimido];
-		Compresor contenedor(buffer,tamanio_buffer_comprimido);
-
-		unsigned tamanio_sin_comprimir=tamanio_buffer_comprimido;
-
-		//Comienzo a descomprimir
-
-		while(archivo_comprimido.peek()!= EOF and not archivo_comprimido.eof()){
-
-			short cont;
-
-			archivo_comprimido.read((char*)&cont,sizeof(cont));
-
-			archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
-
-			contenedor.setCaracteres(tamanio_sin_comprimir*cont);
-
-			contenedor.descomprimir(buffer,descomprimido,tamanio_buffer_comprimido);
-
-			archivo_indice.write(descomprimido.data(),descomprimido.size());
-
-		}
-		delete[] buffer;
-		archivo_comprimido.clear();// saca el flag de eof
-		archivo_indice.clear();
+	if(!archivo_indice.is_open()or!archivo_comprimido.is_open()){
+		return false;
 	}
+
+	archivo_indice.seekp(0);
+	archivo_comprimido.seekg(0);
+
+	//Obtenego el tamaño de los contenedores
+	unsigned tamanio_buffer_comprimido;
+	//cout<<archivo_comprimido.tellg()<<endl;
+	archivo_comprimido.read((char*)&tamanio_buffer_comprimido,sizeof(tamanio_buffer_comprimido));
+
+	//Creo el contenedor
+	unsigned *buffer=new unsigned[tamanio_buffer_comprimido];
+	Compresor contenedor(buffer,tamanio_buffer_comprimido);
+
+	unsigned tamanio_sin_comprimir=tamanio_buffer_comprimido;
+
+	//Comienzo a descomprimir
+
+	while(archivo_comprimido.peek()!= EOF and not archivo_comprimido.eof()){
+
+		short cont;
+
+		archivo_comprimido.read((char*)&cont,sizeof(cont));
+
+		archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
+
+		contenedor.setCaracteres(tamanio_sin_comprimir*cont);
+
+		contenedor.descomprimir(buffer,descomprimido,tamanio_buffer_comprimido);
+
+		archivo_indice.write(descomprimido.data(),descomprimido.size());
+
+		descomprimido.clear();
+	}
+
+
+	delete[] buffer;
+	archivo_comprimido.clear();// saca el flag de eof
+	archivo_indice.clear();
+
 	archivo_comprimido.close();
 	archivo_indice.close();
+
+	return true;
 }
 
 /*
@@ -443,44 +463,44 @@ bool EstrategiaCompresion::descompresion(Almacenamiento*almacen){
 	//todo agregado
 	unsigned tamanio_serializado=almacen->getEstrategia()->getTamanioComponenteUsado();
 
+	descomprimido.clear();
+
+	while(archivo_comprimido.peek()!= EOF and not archivo_comprimido.eof()){
+		/*recupero una tira de componentes serializados*/
+		short cont;
+
+		archivo_comprimido.read((char*)&cont,sizeof(cont));
+
+		archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_comprimido);
+
+
+
+		//contenedor.setExtremos();
 		descomprimido.clear();
 
-		while(archivo_comprimido.peek()!= EOF and not archivo_comprimido.eof()){
-			/*recupero una tira de componentes serializados*/
-			short cont;
+		contenedor.setCaracteres(tamanio_serializado*cont);
 
-			archivo_comprimido.read((char*)&cont,sizeof(cont));
+		contenedor.descomprimir(buffer,descomprimido,tamanio_comprimido);
 
-			archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_comprimido);
+		while(not descomprimido.empty() ){
+			/*escribo los componentes q recupere*/
 
-
-
-			//contenedor.setExtremos();
-			descomprimido.clear();
-
-			contenedor.setCaracteres(tamanio_serializado*cont);
-
-			contenedor.descomprimir(buffer,descomprimido,tamanio_comprimido);
-
-			while(not descomprimido.empty() ){
-				/*escribo los componentes q recupere*/
-
-				serializado.str(descomprimido);
+			serializado.str(descomprimido);
 
 
 
-				serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
+			serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
 
-				componente->deserializar(serializado);
+			componente->deserializar(serializado);
 
 
 
-				almacen->escribir(componente);
+			almacen->escribir(componente);
 
-				descomprimido.erase(0,tamanio_serializado);
+			descomprimido.erase(0,tamanio_serializado);
 
-			}
 		}
+	}
 
 	archivo_comprimido.close();
 

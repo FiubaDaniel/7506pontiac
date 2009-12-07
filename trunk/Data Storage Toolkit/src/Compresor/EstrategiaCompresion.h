@@ -19,11 +19,10 @@ public:
 	void compresion();
 	void compresion(Almacenamiento*almacen,unsigned tamanio);
 	bool descompresion(Almacenamiento*almacen);
-	void compresionArbol(BSharpTree* arbol,string archivoComprimido,unsigned tamanio_buffer_comprimido);
+	bool compresionArbol(BSharpTree* arbol,string archivoComprimido,unsigned tamanio_buffer_comprimido);
 	bool descompresionArbol(BSharpTree*arbol,string archivoComprimido);
-	void compresionIndice(string nombre_inidice,string archivoComprimido,unsigned tamanio_buffer_comprimido);
-	void descompresionInsdice(string nombre_indice,string nombre_comprimido);
-	void compresionHash();
+	bool compresionHash(string nombreIndice,unsigned tamanio_buffer_comprimido);
+	bool descompresionHash(string nombreIndice);
 	virtual ~EstrategiaCompresion();
 };
 #endif /* ESTRATEGIACOMPRESION_H_ */
