@@ -30,15 +30,18 @@ void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivoCompr
 		return;
 	}
 	archivo_comprimido.seekp(0);
+	//cout<<archivo_comprimido.tellp()<<endl;
 	archivo_comprimido.write((char*)&tamanio_buffer_comprimido,sizeof(tamanio_buffer_comprimido));
-
+    //cout<<archivo_comprimido.tellp()<<endl;
 	Nodo* nodo;
 
 	//Paso la metadata (que no se comprime) al archivo de datos comprimido
 	std::string metadata=arbol->getMetadata();
 	unsigned tamanio_meta=metadata.size();
 	archivo_comprimido.write((char*)&tamanio_meta,sizeof(tamanio_meta));
+	//cout<<archivo_comprimido.tellp()<<endl;
 	archivo_comprimido.write(metadata.data(),tamanio_meta);
+	//cout<<archivo_comprimido.tellp()<<endl;
 
 	//Comienzo la compresion
 	//Comprimo el primero
@@ -48,6 +51,8 @@ void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivoCompr
 	nodo->serializate(&serializado);
 
 	contenedor.comprimirPrimeros((unsigned char*)serializado.str().data(),tamanioSerializado);
+
+	delete nodo;
 
 	short cont = 1;
 	//Comprimo los siguiente
@@ -64,9 +69,15 @@ void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivoCompr
 
 			archivo_comprimido.write((char*)&cont,sizeof(cont));
 
+			//cout<<archivo_comprimido.tellp()<<endl;
+
 			archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
 
+			//cout<<archivo_comprimido.tellp()<<endl;
+
 			contenedor.setContinuacionCompresion(buffer,tamanio_buffer_comprimido);
+
+			contenedor.reiniciarBuffer();
 
 			contenedor.comprimirPrimeros((unsigned char*)serializado.str().data(),tamanioSerializado);
 
@@ -80,9 +91,10 @@ void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivoCompr
 	contenedor.cerrar();
 
 	archivo_comprimido.write((char*)&cont,sizeof(cont));
+	//cout<<archivo_comprimido.tellp()<<endl;
 
 	archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
-
+	//cout<<archivo_comprimido.tellp()<<endl;
 	archivo_comprimido.close();
 
 	delete[] buffer;
@@ -110,7 +122,7 @@ void EstrategiaCompresion::compresionIndice(string nombreIndice,string archivoCo
 
 		//Comienza compresion.
 		//Gurado primero.
-		unsigned tamanio_sin_comprimir=tamanio_buffer_comprimido/2;
+		unsigned tamanio_sin_comprimir=tamanio_buffer_comprimido;
 
 		unsigned char sin_comprimir[tamanio_sin_comprimir];
 
@@ -121,7 +133,7 @@ void EstrategiaCompresion::compresionIndice(string nombreIndice,string archivoCo
 		//Comprimo el resto
 		short cont = 1;
 
-		while(archivo_comprimido.peek()!= EOF and not archivo_indice.eof()){
+		while(archivo_indice.peek()!= EOF and not archivo_indice.eof()){
 
 			archivo_indice.read((char*)sin_comprimir,tamanio_sin_comprimir);
 
@@ -143,9 +155,13 @@ void EstrategiaCompresion::compresionIndice(string nombreIndice,string archivoCo
 
 		contenedor.cerrar();
 
+		archivo_comprimido.write((char*)&cont,sizeof(cont));
+
 		archivo_comprimido.write((char*)comprimido,sizeof(unsigned)*tamanio_buffer_comprimido);
 
 		delete[] comprimido;
+
+		archivo_comprimido.clear();
 
 		archivo_indice.clear();
 	}
@@ -169,13 +185,14 @@ void EstrategiaCompresion::descompresionInsdice(string nombre_indice,string nomb
 
 		//Obtenego el tamaño de los contenedores
 		unsigned tamanio_buffer_comprimido;
+		//cout<<archivo_comprimido.tellg()<<endl;
 		archivo_comprimido.read((char*)&tamanio_buffer_comprimido,sizeof(tamanio_buffer_comprimido));
 
 		//Creo el contenedor
 		unsigned *buffer=new unsigned[tamanio_buffer_comprimido];
 		Compresor contenedor(buffer,tamanio_buffer_comprimido);
 
-		unsigned tamanio_sin_comprimir=tamanio_buffer_comprimido/2;
+		unsigned tamanio_sin_comprimir=tamanio_buffer_comprimido;
 
 		//Comienzo a descomprimir
 
@@ -196,6 +213,7 @@ void EstrategiaCompresion::descompresionInsdice(string nombre_indice,string nomb
 		}
 		delete[] buffer;
 		archivo_comprimido.clear();// saca el flag de eof
+		archivo_indice.clear();
 	}
 	archivo_comprimido.close();
 	archivo_indice.close();
@@ -217,8 +235,9 @@ void EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivoCom
 	unsigned tamanio_comprimido;//Tamanio del contenedor.
 
 	archivo_comprimido.seekg(0);
-
+	//cout<<archivo_comprimido.tellg()<<endl;
 	archivo_comprimido.read((char*)&tamanio_comprimido,sizeof(tamanio_comprimido));
+	//cout<<archivo_comprimido.tellg()<<endl;
 
 	unsigned *buffer=new unsigned[tamanio_comprimido];
 
@@ -230,13 +249,15 @@ void EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivoCom
 	unsigned tamanio_meta;
 
 	archivo_comprimido.read((char*)&tamanio_meta,sizeof(tamanio_meta));
-
+	//cout<<archivo_comprimido.tellg()<<endl;
 	char* metadata=new char[tamanio_meta];
 
 	archivo_comprimido.read(metadata,tamanio_meta);
+	//cout<<archivo_comprimido.tellg()<<endl;
 
 	arbol->setMetadata(metadata);
 
+	delete metadata;
 	unsigned tamanio_serializado = arbol->tamanioBloque();
 
 	//Descompresion de Nodos
@@ -252,9 +273,9 @@ void EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivoCom
 			short cont;
 
 			archivo_comprimido.read((char*)&cont,sizeof(cont));
-
+			//cout<<archivo_comprimido.tellg()<<endl;
 			archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_comprimido);
-
+			//cout<<archivo_comprimido.tellg()<<endl;
 			descomprimido.clear();
 
 			contenedor.setCaracteres(tamanio_serializado*cont);
@@ -264,21 +285,21 @@ void EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivoCom
 			while( not descomprimido.empty()){
 				/*escribo los componentes q recupere*/
 
+				//cout<<descomprimido.size()<<endl;;
 				serializado.str(descomprimido);//inicializo el buff con el string descomprimido
 
 				serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
 
-				arbol->escribir(&serializado);
+				arbol->escribir(serializado);
 
-				descomprimido.erase(0,arbol->tamanioBloque());//elimino el primer registro/bloque del string
+				descomprimido.erase(0,tamanio_serializado);//elimino el primer registro/bloque del string
 
 			}
+			descomprimido.clear();
 		}
 	}catch(...){
 		cout<<"ERROR: DESERIALIZAR"<<endl;
 	}
-	arbol->recomponerRaiz();
-
 	archivo_comprimido.close();
 
 	delete buffer;
