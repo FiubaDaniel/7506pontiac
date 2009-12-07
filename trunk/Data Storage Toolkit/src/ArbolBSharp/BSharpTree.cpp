@@ -13,6 +13,7 @@ using namespace std;
 
 BSharpTree::BSharpTree(Clave* clave){
 	claveEstructural = clave->clonarce();
+	this->ultimoNodo=NULL;
 }
 
 void BSharpTree::crear(string nombreArch,unsigned int tamanioDeBloque, Clave* clave,ComparadorClave* comp) {
@@ -80,6 +81,7 @@ bool BSharpTree::abrir(string nombreArch,ComparadorClave* comp){
 	buf.sgetn((char*)&nivel,sizeof(int));
 	if(nivel!=0){
 		Raiz = new NodoIntermedio(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
+	    this->imprimirNodo(Raiz);
 	}else{
 		Raiz = new NodoHoja(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
 	}
@@ -970,9 +972,6 @@ void BSharpTree::imprimirIterativo(Nodo* nodoE){
 void BSharpTree::posicionarArchivo(){
 	archivoArbol.seekg(posicionRaiz);
 	archivoArbol.seekp(posicionRaiz);
-	//Todo borrar impresion
-	cout<<archivoArbol.tellp()<<endl;
-	cout<<archivoArbol.tellg()<<endl;
 }
 
 bool BSharpTree::siguienteAlmacenado(Nodo*& nodo){
@@ -981,6 +980,7 @@ bool BSharpTree::siguienteAlmacenado(Nodo*& nodo){
 		archivoArbol.clear();// saca el flag de eof
 		return false;
 	}
+	cout<<archivoArbol.tellg()<<endl;//todo sacar
 	char array2[tamanioNodo];
 	archivoArbol.read(array2,tamanioNodo);
 	buffer.pubsetbuf(array2,tamanioNodo);
@@ -988,35 +988,37 @@ bool BSharpTree::siguienteAlmacenado(Nodo*& nodo){
 	buffer.sgetn((char*)&nivel,sizeof(int));
 	if(nivel==0){
 		nodo =new  NodoHoja(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
+		//this->imprimirNodo(nodo);//todo sacar
 	}else{
 		nodo = new NodoIntermedio(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
+		//this->imprimirNodo(nodo);//todo sacar
 	}
-	//Todo borrar impresion
-	cout<<archivoArbol.tellp()<<endl;
-	cout<<archivoArbol.tellg()<<endl;
 	return true;
 }
 
-void BSharpTree::escribir(std::stringbuf* buffer){
-	archivoArbol.write(buffer->str().data(),tamanioNodo);
+void BSharpTree::escribir(std::stringbuf& buffer){
+	/*archivoArbol.write(buffer.str().data(),tamanioNodo);
 	delete Raiz;
-	this->recomponerRaiz();
-	/*int nivel;
-	Nodo* nodo;
-	buffer->sgetn((char*)&nivel,sizeof(int));
-	if(nivel==0){
-		nodo =new  NodoHoja(buffer,numeroDeElementosXnodo,comparador,claveEstructural);
-	}else{
-		nodo = new NodoIntermedio(buffer,numeroDeElementosXnodo,comparador,claveEstructural);
-	}
-	char array[tamanioNodo];
-	buffer->pubsetbuf(array,tamanioNodo);
-	buffer->pubseekpos(0);
-	nodo->serializate(buffer);
-	archivoArbol.write(array,tamanioNodo);
-	this->recomponerRaiz();
-	delete nodo;
 	this->recomponerRaiz();*/
+	std::stringbuf buf(ios_base :: in | ios_base :: out | ios_base :: binary);
+	buffer.pubseekpos(0,ios::out|ios::binary|ios::in);
+	int nivel;
+	Nodo* nodo;
+	buffer.sgetn((char*)&nivel,sizeof(int));
+	if(nivel==0){
+		nodo =new  NodoHoja(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
+		//this->imprimirNodo(nodo);//todo sacar
+	}else{
+		nodo = new NodoIntermedio(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
+		//this->imprimirNodo(nodo);//todo sacar
+	}
+	//cout<<archivoArbol.tellp()<<endl;//todo sacar
+	char array[tamanioNodo];
+	buf.pubsetbuf(array,tamanioNodo);
+	buf.pubseekpos(0);
+	nodo->serializate(&buf);
+	archivoArbol.write(array,tamanioNodo);
+	delete nodo;
 }
 
 void BSharpTree::observarNodo(std::stringbuf* buffer){
@@ -1060,6 +1062,10 @@ void BSharpTree::setMetadata(char* metadata){
 	metadata+=sizeof(unsigned int);
 	posicionRaiz=*(unsigned int*)metadata;
 	cantidadMinimaDeElementos = (unsigned int) ((numeroDeElementosXnodo)*2)/3;
+	archivoArbol.seekp(0);
+	archivoArbol.write((char*)&numeroDeElementosXnodo,sizeof(numeroDeElementosXnodo));
+	archivoArbol.write((char*)&tamanioNodo,sizeof(tamanioNodo));
+	archivoArbol.write((char*)&posicionRaiz,sizeof(posicionRaiz));
 }
 
 void BSharpTree::imprimirNodo(Nodo* nodoE){
@@ -1105,6 +1111,24 @@ void BSharpTree::imprimirNodo(Nodo* nodoE){
 	}
 }
 
+void BSharpTree::abrir(string nombreArch,string nombreArch2,ComparadorClave* comp){
+	nombreArchivo = nombreArch+"_Arbol";
+	nombreEspaciosLibres = nombreArch2+"_EspaciosLibre";
+	comparador = comp;
+	archivoArbol.open(nombreArchivo.c_str(),std::fstream::out |std::fstream::binary|std::fstream::trunc);
+	if(!archivoArbol.is_open()){
+		return;
+	}
+	archivoArbol.close();
+	archivoArbol.open(nombreArchivo.c_str(),std::fstream::out | std::fstream::in |std::fstream::binary|std::fstream::trunc);
+	if(!archivoArbol.is_open()){
+		return;
+	}
+	archivoEspaciosLibres.open(nombreEspaciosLibres.c_str(),std::fstream::out|std::fstream::in|std::fstream::binary);
+	if(!archivoEspaciosLibres.is_open()){
+			return;
+		}
+}
 std::string BSharpTree::getNombreArchivo(){
 	return this->nombreArchivo;
 }
