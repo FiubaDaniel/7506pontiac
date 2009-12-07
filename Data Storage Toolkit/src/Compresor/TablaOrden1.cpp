@@ -162,7 +162,7 @@ unsigned char TablaOrden1::calcularEmision(unsigned &piso,unsigned &techo,unsign
 		temp=floor(piso+ocurrencias*((longitud/total)+(1/total)));//temp seria el piso siguiente.
 		techo=temp-1;//al piso siguiente le resto 1.
 		retorno++;
-	}while(codigo>=techo&&retorno<256);
+	}while(codigo>techo&&retorno<256);
 	return retorno-1;
 }
 

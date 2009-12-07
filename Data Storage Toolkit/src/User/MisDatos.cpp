@@ -36,7 +36,7 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 	/*inicializo el archivo*/
 	Archivo* archivo=new Archivo(estrategiaBloques);
 	hay_que_comprimir=comprime;
-	tamanio_contendor=longitudContenedor;
+	tamanio_contendor=(longitudContenedor/sizeof(unsigned) )+1;
 
 	bool existia=true;
 	if(comprime){
@@ -123,7 +123,7 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 	Archivo* archivo=new Archivo(estrategiaregistro);
 
 	hay_que_comprimir=comprime;
-	tamanio_contendor=longitudContenedor;
+	tamanio_contendor=(longitudContenedor/sizeof(unsigned) )+1;
 	if(comprime){
 		archivo->crear(path.c_str());
 		EstrategiaCompresion compresor;

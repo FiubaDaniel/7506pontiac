@@ -339,6 +339,8 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,unsigned tamanio_bu
 			/*no pudo agregar,cierra el contenedor , graba y empieza uno nuevo */
 			contenedor.cerrar();
 
+
+
 			archivo_comprimido.write((char*)&cont,sizeof(cont));
 
 			archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
@@ -353,7 +355,10 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,unsigned tamanio_bu
 
 	}
 
+
 	contenedor.cerrar();
+
+
 
 	archivo_comprimido.write((char*)&cont,sizeof(cont));
 
@@ -412,8 +417,6 @@ bool EstrategiaCompresion::descompresion(Almacenamiento*almacen){
 	//todo agregado
 	unsigned tamanio_serializado=almacen->getEstrategia()->getTamanioComponenteUsado();
 
-	try{
-
 		descomprimido.clear();
 
 		while(archivo_comprimido.peek()!= EOF and not archivo_comprimido.eof()){
@@ -423,6 +426,8 @@ bool EstrategiaCompresion::descompresion(Almacenamiento*almacen){
 			archivo_comprimido.read((char*)&cont,sizeof(cont));
 
 			archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_comprimido);
+
+
 
 			//contenedor.setExtremos();
 			descomprimido.clear();
@@ -436,9 +441,13 @@ bool EstrategiaCompresion::descompresion(Almacenamiento*almacen){
 
 				serializado.str(descomprimido);
 
+
+
 				serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
 
 				componente->deserializar(serializado);
+
+
 
 				almacen->escribir(componente);
 
@@ -446,14 +455,14 @@ bool EstrategiaCompresion::descompresion(Almacenamiento*almacen){
 
 			}
 		}
-	}catch(...){
-		cout<<"ERROR: DESERIALIZAR"<<endl;
-	}
+
 	archivo_comprimido.close();
 
 	delete componente;
 
 	delete[] buffer;
+
+	delete[] metadata;
 
 	return true;
 }

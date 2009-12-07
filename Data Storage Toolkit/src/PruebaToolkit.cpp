@@ -19,18 +19,22 @@ using namespace std;
 
 //para mostrar los datos, buffer e indice de Archivo1
 void mostrarArchivo1(MisDatos& misDatos){
+
 	cout << "********* DATOS **********" << endl;
 	misDatos.mostrarDatosArchivo1();
 	cout << "********* INDICE **********" << endl;
 	misDatos.mostrarIndiceArchivo1();
+
 }
 
 //para mostrar los datos, buffer e indice de Archivo2
 void mostrarArchivo2(MisDatos& misDatos){
+
 	cout << "********* DATOS **********" << endl;
 	misDatos.mostrarDatosArchivo2();
 	cout << "********* INDICE **********" << endl;
 	misDatos.mostrarIndiceArchivo2();
+
 }
 
 void mostrarRegistroVariable(MiRegistroVariable* registro){
@@ -63,7 +67,7 @@ char calcularChar(int valor){
 	return 35 + (valor%88);
 }
 
-int MNmain() {
+int main() {
 
 	int* miLista = NULL;
 	MiRegistroVariable* miRegVariable = NULL;
