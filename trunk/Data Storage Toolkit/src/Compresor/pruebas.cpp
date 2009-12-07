@@ -187,7 +187,7 @@ int pruebaEstrategiaCompresionArbol(){
 	string nombreComprimido = "ArbolComprimido";
 	unsigned int tamanioBloque = 128;
 	arbol->crear(nombreArbol,tamanioBloque,&clave,comparador);
-	for(int i=0;i<30;i++){
+	for(int i=0;i<70;i++){
 		strncpy(unNombre,Terminos::obtenerTermino(i).data(),15);
 		nombre.set(unNombre);
 		Registro reg1(1,&nombre);
@@ -195,6 +195,14 @@ int pruebaEstrategiaCompresionArbol(){
 		//std::cout<<clave1.getAtributo("miStringID")<<std::endl;
 		arbol->insertar(ref,&clave1);
 	}
+	for(int i=0;i<30;i++){
+			strncpy(unNombre,Terminos::obtenerTermino(i).data(),15);
+			nombre.set(unNombre);
+			Registro reg1(1,&nombre);
+			Clave clave1(&reg1,1,"miStringID");
+			//std::cout<<clave1.getAtributo("miStringID")<<std::endl;
+			arbol->eliminar(&clave1);
+		}
 	arbol->imprimir();
 	//arbol->cerrar();
 	string nombreArchivo = arbol->getNombreArchivo();
@@ -213,7 +221,6 @@ int pruebaEstrategiaCompresionArbol(){
 	arbol2->abrir(nombreArbol2,nombreArbol,comparador2);
 	//arbol2->abrir(nombreArbol2,nombreArbol,comparador2);
 	compresion.descompresionArbol(arbol2,nombreComprimido);
-    arbol2->recomponerRaiz();
 	arbol2->imprimir();
 	delete arbol2;
 	delete comparador2;
