@@ -33,6 +33,8 @@ public:
 	 * memoria.
 	 */
 	bool abrir(string nombreArch,ComparadorClave* comp);
+
+	void abrir(string nombreArbol2,string nombreArbol,ComparadorClave* comp);
 	/*
 	 * Busca la referencia al archivo de un registro segun la clave determinada
 	 * y la almacena en referencia.
@@ -73,7 +75,7 @@ public:
 
 	bool siguienteAlmacenado(Nodo* &nodo);
 
-	void escribir(std::stringbuf* buffer);
+	void escribir(std::stringbuf& buffer);
 
 	void posicionarArchivo();
 
