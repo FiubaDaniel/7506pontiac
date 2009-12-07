@@ -64,45 +64,44 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 	/*incializar indice*/
 	EstrategiaIndice* Indice=NULL;
 	if(tieneIndice){
-		if(tipo==0){
+		existia=true;
+		if(tipo==ARBOL){
 			Indice = new EstrategiaBSharp(&claveEstructural);
+			if(comprime){
+				/*arbol->abrir(path,comparador,true);
+				existia=compresor.descompresionArbol(arbol,path);
+				if(existia)arbol->recomponerRaiz();*/
+			}else {
+				if(!Indice->abrir(path,comparador)){
+							Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
+							existia = false;
+				}
+			}
 		}else{
 			Indice = new HashingExt();
-		}
-		/***********************************************/
-		bool existiaIndice = true;
-		if(comprime){
-			BSharpTree* arbol = dynamic_cast<BSharpTree*>(Indice);
-			if(arbol!=NULL){
-				arbol->abrir(path,comparador,true);
-				existiaIndice=compresor.descompresionArbol(arbol,path);
-				if(existiaIndice)arbol->recomponerRaiz();
+			if(comprime){
+				/*Descomprimir hash*/
 			}else{
-				HashingExt* hash=dynamic_cast<HashingExt*>(Indice);
-				if(hash!=NULL){
-					/*-----*/
+				if(!Indice->abrir(path,comparador)){
+							Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
+							existia = false;
 				}
 			}
-		}else {
-			if(!Indice->abrir(path,comparador)){
-				Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
-				existiaIndice = false;
-			}
-			if(existiaIndice){
-				if(Indice->tamanioBloque()!=longitudBloqueIndice){
-					archivo->cerrar();
-					Indice->cerrar();
-					delete registro1;
-					delete comparador;
-					delete archivo;
-					delete estrategiaBloques;
-					delete Indice;
-					throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloqueIndice incorrecta");
-				}
+		}
+		/*en caso de que existiera previamente verifica*/
+		if(existia){
+			if(Indice->tamanioBloque()!=longitudBloqueIndice){
+				archivo->cerrar();
+				Indice->cerrar();
+				delete registro1;
+				delete comparador;
+				delete archivo;
+				delete estrategiaBloques;
+				delete Indice;
+				throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloqueIndice incorrecta");
 			}
 		}
 	}
-	//TODO Indice=new Set();
 	/*inicializar el estrategia Recurso*/
 	EstrategiaRecursos* estrategiaRecurso=NULL;
 	if(tieneBuffer){
@@ -151,26 +150,42 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 	/*incializar indice*/
 	EstrategiaIndice* Indice=NULL;
 	if(tieneIndice){
-
-		/*creo una clave estructural*/
-
-		if(tipo==0){
+		bool existia=true;
+		if(tipo==ARBOL){
 			Indice = new EstrategiaBSharp(&claveEstructural);
+			if(comprime){
+				/*arbol->abrir(path,comparador,true);
+				existia=compresor.descompresionArbol(arbol,path);
+				if(existia)arbol->recomponerRaiz();*/
+			}else {
+				if(!Indice->abrir(path,comparador)){
+							Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
+							existia = false;
+				}
+			}
 		}else{
 			Indice = new HashingExt();
+			if(comprime){
+				/*Descomprimir hash*/
+			}else{
+				if(!Indice->abrir(path,comparador)){
+							Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
+							existia = false;
+				}
+			}
 		}
-
-		if(!Indice->abrir(path,comparador)){
-			Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
-		}else if(Indice->tamanioBloque()!=longitudBloqueIndice){
-			archivo->cerrar();
-			Indice->cerrar();
-			delete registro2;
-			delete comparador;
-			delete archivo;
-			delete estrategiaregistro;
-			delete Indice;
-			throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
+		/*en caso de que existiera previamente verifica*/
+		if(existia){
+			if(Indice->tamanioBloque()!=longitudBloqueIndice){
+				archivo->cerrar();
+				Indice->cerrar();
+				delete registro2;
+				delete comparador;
+				delete archivo;
+				delete estrategiaregistro;
+				delete Indice;
+				throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
+			}
 		}
 	}
 	/*inicializar el estrategia Recurso*/
@@ -462,6 +477,16 @@ void MisDatos::cerrarArchivo1(){
 			string nombre_archivo=almacen->getNombre();
 			EstrategiaCompresion compresor;
 			compresor.compresion(almacen,tamanio_contendor);
+
+			EstrategiaIndice *indice=recurso1->getEstrategiaRecurso()->getIndice();
+			EstrategiaBSharp* arbol=dynamic_cast<EstrategiaBSharp*>(indice);
+			if(arbol!=NULL){
+				/*todo comprimir arbol*/
+			}
+			HashingExt* hash=dynamic_cast<HashingExt*>(indice);
+			if(hash){
+				/*todo comprimir hash*/
+			}
 			recurso1->cerrar();
 			remove(nombre_archivo.c_str());
 		}else
@@ -498,6 +523,16 @@ void MisDatos::cerrarArchivo2(){
 			string nombre_archivo=almacen->getNombre();
 			EstrategiaCompresion compresor;
 			compresor.compresion(almacen,tamanio_contendor);
+
+			EstrategiaIndice *indice=recurso2->getEstrategiaRecurso()->getIndice();
+			EstrategiaBSharp* arbol=dynamic_cast<EstrategiaBSharp*>(indice);
+			if(arbol!=NULL){
+				/*todo comprimir arbol*/
+			}
+			HashingExt* hash=dynamic_cast<HashingExt*>(indice);
+			if(hash){
+				/*todo comprimir hash*/
+			}
 			recurso2->cerrar();
 			remove(nombre_archivo.c_str());
 		}else
