@@ -212,8 +212,8 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 void MisDatos::inicializarArchivo3(std::string path) throw (ExcepcionMisDatos){
 	AtributoVariable<string> mistring("claveIntId");
 	registro3=new Registro(1,&mistring);
-	//TOdo comparador y clave
 	ComparadorClave* comparador = new ComparadorRegistroVariable();
+	Clave claveEstructural(registro3,1,"claveIntId");
 	EATexto * estrategiaTexto=new EATexto(registro3);
 	estrategiaTexto->setComparador(comparador);
 	Archivo* archivo=new Archivo(estrategiaTexto);
