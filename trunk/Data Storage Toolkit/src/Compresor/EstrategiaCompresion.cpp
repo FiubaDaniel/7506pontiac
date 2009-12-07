@@ -285,8 +285,11 @@ void EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivoCom
 }
 
 
-void EstrategiaCompresion::compresion(Almacenamiento*almacen,string archivoComprimido,unsigned tamanio_buffer_comprimido){
+void EstrategiaCompresion::compresion(Almacenamiento*almacen,unsigned tamanio_buffer_comprimido){
 
+	string archivoComprimido=almacen->getNombre();
+
+	archivoComprimido+=".arit";
 	/**/
 	std::fstream archivo_comprimido;
 
@@ -363,7 +366,11 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,string archivoCompr
 	delete[] buffer;
 
 }
-void EstrategiaCompresion::descompresion(Almacenamiento*almacen,string archivoComprimido){
+bool EstrategiaCompresion::descompresion(Almacenamiento*almacen){
+
+	string archivoComprimido=almacen->getNombre();
+
+	archivoComprimido+=".arit";
 
 	std::fstream archivo_comprimido;
 
@@ -373,7 +380,7 @@ void EstrategiaCompresion::descompresion(Almacenamiento*almacen,string archivoCo
 	/*todo checkear si abierto*/
 
 	if(not archivo_comprimido.is_open())
-		return;
+		return false;
 
 	Componente* componente=almacen->getEstrategia()->getComponenteUsado()->clonar();
 
@@ -433,7 +440,6 @@ void EstrategiaCompresion::descompresion(Almacenamiento*almacen,string archivoCo
 
 				componente->deserializar(serializado);
 
-
 				almacen->escribir(componente);
 
 				descomprimido.erase(0,tamanio_serializado);
@@ -449,4 +455,5 @@ void EstrategiaCompresion::descompresion(Almacenamiento*almacen,string archivoCo
 
 	delete[] buffer;
 
+	return true;
 }
