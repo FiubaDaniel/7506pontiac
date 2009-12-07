@@ -327,6 +327,8 @@ bool EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivo){
 
 	delete buffer;
 
+	arbol->recomponerRaiz();
+
 	return true;
 }
 
