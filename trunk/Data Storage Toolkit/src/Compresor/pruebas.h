@@ -28,8 +28,10 @@ using namespace std;
 int pruebacompresion1();
 int pruebacompresion2();
 int pruebaCompresion3();
-int pruebaEstragiaCompresionAlmacenamiento();
-int pruebaEstragiaCompresionAlmacenamiento1();
+int pruebaEstragiaCompresionAlmacenamiento(char nombre_archivo[]="registro.dat",
+		char nombre_comprimido[]="registro.zip");
+int pruebaEstragiaCompresionAlmacenamiento1(char nombre_archivo[]="bloques.dat",
+		char nombre_comprimido[]="bloques.zip");
 int pruebaEstrategiaCompresionArbol();
 int PruebaComprimirNodo();
 int pruebaCompresion5();

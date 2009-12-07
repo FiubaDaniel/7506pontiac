@@ -77,5 +77,6 @@ Referencia Archivo::posicionActual(){
 }
 Almacenamiento*Archivo::clonar(){
 	Archivo*clon=new Archivo(NULL);
+	clon->estrategia=NULL;
 	return clon;
 }

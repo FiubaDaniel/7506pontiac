@@ -115,14 +115,14 @@ int pruebaCompresion3(){
 
 	return 0;
 }
-int pruebaEstragiaCompresionAlmacenamiento(){
+int pruebaEstragiaCompresionAlmacenamiento(char nombre_archivo[],char nombre_comprimido[]){
 	AtributoFijo<char*> nombre("N",10);
 	Registro registro(1,&nombre);
 	EARegistros estrategia(&registro);
 	Archivo archivo(&estrategia);
 	/*archivo original*/
-	archivo.crear("resgitroIniciales.dat");
-	for(int i=0;i<MIN_CANT_CHAR;i++){
+	archivo.crear(nombre_archivo);
+	for(int i=0;i<100;i++){
 		*(AtributoFijo<char*>*)registro.get(0)=Terminos::obtenerTermino(i).c_str();
 		((Almacenamiento&)archivo).escribir(&registro);
 	}
@@ -130,20 +130,18 @@ int pruebaEstragiaCompresionAlmacenamiento(){
 	archivo.imprimir(cout);
 	archivo.cerrar();
 	EstrategiaCompresion compresion;
-	archivo.abrir("resgitroIniciales.dat");
-	compresion.compresion(&archivo,"prueba.zip",10);
+	archivo.abrir(nombre_archivo);
+	compresion.compresion(&archivo,nombre_comprimido,10);
 	archivo.cerrar();
 	/*creo un archivo para los descomprimidos*/
 	cout<<endl<<"/***************DESCOMPRIMIENDO************************/"<<endl;
-	archivo.crear("registroDescomprimido.dat");
-	compresion.descompresion(&archivo,"prueba.zip");
+	archivo.crear(nombre_archivo);
+	compresion.descompresion(&archivo,nombre_comprimido);
 	archivo.imprimir(cout);
 	archivo.cerrar();
 	return 0;
 }
-int pruebaEstragiaCompresionAlmacenamiento1(){
-	char nombre_archivo[]="bloques.dat";
-	char nombre_comprimido[]="bloques.zip";
+int pruebaEstragiaCompresionAlmacenamiento1(char nombre_archivo[],char nombre_comprimido[]){
 	AtributoVariable<string> nombre("N");
 	Registro registro(1,&nombre);
 	Bloque bloque(&registro);
@@ -155,7 +153,7 @@ int pruebaEstragiaCompresionAlmacenamiento1(){
 	Archivo archivo(&estrategia);
 	/*archivo original*/
 	archivo.crear(nombre_archivo);
-	for(int i=0;i<MIN_CANT_CHAR*2;i++){
+	for(int i=0;i<200;i++){
 		*(AtributoVariable<string>*)registro.get(0)=Terminos::obtenerTermino(i).c_str();
 		((Almacenamiento&)archivo).insertar(&registro);
 	}
