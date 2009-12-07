@@ -70,9 +70,11 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 		if(tipo==ARBOL){
 			Indice = new EstrategiaBSharp(&claveEstructural);
 			if(comprime){
-				/*arbol->abrir(path,comparador,true);
+				BSharpTree* arbol;//=dynamic_cast<EstrategiaBSharp*>(Indice)->getBsharpTree();
+				arbol->abrir(path,comparador,true);
 				existia=compresor.descompresionArbol(arbol,path);
-				if(existia)arbol->recomponerRaiz();*/
+				if(existia)
+					arbol->recomponerRaiz();
 			}else if(!Indice->abrir(path,comparador)){
 				Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 				existia = false;
@@ -80,7 +82,8 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 		}else{
 			Indice = new HashingExt();
 			if(comprime){
-				/*Descomprimir hash*/
+				/* todo Descomprimir hash*/
+
 			}else if(!Indice->abrir(path,comparador)){
 				Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 				existia = false;
@@ -152,9 +155,11 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 		if(tipo==ARBOL){
 			Indice = new EstrategiaBSharp(&claveEstructural);
 			if(comprime){
-				/*arbol->abrir(path,comparador,true);
+				BSharpTree* arbol;//=dynamic_cast<EstrategiaBSharp*>(Indice)->getBsharpTree();
+				arbol->abrir(path,comparador,true);
 				existia=compresor.descompresionArbol(arbol,path);
-				if(existia)arbol->recomponerRaiz();*/
+				if(existia)
+					arbol->recomponerRaiz();
 			}else if(!Indice->abrir(path,comparador)){
 					Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 					existia = false;
@@ -162,7 +167,7 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 		}else{
 			Indice = new HashingExt();
 			if(comprime){
-				/*Descomprimir hash*/
+				/* todo Descomprimir hash*/
 			}else if(!Indice->abrir(path,comparador)){
 					Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 					existia = false;
@@ -471,9 +476,11 @@ void MisDatos::cerrarArchivo1(){
 			compresor.compresion(almacen,tamanio_contendor);
 
 			EstrategiaIndice *indice=recurso1->getEstrategiaRecurso()->getIndice();
-			EstrategiaBSharp* arbol=dynamic_cast<EstrategiaBSharp*>(indice);
-			if(arbol!=NULL){
+			EstrategiaBSharp *indice_arbol=dynamic_cast<EstrategiaBSharp*>(indice);
+			if(indice_arbol!=NULL){
 				/*todo comprimir arbol*/
+				BSharpTree* arbol;//=dynamic_cast<EstrategiaBSharp*>(Indice)->getBsharpTree();
+				compresor.compresionArbol(arbol,"",tamanio_contendor);
 			}
 			HashingExt* hash=dynamic_cast<HashingExt*>(indice);
 			if(hash){
@@ -520,6 +527,8 @@ void MisDatos::cerrarArchivo2(){
 			EstrategiaBSharp* arbol=dynamic_cast<EstrategiaBSharp*>(indice);
 			if(arbol!=NULL){
 				/*todo comprimir arbol*/
+				BSharpTree* arbol;//=dynamic_cast<EstrategiaBSharp*>(Indice)->getBsharpTree();
+				compresor.compresionArbol(arbol,"",tamanio_contendor);
 			}
 			HashingExt* hash=dynamic_cast<HashingExt*>(indice);
 			if(hash){
