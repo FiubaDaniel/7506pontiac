@@ -8,7 +8,7 @@
 #include "EstrategiaCompresion.h"
 
 EstrategiaCompresion::EstrategiaCompresion() {
-	// TODO Auto-generated constructor stub
+
 
 }
 
@@ -426,9 +426,9 @@ bool EstrategiaCompresion::descompresion(Almacenamiento*almacen){
 	std::fstream archivo_comprimido;
 
 	std::stringbuf serializado;
-	//TODO saque trunc
+
 	archivo_comprimido.open(archivoComprimido.c_str(),fstream::in|fstream::binary);
-	/*todo checkear si abierto*/
+
 
 	if(not archivo_comprimido.is_open())
 		return false;
@@ -460,7 +460,6 @@ bool EstrategiaCompresion::descompresion(Almacenamiento*almacen){
 	almacen->posicionarComponente(0);
 
 	std::string descomprimido;
-	//todo agregado
 	unsigned tamanio_serializado=almacen->getEstrategia()->getTamanioComponenteUsado();
 
 	descomprimido.clear();

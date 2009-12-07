@@ -51,7 +51,6 @@ public:
 	 * 0<=cantidad<=MAX_BITS
 	 * en caso de que la <cantidad> supera los bits de espacio que quedan
 	 * no se guarda nada.
-	 * TODO lanzar excepcion?
 	 */
 	void write(unsigned fuente,char cantidad) throw (bitFileEOFException);
 	/* Toma los <cantidad> bits siguiente de la posicion de lectura y los copia
@@ -60,7 +59,6 @@ public:
 	 * 0<=cantidad<=MAX_BITS
 	 * en caso de que la <cantidad> supera los bits de que puende ser leidos
 	 * no se lee nada.
-	 * TODO lanzar excepcion?
 	 */
 	void read(unsigned &destino,char cantidad) throw (bitFileEOFException);
 	/* posiciona para la lectura en el unsigned <posicion>
