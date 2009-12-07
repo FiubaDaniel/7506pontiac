@@ -1111,23 +1111,24 @@ void BSharpTree::imprimirNodo(Nodo* nodoE){
 	}
 }
 
-void BSharpTree::abrir(string nombreArch,string nombreArch2,ComparadorClave* comp){
+bool BSharpTree::abrir(string nombreArch,ComparadorClave* comp,bool comprimido){
 	nombreArchivo = nombreArch+"_Arbol";
-	nombreEspaciosLibres = nombreArch2+"_EspaciosLibre";
+	nombreEspaciosLibres = nombreArch+"_EspaciosLibre";
 	comparador = comp;
 	archivoArbol.open(nombreArchivo.c_str(),std::fstream::out |std::fstream::binary|std::fstream::trunc);
 	if(!archivoArbol.is_open()){
-		return;
+		return false;
 	}
 	archivoArbol.close();
 	archivoArbol.open(nombreArchivo.c_str(),std::fstream::out | std::fstream::in |std::fstream::binary|std::fstream::trunc);
 	if(!archivoArbol.is_open()){
-		return;
+		return false;
 	}
 	archivoEspaciosLibres.open(nombreEspaciosLibres.c_str(),std::fstream::out|std::fstream::in|std::fstream::binary);
 	if(!archivoEspaciosLibres.is_open()){
-			return;
+			return false;
 		}
+	return true;
 }
 std::string BSharpTree::getNombreArchivo(){
 	return this->nombreArchivo;

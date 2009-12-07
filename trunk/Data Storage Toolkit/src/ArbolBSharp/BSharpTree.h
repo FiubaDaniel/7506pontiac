@@ -34,7 +34,7 @@ public:
 	 */
 	bool abrir(string nombreArch,ComparadorClave* comp);
 
-	void abrir(string nombreArbol2,string nombreArbol,ComparadorClave* comp);
+	bool abrir(string nombreArbol,ComparadorClave* comp,bool comprimido);
 	/*
 	 * Busca la referencia al archivo de un registro segun la clave determinada
 	 * y la almacena en referencia.
