@@ -16,7 +16,7 @@ EstrategiaCompresion::~EstrategiaCompresion() {
 
 }
 
-void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivoComprimido,unsigned tamanio_buffer_comprimido){
+void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivo,unsigned tamanio_buffer_comprimido){
 	std::fstream archivo_comprimido;
 
 	//Creo el contenedor adecuado a las condiciones dadas.
@@ -25,6 +25,7 @@ void EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivoCompr
 	unsigned tamanioSerializado = arbol->tamanioBloque();
 	std::stringbuf serializado;
 
+	string archivoComprimido = archivo +"_comprimido";
 	archivo_comprimido.open(archivoComprimido.c_str(),fstream::trunc|fstream::out|fstream::binary);
 	if(!archivo_comprimido.is_open()){
 		return;
@@ -222,15 +223,17 @@ void EstrategiaCompresion::descompresionInsdice(string nombre_indice,string nomb
 /*
  * Arbol creado, con archivo de espacios libres seteado, archivo del arbol abierto y comparador seteado.
  */
-void EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivoComprimido){
+bool EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivo){
 
 	std::fstream archivo_comprimido;
 	std::stringbuf serializado;
 
+	string archivoComprimido = archivo +"_comprimido";
+
 	archivo_comprimido.open(archivoComprimido.c_str(),fstream::in|fstream::binary);
 
 	if(!archivo_comprimido.is_open()){
-		return;
+		return false;
 	}
 	unsigned tamanio_comprimido;//Tamanio del contenedor.
 
@@ -303,6 +306,8 @@ void EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivoCom
 	archivo_comprimido.close();
 
 	delete buffer;
+
+	return true;
 }
 
 
