@@ -112,8 +112,10 @@ public:
 		}
 		while(i<nroValores){
 			leidos=entrada.sgetn((char*)&aux,sizeof(T_tipo));
-			if(leidos!=sizeof(T_tipo))
+			if(leidos!=sizeof(T_tipo)){
+				int a=0;
 				throw IOSerializacionExcepcion("Excepcion:AtributoVariable "+nombre+" no fue deserializado");
+			}
 			valores.push_back(aux);
 			offset+=sizeof(T_tipo);
 			i++;

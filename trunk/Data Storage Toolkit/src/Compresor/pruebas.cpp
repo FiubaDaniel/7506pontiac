@@ -125,7 +125,7 @@ int pruebaEstragiaCompresionAlmacenamiento(char nombre_archivo[]){
 	Archivo archivo(&estrategia);
 	/*archivo original*/
 	archivo.crear(nombre_archivo);
-	for(int i=0;i<100;i++){
+	for(int i=0;i<200;i++){
 		*(AtributoFijo<char*>*)registro.get(0)=Terminos::obtenerTermino(i).c_str();
 		((Almacenamiento&)archivo).escribir(&registro);
 	}
@@ -147,26 +147,32 @@ int pruebaEstragiaCompresionAlmacenamiento(char nombre_archivo[]){
 }
 int pruebaEstragiaCompresionAlmacenamiento1(char* nombre_archivo){
 	AtributoVariable<string> nombre("N");
-	Registro registro(1,&nombre);
+	AtributoVariable<int> numeros("#");
+	Registro registro(2,&nombre,&numeros);
 	Bloque bloque(&registro);
 	Clave clave(&registro,1,"N");
 	ComparadorRegistroVariable comparador;
-	EABloques estrategia(&bloque,25,0.8f);
+	EABloques estrategia(&bloque,125,0.8f);
 	estrategia.setClave(&clave);
 	estrategia.setComparador(&comparador);
 	Archivo archivo(&estrategia);
 	/*archivo original*/
 	archivo.crear(nombre_archivo);
-	for(int i=0;i<200;i++){
+	for(int i=0;i<250;i++){
 		*(AtributoVariable<string>*)registro.get(0)=Terminos::obtenerTermino(i).c_str();
-		((Almacenamiento&)archivo).insertar(&registro);
+		((AtributoVariable<int>*)registro.get(1))->getVector().clear();
+		for(int j=0;j< i%4+1;j++){
+			((AtributoVariable<int>*)registro.get(1))->getVector().push_back(j);
+		};
+		if(not ((Almacenamiento&)archivo).insertar(&registro))
+			cout<<"Problema"<<endl;
 	}
 	cout<<"/***************COMPRIMIENDO************************/"<<endl;
 	archivo.imprimir(cout);
 	archivo.cerrar();
 	EstrategiaCompresion compresion;
 	archivo.abrir(nombre_archivo);
-	compresion.compresion(&archivo,25);
+	compresion.compresion(&archivo,256);
 	archivo.cerrar();
 	/*creo un archivo para los descomprimidos*/
 	cout<<endl<<"/***************DESCOMPRIMIENDO************************/"<<endl;
