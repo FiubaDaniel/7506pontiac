@@ -84,5 +84,6 @@ void Buffer::cerrar(){
 }
 Almacenamiento*Buffer::clonar(){
 	Buffer*clon=new Buffer(NULL,longitudBuffer);
+	clon->estrategia=NULL;
 	return clon;
 }
