@@ -12,7 +12,9 @@ MisDatos::MisDatos(){
 	registro2=NULL;
 	registro3=NULL;
 }
-MisDatos::~MisDatos(){}
+MisDatos::~MisDatos(){
+
+}
 /*
  * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe, lo crea.
  * Si existe previamente, verifica que se correspondan los parametros de longitud de bloque,
@@ -36,7 +38,7 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 	/*inicializo el archivo*/
 	Archivo* archivo=new Archivo(estrategiaBloques);
 	hay_que_comprimir=comprime;
-	tamanio_contendor=(longitudContenedor/sizeof(unsigned) )+1;
+	tamanio_contendor=longitudContenedor/sizeof(unsigned);
 
 	bool existia=true;
 	if(comprime){
@@ -71,21 +73,17 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 				/*arbol->abrir(path,comparador,true);
 				existia=compresor.descompresionArbol(arbol,path);
 				if(existia)arbol->recomponerRaiz();*/
-			}else {
-				if(!Indice->abrir(path,comparador)){
-							Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
-							existia = false;
-				}
+			}else if(!Indice->abrir(path,comparador)){
+				Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
+				existia = false;
 			}
 		}else{
 			Indice = new HashingExt();
 			if(comprime){
 				/*Descomprimir hash*/
-			}else{
-				if(!Indice->abrir(path,comparador)){
-							Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
-							existia = false;
-				}
+			}else if(!Indice->abrir(path,comparador)){
+				Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
+				existia = false;
 			}
 		}
 		/*en caso de que existiera previamente verifica*/
@@ -140,7 +138,7 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 	Archivo* archivo=new Archivo(estrategiaregistro);
 
 	hay_que_comprimir=comprime;
-	tamanio_contendor=(longitudContenedor/sizeof(unsigned) )+1;
+	tamanio_contendor=longitudContenedor/sizeof(unsigned);
 	if(comprime){
 		archivo->crear(path.c_str());
 		compresor.descompresion(archivo);
@@ -157,21 +155,17 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 				/*arbol->abrir(path,comparador,true);
 				existia=compresor.descompresionArbol(arbol,path);
 				if(existia)arbol->recomponerRaiz();*/
-			}else {
-				if(!Indice->abrir(path,comparador)){
-							Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
-							existia = false;
-				}
+			}else if(!Indice->abrir(path,comparador)){
+					Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
+					existia = false;
 			}
 		}else{
 			Indice = new HashingExt();
 			if(comprime){
 				/*Descomprimir hash*/
-			}else{
-				if(!Indice->abrir(path,comparador)){
-							Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
-							existia = false;
-				}
+			}else if(!Indice->abrir(path,comparador)){
+					Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
+					existia = false;
 			}
 		}
 		/*en caso de que existiera previamente verifica*/
@@ -419,12 +413,10 @@ void MisDatos::mostrarContenidoBufferArchivo2(){
  * Si el archivo no tiene indice asociado, muestra un mensaje que lo especifique.
  */
 void MisDatos::mostrarIndiceArchivo1(){
-
 	EstrategiaIndice *indice=const_cast<EstrategiaIndice *>(recurso1->getEstrategia()->getIndice());
 	if(indice!=NULL){
 		//tiene indice
 		indice->mostrarEstado();
-
 	}else{
 		cout<< "El archivo1 no tiene indice asociado" << endl;
 	}
