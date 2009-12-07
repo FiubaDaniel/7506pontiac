@@ -55,8 +55,8 @@ class Compresor {
 	 */
 	void abrir_codigo();
     //TablaOrden0 tabla;
-	//TablaOrden1 tabla;
-	PPMC::TablaPPMC tabla;
+	TablaOrden1 tabla;
+	//PPMC::TablaPPMC tabla;
 
 public:
 	Compresor();
