@@ -980,7 +980,7 @@ bool BSharpTree::siguienteAlmacenado(Nodo*& nodo){
 		archivoArbol.clear();// saca el flag de eof
 		return false;
 	}
-	cout<<archivoArbol.tellg()<<endl;//todo sacar
+	//cout<<archivoArbol.tellg()<<endl;//todo sacar
 	char array2[tamanioNodo];
 	archivoArbol.read(array2,tamanioNodo);
 	buffer.pubsetbuf(array2,tamanioNodo);
