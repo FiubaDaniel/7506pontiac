@@ -480,7 +480,6 @@ void MisDatos::cerrarArchivo1(){
 			if(indice_arbol!=NULL){
 				/*todo comprimir arbol*/
 				BSharpTree* arbol=indice_arbol->obtenerArbol();
-				nombre_archivo=arbol->getNombreArchivo();
 				compresor.compresionArbol(arbol,nombre_archivo,tamanio_contendor);
 			}
 			HashingExt* hash=dynamic_cast<HashingExt*>(indice);
@@ -529,7 +528,6 @@ void MisDatos::cerrarArchivo2(){
 			if(indice_arbol!=NULL){
 				/*todo comprimir arbol*/
 				BSharpTree* arbol=indice_arbol->obtenerArbol();
-				nombre_archivo=arbol->getNombreArchivo();
 				compresor.compresionArbol(arbol,nombre_archivo,tamanio_contendor);
 			}
 			HashingExt* hash=dynamic_cast<HashingExt*>(indice);
