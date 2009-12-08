@@ -112,7 +112,7 @@ bool EstrategiaCompresion::compresionHash(string nombreIndice,unsigned tamanio_b
 	Compresor contenedor(comprimido,tamanio_buffer_comprimido);
 
 	string nombreHash = nombreIndice+"_cubos";
-	string nombreComprimido = nombreIndice+"_Comprimido";
+	string nombreComprimido = nombreIndice+"_HashComprimido";
 
 	archivo_indice.open(nombreHash.c_str(),fstream::in|fstream::binary);
 
