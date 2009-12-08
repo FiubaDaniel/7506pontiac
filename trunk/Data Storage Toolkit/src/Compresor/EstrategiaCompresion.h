@@ -11,12 +11,15 @@
 #include "../ArbolBSharp/BSharpTree.h"
 #include "Compresor.h"
 #include <fstream>
+
 #include <string>
 
 class EstrategiaCompresion {
+	std::ostream * salida;
 public:
 	EstrategiaCompresion();
 	void compresion();
+	void setSalida(std::ostream*salida);
 	void compresion(Almacenamiento*almacen,unsigned tamanio);
 	bool descompresion(Almacenamiento*almacen);
 	bool compresionArbol(BSharpTree* arbol,string archivoComprimido,unsigned tamanio_buffer_comprimido);

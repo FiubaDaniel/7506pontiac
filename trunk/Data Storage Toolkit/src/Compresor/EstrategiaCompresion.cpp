@@ -8,7 +8,7 @@
 #include "EstrategiaCompresion.h"
 
 EstrategiaCompresion::EstrategiaCompresion() {
-
+salida=NULL;
 
 }
 
@@ -22,6 +22,7 @@ bool EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivo,unsi
 	//Creo el contenedor adecuado a las condiciones dadas.
 	unsigned *buffer=new unsigned[tamanio_buffer_comprimido];
 	Compresor contenedor(buffer,tamanio_buffer_comprimido);
+	contenedor.setSalida(salida);
 	unsigned tamanioSerializado = arbol->tamanioBloque();
 	std::stringbuf serializado;
 
@@ -43,7 +44,9 @@ bool EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivo,unsi
 	//cout<<archivo_comprimido.tellp()<<endl;
 	archivo_comprimido.write(metadata.data(),tamanio_meta);
 	//cout<<archivo_comprimido.tellp()<<endl;
-
+	if(salida!=NULL){
+		(*salida)<<"Comprimiendo arbol:"<<archivo<<endl;
+	}
 	//Comienzo la compresion
 	//Comprimo el primero
 	arbol->posicionarArchivo();
@@ -97,6 +100,9 @@ bool EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivo,unsi
 	archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
 	//cout<<archivo_comprimido.tellp()<<endl;
 	archivo_comprimido.close();
+	if(salida!=NULL){
+		(*salida)<<"Termino de comprimir arbol:"<<archivo<<endl;
+	}
 
 	delete[] buffer;
 
@@ -110,6 +116,7 @@ bool EstrategiaCompresion::compresionHash(string nombreIndice,unsigned tamanio_b
 	unsigned *comprimido=new unsigned[tamanio_buffer_comprimido];
 
 	Compresor contenedor(comprimido,tamanio_buffer_comprimido);
+	contenedor.setSalida(salida);
 
 	string nombreHash = nombreIndice+"_cubos";
 	string nombreComprimido = nombreIndice+"_HashComprimido";
@@ -130,6 +137,9 @@ bool EstrategiaCompresion::compresionHash(string nombreIndice,unsigned tamanio_b
 
 	//Comienza compresion.
 	//Gurado primero.
+	if(salida!=NULL){
+		(*salida)<<"Comprimiendo hashin:"<<archivo_indice<<endl;
+	}
 	unsigned tamanio_sin_comprimir=tamanio_buffer_comprimido;
 
 	unsigned char sin_comprimir[tamanio_sin_comprimir];
@@ -169,6 +179,10 @@ bool EstrategiaCompresion::compresionHash(string nombreIndice,unsigned tamanio_b
 	archivo_comprimido.write((char*)comprimido,sizeof(unsigned)*tamanio_buffer_comprimido);
 
 	delete[] comprimido;
+
+	if(salida!=NULL){
+		(*salida)<<"Termino de comprimir hashing:"<<archivo_indice<<endl;
+	}
 
 	archivo_comprimido.clear();
 
@@ -353,6 +367,8 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,unsigned tamanio_bu
 
 	Compresor contenedor(buffer,tamanio_buffer_comprimido);
 
+	contenedor.setSalida(salida);
+
 	archivo_comprimido.write((char*)&tamanio_buffer_comprimido,sizeof(tamanio_buffer_comprimido));
 
 	/*guardar metadata*/
@@ -366,6 +382,9 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,unsigned tamanio_bu
 
 	/*comprimiendo*/
 	/*comprime el primer componente*/
+	if(salida!=NULL){
+		(*salida)<<"Comprimiendo almacenamiento:"<<archivoComprimido<<endl;
+	}
 	almacen->posicionarComponente(0);
 
 	almacen->leer(componente);
@@ -411,7 +430,9 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,unsigned tamanio_bu
 	archivo_comprimido.write((char*)&cont,sizeof(cont));
 
 	archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
-
+	if(salida!=NULL){
+		(*salida)<<"Termino compresion almacenamiento:"<<archivoComprimido<<endl;
+	}
 	archivo_comprimido.close();
 
 	delete componente;
@@ -445,6 +466,7 @@ bool EstrategiaCompresion::descompresion(Almacenamiento*almacen){
 	unsigned *buffer=new unsigned[tamanio_comprimido];
 
 	Compresor contenedor(buffer,tamanio_comprimido);
+	contenedor.setSalida(salida);
 	/*recupero la metadata del almacenamiento*/
 
 	unsigned tamanio_meta;
@@ -512,4 +534,7 @@ bool EstrategiaCompresion::descompresion(Almacenamiento*almacen){
 	delete[] metadata;
 
 	return true;
+}
+void EstrategiaCompresion::setSalida(std::ostream*salida){
+	this->salida=salida;
 }
