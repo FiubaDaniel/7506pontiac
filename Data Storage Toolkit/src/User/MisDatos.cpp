@@ -44,7 +44,6 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 	if(comprime){
 		archivo->crear(path.c_str());
 		existia=compresor.descompresion(archivo);
-
 	}else{
 		if( not archivo->abrir(path.c_str())){
 			archivo->crear(path.c_str());
@@ -117,8 +116,16 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 	}else{
 		estrategiaRecurso=new ERUnAlmacenamiento(Indice,archivo);
 	};
-
 	recurso1=new Recurso(estrategiaRecurso);
+	string comprimido = path+"_Compresion";
+	remove(comprimido.c_str());
+	if(ARBOL){
+		comprimido = paht+"_arbolcomprimido";
+		remove(comprimido.c_str());
+	}else{
+		comprimido = paht+"_HashComprimido";
+		remove(comprimido.c_str());
+	}
 }
 /*
  * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe,
@@ -205,8 +212,15 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 		estrategiaRecurso=new ERUnAlmacenamiento(Indice,archivo);
 	};
 
-
 	recurso2=new Recurso(estrategiaRecurso);
+
+	if(ARBOL){
+		comprimido = paht+"_arbolcomprimido";
+		remove(comprimido.c_str());
+	}else{
+		comprimido = paht+"_HashComprimido";
+		remove(comprimido.c_str());
+	}
 }
 /*
  * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe, lo crea.
