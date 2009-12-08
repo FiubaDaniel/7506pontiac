@@ -1134,7 +1134,8 @@ std::string BSharpTree::getNombreArchivo(){
 	return this->nombreArchivo;
 }
 bool BSharpTree::estaVacio(){
-	if(Raiz->getListaElementos()->empty())return true;
+	if(Raiz->getListaElementos()->empty())
+		return true;
 	return false;
 }
 
