@@ -19,22 +19,18 @@ using namespace std;
 
 //para mostrar los datos, buffer e indice de Archivo1
 void mostrarArchivo1(MisDatos& misDatos){
-
 	cout << "********* DATOS **********" << endl;
 	misDatos.mostrarDatosArchivo1();
 	cout << "********* INDICE **********" << endl;
 	misDatos.mostrarIndiceArchivo1();
-
 }
 
 //para mostrar los datos, buffer e indice de Archivo2
 void mostrarArchivo2(MisDatos& misDatos){
-
 	cout << "********* DATOS **********" << endl;
 	misDatos.mostrarDatosArchivo2();
 	cout << "********* INDICE **********" << endl;
 	misDatos.mostrarIndiceArchivo2();
-
 }
 
 void mostrarRegistroVariable(MiRegistroVariable* registro){
@@ -68,7 +64,6 @@ char calcularChar(int valor){
 }
 
 int main() {
-
 	int* miLista = NULL;
 	MiRegistroVariable* miRegVariable = NULL;
 	MiRegistroFijo* miRegFijo = NULL;
@@ -226,6 +221,7 @@ int main() {
 	//OBTENGO REGISTROS FIJOS
 	for (int i=0; i<MINBORRARFIJO; ++i){
 		try{
+			miRegFijo=NULL;
 			miRegFijo = misDatos.obtenerRegistroArchivo2(i, calcularChar(i));
 		}catch(ExcepcionMisDatos e){
 			cout << e.getMensaje() << endl;
