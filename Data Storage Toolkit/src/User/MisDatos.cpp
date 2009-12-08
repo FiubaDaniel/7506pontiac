@@ -481,6 +481,7 @@ void MisDatos::cerrarArchivo1(){
 			string nombre_archivo=almacen->getNombre();
 			EstrategiaCompresion compresor;
 			compresor.compresion(almacen,tamanio_contendor);
+			remove(nombre_archivo.c_str());
 
 			EstrategiaIndice *indice=recurso1->getEstrategiaRecurso()->getIndice();
 			EstrategiaBSharp *indice_arbol=dynamic_cast<EstrategiaBSharp*>(indice);
@@ -494,9 +495,11 @@ void MisDatos::cerrarArchivo1(){
 			if(hash){
 				/*todo comprimir hash*/
 				compresor.compresionHash(nombre_archivo,tamanio_contendor);
+				nombre_archivo+="_cubos";
+				remove(nombre_archivo.c_str());
 			}
 			recurso1->cerrar();
-			remove(nombre_archivo.c_str());
+
 		}else
 			recurso1->cerrar();
 
@@ -531,6 +534,7 @@ void MisDatos::cerrarArchivo2(){
 			string nombre_archivo=almacen->getNombre();
 			EstrategiaCompresion compresor;
 			compresor.compresion(almacen,tamanio_contendor);
+			remove(nombre_archivo.c_str());
 
 			EstrategiaIndice *indice=recurso2->getEstrategiaRecurso()->getIndice();
 			EstrategiaBSharp* indice_arbol=dynamic_cast<EstrategiaBSharp*>(indice);
@@ -544,9 +548,12 @@ void MisDatos::cerrarArchivo2(){
 			if(hash){
 				/*todo comprimir hash*/
 				compresor.compresionHash(nombre_archivo,tamanio_contendor);
+				nombre_archivo+="_cubos";
+				remove(nombre_archivo.c_str());
+
 			}
 			recurso2->cerrar();
-			remove(nombre_archivo.c_str());
+
 		}else
 			recurso2->cerrar();
 
