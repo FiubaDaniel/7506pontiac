@@ -15,6 +15,7 @@ RM := rm -rf
 -include src/RecursoAlmacenamiento/subdir.mk
 -include src/Indices/subdir.mk
 -include src/Compuesto/subdir.mk
+-include src/Compresor/subdir.mk
 -include src/ArbolBSharp/subdir.mk
 -include src/Almacenamiento/subdir.mk
 -include objects.mk
@@ -45,9 +46,8 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: dataStorageToolkit ejecutar
-ejecutar:
-	./dataStorageToolkit
+all: dataStorageToolkit
+
 # Tool invocations
 dataStorageToolkit: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'

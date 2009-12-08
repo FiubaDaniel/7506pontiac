@@ -3,6 +3,10 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
+O_SRCS += \
+../src/PruebaToolkit.o \
+../src/Terminos.o 
+
 CPP_SRCS += \
 ../src/PruebaToolkit.cpp \
 ../src/Terminos.cpp 

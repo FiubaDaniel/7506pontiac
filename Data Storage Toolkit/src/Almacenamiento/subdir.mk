@@ -3,6 +3,13 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
+O_SRCS += \
+../src/Almacenamiento/Archivo.o \
+../src/Almacenamiento/Buffer.o \
+../src/Almacenamiento/EABloques.o \
+../src/Almacenamiento/EARegistros.o \
+../src/Almacenamiento/EATexto.o 
+
 CPP_SRCS += \
 ../src/Almacenamiento/Archivo.cpp \
 ../src/Almacenamiento/Buffer.cpp \
