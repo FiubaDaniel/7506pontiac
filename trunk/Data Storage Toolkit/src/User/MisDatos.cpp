@@ -213,7 +213,8 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 	};
 
 	recurso2=new Recurso(estrategiaRecurso);
-
+	string comprimido = path+"_Compresion";
+	remove(comprimido.c_str());
 	if(ARBOL){
 		comprimido = paht+"_arbolcomprimido";
 		remove(comprimido.c_str());
