@@ -1,8 +1,5 @@
 #include "MisDatos.h"
-#include "../Indices/Set.h"
-#include "../Compuesto/BloqueMemoria.h"
-#include "../Compuesto/RegistroMemoria.h"
-#include "../Compresor/EstrategiaCompresion.h"
+
 
 MisDatos::MisDatos(){
 	recurso1=NULL;
