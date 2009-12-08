@@ -101,7 +101,7 @@ bool EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivo,unsi
 	//cout<<archivo_comprimido.tellp()<<endl;
 	archivo_comprimido.close();
 	if(salida!=NULL){
-		(*salida)<<"Termino de comprimir arbol:"<<archivo<<endl;
+		(*salida)<< dec<<"Termino de comprimir arbol:"<<archivo<<endl;
 	}
 
 	delete[] buffer;
@@ -138,7 +138,7 @@ bool EstrategiaCompresion::compresionHash(string nombreIndice,unsigned tamanio_b
 	//Comienza compresion.
 	//Gurado primero.
 	if(salida!=NULL){
-		(*salida)<<"Comprimiendo hashin:"<<archivo_indice<<endl;
+		(*salida)<< dec<<"Comprimiendo hashin:"<<archivo_indice<<endl;
 	}
 	unsigned tamanio_sin_comprimir=tamanio_buffer_comprimido;
 
@@ -181,7 +181,7 @@ bool EstrategiaCompresion::compresionHash(string nombreIndice,unsigned tamanio_b
 	delete[] comprimido;
 
 	if(salida!=NULL){
-		(*salida)<<"Termino de comprimir hashing:"<<archivo_indice<<endl;
+		(*salida)<< dec<<"Termino de comprimir hashing:"<<archivo_indice<<endl;
 	}
 
 	archivo_comprimido.clear();
@@ -383,7 +383,7 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,unsigned tamanio_bu
 	/*comprimiendo*/
 	/*comprime el primer componente*/
 	if(salida!=NULL){
-		(*salida)<<"Comprimiendo almacenamiento:"<<archivoComprimido<<endl;
+		(*salida)<< dec<<"Comprimiendo almacenamiento:"<<archivoComprimido<<endl;
 	}
 	almacen->posicionarComponente(0);
 
@@ -431,7 +431,7 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,unsigned tamanio_bu
 
 	archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
 	if(salida!=NULL){
-		(*salida)<<"Termino compresion almacenamiento:"<<archivoComprimido<<endl;
+		(*salida)<< dec<<"Termino compresion almacenamiento:"<<archivoComprimido<<endl;
 	}
 	archivo_comprimido.close();
 
