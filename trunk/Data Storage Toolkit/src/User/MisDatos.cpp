@@ -492,6 +492,7 @@ void MisDatos::cerrarArchivo1(){
 			Almacenamiento* almacen=recurso1->getEstrategia()->getAlmacenamiento();
 			string nombre_archivo=almacen->getNombre();
 			EstrategiaCompresion compresor;
+			compresor.setSalida(&cout);
 			compresor.compresion(almacen,tamanio_contendor);
 			remove(nombre_archivo.c_str());
 
@@ -545,6 +546,7 @@ void MisDatos::cerrarArchivo2(){
 			Almacenamiento* almacen=recurso2->getEstrategia()->getAlmacenamiento();
 			string nombre_archivo=almacen->getNombre();
 			EstrategiaCompresion compresor;
+			compresor.setSalida(&cout);
 			compresor.compresion(almacen,tamanio_contendor);
 			remove(nombre_archivo.c_str());
 
