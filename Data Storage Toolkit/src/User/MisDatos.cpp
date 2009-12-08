@@ -486,6 +486,7 @@ void MisDatos::cerrarArchivo1(){
 			HashingExt* hash=dynamic_cast<HashingExt*>(indice);
 			if(hash){
 				/*todo comprimir hash*/
+				compresor.compresionHash(nombre_archivo,tamanio_contendor);
 			}
 			recurso1->cerrar();
 			remove(nombre_archivo.c_str());
@@ -534,6 +535,7 @@ void MisDatos::cerrarArchivo2(){
 			HashingExt* hash=dynamic_cast<HashingExt*>(indice);
 			if(hash){
 				/*todo comprimir hash*/
+				compresor.compresionHash(nombre_archivo,tamanio_contendor);
 			}
 			recurso2->cerrar();
 			remove(nombre_archivo.c_str());
