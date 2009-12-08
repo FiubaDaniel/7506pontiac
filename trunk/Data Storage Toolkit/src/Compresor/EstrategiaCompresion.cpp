@@ -101,7 +101,7 @@ bool EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivo,unsi
 	//cout<<archivo_comprimido.tellp()<<endl;
 	archivo_comprimido.close();
 	if(salida!=NULL){
-		(*salida)<< dec<<"Termino de comprimir arbol:"<<archivo<<endl;
+		(*salida)<< dec<<"Termino de comprimir arbol"<<endl;
 	}
 
 	delete[] buffer;
@@ -181,7 +181,7 @@ bool EstrategiaCompresion::compresionHash(string nombreIndice,unsigned tamanio_b
 	delete[] comprimido;
 
 	if(salida!=NULL){
-		(*salida)<< dec<<"Termino de comprimir hashing:"<<archivo_indice<<endl;
+		(*salida)<< dec<<"Termino de comprimir hashing"<<endl;
 	}
 
 	archivo_comprimido.clear();
@@ -425,14 +425,14 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,unsigned tamanio_bu
 
 	contenedor.cerrar();
 
-
+	if(salida!=NULL){
+		(*salida)<< dec<<"Termino compresion almacenamiento"<<endl;
+	}
 
 	archivo_comprimido.write((char*)&cont,sizeof(cont));
 
 	archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
-	if(salida!=NULL){
-		(*salida)<< dec<<"Termino compresion almacenamiento:"<<archivoComprimido<<endl;
-	}
+
 	archivo_comprimido.close();
 
 	delete componente;
