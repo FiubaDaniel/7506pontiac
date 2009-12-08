@@ -25,7 +25,7 @@ bool EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivo,unsi
 	unsigned tamanioSerializado = arbol->tamanioBloque();
 	std::stringbuf serializado;
 
-	string archivoComprimido = archivo +"_comprimido";
+	string archivoComprimido = archivo +"_ArbolComprimido";
 	archivo_comprimido.open(archivoComprimido.c_str(),fstream::trunc|fstream::out|fstream::binary);
 	if(!archivo_comprimido.is_open()){
 		return false;
