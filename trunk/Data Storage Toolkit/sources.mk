@@ -29,6 +29,7 @@ src \
 src/RecursoAlmacenamiento \
 src/Indices \
 src/Compuesto \
+src/Compresor \
 src/ArbolBSharp \
 src/Almacenamiento \
 

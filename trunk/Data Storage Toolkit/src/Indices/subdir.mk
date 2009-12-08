@@ -3,6 +3,11 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
+O_SRCS += \
+../src/Indices/EstrategiaBSharp.o \
+../src/Indices/HashingExt.o \
+../src/Indices/Set.o 
+
 CPP_SRCS += \
 ../src/Indices/EstrategiaBSharp.cpp \
 ../src/Indices/HashingExt.cpp \
