@@ -72,7 +72,10 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 			if(comprime){
 				BSharpTree* arbol=dynamic_cast<EstrategiaBSharp*>(Indice)->obtenerArbol();
 				arbol->abrir(path,comparador,true);
-				existia=compresor.descompresionArbol(arbol,path);
+				if(not compresor.descompresionArbol(arbol,path)){
+					Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
+					existia=false;
+				}
 			}else if(!Indice->abrir(path,comparador)){
 				Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 				existia = false;
@@ -157,7 +160,10 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 			if(comprime){
 				BSharpTree* arbol=dynamic_cast<EstrategiaBSharp*>(Indice)->obtenerArbol();
 				arbol->abrir(path,comparador,true);
-				existia=compresor.descompresionArbol(arbol,path);
+				if(not compresor.descompresionArbol(arbol,path)){
+					Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
+					existia=false;
+				}
 			}else if(!Indice->abrir(path,comparador)){
 				Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 				existia = false;
@@ -482,6 +488,7 @@ void MisDatos::cerrarArchivo1(){
 				/*todo comprimir arbol*/
 				BSharpTree* arbol=indice_arbol->obtenerArbol();
 				compresor.compresionArbol(arbol,nombre_archivo,tamanio_contendor);
+				remove(arbol->getNombreArchivo().c_str());
 			}
 			HashingExt* hash=dynamic_cast<HashingExt*>(indice);
 			if(hash){
@@ -531,6 +538,7 @@ void MisDatos::cerrarArchivo2(){
 				/*todo comprimir arbol*/
 				BSharpTree* arbol=indice_arbol->obtenerArbol();
 				compresor.compresionArbol(arbol,nombre_archivo,tamanio_contendor);
+				remove(arbol->getNombreArchivo().c_str());
 			}
 			HashingExt* hash=dynamic_cast<HashingExt*>(indice);
 			if(hash){
