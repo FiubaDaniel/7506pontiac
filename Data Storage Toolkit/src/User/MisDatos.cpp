@@ -82,7 +82,10 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 		}else{
 			Indice = new HashingExt();
 			if(comprime){
-				existia=compresor.descompresionHash(path);
+				if(not compresor.descompresionHash(path)){
+					Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
+					existia = false;
+				}
 			}
 			if(!Indice->abrir(path,comparador)){
 				Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
@@ -176,7 +179,10 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 		}else{
 			Indice = new HashingExt();
 			if(comprime){
-				existia=compresor.descompresionHash(path);
+				if(not compresor.descompresionHash(path)){
+					Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
+					existia = false;
+				}
 			}
 			if(!Indice->abrir(path,comparador)){
 				Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
