@@ -33,6 +33,7 @@ public:
   void cerrar();
   int tamanioBloque();
   void mostrarEstado();
+  BSharpTree* obtenerArbol();
 
 private:
   BSharpTree* arbol;
