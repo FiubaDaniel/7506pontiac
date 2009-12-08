@@ -8,7 +8,7 @@
 #include "EstrategiaCompresion.h"
 
 EstrategiaCompresion::EstrategiaCompresion() {
-salida=NULL;
+	salida=NULL;
 
 }
 
@@ -126,6 +126,11 @@ bool EstrategiaCompresion::compresionHash(string nombreIndice,unsigned tamanio_b
 	archivo_comprimido.open(nombreComprimido.c_str(),fstream::trunc|fstream::out|fstream::binary);
 
 	if(!archivo_indice.is_open()or!archivo_comprimido.is_open()){
+
+		archivo_comprimido.close();
+
+		archivo_indice.close();
+
 		return false;
 	}
 
@@ -151,7 +156,7 @@ bool EstrategiaCompresion::compresionHash(string nombreIndice,unsigned tamanio_b
 	//Comprimo el resto
 	short cont = 1;
 
-	while(archivo_indice.peek()!= EOF and not archivo_indice.eof()){
+	while(not archivo_indice.eof()){
 
 		archivo_indice.read((char*)sin_comprimir,tamanio_sin_comprimir);
 
@@ -181,7 +186,9 @@ bool EstrategiaCompresion::compresionHash(string nombreIndice,unsigned tamanio_b
 	delete[] comprimido;
 
 	if(salida!=NULL){
+
 		(*salida)<< dec<<"Termino de comprimir hashing"<<endl;
+
 	}
 
 	archivo_comprimido.clear();
@@ -189,6 +196,7 @@ bool EstrategiaCompresion::compresionHash(string nombreIndice,unsigned tamanio_b
 	archivo_indice.clear();
 
 	archivo_comprimido.close();
+
 	archivo_indice.close();
 
 	return true;
@@ -207,6 +215,8 @@ bool EstrategiaCompresion::descompresionHash(string nombreIndice){
 	archivo_comprimido.open(nombreComprimido.c_str(),fstream::in|fstream::binary);
 
 	if(!archivo_indice.is_open()or!archivo_comprimido.is_open()){
+		archivo_comprimido.close();
+		archivo_indice.close();
 		return false;
 	}
 
