@@ -70,7 +70,7 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 		if(tipo==ARBOL){
 			Indice = new EstrategiaBSharp(&claveEstructural);
 			if(comprime){
-				BSharpTree* arbol;//=dynamic_cast<EstrategiaBSharp*>(Indice)->getBsharpTree();
+				BSharpTree* arbol=dynamic_cast<EstrategiaBSharp*>(Indice)->obtenerArbol();
 				arbol->abrir(path,comparador,true);
 				existia=compresor.descompresionArbol(arbol,path);
 				if(existia)
@@ -155,7 +155,7 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 		if(tipo==ARBOL){
 			Indice = new EstrategiaBSharp(&claveEstructural);
 			if(comprime){
-				BSharpTree* arbol;//=dynamic_cast<EstrategiaBSharp*>(Indice)->getBsharpTree();
+				BSharpTree* arbol=dynamic_cast<EstrategiaBSharp*>(Indice)->obtenerArbol();
 				arbol->abrir(path,comparador,true);
 				existia=compresor.descompresionArbol(arbol,path);
 				if(existia)
@@ -479,7 +479,7 @@ void MisDatos::cerrarArchivo1(){
 			EstrategiaBSharp *indice_arbol=dynamic_cast<EstrategiaBSharp*>(indice);
 			if(indice_arbol!=NULL){
 				/*todo comprimir arbol*/
-				BSharpTree* arbol;//=dynamic_cast<EstrategiaBSharp*>(Indice)->getBsharpTree();
+				BSharpTree* arbol=indice_arbol->obtenerArbol();
 				nombre_archivo=arbol->getNombreArchivo();
 				compresor.compresionArbol(arbol,nombre_archivo,tamanio_contendor);
 			}
@@ -525,10 +525,10 @@ void MisDatos::cerrarArchivo2(){
 			compresor.compresion(almacen,tamanio_contendor);
 
 			EstrategiaIndice *indice=recurso2->getEstrategiaRecurso()->getIndice();
-			EstrategiaBSharp* arbol=dynamic_cast<EstrategiaBSharp*>(indice);
-			if(arbol!=NULL){
+			EstrategiaBSharp* indice_arbol=dynamic_cast<EstrategiaBSharp*>(indice);
+			if(indice_arbol!=NULL){
 				/*todo comprimir arbol*/
-				BSharpTree* arbol;//=dynamic_cast<EstrategiaBSharp*>(Indice)->getBsharpTree();
+				BSharpTree* arbol=indice_arbol->obtenerArbol();
 				nombre_archivo=arbol->getNombreArchivo();
 				compresor.compresionArbol(arbol,nombre_archivo,tamanio_contendor);
 			}
