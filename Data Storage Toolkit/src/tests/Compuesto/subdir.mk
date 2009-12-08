@@ -3,6 +3,11 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
+O_SRCS += \
+../src/tests/Compuesto/AtributoTest.o \
+../src/tests/Compuesto/EAAlmacenamientoTest.o \
+../src/tests/Compuesto/RegistroTest.o 
+
 CPP_SRCS += \
 ../src/tests/Compuesto/AtributoTest.cpp \
 ../src/tests/Compuesto/EAAlmacenamientoTest.cpp \
