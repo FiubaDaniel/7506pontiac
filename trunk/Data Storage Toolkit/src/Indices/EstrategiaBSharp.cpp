@@ -46,4 +46,7 @@ void EstrategiaBSharp::mostrarEstado(){
 	arbol->imprimir();
 }
 
+BSharpTree* EstrategiaBSharp::obtenerArbol(){
+	return this->arbol;
+}
 
