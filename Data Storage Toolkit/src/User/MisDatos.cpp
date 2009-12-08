@@ -73,8 +73,6 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 				BSharpTree* arbol=dynamic_cast<EstrategiaBSharp*>(Indice)->obtenerArbol();
 				arbol->abrir(path,comparador,true);
 				existia=compresor.descompresionArbol(arbol,path);
-				if(existia)
-					arbol->recomponerRaiz();
 			}else if(!Indice->abrir(path,comparador)){
 				Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 				existia = false;
@@ -82,8 +80,10 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 		}else{
 			Indice = new HashingExt();
 			if(comprime){
-				/* todo Descomprimir hash*/
-
+				existia=compresor.descompresionHash(path);
+				if(existia){
+					Indice->abrir(path,comparador);
+				}
 			}else if(!Indice->abrir(path,comparador)){
 				Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 				existia = false;
@@ -158,19 +158,20 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 				BSharpTree* arbol=dynamic_cast<EstrategiaBSharp*>(Indice)->obtenerArbol();
 				arbol->abrir(path,comparador,true);
 				existia=compresor.descompresionArbol(arbol,path);
-				if(existia)
-					arbol->recomponerRaiz();
 			}else if(!Indice->abrir(path,comparador)){
-					Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
-					existia = false;
+				Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
+				existia = false;
 			}
 		}else{
 			Indice = new HashingExt();
 			if(comprime){
-				/* todo Descomprimir hash*/
+				existia=compresor.descompresionHash(path);
+				if(existia){
+					Indice->abrir(path,comparador);
+				}
 			}else if(!Indice->abrir(path,comparador)){
-					Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
-					existia = false;
+				Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
+				existia = false;
 			}
 		}
 		/*en caso de que existiera previamente verifica*/
