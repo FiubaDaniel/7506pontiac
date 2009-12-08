@@ -25,7 +25,7 @@ bool EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivo,unsi
 	unsigned tamanioSerializado = arbol->tamanioBloque();
 	std::stringbuf serializado;
 
-	string archivoComprimido = archivo +"_ArbolComprimido";
+	string archivoComprimido = archivo +"_arbolcomprimido";
 	archivo_comprimido.open(archivoComprimido.c_str(),fstream::trunc|fstream::out|fstream::binary);
 	if(!archivo_comprimido.is_open()){
 		return false;
@@ -187,7 +187,7 @@ bool EstrategiaCompresion::descompresionHash(string nombreIndice){
 	std::fstream archivo_comprimido;
 
 	string nombreHash = nombreIndice+"_cubos";
-	string nombreComprimido = nombreIndice+"_Comprimido";
+	string nombreComprimido = nombreIndice+"_HashComprimido";
 
 	archivo_indice.open(nombreHash.c_str(),fstream::trunc|fstream::out|fstream::binary);
 	archivo_comprimido.open(nombreComprimido.c_str(),fstream::in|fstream::binary);
@@ -248,7 +248,7 @@ bool EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivo){
 	std::fstream archivo_comprimido;
 	std::stringbuf serializado;
 
-	string archivoComprimido = archivo +"_comprimido";
+	string archivoComprimido = archivo +"_arbolcomprimido";
 
 	archivo_comprimido.open(archivoComprimido.c_str(),fstream::in|fstream::binary);
 
