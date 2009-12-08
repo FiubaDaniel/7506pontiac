@@ -120,10 +120,10 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 	string comprimido = path+"_Compresion";
 	remove(comprimido.c_str());
 	if(ARBOL){
-		comprimido = paht+"_arbolcomprimido";
+		comprimido = path+"_arbolcomprimido";
 		remove(comprimido.c_str());
 	}else{
-		comprimido = paht+"_HashComprimido";
+		comprimido = path+"_HashComprimido";
 		remove(comprimido.c_str());
 	}
 }
@@ -216,10 +216,10 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 	string comprimido = path+"_Compresion";
 	remove(comprimido.c_str());
 	if(ARBOL){
-		comprimido = paht+"_arbolcomprimido";
+		comprimido = path+"_arbolcomprimido";
 		remove(comprimido.c_str());
 	}else{
-		comprimido = paht+"_HashComprimido";
+		comprimido = path+"_HashComprimido";
 		remove(comprimido.c_str());
 	}
 }
