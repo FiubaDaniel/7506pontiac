@@ -30,10 +30,10 @@
 #include "../Indices/EstrategiaBSharp.h"
 #include "../Indices/EstrategiaIndice.h"
 #include "../Indices/HashingExt.hpp"
-
-
-
-
+#include "../Indices/Set.h"
+#include "../Compuesto/BloqueMemoria.h"
+#include "../Compuesto/RegistroMemoria.h"
+#include "../Compresor/EstrategiaCompresion.h"
 
 #include "MiRegistroFijo.h"
 #include "MiRegistroVariable.h"
