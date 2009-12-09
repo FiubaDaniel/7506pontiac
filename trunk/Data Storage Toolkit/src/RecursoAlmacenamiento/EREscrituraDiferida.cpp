@@ -5,7 +5,7 @@ bool EREscrituraDiferida :: insertar(Registro* registro)
 {
 
 	std::stringbuf buf;
-	buf.pubseekpos(0,std::ios_base::binary | std::ios_base::in );
+	buf.pubseekpos(0,std::ios_base::binary | std::ios_base::in |std::ios_base:: out);
 	registro->serializar(buf);
 
 	Ttamanio tam_registro=registro->tamanioSerializado();
@@ -66,7 +66,9 @@ bool EREscrituraDiferida :: eliminar(Clave* unaClave)
         //Se obtiene la referencia del registro a eliminar
         if(indice!=NULL){
 		if(!indice->BuscarReferencia(unaClave,&ref_eliminar))
+		{
 			return false;
+		}
 	}else{
                 //busqueda secuencial?
 	}
@@ -77,7 +79,8 @@ bool EREscrituraDiferida :: eliminar(Clave* unaClave)
 
 	//Se serializa reg_ultimo
         std::stringbuf buf;
-	buf.pubseekpos(0,std::ios_base::binary | std::ios_base::in );
+
+	buf.pubseekpos(0,std::ios_base::binary | std::ios_base::in |std::ios_base:: out);
 	reg_ultimo->serializar(buf);
 
 	Ttamanio tam_registro=reg_ultimo->tamanioSerializado();
@@ -112,7 +115,7 @@ bool EREscrituraDiferida :: modificar(Clave* unaClave,Registro* registro)
 	}
 
         std::stringbuf buf;
-	buf.pubseekpos(0,std::ios_base::binary | std::ios_base::in );
+	buf.pubseekpos(0,std::ios_base::binary | std::ios_base::in |std::ios_base:: out);
 	registro->serializar(buf);
 
 	Ttamanio tam_registro=registro->tamanioSerializado();
