@@ -204,17 +204,17 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 	/*inicializar el estrategia Recurso*/
 	EstrategiaRecursos* estrategiaRecurso=NULL;
 	if(tieneBuffer){
-		//if(tipoBuffer==DIRECTO){
+		if(tipoBuffer==DIRECTO){
 			RegistroMemoria regmem(registro2);
 			EARegistros* estrategiaBuffer=new EARegistros(&regmem);
 			Buffer* buffer=new Buffer(estrategiaBuffer,longitudBuffer);
 			buffer->crear("buffer");
 			long nroElem=longitudBuffer/regmem.tamanioSerializado();
 			estrategiaRecurso=new EREscrituraDirecta(Indice,archivo,buffer,nroElem);
-		/*}else{
+		}else{
 			EREscrituraDiferida *dif=new EREscrituraDiferida(Indice,archivo);
 			estrategiaRecurso=dif;
-		}*/
+		}
 	}else{
 		estrategiaRecurso=new ERUnAlmacenamiento(Indice,archivo);
 	};
