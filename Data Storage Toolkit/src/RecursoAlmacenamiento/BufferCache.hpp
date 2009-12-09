@@ -8,7 +8,7 @@
 //Buffers de 64 bytes
 #define TAM_BUFFER 64
 
-#define CANT_BUFFERS 100
+#define CANT_BUFFERS 50
 
 //Se definen las máscaras de la variable "estado" de cada buffer
 #define OCUPADO 1
