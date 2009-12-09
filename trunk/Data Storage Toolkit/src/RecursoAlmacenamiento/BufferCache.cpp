@@ -39,10 +39,10 @@ void BufferCache :: remover_buffer_libre(Buffer_header *buff_para_usar){
         pre-condicion: la lista de libres no debe estar vacia
         post-condicion: se quita el primer buffer de la lista de buffers libres (puede quedar vacia)
 */
- void BufferCache :: remover_primer_buffer(Buffer_header *buff_para_reemplazar)
+ void BufferCache :: remover_primer_buffer(Buffer_header **buff_para_reemplazar)
  {
 
-         buff_para_reemplazar = buffers_libres.primer_buffer;
+         *buff_para_reemplazar = buffers_libres.primer_buffer;
 
         if (buffers_libres.primer_buffer == buffers_libres.ultimo_buffer)
         {
@@ -50,8 +50,8 @@ void BufferCache :: remover_buffer_libre(Buffer_header *buff_para_usar){
                 buffers_libres.primer_buffer = buffers_libres.ultimo_buffer = NULL;
         }else{
 
-                buffers_libres.primer_buffer = buff_para_reemplazar->siguiente_libre;
-                buff_para_reemplazar->siguiente_libre->anterior_libre = (Buffer_header*) &buffers_libres;
+                buffers_libres.primer_buffer = (*buff_para_reemplazar)->siguiente_libre;
+                (*buff_para_reemplazar)->siguiente_libre->anterior_libre = (Buffer_header*) &buffers_libres;
         }
  }
 
@@ -72,13 +72,43 @@ void BufferCache :: despertar_procesos()
 */
 void BufferCache :: manejar_diferidos()
 {
-        for(int i=0; i < cant_diferidos; cant_diferidos--)
+        int total_diferidos = cant_diferidos;
+
+        for(int i=0; i < total_diferidos; i++)
         {
 
-                //referencia = delayed[i]->numero_bloque;
-                // componente.escribir( delayed[i]->numero_bloque->datos );
 
-                //Se pone al principio de la liste de libres
+                //Se escribe en disco un bloque o un registro segun corresponda
+                Componente* un_componente=almacen->getEstrategia()->getComponenteUsado()->clonar();
+                Ttamanio tam_datos=almacen->getEstrategia()->getTamanioComponenteUsado();
+
+                std::stringbuf buf;
+                buf.pubseekpos(0,std::ios_base::binary | std::ios_base::in );
+                buf.pubsetbuf(delayed[i]->datos, tam_datos);
+                un_componente->deserializar(buf);
+
+                almacen->posicionarComponente( delayed[i]->numero_bloque);
+                almacen->escribir(un_componente);
+
+                delete un_componente;
+
+
+                /* //solo registros fijos
+                Almacenamiento almacen;
+                Registro un_registro;
+
+                std::stringbuf buf;
+                buf.pubseekpos(0,std::ios_base::binary | std::ios_base::in );
+                buf.pubsetbuf(delayed[i]->datos, tam_datos);
+                un_registro.deserializar(buf);
+
+
+                almacen.posicionarComponente( delayed[i]->numero_bloque);
+                almacen.escribir(&un_registro);
+                */
+
+
+                //Se pone al principio de la lista de libres
                 if ( buffers_libres.primer_buffer == NULL)
                 {
                         //lista vacia
@@ -94,7 +124,10 @@ void BufferCache :: manejar_diferidos()
 
                 //Se apaga su estado "delayed write"
                 (delayed[i]->estado) &= 0xfb ;// 1111 1011
+
         }
+
+        cant_diferidos = 0;
 }
 
 /*
@@ -138,14 +171,17 @@ void BufferCache :: liberar_buffer(Buffer_header *buff_bloqueado){
 }
 
 /*
-        post-condicion: deja en "buff_para_usar" un buffer en estado "ocupado", listo para usarse por el proceso actual a traves de
+        post-condicion: - deja en "buff_para_usar" un buffer en estado "ocupado", listo para usarse por el proceso actual a traves de
                                 los metodos publicos: leer() y escribir()
+                                - devuelve false en caso de que no pueda devolver un buffer debido a que TODOS estaban esperando para escribirse
+                                true sino
 
 */
-void BufferCache :: asignar_bloque(int nro_bloque, Buffer_header *buff_para_usar)
+bool BufferCache :: asignar_bloque(int nro_bloque, Buffer_header **buff_para_usar)
 {
         bool buffer_no_encontrado = true;
         bool bloque_no_encontrado = true;
+        bool all_delayed = false; //true si TODOS estan en estado "delayed write"
         Buffer_header *ptr_buff_recorrido = buffers.primer_buffer;
 
         while (buffer_no_encontrado)
@@ -156,7 +192,7 @@ void BufferCache :: asignar_bloque(int nro_bloque, Buffer_header *buff_para_usar
                 {
                         if ( (ptr_buff_recorrido->numero_bloque) == nro_bloque )
                         {
-                                buff_para_usar = ptr_buff_recorrido; //Se guarda la cabecera
+                                *buff_para_usar = ptr_buff_recorrido; //Se guarda la cabecera
                                 bloque_no_encontrado = false;
                         }
 
@@ -165,19 +201,19 @@ void BufferCache :: asignar_bloque(int nro_bloque, Buffer_header *buff_para_usar
 
                 if( ! bloque_no_encontrado )
                 {
-                        if( buff_para_usar->estado & OCUPADO)
+                        if( (*buff_para_usar)->estado & OCUPADO)
                         {
                                 //Si no esta en la free list
                                 dormir_proceso(); //despertar cuando se libere EL BUFFER ENCONTRADO
                                 continue;
                         }
                         //Se enciende el estado ocupado
-                        (buff_para_usar->estado) |= 0x01 ;//0000 0001
+                        ( (*buff_para_usar)->estado) |= 0x01 ;//0000 0001
 
                         //Se remueve el buffer de la free list, ya que estará ocupado por el proceso actual
-                        remover_buffer_libre(buff_para_usar);
+                        remover_buffer_libre(*buff_para_usar);
 
-                        return;
+                        return true;
 
                 }else{
                         /**No se encontro el bloque en la lista de datos (porque nunca se uso)**/
@@ -191,49 +227,81 @@ void BufferCache :: asignar_bloque(int nro_bloque, Buffer_header *buff_para_usar
 
                         //Se remueve el primer buffer de la lista para REUSARSE (politica de reemplazo LRU)
                         remover_primer_buffer(buff_para_usar);
-
-                        if ( (buff_para_usar->estado) & DELAYED_WRITE)
+                        while( ( ( (*buff_para_usar)->estado) & DELAYED_WRITE) && (!all_delayed) )
                         {
                                 /**Escribir en disco: "buff_para_usar->datos" **/
 
-                                delayed[cant_diferidos] = buff_para_usar; //se suma al arreglo de buffers que deben ser escritos
+                                delayed[cant_diferidos] = *buff_para_usar; //se suma al arreglo de buffers que deben ser escritos
                                 cant_diferidos ++;
-                                continue;
+                                remover_primer_buffer(buff_para_usar);
+
+                                if( (buffers_libres.primer_buffer==NULL)&& ( ( (*buff_para_usar)->estado) & DELAYED_WRITE) )
+                                {
+                                        /**Se vacio la lista de buffers libres porque todos estaban en "delayed write"**/
+                                        all_delayed = true;
+                                }
                         }
 
-                        buff_para_usar->numero_bloque = nro_bloque;
+                        if(all_delayed)
+                        {
+                                //No se puede devolver un buffer hasta que se hayan escrito en disco
+                                return false;
+                        }
+
+                        (*buff_para_usar)->numero_bloque = nro_bloque;
                         //Se enciende el estado ocupado
-                        (buff_para_usar->estado) |= 0x01 ;//0000 0001
+                        ( (*buff_para_usar)->estado) |= 0x01 ;//0000 0001
 
                         //Se apaga el estado "valido"
-                        (buff_para_usar->estado) &= 0xFD;// 1111 1101
+                        ( (*buff_para_usar)->estado) &= 0xFD;// 1111 1101
 
-                        return;
+                        return true;
                 }
         }
-
 }
 
-
 /*
-        Coloca en "datos" la informacion corresponiendte al bloque "nro_bloque"
 
-        pre-condicion : tam_datos debe ser menor o igual que TAM_BUFFER
 */
-void BufferCache :: leer(int nro_bloque, char *datos, unsigned tam_datos)
+void BufferCache :: leer(int nro_bloque, Registro *registro)
 {
         Buffer_header *buff;
-        asignar_bloque(nro_bloque, buff); //obtengo un buffer para el bloque pedido
+
+        //se obtiene un buffer para el bloque pedido
+        if ( !asignar_bloque(nro_bloque, &buff))
+        {
+                //Se tienen que manejar los buffers diferidos antes de poder conseguir uno para usar
+                manejar_diferidos();
+                asignar_bloque(nro_bloque, &buff);
+        }
+
         if ( (buff->estado) & DATOS_VALIDOS )
         {
                 //Se aprovecha el buffer cache, no hay necesidad de leer del disco
-                memcpy(datos, buff->datos, tam_datos);
+                std::stringbuf buf;
+                buf.pubseekpos(0,std::ios_base::binary | std::ios_base::in );
+                buf.pubsetbuf(buff->datos, registro->tamanioSerializado() );
+
+                /**ES UN REGISTRO O UN BLOQUE**/
+                registro->deserializar(buf);
+
         }else{
-                //Hay que leer los datos del disco (segun el nro_bloque) y ponerlos en buff->datos
+                //Hay que leer los datos (registro o bloque) desde el disco (segun el nro_bloque) y ponerlos en buff->datos
 
-                //usar nro_bloque como Referencia para leer de un componente hacia "buff->datos"
+                //ESCRIBIR EN EL BUFFER Y EN EL REGISTRO
+                Componente* un_componente=almacen->getEstrategia()->getComponenteUsado()->clonar();
+                Ttamanio tam_datos=almacen->getEstrategia()->getTamanioComponenteUsado();
 
-                memcpy(datos, buff->datos, tam_datos);
+                almacen->posicionarComponente( nro_bloque);
+                almacen->obtener(un_componente);
+
+                std:: stringbuf buf;
+		un_componente->serializar(buf);
+                buf.pubseekpos(0,std:: ios_base::binary | std:: ios_base::in );
+
+                //Se escribe en el buffer para que futuros accesos den "hit"
+		memcpy(buff->datos, buf.str().data(), tam_datos);
+
                 //Se enciende el estado: "datos validos"
                 (buff->estado) |= 0x02;//0000 0010
         }
@@ -247,8 +315,14 @@ void BufferCache :: leer(int nro_bloque, char *datos, unsigned tam_datos)
 void BufferCache :: escribir(int nro_bloque, char *datos, unsigned tam_datos)
 {
         Buffer_header *buff;
-        asignar_bloque(nro_bloque, buff); //obtengo un buffer para el bloque pedido
 
+        //obtengo un buffer para el bloque pedido
+        if( ! asignar_bloque(nro_bloque, &buff) )
+        {
+                //Se tienen que manejar los buffers diferidos antes de poder conseguir uno para usar
+                manejar_diferidos();
+                asignar_bloque(nro_bloque, &buff);
+        }
 
         memcpy(buff->datos, datos, tam_datos); //se escribe en el buffer, y se posterga la escritura al disco
         //Se enciende el estado delayed write
@@ -260,8 +334,11 @@ void BufferCache :: escribir(int nro_bloque, char *datos, unsigned tam_datos)
                 (buff->estado) |= 0x02;//0000 0010
         }
 
-        if( cant_diferidos)
+        if(cant_diferidos)
+        {
+                /**En caso de que se hayan encontrado buffers "delayed write" en la free list durante la busqueda del bloque**/
                 manejar_diferidos();
+        }
 
         liberar_buffer(buff);
 }
