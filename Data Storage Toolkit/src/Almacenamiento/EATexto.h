@@ -56,6 +56,8 @@ public:
 	}
 	void setMetadata(char* metadata){}
 	unsigned getTamanioComponenteUsado();
+	Referencia ultimoComponente();
+	bool truncar(Referencia ultimo){return false;};
 };
 
 #endif /* EATEXTO_H_ */

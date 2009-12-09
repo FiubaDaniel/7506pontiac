@@ -51,6 +51,11 @@ public:
 	std::string getMetadata();
 	void setMetadata(char* metadata);
 	unsigned getTamanioComponenteUsado();
+	virtual Referencia ultimoComponente();
+	bool truncar(Referencia ultimo){
+		siguienteLibre=ultimo+1;
+		return true;
+	}
 	 /*------------------------------------------------------------*/
 	Componente* getRegistro();
 	Componente*getComponenteUsado();

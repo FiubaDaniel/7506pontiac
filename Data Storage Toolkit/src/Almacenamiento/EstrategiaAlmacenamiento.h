@@ -66,6 +66,7 @@ public:
 	virtual bool obtener(Componente*componente)=0;
 	virtual bool buscar(Componente*componente)=0;
 	virtual bool buscar(Clave*unaClave)=0;
+	virtual Referencia ultimoComponente()=0;
 	/*******************************************************************************/
 	void setClave(Clave*unaClave){
 		delete clave;
@@ -88,5 +89,6 @@ public:
 	virtual void imprimirMetada(std::ostream&out)=0;
 	virtual std::string getMetadata()=0;
 	virtual void setMetadata(char* metadata)=0;
+	virtual bool truncar(Referencia ultimo)=0;
 };
 #endif /* ESTRATEGIAALMACENAMIENTO_H_ */

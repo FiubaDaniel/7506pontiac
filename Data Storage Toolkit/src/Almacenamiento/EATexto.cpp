@@ -278,3 +278,6 @@ unsigned EATexto::getTamanioComponenteUsado(){
 void EATexto::imprimirMetada(std::ostream&out){
 	out<<"Estrategia Texto:"<<std::endl;
 }
+Referencia EATexto::ultimoComponente(){
+	return 0;
+}
