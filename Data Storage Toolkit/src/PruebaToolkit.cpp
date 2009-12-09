@@ -74,7 +74,7 @@ int main() {
 
 	// ARCHIVO 1
 	// INICIALIZO EL ARCHIVO 1
-	misDatos.inicializarArchivo1("MiArchivo1.dat", 256, true, DIFERIDO, 1024, true, ARBOL, 128, true, 1024);
+/*	misDatos.inicializarArchivo1("MiArchivo1.dat", 256, true, DIFERIDO, 1024, true, ARBOL, 128, true, 1024);
 	
 	// INSERTO REGISTROS VARIABLES
 	for (int i=0; i<CENTENAMAXREGISTROS*100; ++i){
@@ -155,7 +155,7 @@ int main() {
 	}
 
 	// CIERRO ARCHIVO 1
-	misDatos.cerrarArchivo1();
+	misDatos.cerrarArchivo1();*/
 	
 
 
