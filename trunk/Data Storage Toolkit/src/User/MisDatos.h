@@ -20,6 +20,7 @@
 #include "../RecursoAlmacenamiento/Recurso.h"
 #include "../RecursoAlmacenamiento/EREscrituraDirecta.h"
 #include "../RecursoAlmacenamiento/ERUnAlmacenamiento.h"
+#include "../RecursoAlmacenamiento/EREscrituraDiferida.h"
 #include "../Almacenamiento/Archivo.h"
 #include "../Almacenamiento/EABloques.h"
 #include "../Almacenamiento/EARegistros.h"
