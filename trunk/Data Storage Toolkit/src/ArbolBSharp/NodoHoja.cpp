@@ -200,6 +200,9 @@ ElementoNodo* NodoHoja::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* nodoMe
 	nodoDer->setReferenciaSiguiente(nodoHermano->getReferenciaSiguiente());
 	int cantIzq = ((cantidadMaximaDeElementos*2)+1)/3;
 	int cantMedio = ((cantidadMaximaDeElementos*2)+1)/3;
+	if(nodoPadre->getCatidadMaximaDeElementos()==2){
+		cantMedio=2;
+	}
 	ElementoNodo* elementoApadre,*elementoPadre;
 	bool encontrado = false;
 	/*busco en padre la clave, será el elemento seteado*/
