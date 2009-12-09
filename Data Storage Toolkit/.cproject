@@ -54,7 +54,6 @@
 </toolChain>
 </folderInfo>
 <sourceEntries>
-<entry excluding="tests|Compuesto|Compresor|Indices|User|ArbolBSharp|RecursoAlmacenamiento|Almacenamiento" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Compresor"/>
 <entry excluding="Compuesto" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests"/>
 <entry excluding="Copy of MisDatos.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/User"/>
@@ -64,6 +63,7 @@
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/RecursoAlmacenamiento"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Almacenamiento"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Indices"/>
+<entry excluding="main.cpp|tests|Compuesto|Compresor|Indices|User|ArbolBSharp|RecursoAlmacenamiento|Almacenamiento" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 </sourceEntries>
 </configuration>
 </storageModule>
@@ -628,7 +628,6 @@
 </toolChain>
 </folderInfo>
 <sourceEntries>
-<entry excluding="Compresor|User|ArbolBSharp|tests|Indices|RecursoAlmacenamiento|Almacenamiento|Compuesto" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 <entry excluding="Compuesto" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/RecursoAlmacenamiento"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Almacenamiento"/>
@@ -637,6 +636,7 @@
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Compresor"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests/Compuesto"/>
 <entry excluding="Copy of MisDatos.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/User"/>
+<entry excluding="main.cpp|Compresor|User|ArbolBSharp|tests|Indices|RecursoAlmacenamiento|Almacenamiento|Compuesto" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 </sourceEntries>
 </configuration>
 </storageModule>

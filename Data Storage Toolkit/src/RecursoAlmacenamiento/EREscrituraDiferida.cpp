@@ -12,12 +12,13 @@ bool EREscrituraDiferida :: insertar(Registro* registro)
 	char serializado[tam_registro];
 	memcpy(serializado, buf.str().data(), tam_registro);
 
-
+        /*
         Cambio* cambio=&cambiosArchivo.front();
 	while(cambio->operacion!=Cambio::Alta){
 		cambiosArchivo.pop();
 		cambio=&cambiosArchivo.front();
 	}
+	*/
 
 	/*
 
@@ -40,11 +41,19 @@ bool EREscrituraDiferida :: insertar(Registro* registro)
         */
 
         /**Se escribe en el buffer**/
-        buffer_recurso.escribir(cambio->referencia, serializado, tam_registro);
 
-        cambiosArchivo.pop();
+        //buffer_recurso.escribir(cambio->referencia, serializado, tam_registro);
+        buffer_recurso.escribir(numeros_bloques, serializado, tam_registro);
 
-        //actualizacion del indice?
+        //Se actualiza el indice
+        Clave* clave=almacen->getEstrategia()->getClave();
+	clave->set(registro);
+	indice->insertar(numeros_bloques,clave);
+
+        numeros_bloques++;
+
+        //cambiosArchivo.pop();
+
         return true;
 }
 
@@ -53,8 +62,6 @@ bool EREscrituraDiferida :: eliminar(Clave* unaClave)
         Registro *reg_ultimo;
         Referencia ref_ultimo = almacen->ultimoComponente();
         Referencia ref_eliminar;
-
-       //bool truncar(Referencia ultimo)
 
         //Se obtiene la referencia del registro a eliminar
         if(indice!=NULL){
@@ -81,6 +88,16 @@ bool EREscrituraDiferida :: eliminar(Clave* unaClave)
 
 	almacen->truncar(ref_ultimo);
 
+	//se actualiza el indice usado
+
+	indice->eliminar(unaClave);
+
+        Clave* clave_ultima=almacen->getEstrategia()->getClave();
+        clave_ultima->set(reg_ultimo);
+        indice->modificar( clave_ultima, ref_eliminar);
+
+	return true;
+
 }
 
 bool EREscrituraDiferida :: modificar(Clave* unaClave,Registro* registro)
@@ -103,6 +120,8 @@ bool EREscrituraDiferida :: modificar(Clave* unaClave,Registro* registro)
 	memcpy(serializado, buf.str().data(), tam_registro);
 
 	buffer_recurso.escribir(referencia, serializado, tam_registro);
+	return true;
+
 
 }
 
@@ -120,4 +139,5 @@ bool EREscrituraDiferida :: obtener(Clave* unaClave, Registro*registro)
 
         /**Se trata de leer desde el buffer**/
         buffer_recurso.leer( (int) referencia, registro);
+        return true;
 }

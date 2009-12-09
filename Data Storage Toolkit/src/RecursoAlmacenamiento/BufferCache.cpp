@@ -184,11 +184,12 @@ bool BufferCache :: asignar_bloque(int nro_bloque, Buffer_header **buff_para_usa
         bool all_delayed = false; //true si TODOS estan en estado "delayed write"
         Buffer_header *ptr_buff_recorrido = buffers.primer_buffer;
 
+
         while (buffer_no_encontrado)
         {
                 //Se busca el bloque en la lista de buffers (hash queue en el original)
 
-                for(int i= 0; (i < CANT_BUFFERS) && bloque_no_encontrado; i++)
+                for(int i= 0; ( (i < CANT_BUFFERS) && (bloque_no_encontrado) ); i++)
                 {
                         if ( (ptr_buff_recorrido->numero_bloque) == nro_bloque )
                         {
@@ -196,11 +197,12 @@ bool BufferCache :: asignar_bloque(int nro_bloque, Buffer_header **buff_para_usa
                                 bloque_no_encontrado = false;
                         }
 
-                        ptr_buff_recorrido = ptr_buff_recorrido->siguiente_buffer;
+                        ptr_buff_recorrido = (Buffer_header*) (ptr_buff_recorrido->siguiente_buffer);
                 }
 
                 if( ! bloque_no_encontrado )
                 {
+
                         if( (*buff_para_usar)->estado & OCUPADO)
                         {
                                 //Si no esta en la free list
@@ -217,6 +219,7 @@ bool BufferCache :: asignar_bloque(int nro_bloque, Buffer_header **buff_para_usa
 
                 }else{
                         /**No se encontro el bloque en la lista de datos (porque nunca se uso)**/
+
 
                         if ( buffers_libres.primer_buffer == NULL)
                         {
@@ -319,10 +322,13 @@ void BufferCache :: escribir(int nro_bloque, char *datos, unsigned tam_datos)
         //obtengo un buffer para el bloque pedido
         if( ! asignar_bloque(nro_bloque, &buff) )
         {
+
                 //Se tienen que manejar los buffers diferidos antes de poder conseguir uno para usar
                 manejar_diferidos();
                 asignar_bloque(nro_bloque, &buff);
         }
+
+
 
         memcpy(buff->datos, datos, tam_datos); //se escribe en el buffer, y se posterga la escritura al disco
         //Se enciende el estado delayed write

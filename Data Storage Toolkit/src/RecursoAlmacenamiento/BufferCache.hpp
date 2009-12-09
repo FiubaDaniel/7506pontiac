@@ -5,8 +5,8 @@
 #include "../Compuesto/Registro.h"
 #include "../Almacenamiento/Almacenamiento.h"
 
-//Buffers de 32 bytes
-#define TAM_BUFFER 32
+//Buffers de 64 bytes
+#define TAM_BUFFER 64
 
 #define CANT_BUFFERS 100
 
@@ -117,6 +117,8 @@ class BufferCache{
                         buf->anterior_buffer = ptr_anterior;
                         buf->siguiente_libre = (Buffer_header*) &buffers_libres;
                         buf->anterior_libre = ptr_anterior_libre;
+
+                        ptr_anterior->siguiente_buffer = ptr_anterior->siguiente_libre = buf;
 
                         buffers.ultimo_buffer = buf;
                         buffers_libres.ultimo_buffer = buf;
