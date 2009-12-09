@@ -2,6 +2,8 @@
 #define _BUFFER_CACHE_HPP_
 
 #include <cstdlib>
+#include "../Compuesto/Registro.h"
+#include "../Almacenamiento/Almacenamiento.h"
 
 //Buffers de 32 bytes
 #define TAM_BUFFER 32
@@ -48,24 +50,27 @@ class BufferCache{
                 Lista_buffers buffers;
                 Lista_libres buffers_libres;
 
-                Buffer_header **delayed;
+                Buffer_header **delayed; //conjunto de buffers diferidos que hay que escribir en disco
                 unsigned cant_diferidos; //cantidad de buffers "delayed write" que se encontraron al principio de la free list
+                Almacenamiento *almacen; //para escribir/leer los datos hacia y desde el disco
 
                 void liberar_buffer(Buffer_header *buff_bloqueado);
-                void asignar_bloque(int nro_bloque, Buffer_header *buff_para_usar);
+                bool asignar_bloque(int nro_bloque, Buffer_header **buff_para_usar);
 
                 void remover_buffer_libre(Buffer_header *buff_para_usar);
                 void dormir_proceso();
                 void despertar_procesos();
-                void remover_primer_buffer(Buffer_header *buff_para_reemplazar);
+                void remover_primer_buffer(Buffer_header **buff_para_reemplazar);
                 void manejar_diferidos();
 
         public:
 
-                BufferCache(){
+                BufferCache(Almacenamiento *almacen){
 
                         delayed = new Buffer_header*[CANT_BUFFERS];
                         cant_diferidos =0;
+
+                        this->almacen = almacen;
 
                         Buffer_header *ptr_anterior;
                         Buffer_header *ptr_anterior_libre;
@@ -118,15 +123,34 @@ class BufferCache{
 
                 };
 
-                void leer(int nro_bloque, char *datos, unsigned tam_datos);
+                void leer(int nro_bloque, Registro *registro);
 
-                void escribir(int nro_bloque, char* datos);
+                void escribir(int nro_bloque, char *datos, unsigned tam_datos);
 
                 ~BufferCache(){
 
                         //Punteros a buffers_headers
                         Buffer_header *ptr_buffer = buffers.primer_buffer;
                         Buffer_header *ptr_aux = NULL;
+
+
+                        /** Si quedaron buffers sin escribirse en disco "delayed write", escribirlos **/
+
+                        for(int j = 0; j < CANT_BUFFERS; j++)
+                        {
+                                if( ptr_buffer->estado & DELAYED_WRITE )
+                                {
+                                        //cant_diferidos empieza en cero
+                                        delayed[cant_diferidos] = ptr_buffer;
+                                }
+
+                        }
+                        if( cant_diferidos)
+                        {
+                                manejar_diferidos();
+                        }
+
+                        ptr_buffer = buffers.primer_buffer;
 
                         for(int i=0; i < CANT_BUFFERS  ; i++)
                         {
@@ -139,7 +163,6 @@ class BufferCache{
 
                         delete [] delayed;
 
-                        //Se escriben los buffers que hayan quedado en el estado "delayed write"
 
                 };
 

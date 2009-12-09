@@ -3,7 +3,7 @@
 #define ESTRATEGIARECURSOSESCRITURADIFERIDA_H
 #include "EstrategiaRecursos.h"
 #include "BufferCache.hpp"
-
+#include "../Almacenamiento/Almacenamiento.h"
 #include <string>
 
 class EREscrituraDiferida : public EstrategiaRecursos{
@@ -12,11 +12,14 @@ class EREscrituraDiferida : public EstrategiaRecursos{
 private:
 
         BufferCache buffer_recurso;
-        EstrategiaIndice* indice;
+        EstrategiaIndice *indice;
+        Almacenamiento *almacen;
+        std::queue<Cambio> cambiosArchivo;
 
 public:
-        EREscrituraDiferida (EstrategiaIndice *indice ):buffer_recurso() {
+        EREscrituraDiferida (EstrategiaIndice *indice, Almacenamiento *almacen ):buffer_recurso(almacen) {
                         this->indice = indice;
+                        this->almacen = almacen;
         };
         virtual ~EREscrituraDiferida ( ){};
 
