@@ -129,6 +129,8 @@ private:
 
 	void resolverSubflujo(Nodo* nodo,std::list<Referencia>&listaDePadres,Referencia refHijo);
 
+	void eliminarHoja(Nodo* nodo,std::list<Referencia>&listaDePadres,Referencia refHijo);
+
 	void resolverReferenciaSiguiente(Nodo* nodoIzq,Referencia refAHermanoNuevo);
 
 	void subflujoHijosRaiz(Nodo* nodo,Nodo* hermano,Nodo* padre,Referencia refNodo,Referencia refHermano);

@@ -81,7 +81,7 @@ bool BSharpTree::abrir(string nombreArch,ComparadorClave* comp){
 	buf.sgetn((char*)&nivel,sizeof(int));
 	if(nivel!=0){
 		Raiz = new NodoIntermedio(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
-	    this->imprimirNodo(Raiz);
+		this->imprimirNodo(Raiz);
 	}else{
 		Raiz = new NodoHoja(&buf,numeroDeElementosXnodo,comparador,claveEstructural);
 	}
@@ -535,12 +535,16 @@ bool BSharpTree::eliminar(const Clave* claveE){
 	listaDePadres.push_back(posicionRaiz);
 	BuscarInsertarOEliminar(hoja,listaDePadres,Raiz,clave,refHoja,esRaiz,false);
 	int subFlujo = hoja->Eliminar(clave);
-	eliminarClaveEnIntermedio(clave,hoja->getListaElementos()->front()->getClave());
-	if(subFlujo==0){return false;}
-	if(subFlujo==1){
-		grabarUnitario(hoja,refHoja);
+	if(hoja->getCatidadMaximaDeElementos()==2){
+		eliminarHoja(hoja,listaDePadres,refHoja);
 	}else{
-		resolverSubflujo(hoja,listaDePadres,refHoja);
+		eliminarClaveEnIntermedio(clave,hoja->getListaElementos()->front()->getClave());
+		if(subFlujo==0){return false;}
+		if(subFlujo==1){
+			grabarUnitario(hoja,refHoja);
+		}else{
+			resolverSubflujo(hoja,listaDePadres,refHoja);
+		}
 	}
 	recomponerRaiz();
 	listaDePadres.clear();
@@ -724,6 +728,49 @@ Referencia BSharpTree::obtenerReferenciaHermano(Nodo* padreE,Clave* clave,bool I
 	return NULL;
 }
 
+void BSharpTree::eliminarHoja (Nodo* nodo,std::list<Referencia>&listaDePadres,Referencia refHijo){
+
+	grabarUnitario(nodo,refHijo);
+	if(nodo->getEspacioLibre()==2){
+		this->nuevoEspacioLibre(refHijo);
+	}
+	/*std::stringbuf buff(ios_base :: in | ios_base :: out | ios_base :: binary);
+	archivoArbol.seekg(listaDePadres.front());
+	char array2[tamanioNodo];
+	archivoArbol.read(array2,tamanioNodo);
+	buff.pubsetbuf(array2,tamanioNodo);
+	NodoIntermedio* padre = new NodoIntermedio(&buff,numeroDeElementosXnodo,comparador,claveEstructural);
+	std::list<ElementoNodo*>::iterator itPadre = padre->getListaElementos()->begin();
+	bool vacio = true;
+	Nodo* nodoAux = this->obtenerNodoPorPosiciones(padre->getReferenciaIzq());
+	if(nodoAux->getEspacioLibre()==2){
+		vacio=false;
+	}
+	delete nodo;
+	while(itPadre != padre->getListaElementos()->end()&&vacio){
+		ElementoNodo* elemPadre = *itPadre;
+		nodoAux = this->obtenerNodoPorPosiciones(elemPadre->getReferencia());
+		if(nodoAux->getCatidadMaximaDeElementos()==nodoAux->getEspacioLibre()){
+			vacio=false;
+		}
+		delete nodoAux;
+	}
+	if(vacio)this->nuevoEspacioLibre(refHijo);*/
+	/*if(nodo->getEspacioLibre()<2){
+		grabarUnitario(nodo,refHijo);
+	}else{
+		archivoArbol.seekg(listaDePadres.front());
+		char array2[tamanioNodo];
+		archivoArbol.read(array2,tamanioNodo);
+		buff.pubsetbuf(array2,tamanioNodo);
+		NodoIntermedio* padre = new NodoIntermedio(&buff,numeroDeElementosXnodo,comparador,claveEstructural);
+		//Padre dos elementos
+		if(padre->getEspacioLibre()==0){
+
+		}
+	}*/
+}
+
 Nodo* BSharpTree::obtenerHermanoXsuBflujo(int nivel,Referencia ref){
 	archivoArbol.seekg(ref);
 	std::stringbuf buff(ios_base :: in | ios_base :: out | ios_base :: binary);
@@ -893,11 +940,17 @@ Referencia BSharpTree::buscarEspacioLibre(){
 
 Nodo* BSharpTree::obtenerNodoPorPosiciones(Referencia posInicial){
 	std::stringbuf buffer(ios_base :: in | ios_base :: out | ios_base :: binary);
+	archivoArbol.exceptions( fstream::eofbit | fstream::failbit | fstream::badbit );
+
 	buffer.pubseekpos(0);
 	Nodo* nodo;
 	archivoArbol.seekg(posInicial);
 	char array2[tamanioNodo];
-	archivoArbol.read(array2,tamanioNodo);
+	try{
+		archivoArbol.read(array2,tamanioNodo);
+	} catch (fstream::failure e) {
+		cout << "Error al serializar Nodo";
+	}
 	buffer.pubsetbuf(array2,tamanioNodo);
 	int nivel;
 	buffer.sgetn((char*)&nivel,sizeof(int));
@@ -916,58 +969,62 @@ void BSharpTree::imprimir(){
 }
 
 void BSharpTree::imprimirIterativo(Nodo* nodoE){
-	cout<<" "<<endl;
-	if(nodoE->getNumeroNivel()!=0){
-		NodoIntermedio* nodo = dynamic_cast<NodoIntermedio*>(nodoE);
-		cout <<"Nodo Intermedio ";
-		cout <<"Nivel: " << nodo->getNumeroNivel()<<" ";
-		cout <<"Referencia Izquierda: " << nodo->getReferenciaIzq()<<endl;
-		cout <<"Elementos: ";
-		std::list<ElementoNodo*>::iterator it = nodo->getListaElementos()->begin();
-		while(it!=nodo->getListaElementos()->end()){
-			ElementoNodo* elem = *it;
-			for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
-				cout<<" ";
-				elem->getClave()->getAtributo(i)->imprimir(cout);
-				cout<<" ";
-			}
-			cout << elem->getReferencia();
-			cout<<"   ";
-			++it;
-		}
+
+	if(nodoE->getEspacioLibre()!=nodoE->getCatidadMaximaDeElementos()){
 		cout<<" "<<endl;
-		Nodo* nodoSiguiente = obtenerNodoPorPosiciones(nodo->getReferenciaIzq());
-		imprimirIterativo(nodoSiguiente);
-		delete nodoSiguiente;
-		it = nodo->getListaElementos()->begin();
-		while(it!=nodo->getListaElementos()->end()){
-			ElementoNodo* elem = *it;
-			nodoSiguiente = obtenerNodoPorPosiciones(elem->getReferencia());
+		if(nodoE->getNumeroNivel()!=0){
+			NodoIntermedio* nodo = dynamic_cast<NodoIntermedio*>(nodoE);
+			cout <<"Nodo Intermedio ";
+			cout <<"Nivel: " << nodo->getNumeroNivel()<<" ";
+			cout <<"Referencia Izquierda: " << nodo->getReferenciaIzq()<<endl;
+			cout <<"Elementos: ";
+			std::list<ElementoNodo*>::iterator it = nodo->getListaElementos()->begin();
+			while(it!=nodo->getListaElementos()->end()){
+				ElementoNodo* elem = *it;
+				for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
+					cout<<" ";
+					elem->getClave()->getAtributo(i)->imprimir(cout);
+					cout<<" ";
+				}
+				cout << elem->getReferencia();
+				cout<<"   ";
+				++it;
+			}
+			cout<<" "<<endl;
+			Nodo* nodoSiguiente = obtenerNodoPorPosiciones(nodo->getReferenciaIzq());
 			imprimirIterativo(nodoSiguiente);
 			delete nodoSiguiente;
-			++it;
-		}
-	}else{
-		NodoHoja* nodo = dynamic_cast<NodoHoja*>(nodoE);
-		cout <<"Nodo Hoja ";
-		cout <<"Nivel: " << nodo->getNumeroNivel()<<" ";
-		cout <<"Referencia Siguente: " << nodo->getReferenciaSiguiente()<<endl;;
-		cout <<"Elementos: ";
-		std::list<ElementoNodo*>::iterator it = nodo->getListaElementos()->begin();
-		while(it!=nodo->getListaElementos()->end()){
-			ElementoNodo* elem = *it;
-			for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
-				cout<<" ";
-				elem->getClave()->getAtributo(i)->imprimir(cout);
-				cout<<" ";
+			it = nodo->getListaElementos()->begin();
+			while(it!=nodo->getListaElementos()->end()){
+				ElementoNodo* elem = *it;
+				nodoSiguiente = obtenerNodoPorPosiciones(elem->getReferencia());
+				imprimirIterativo(nodoSiguiente);
+				delete nodoSiguiente;
+				++it;
 			}
-			cout << elem->getReferencia();
-			cout<<"   ";
-			++it;
+		}else{
+			NodoHoja* nodo = dynamic_cast<NodoHoja*>(nodoE);
+			cout <<"Nodo Hoja ";
+			cout <<"Nivel: " << nodo->getNumeroNivel()<<" ";
+			cout <<"Referencia Siguente: " << nodo->getReferenciaSiguiente()<<endl;;
+			cout <<"Elementos: ";
+			std::list<ElementoNodo*>::iterator it = nodo->getListaElementos()->begin();
+			while(it!=nodo->getListaElementos()->end()){
+				ElementoNodo* elem = *it;
+				for(unsigned int i = 0; i<elem->getClave()->getCantidadAtributos();i++){
+					cout<<" ";
+					elem->getClave()->getAtributo(i)->imprimir(cout);
+					cout<<" ";
+				}
+				cout << elem->getReferencia();
+				cout<<"   ";
+				++it;
+			}
+			cout<<" "<<endl;
 		}
-		cout<<" "<<endl;
 	}
 }
+
 
 void BSharpTree::posicionarArchivo(){
 	archivoArbol.seekg(posicionRaiz);
@@ -1126,8 +1183,8 @@ bool BSharpTree::abrir(string nombreArch,ComparadorClave* comp,bool comprimido){
 	}
 	archivoEspaciosLibres.open(nombreEspaciosLibres.c_str(),std::fstream::out|std::fstream::in|std::fstream::binary);
 	if(!archivoEspaciosLibres.is_open()){
-			return false;
-		}
+		return false;
+	}
 	return true;
 }
 std::string BSharpTree::getNombreArchivo(){
