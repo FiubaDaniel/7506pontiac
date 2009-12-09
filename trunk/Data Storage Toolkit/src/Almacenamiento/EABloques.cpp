@@ -125,12 +125,25 @@ bool EABloques::escribir(Componente*compuesto){
 			escribirBloque(bloque);
 			if(siguienteLibre<=nroBloque)
 				siguienteLibre=nroBloque;
-			if(colaDeCambios){
+/*			if(colaDeCambios){
 				for(Ttamanio i=0;i<bloque->cantidadComponentes();i++){
 					clave->set((Registro*)bloque->get(i));
 					colaDeCambios->push(Cambio(clave,nroBloque,Cambio::Alta));
 				}
-			}
+			}*/
+			return true;
+		}
+	}
+	Registro*registro=dynamic_cast<Registro*>(compuesto);
+	if(registro!=NULL){
+		if(leerBloque(this->bloque)){
+			archivoEspacioLibre->posicionar(nroBloque*sizeof(Ttamanio));
+			archivoEspacioLibre->leer((char*)&libres,sizeof(Ttamanio));
+			if( libres  <  registro->tamanioSerializado() )
+				return false;
+			this->bloque->agregar(registro);
+			posicionarComponente(nroBloque-1);
+			escribirBloque(this->bloque);
 			return true;
 		}
 	}
@@ -141,6 +154,20 @@ bool EABloques::leer(Componente*compuesto){
 	Bloque*bloque=dynamic_cast<Bloque*>(compuesto);
 	if(bloque!=NULL &&nroBloque<siguienteLibre){
 		return leerBloque(bloque);
+	}
+	Registro*registro=dynamic_cast<Registro*>(compuesto);
+	if(registro!=NULL){
+		if(leerBloque(this->bloque)){
+			Ttamanio pos;
+			if(buscarComponente(registro,pos)){
+				std::stringbuf buf(std::ios_base::binary | std::ios_base::in | std::ios_base::out );
+				buf.pubseekpos(0);
+				this->bloque->get(pos)->serializar(buf);
+				buf.pubseekpos(0);
+				registro->deserializar(buf);
+				return true;
+			}
+		}
 	}
 	return false;
 }
@@ -263,6 +290,12 @@ bool EABloques::buscarComponente(Clave*unaClave,Ttamanio & posicion){
 	return false;
 }
 bool EABloques::eliminar(Componente*componente){
+	Bloque*bloqueeliminado=dynamic_cast<Bloque*>(componente);
+	if(bloqueeliminado){
+		libres=0;
+		archivoEspacioLibre->posicionar(nroBloque*sizeof(Ttamanio));
+		archivoEspacioLibre->escribir((char*)&libres,sizeof(Ttamanio));
+	}
 	Referencia posBorrado=nroBloque;
 	if(nroBloque<siguienteLibre){
 		if(not leerBloque(bloque))return false;
@@ -462,6 +495,9 @@ std::string EABloques::getMetadata(){
 };
 unsigned EABloques::getTamanioComponenteUsado(){
 	return capacBloque;
+}
+Referencia EABloques::ultimoComponente(){
+	return siguienteLibre-1;
 }
 void EABloques::setMetadata(char* metadata){
 	capacBloque=*(Ttamanio*)metadata;

@@ -48,6 +48,11 @@ public:
 	void imprimirMetada(std::ostream&out);
 	std::string getMetadata();
 	void setMetadata(char* metadata);
+	Referencia ultimoComponente();
+	bool truncar(Referencia ultimo){
+		siguienteRegLibre=ultimo+1;
+		return true;
+	}
 };
 
 #endif /* EAREGISTROS_H_ */

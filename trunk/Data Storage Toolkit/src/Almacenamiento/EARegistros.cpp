@@ -240,3 +240,6 @@ void EARegistros::setMetadata(char* metadata){
 	metadata+=sizeof(Ttamanio);
 	siguienteRegLibre=*(Referencia*)metadata;
 }
+Referencia EARegistros::ultimoComponente(){
+	return siguienteRegLibre-1;
+}

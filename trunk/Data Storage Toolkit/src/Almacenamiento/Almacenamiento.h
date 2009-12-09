@@ -38,6 +38,7 @@ public:
 	virtual void clear()=0;
 	virtual void cerrar()=0;
 	virtual Almacenamiento*clonar()=0;
+
 	EstrategiaAlmacenamiento*getEstrategia(){
 		return estrategia;
 	}
@@ -50,6 +51,16 @@ public:
 			return estrategia->posicionarComponente(nroComponente);
 		return false;
 	};
+	virtual Referencia ultimoComponente(){
+		if(estrategia)
+			return  estrategia->ultimoComponente();
+		return 0;
+	};
+	virtual bool truncar(Referencia ultimo){
+		if(estrategia)
+					return  estrategia->truncar(ultimo);
+		return false;
+	}
 	virtual Referencia posicionComponente(){
 		if(estrategia)
 			return estrategia->posicionComponente();
