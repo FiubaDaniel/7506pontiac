@@ -734,28 +734,30 @@ void BSharpTree::eliminarHoja (Nodo* nodo,std::list<Referencia>&listaDePadres,Re
 	if(nodo->getEspacioLibre()==2){
 		this->nuevoEspacioLibre(refHijo);
 	}
-	/*std::stringbuf buff(ios_base :: in | ios_base :: out | ios_base :: binary);
-	archivoArbol.seekg(listaDePadres.front());
-	char array2[tamanioNodo];
-	archivoArbol.read(array2,tamanioNodo);
-	buff.pubsetbuf(array2,tamanioNodo);
-	NodoIntermedio* padre = new NodoIntermedio(&buff,numeroDeElementosXnodo,comparador,claveEstructural);
-	std::list<ElementoNodo*>::iterator itPadre = padre->getListaElementos()->begin();
+	Nodo* padreE = this->obtenerNodoPorPosiciones(listaDePadres.front());
+	NodoIntermedio* padre = dynamic_cast<NodoIntermedio*>(padreE);
 	bool vacio = true;
 	Nodo* nodoAux = this->obtenerNodoPorPosiciones(padre->getReferenciaIzq());
-	if(nodoAux->getEspacioLibre()==2){
+	if(nodoAux->getEspacioLibre()!=2){
 		vacio=false;
 	}
-	delete nodo;
+	delete nodoAux;
+	std::list<ElementoNodo*>::iterator itPadre = padre->getListaElementos()->begin();
 	while(itPadre != padre->getListaElementos()->end()&&vacio){
 		ElementoNodo* elemPadre = *itPadre;
 		nodoAux = this->obtenerNodoPorPosiciones(elemPadre->getReferencia());
-		if(nodoAux->getCatidadMaximaDeElementos()==nodoAux->getEspacioLibre()){
+		if(nodoAux->getCatidadMaximaDeElementos()!=nodoAux->getEspacioLibre()){
 			vacio=false;
 		}
 		delete nodoAux;
+		++itPadre;
 	}
-	if(vacio)this->nuevoEspacioLibre(refHijo);*/
+	if(vacio){
+		while(!padre->getListaElementos()->empty()){
+			padre->getListaElementos()->pop_front();
+		}
+		this->nuevoEspacioLibre(refHijo);
+	}
 	/*if(nodo->getEspacioLibre()<2){
 		grabarUnitario(nodo,refHijo);
 	}else{
