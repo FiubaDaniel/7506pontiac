@@ -46,7 +46,7 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: dataStorageToolkit
+all: dataStorageToolkit run
 
 # Tool invocations
 dataStorageToolkit: $(OBJS) $(USER_OBJS)
@@ -55,7 +55,7 @@ dataStorageToolkit: $(OBJS) $(USER_OBJS)
 	g++  -o"dataStorageToolkit" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
-
+run: ./dataStorageToolkit
 # Other Targets
 clean:
 	-$(RM) $(OBJS)$(C++_DEPS)$(C_DEPS)$(CC_DEPS)$(CPP_DEPS)$(EXECUTABLES)$(CXX_DEPS)$(C_UPPER_DEPS) dataStorageToolkit
