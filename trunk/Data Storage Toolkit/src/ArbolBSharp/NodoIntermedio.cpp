@@ -217,6 +217,9 @@ ElementoNodo* NodoIntermedio::dividirse(Nodo* nodoHermanoE,Nodo* nodoIzqE,Nodo* 
 	NodoIntermedio* nodoPadre= dynamic_cast<NodoIntermedio*>(nodoPadreE);
 	int cantElementosIzq = ((cantidadMaximaDeElementos*2)+1)/3;
 	int cantElementosMedio = ((cantidadMaximaDeElementos*2)+1)/3;
+	if(nodoPadre->getCatidadMaximaDeElementos()==2){
+		cantElementosMedio=2;
+	}
 	ElementoNodo* elem;
 	ElementoNodo* retorno;
 	std::list<ElementoNodo*>::iterator itPadre = nodoPadre->getListaElementos()->begin();
@@ -328,7 +331,7 @@ int NodoIntermedio::unirse(Nodo* nodoHermanoIzq,Nodo* nodoHermanoDer,Nodo* Padre
 	auxiliarPadre->setReferencia(referenciaIzq);
 	nodoHermanoIzq->agregarElemento(auxiliarPadre);
 	Referencia refIzqDeNodoDer  = nodoDerecho->getReferenciaIzq();
-    int cantIzq = cantidadMaximaDeElementos- (cantidadMaximaDeElementos - nodoHermanoIzq->getEspacioLibre()) - 1;
+	int cantIzq = cantidadMaximaDeElementos- (cantidadMaximaDeElementos - nodoHermanoIzq->getEspacioLibre()) - 1;
 	std::list<ElementoNodo*>::iterator itMedio = listaElementos.begin();
 	while(itMedio != listaElementos.end()){
 		ElementoNodo* elem = *itMedio;
