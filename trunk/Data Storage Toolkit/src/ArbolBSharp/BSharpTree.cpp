@@ -942,17 +942,12 @@ Referencia BSharpTree::buscarEspacioLibre(){
 
 Nodo* BSharpTree::obtenerNodoPorPosiciones(Referencia posInicial){
 	std::stringbuf buffer(ios_base :: in | ios_base :: out | ios_base :: binary);
-	archivoArbol.exceptions( fstream::eofbit | fstream::failbit | fstream::badbit );
 
 	buffer.pubseekpos(0);
 	Nodo* nodo;
 	archivoArbol.seekg(posInicial);
 	char array2[tamanioNodo];
-	try{
-		archivoArbol.read(array2,tamanioNodo);
-	} catch (fstream::failure e) {
-		cout << "Error al serializar Nodo";
-	}
+	archivoArbol.read(array2,tamanioNodo);
 	buffer.pubsetbuf(array2,tamanioNodo);
 	int nivel;
 	buffer.sgetn((char*)&nivel,sizeof(int));
