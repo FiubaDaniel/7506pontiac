@@ -33,7 +33,7 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 	estrategiaBloques->setComparador(comparador);
 	estrategiaBloques->setClave(&claveEstructural);
 	/*inicializo el archivo*/
-	Archivo* archivo=new Archivo(estrategiaBloques);
+	Almacenamiento* archivo=new Archivo(estrategiaBloques);
 	hay_que_comprimir=comprime;
 	tamanio_contendor=longitudContenedor/sizeof(unsigned);
 
@@ -41,13 +41,11 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 	if(comprime){
 		archivo->crear(path.c_str());
 		existia=compresor.descompresion(archivo);
-
-	}else{
-		if( not archivo->abrir(path.c_str())){
-			archivo->crear(path.c_str());
-			existia=false;
-		}
+	}else if( not archivo->abrir(path.c_str())){
+		archivo->crear(path.c_str());
+		existia=false;
 	}
+
 
 	if(existia){
 		long longitud=longitudBloque;
@@ -59,6 +57,13 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 			delete estrategiaBloques;
 			throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
 		}
+	}
+
+	if(tipoBuffer==DIFERIDO){
+		archivo->cerrar();
+		AlmacenamientoBufferCache* almacen_buffer=new AlmacenamientoBufferCache(archivo);
+		archivo=almacen_buffer;
+		archivo->abrir(path.c_str());
 	}
 	/*incializar indice*/
 	EstrategiaIndice* Indice=NULL;
@@ -107,13 +112,16 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 	/*inicializar el estrategia Recurso*/
 	EstrategiaRecursos* estrategiaRecurso=NULL;
 	if(tieneBuffer){
-		BloqueMemoria bloqueMem(registro1);
-		EABloques * estrategiaBuffer=new EABloques(&bloqueMem,longitudBloque,0.8);
-		Buffer* buffer=new Buffer(estrategiaBuffer,longitudBuffer);
-		buffer->crear("buffer");
-		long nroElem=longitudBuffer/longitudBloque;
-		estrategiaRecurso=new EREscrituraDirecta(Indice,archivo,buffer,nroElem);
-
+		if(tipoBuffer==DIRECTO){
+			BloqueMemoria bloqueMem(registro1);
+			EABloques * estrategiaBuffer=new EABloques(&bloqueMem,longitudBloque,0.8);
+			Buffer* buffer=new Buffer(estrategiaBuffer,longitudBuffer);
+			buffer->crear("buffer");
+			long nroElem=longitudBuffer/longitudBloque;
+			estrategiaRecurso=new EREscrituraDirecta(Indice,archivo,buffer,nroElem);
+		}else{
+			estrategiaRecurso=new ERUnAlmacenamiento(Indice,archivo);
+		}
 	}else{
 		estrategiaRecurso=new ERUnAlmacenamiento(Indice,archivo);
 	};
@@ -213,8 +221,9 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 			long nroElem=longitudBuffer/regmem.tamanioSerializado();
 			estrategiaRecurso=new EREscrituraDirecta(Indice,archivo,buffer,nroElem);
 		}else{
-			EREscrituraDiferida *dif=new EREscrituraDiferida(Indice,archivo);
-			estrategiaRecurso=dif;
+			/*EREscrituraDiferida *dif=new EREscrituraDiferida(Indice,archivo);
+			estrategiaRecurso=dif;*/
+			estrategiaRecurso=new ERUnAlmacenamiento(Indice,archivo);
 		}
 	}else{
 		estrategiaRecurso=new ERUnAlmacenamiento(Indice,archivo);
@@ -500,9 +509,8 @@ void MisDatos::cerrarArchivo1(){
 			Almacenamiento* almacen=recurso1->getEstrategia()->getAlmacenamiento();
 			string nombre_archivo=almacen->getNombre();
 			EstrategiaCompresion compresor;
-			compresor.setSalida(&cout);
+			//compresor.setSalida(&cout);
 			compresor.compresion(almacen,tamanio_contendor);
-			remove(nombre_archivo.c_str());
 
 			EstrategiaIndice *indice=recurso1->getEstrategiaRecurso()->getIndice();
 			EstrategiaBSharp *indice_arbol=dynamic_cast<EstrategiaBSharp*>(indice);
@@ -510,16 +518,20 @@ void MisDatos::cerrarArchivo1(){
 				/*todo comprimir arbol*/
 				BSharpTree* arbol=indice_arbol->obtenerArbol();
 				compresor.compresionArbol(arbol,nombre_archivo,tamanio_contendor);
+				recurso1->cerrar();
+				remove(nombre_archivo.c_str());
 				remove(arbol->getNombreArchivo().c_str());
 			}
 			HashingExt* hash=dynamic_cast<HashingExt*>(indice);
 			if(hash){
 				/*todo comprimir hash*/
 				compresor.compresionHash(nombre_archivo,tamanio_contendor);
+				recurso1->cerrar();
+				remove(nombre_archivo.c_str());
 				nombre_archivo+="_cubos";
 				remove(nombre_archivo.c_str());
 			}
-			recurso1->cerrar();
+
 
 		}else
 			recurso1->cerrar();
