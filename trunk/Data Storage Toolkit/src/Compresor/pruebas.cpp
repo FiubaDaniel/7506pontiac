@@ -148,7 +148,8 @@ int pruebaEstragiaCompresionAlmacenamiento(char nombre_archivo[]){
 int pruebaEstragiaCompresionAlmacenamiento1(char nombre_archivo[]){
 	AtributoVariable<string> nombre("N");
 	AtributoVariable<int> numeros("#");
-	Registro registro(2,&nombre,&numeros);
+	AtributoFijo<int> num("n");
+	Registro registro(3,&nombre,&numeros,&num);
 	Bloque bloque(&registro);
 	Clave clave(&registro,1,"N");
 	ComparadorRegistroVariable comparador;
@@ -160,17 +161,18 @@ int pruebaEstragiaCompresionAlmacenamiento1(char nombre_archivo[]){
 	/*archivo original*/
 	archivo.crear(nombre_archivo);
 	if(not compresion.descompresion(&archivo)){
-		for(int i=0;i<250;i++){
+		for(int i=0;i<5;i++){
 			*(AtributoVariable<string>*)registro.get(0)=Terminos::obtenerTermino(i).c_str();
 			((AtributoVariable<int>*)registro.get(1))->getVector().clear();
 			for(int j=0;j< i%4+1;j++){
 				((AtributoVariable<int>*)registro.get(1))->getVector().push_back(j);
 			};
+			*((AtributoFijo<int>*)registro.get(2))=i;
 			if(not ((Almacenamiento&)archivo).insertar(&registro))
 				cout<<"Problema"<<endl;
 		}
 		//archivo.imprimir(cout);
-		compresion.compresion(&archivo,256);
+		compresion.compresion(&archivo,512);
 		cout<<"/***************COMPRIMIENDO************************/"<<endl;
 	}else{
 		archivo.imprimir(cout);
