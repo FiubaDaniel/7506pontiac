@@ -19,8 +19,8 @@ using namespace std;
 
 //para mostrar los datos, buffer e indice de Archivo1
 void mostrarArchivo1(MisDatos& misDatos){
-	cout << "********* DATOS **********" << endl;
-	misDatos.mostrarDatosArchivo1();
+	//cout << "********* DATOS **********" << endl;
+	//misDatos.mostrarDatosArchivo1();
 	//cout << "********* INDICE **********" << endl;
 	//misDatos.mostrarIndiceArchivo1();
 }
@@ -62,8 +62,8 @@ int invertirDecenaUnidad(int valor){
 char calcularChar(int valor){
 	return 35 + (valor%88);
 }
-
 int main() {
+
 	int* miLista = NULL;
 	MiRegistroVariable* miRegVariable = NULL;
 	MiRegistroFijo* miRegFijo = NULL;
@@ -75,8 +75,8 @@ int main() {
 	// ARCHIVO 1
 	// INICIALIZO EL ARCHIVO 1
 	//while(true){
-	//misDatos.inicializarArchivo1("./datos/MiArchivo1.dat", 256, true, DIFERIDO, 1024, true, ARBOL, 128, true, 1024);
 	misDatos.inicializarArchivo1("./datos/MiArchivo1.dat", 256, true, DIRECTO, 1024, true, ARBOL, 128, true, 1024);
+	//misDatos.inicializarArchivo1("./datos/MiArchivo1.dat", 256, true, DIFERIDO, 1024, true, ARBOL, 128, true, 1024);
 	// INSERTO REGISTROS VARIABLES
 	for (int i=0; i<CENTENAMAXREGISTROS*100; ++i){
 		cantElementos = i % DELTA + MINIMO;
