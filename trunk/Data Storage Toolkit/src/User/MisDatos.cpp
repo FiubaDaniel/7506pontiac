@@ -36,9 +36,10 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 	Almacenamiento* archivo=new Archivo(estrategiaBloques);
 	hay_que_comprimir=comprime;
 	tamanio_contendor=longitudContenedor/sizeof(unsigned);
-
+	compresor.setSalida(&cout);
 	bool existia=true;
 	if(comprime){
+
 		archivo->crear(path.c_str());
 		existia=compresor.descompresion(archivo);
 	}else if( not archivo->abrir(path.c_str())){
@@ -509,7 +510,7 @@ void MisDatos::cerrarArchivo1(){
 			Almacenamiento* almacen=recurso1->getEstrategia()->getAlmacenamiento();
 			string nombre_archivo=almacen->getNombre();
 			EstrategiaCompresion compresor;
-			//compresor.setSalida(&cout);
+			compresor.setSalida(&cout);
 			compresor.compresion(almacen,tamanio_contendor);
 
 			EstrategiaIndice *indice=recurso1->getEstrategiaRecurso()->getIndice();
