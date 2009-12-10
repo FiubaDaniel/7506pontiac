@@ -12,6 +12,7 @@
 #include "../Almacenamiento/Archivo.h"
 #include "../Almacenamiento/EARegistros.h"
 #include "../Almacenamiento/EABloques.h"
+#include "../RecursoAlmacenamiento/AlmacenamientoBufferCache.h"
 #include "../Compuesto/Registro.h"
 #include "../Compuesto/Bloque.h"
 #include "../Compuesto/AtributoFijo.h"
@@ -30,6 +31,7 @@ int pruebacompresion2();
 int pruebaCompresion3();
 int pruebaEstragiaCompresionAlmacenamiento(char nombre_archivo[] );
 int pruebaEstragiaCompresionAlmacenamiento1(char nombre_archivo[] );
+int pruebaAlmacenamientoBufferCache(char nombre_archivo[] );
 int pruebaEstrategiaCompresionArbol();
 int PruebaComprimirNodo();
 int pruebaCompresion5();

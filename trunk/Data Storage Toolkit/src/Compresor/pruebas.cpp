@@ -182,6 +182,39 @@ int pruebaEstragiaCompresionAlmacenamiento1(char nombre_archivo[]){
 	remove(nombre_archivo);
 	return 0;
 }
+int pruebaAlmacenamientoBufferCache(char nombre_archivo[] ){
+	AtributoVariable<string> nombre("N");
+	AtributoVariable<int> numeros("#");
+	AtributoFijo<int> num("n");
+	Registro registro(3,&nombre,&numeros,&num);
+	Bloque bloque(&registro);
+	Clave clave(&registro,1,"N");
+	ComparadorRegistroVariable comparador;
+	EABloques estrategia(&bloque,125,0.8f);
+	estrategia.setClave(&clave);
+	estrategia.setComparador(&comparador);
+	Archivo archivo(&estrategia);
+	AlmacenamientoBufferCache cache(&archivo);
+	/*archivo original*/
+	cache.crear(nombre_archivo);
+	for(int i=0;i<5;i++){
+		*(AtributoVariable<string>*)registro.get(0)=Terminos::obtenerTermino(i).c_str();
+		((AtributoVariable<int>*)registro.get(1))->getVector().clear();
+		for(int j=0;j< i%4+1;j++){
+			((AtributoVariable<int>*)registro.get(1))->getVector().push_back(j);
+		};
+		*((AtributoFijo<int>*)registro.get(2))=i;
+		if(not ((Almacenamiento&)cache).insertar(&registro))
+			cout<<"Problema"<<endl;
+	}
+	cache.imprimir(cout);
+	cache.cerrar();
+	archivo.setEstrategia(&estrategia);
+	archivo.abrir(nombre_archivo);
+	archivo.imprimir(cout);
+	archivo.cerrar();
+	return 0;
+}
 int pruebaEstrategiaCompresionArbol(){
 	/*************************Creacion Arbol***************************/
 	Referencia ref=0;
