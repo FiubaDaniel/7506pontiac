@@ -41,6 +41,7 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 	if(comprime){
 		archivo->crear(path.c_str());
 		existia=compresor.descompresion(archivo);
+
 	}else{
 		if( not archivo->abrir(path.c_str())){
 			archivo->crear(path.c_str());
@@ -117,9 +118,9 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 		estrategiaRecurso=new ERUnAlmacenamiento(Indice,archivo);
 	};
 	recurso1=new Recurso(estrategiaRecurso);
-	string comprimido = path+"_Compresion";
+	string comprimido = path+"_comprimido";
 	remove(comprimido.c_str());
-	if(ARBOL){
+	if(tipo==ARBOL){
 		comprimido = path+"_arbolcomprimido";
 		remove(comprimido.c_str());
 	}else{

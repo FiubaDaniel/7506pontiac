@@ -39,7 +39,9 @@ bool EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivo,unsi
 
 	//Paso la metadata (que no se comprime) al archivo de datos comprimido
 	std::string metadata=arbol->getMetadata();
+
 	unsigned tamanio_meta=metadata.size();
+
 	archivo_comprimido.write((char*)&tamanio_meta,sizeof(tamanio_meta));
 	//cout<<archivo_comprimido.tellp()<<endl;
 	archivo_comprimido.write(metadata.data(),tamanio_meta);
@@ -361,7 +363,7 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,unsigned tamanio_bu
 
 	string archivoComprimido=almacen->getNombre();
 
-	archivoComprimido+=".arit";
+	archivoComprimido+="_comprimido";
 	/**/
 	std::fstream archivo_comprimido;
 
@@ -454,7 +456,7 @@ bool EstrategiaCompresion::descompresion(Almacenamiento*almacen){
 
 	string archivoComprimido=almacen->getNombre();
 
-	archivoComprimido+=".arit";
+	archivoComprimido+="_comprimido";
 
 	std::fstream archivo_comprimido;
 

@@ -145,42 +145,39 @@ int pruebaEstragiaCompresionAlmacenamiento(char nombre_archivo[]){
 	archivo.cerrar();
 	return 0;
 }
-int pruebaEstragiaCompresionAlmacenamiento1(char* nombre_archivo){
+int pruebaEstragiaCompresionAlmacenamiento1(char nombre_archivo[]){
 	AtributoVariable<string> nombre("N");
 	AtributoVariable<int> numeros("#");
 	Registro registro(2,&nombre,&numeros);
 	Bloque bloque(&registro);
 	Clave clave(&registro,1,"N");
 	ComparadorRegistroVariable comparador;
+	EstrategiaCompresion compresion;
 	EABloques estrategia(&bloque,125,0.8f);
 	estrategia.setClave(&clave);
 	estrategia.setComparador(&comparador);
 	Archivo archivo(&estrategia);
 	/*archivo original*/
 	archivo.crear(nombre_archivo);
-	for(int i=0;i<250;i++){
-		*(AtributoVariable<string>*)registro.get(0)=Terminos::obtenerTermino(i).c_str();
-		((AtributoVariable<int>*)registro.get(1))->getVector().clear();
-		for(int j=0;j< i%4+1;j++){
-			((AtributoVariable<int>*)registro.get(1))->getVector().push_back(j);
-		};
-		if(not ((Almacenamiento&)archivo).insertar(&registro))
-			cout<<"Problema"<<endl;
+	if(not compresion.descompresion(&archivo)){
+		for(int i=0;i<250;i++){
+			*(AtributoVariable<string>*)registro.get(0)=Terminos::obtenerTermino(i).c_str();
+			((AtributoVariable<int>*)registro.get(1))->getVector().clear();
+			for(int j=0;j< i%4+1;j++){
+				((AtributoVariable<int>*)registro.get(1))->getVector().push_back(j);
+			};
+			if(not ((Almacenamiento&)archivo).insertar(&registro))
+				cout<<"Problema"<<endl;
+		}
+		//archivo.imprimir(cout);
+		compresion.compresion(&archivo,256);
+		cout<<"/***************COMPRIMIENDO************************/"<<endl;
+	}else{
+		archivo.imprimir(cout);
+		cout<<"/***************DESCOMPRIMIDO**********************/"<<endl;
 	}
-	cout<<"/***************COMPRIMIENDO************************/"<<endl;
-	archivo.imprimir(cout);
 	archivo.cerrar();
-	EstrategiaCompresion compresion;
-	archivo.abrir(nombre_archivo);
-	compresion.compresion(&archivo,256);
-	archivo.cerrar();
-	/*creo un archivo para los descomprimidos*/
-	cout<<endl<<"/***************DESCOMPRIMIENDO************************/"<<endl;
 	remove(nombre_archivo);
-	archivo.crear(nombre_archivo);
-	compresion.descompresion(&archivo);
-	archivo.imprimir(cout);
-	archivo.cerrar();
 	return 0;
 }
 int pruebaEstrategiaCompresionArbol(){
@@ -207,13 +204,13 @@ int pruebaEstrategiaCompresionArbol(){
 		arbol->insertar(ref,&clave1);
 	}
 	for(int i=0;i<30;i++){
-			strncpy(unNombre,Terminos::obtenerTermino(i).data(),15);
-			nombre.set(unNombre);
-			Registro reg1(1,&nombre);
-			Clave clave1(&reg1,1,"miStringID");
-			//std::cout<<clave1.getAtributo("miStringID")<<std::endl;
-			arbol->eliminar(&clave1);
-		}
+		strncpy(unNombre,Terminos::obtenerTermino(i).data(),15);
+		nombre.set(unNombre);
+		Registro reg1(1,&nombre);
+		Clave clave1(&reg1,1,"miStringID");
+		//std::cout<<clave1.getAtributo("miStringID")<<std::endl;
+		arbol->eliminar(&clave1);
+	}
 	arbol->imprimir();
 	//arbol->cerrar();
 	string nombreArchivo = arbol->getNombreArchivo();
@@ -228,7 +225,7 @@ int pruebaEstrategiaCompresionArbol(){
 	/************************DESCOMPRIMIENDO**************************/
 	BSharpTree* arbol2 = new BSharpTree(&clave);
 	ComparadorClave* comparador2 = new ComparadorRegistroVariable();
-    //compresion.descompresionInsdice(nombreComprimido,nombreArchivo);
+	//compresion.descompresionInsdice(nombreComprimido,nombreArchivo);
 	//arbol2->abrir(nombreArbol2,nombreArbol,comparador2);
 	//arbol2->abrir(nombreArbol2,nombreArbol,comparador2);
 	compresion.descompresionArbol(arbol2,nombreComprimido);
@@ -241,7 +238,7 @@ int pruebaCompresion5(){
 	//AAAAAABBBBBBPPPPPPDSAZXCVBNN�
 	//12345678901234567890123456789012345678901234567890
 	//AAAAAABBBBBBPPPPPPDSAZXCVBNMqweeeeeeeeetttttttttty
-	          //123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+	//123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
 #define CANT_AGREGAR 2
 #define CANT_UNSIGNED 30
 #define NUMERO_ITERACIONES 70
