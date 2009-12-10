@@ -36,6 +36,21 @@ public:
 	void clear();
 	void cerrar();
 	Almacenamiento*clonar();
+	virtual void imprimir(ostream& out){
+		if(estrategia){
+			estrategia->imprimirMetada(out);
+			Componente*componente=estrategia->getComponenteUsado()->clonar();
+			switchEstrategia();
+			almacen->posicionarComponente(0);
+			while(almacen->leer(componente)){
+				out<<almacen->posicionComponente()-1 <<" : ";
+				componente->imprimir(out);
+				out<<endl;
+			};
+			delete componente;
+			switchEstrategia();
+		}
+	}
 	virtual ~AlmacenamientoBufferCache();
 };
 
