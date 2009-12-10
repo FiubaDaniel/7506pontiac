@@ -14,7 +14,7 @@
 #include <iostream>
 #include <string>
 #include "ElementoNodo.h"
-typedef unsigned int Referencia;
+typedef int Referencia;
 class Nodo {
 public:
 	     Nodo(unsigned int cantElem,unsigned int nNivel,ComparadorClave* comparador);
