@@ -8,7 +8,7 @@
  * class Almacenamiento
  *
  */
-typedef unsigned int Referencia;
+typedef int Referencia;
 class EstrategiaAlmacenamiento;
 
 class Almacenamiento{

@@ -476,21 +476,9 @@ void EABloques::imprimirMetada(std::ostream&out){
 }
 std::string EABloques::getMetadata(){
 	std::string resultado;
-	char*p=(char*)&capacBloque;
-	for(unsigned i=0;i<sizeof(capacBloque);i++){
-		resultado.push_back(*p);
-		p++;
-	}
-	p=(char*)&porcCarga;
-	for(unsigned i=0;i<sizeof(porcCarga);i++){
-		resultado.push_back(*p);
-		p++;
-	}
-	p=(char*)&siguienteLibre;
-	for(unsigned i=0;i<sizeof(siguienteLibre);i++){
-		resultado.push_back(*p);
-		p++;
-	}
+	resultado.append((char*)&capacBloque,sizeof(Ttamanio));
+	resultado.append((char*)&porcCarga,sizeof(double));
+	resultado.append((char*)&siguienteLibre,sizeof(Ttamanio));
 	return resultado;
 };
 unsigned EABloques::getTamanioComponenteUsado(){
