@@ -310,11 +310,11 @@ void Compresor::setContinuacionCompresion(unsigned*buffer,unsigned tamanio){
         U=0;
 }
 /*---------------------------------------Descompresion--------------------------------------------------------*/
-void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int tamanioComprimido){
+void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,unsigned tamanioComprimido){
         this->setExtremos();
         //Calculo Padding
         //Primero busco el byte donde comienza el padding.
-        int nro_unsigned;
+        unsigned nro_unsigned;
         for(nro_unsigned=(tamanioComprimido-1);buffer[nro_unsigned]==0;nro_unsigned--);
         int bit_comparado=0X1;
         int nro_bit;
@@ -329,7 +329,7 @@ void Compresor::descomprimir(unsigned * buffer,std::string& descomprimido,int ta
         unsigned char contadorDeBits=MAX_BITS;
         //Comienza descompresion
 
-        int cant = 0;
+        unsigned cant = 0;
         //while(cant<100){
         while(this->bitRestantes>=0 and cant<this->caracteres){
 
@@ -418,7 +418,7 @@ void Compresor::restructuracionUnderflow(unsigned char cantidadIteraciones,unsig
         siguiente<<=cantidadIteraciones;
 }
 
-void Compresor::setCaracteres(int caracteres){
+void Compresor::setCaracteres(unsigned caracteres){
         this->caracteres=caracteres;
 }
 
