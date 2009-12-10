@@ -35,7 +35,7 @@ class Compresor {
 	unsigned char cerrador;
 	int bitRestantes;
 	int U;
-	int caracteres;
+	unsigned caracteres;
 	char overflow();
 	char underflow();
 	//void emitir();
@@ -109,10 +109,9 @@ public:
 	unsigned tamanioBufferComprimido(){
 		return buffer.size();
 	};
-	void descomprimir(unsigned * buffer,std::string& descomprimido,int tamanioComprimido);
-	void descomprimir(unsigned * buffer,std::list<unsigned char>& descomprimido,int tamanioComprimido);
+	void descomprimir(unsigned * buffer,std::string& descomprimido,unsigned tamanioComprimido);
 	void setExtremos();
-	void setCaracteres(int caracteres);
+	void setCaracteres(unsigned caracteres);
 	virtual ~Compresor();
 
 private:

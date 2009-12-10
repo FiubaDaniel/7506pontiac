@@ -418,7 +418,8 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,unsigned tamanio_bu
 			/*no pudo agregar,cierra el contenedor , graba y empieza uno nuevo */
 			contenedor.cerrar();
 
-
+			cout<<tamanioSerializado<<endl;
+			cout<<cont<<endl;
 
 			archivo_comprimido.write((char*)&cont,sizeof(cont));
 
@@ -499,16 +500,19 @@ bool EstrategiaCompresion::descompresion(Almacenamiento*almacen){
 	unsigned tamanio_serializado=almacen->getEstrategia()->getTamanioComponenteUsado();
 
 	descomprimido.clear();
+	short cont=0;
+	try{
+
 
 	while(archivo_comprimido.peek()!= EOF and not archivo_comprimido.eof()){
 		/*recupero una tira de componentes serializados*/
-		short cont;
+
 
 		archivo_comprimido.read((char*)&cont,sizeof(cont));
 
 		archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_comprimido);
 
-
+		cout<<tamanio_comprimido<<endl;
 
 		//contenedor.setExtremos();
 		descomprimido.clear();
@@ -516,6 +520,10 @@ bool EstrategiaCompresion::descompresion(Almacenamiento*almacen){
 		contenedor.setCaracteres(tamanio_serializado*cont);
 
 		contenedor.descomprimir(buffer,descomprimido,tamanio_comprimido);
+
+		cout<<cont<<endl;
+
+		cout<<descomprimido.size()<<endl;
 
 		while(not descomprimido.empty() ){
 			/*escribo los componentes q recupere*/
@@ -536,7 +544,12 @@ bool EstrategiaCompresion::descompresion(Almacenamiento*almacen){
 
 		}
 	}
-
+	}catch(IOSerializacionExcepcion e){
+		cout<<e.what()<<endl;
+		almacen->cerrar();
+		archivo_comprimido.close();
+		throw IOSerializacionExcepcion("ups");
+	}
 	archivo_comprimido.close();
 
 	delete componente;
