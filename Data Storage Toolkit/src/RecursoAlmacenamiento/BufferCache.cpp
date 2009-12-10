@@ -80,41 +80,7 @@ void BufferCache :: manejar_diferidos()
                 //Se escribe en disco un bloque o un registro segun corresponda
 
                 almacen->posicionarComponente( delayed[i]->numero_bloque);
-                almacen->escribir(delayed[i]->datos);
-
-                /* ULTIMA VERSION
-                Componente* un_componente=almacen->getEstrategia()->getComponenteUsado()->clonar();
-                Ttamanio tam_datos=almacen->getEstrategia()->getTamanioComponenteUsado();
-
-                std::stringbuf buf;
-                buf.pubseekpos(0,std::ios_base::binary | std::ios_base::in |std::ios_base:: out);
-                buf.pubsetbuf(delayed[i]->datos, tam_datos);
-                un_componente->deserializar(buf);
-
-                almacen->posicionarComponente( delayed[i]->numero_bloque);
-                almacen->escribir(un_componente);
-
-                delete un_componente;*/
-
-                /*
-                almacen->posicionarComponente(nro_bloque);// nro_bloque==nro_buffer
-                almacen->escribir(buff->datos,tam_datos);
-                */
-
-                /* //solo registros fijos
-                Almacenamiento almacen;
-                Registro un_registro;
-
-                std::stringbuf buf;
-                buf.pubseekpos(0,std::ios_base::binary | std::ios_base::in );
-                buf.pubsetbuf(delayed[i]->datos, tam_datos);
-                un_registro.deserializar(buf);
-
-
-                almacen.posicionarComponente( delayed[i]->numero_bloque);
-                almacen.escribir(&un_registro);
-                */
-
+                almacen->escribir(delayed[i]->datos,tam_datos);
 
                 //Se pone al principio de la lista de libres
                 if ( buffers_libres.primer_buffer == NULL)
@@ -297,25 +263,10 @@ void BufferCache :: leer(int nro_bloque, char *datos)
                 //Hay que leer los datos (registro o bloque) desde el disco (segun el nro_bloque) y ponerlos en buff->datos
 
                 //ESCRIBIR EN EL BUFFER Y EN EL REGISTRO
-                /*
-                Componente* un_componente=almacen->getEstrategia()->getComponenteUsado()->clonar();
-                Ttamanio tam_datos=almacen->getEstrategia()->getTamanioComponenteUsado();
-
-                almacen->posicionarComponente( nro_bloque);
-                almacen->obtener(un_componente);
-
-                std:: stringbuf buf;
-		un_componente->serializar(buf);
-                buf.pubseekpos(0,std::ios_base::binary | std::ios_base::in |std::ios_base:: out);
-                */
 
                 almacen->posicionarComponente(nro_bloque);// nro_bloque==nro_buffer
                 almacen->leer(buff->datos,tam_datos);//Se escribe en el buffer para que futuros accesos den "hit"
-
-                /*
-		memcpy(buff->datos, buf.str().data(), tam_datos);
-                */
-
+                memcpy(datos, buff->datos, tam_datos);
                 //Se enciende el estado: "datos validos"
                 (buff->estado) |= 0x02;//0000 0010
         }

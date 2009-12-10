@@ -5,7 +5,7 @@
 #include "../Compuesto/Registro.h"
 #include "../Almacenamiento/Almacenamiento.h"
 
-#define CANT_BUFFERS 5
+#define CANT_BUFFERS 1
 
 //Se definen las máscaras de la variable "estado" de cada buffer
 #define OCUPADO 1
