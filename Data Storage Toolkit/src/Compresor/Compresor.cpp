@@ -150,7 +150,7 @@ unsigned Compresor::comprimirPrimeros(unsigned char*simbolos,unsigned cantidad){
         unsigned piso_anterior,techo_anterior;
         unsigned pos=buffer.tell_unsigned_write();
         char offset=buffer.tell_bits_offset_w();
-        try{
+       // try{
                 if(salida){
                         (*salida)<<"Caracteres en nro ASCCI"<<std::endl;
                         (*salida)<<"#bits  Caracter"<<std::endl;
@@ -184,11 +184,11 @@ unsigned Compresor::comprimirPrimeros(unsigned char*simbolos,unsigned cantidad){
                 if((buffer.size()-buffer.tell_unsigned_write())*MAX_BITS-buffer.tell_bits_offset_w() < bits_necesarios){
                         throw bitFileEOFException();
                 }
-        }catch(bitFileEOFException e){
+       /* }catch(bitFileEOFException e){
                 buffer.seek_w(offset,pos);
                 piso=piso_anterior;
                 techo=techo_anterior;
-        };
+        };*/
         return cant_emitidos+1;
 }
 bool Compresor::agregar(unsigned char*simbolos,unsigned cantidad){
