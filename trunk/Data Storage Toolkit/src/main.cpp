@@ -19,9 +19,9 @@ int main(){
 	pruebaCompresion3();*/
     cout<<"Prueba4"<<endl;
     //pruebaEstragiaCompresionAlmacenamiento();
-    for(int i=0;i<100;i++){
+    while(true){
 
-    	pruebaEstragiaCompresionAlmacenamiento1("archivo.dat");
+    	pruebaEstragiaCompresionAlmacenamiento1("./datos/archivo.dat");
 
     }
 	//pruebaCompresion5();

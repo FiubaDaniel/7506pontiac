@@ -21,8 +21,8 @@ using namespace std;
 void mostrarArchivo1(MisDatos& misDatos){
 	cout << "********* DATOS **********" << endl;
 	misDatos.mostrarDatosArchivo1();
-	cout << "********* INDICE **********" << endl;
-	misDatos.mostrarIndiceArchivo1();
+	//cout << "********* INDICE **********" << endl;
+	//misDatos.mostrarIndiceArchivo1();
 }
 
 //para mostrar los datos, buffer e indice de Archivo2
@@ -74,8 +74,9 @@ int main() {
 
 	// ARCHIVO 1
 	// INICIALIZO EL ARCHIVO 1
-/*	misDatos.inicializarArchivo1("MiArchivo1.dat", 256, true, DIFERIDO, 1024, true, ARBOL, 128, true, 1024);
-	
+	//while(true){
+	//misDatos.inicializarArchivo1("./datos/MiArchivo1.dat", 256, true, DIFERIDO, 1024, true, ARBOL, 128, true, 1024);
+	misDatos.inicializarArchivo1("./datos/MiArchivo1.dat", 256, true, DIFERIDO, 1024, true, ARBOL, 128, false, 1024);
 	// INSERTO REGISTROS VARIABLES
 	for (int i=0; i<CENTENAMAXREGISTROS*100; ++i){
 		cantElementos = i % DELTA + MINIMO;
@@ -144,23 +145,23 @@ int main() {
 	for (int i=0; i<MINBORRARVARIABLE; ++i){
 		try{
 			miRegVariable = misDatos.obtenerRegistroArchivo1(Terminos::obtenerTermino(i));
+			mostrarRegistroVariable(miRegVariable);
+			delete miRegVariable;
 		}catch(ExcepcionMisDatos e){
 			cout << e.getMensaje() << endl;
 			cout << "*****ERROR CON CLAVE: " << Terminos::obtenerTermino(i) << " *****" << endl;
 		}
 
-		mostrarRegistroVariable(miRegVariable);
-
-		delete miRegVariable;
 	}
 
 	// CIERRO ARCHIVO 1
-	misDatos.cerrarArchivo1();*/
-	
-
+	misDatos.cerrarArchivo1();
+	cout<<"Archivo1 Cerrado"<<endl;
+	//}
 
 	// ARCHIVO 2
 	// INICIALIZO EL ARCHIVO 2
+/*
 	misDatos.inicializarArchivo2("MiArchivo2.dat", true, DIFERIDO, 64, true, HASH, 64, true, 64);
 	
 	// INSERTO REGISTROS FIJOS
@@ -233,6 +234,7 @@ int main() {
 
 	// CIERRO ARCHIVO 2
 	misDatos.cerrarArchivo2();
+*/
 
 	return 0;
 }

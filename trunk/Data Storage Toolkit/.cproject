@@ -60,10 +60,10 @@
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/ArbolBSharp"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Compuesto"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests/Compuesto"/>
-<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/RecursoAlmacenamiento"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Almacenamiento"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Indices"/>
 <entry excluding="main.cpp|tests|Compuesto|Compresor|Indices|User|ArbolBSharp|RecursoAlmacenamiento|Almacenamiento" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+<entry excluding="EREscrituraDiferida.cpp|EREscrituraDiferida.h" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/RecursoAlmacenamiento"/>
 </sourceEntries>
 </configuration>
 </storageModule>
@@ -629,7 +629,6 @@
 </folderInfo>
 <sourceEntries>
 <entry excluding="Compuesto" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests"/>
-<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/RecursoAlmacenamiento"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Almacenamiento"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Compuesto"/>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/ArbolBSharp"/>
@@ -637,6 +636,7 @@
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/tests/Compuesto"/>
 <entry excluding="Copy of MisDatos.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/User"/>
 <entry excluding="main.cpp|Compresor|User|ArbolBSharp|tests|Indices|RecursoAlmacenamiento|Almacenamiento|Compuesto" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+<entry excluding="EREscrituraDiferida.cpp|EREscrituraDiferida.h" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/RecursoAlmacenamiento"/>
 </sourceEntries>
 </configuration>
 </storageModule>
