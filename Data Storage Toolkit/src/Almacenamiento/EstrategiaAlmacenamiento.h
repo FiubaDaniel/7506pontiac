@@ -45,9 +45,6 @@ public:
 			delete clave;
 	};
 	void setAlmacenamiento(Almacenamiento*almacen){
-		if(this->almacen){
-			cerrar();
-		}
 		this->almacen=almacen;
 	}
 	/*******************************************************************************/

@@ -76,7 +76,7 @@ int main() {
 	// INICIALIZO EL ARCHIVO 1
 	//while(true){
 	//misDatos.inicializarArchivo1("./datos/MiArchivo1.dat", 256, true, DIFERIDO, 1024, true, ARBOL, 128, true, 1024);
-	misDatos.inicializarArchivo1("./datos/MiArchivo1.dat", 256, true, DIFERIDO, 1024, true, ARBOL, 128, false, 1024);
+	misDatos.inicializarArchivo1("./datos/MiArchivo1.dat", 256, true, DIRECTO, 1024, true, ARBOL, 128, true, 1024);
 	// INSERTO REGISTROS VARIABLES
 	for (int i=0; i<CENTENAMAXREGISTROS*100; ++i){
 		cantElementos = i % DELTA + MINIMO;

@@ -37,11 +37,11 @@ bool AlmacenamientoBufferCache::abrir(const char* nombre){
 void AlmacenamientoBufferCache::crear(const char *nombre){
 	almacen->crear(nombre);
 	if(estrategia){
-			estrategia->setAlmacenamiento(this);
-			this->tamanio_metadata=estrategia->getMetadata().size();
-			this->tamanio_bloque=estrategia->getTamanioComponenteUsado();
-			buffer=new BufferCache(almacen,this->tamanio_bloque);
-			estrategia->crear();
+		estrategia->setAlmacenamiento(this);
+		this->tamanio_metadata=estrategia->getMetadata().size();
+		this->tamanio_bloque=estrategia->getTamanioComponenteUsado();
+		buffer=new BufferCache(almacen,this->tamanio_bloque);
+		estrategia->crear();
 	}
 
 }
@@ -49,7 +49,9 @@ void AlmacenamientoBufferCache::escribir(const void* bytes,Referencia cantidad){
 	if(posicion>=tamanio_metadata){
 		nro_bloque=(posicion-tamanio_metadata)/tamanio_bloque;
 		char*datos=(char*)(const_cast<void*>(bytes));
+		switchEstrategia();
 		buffer->escribir(nro_bloque,datos);
+		switchEstrategia();
 		nro_bloque++;
 	}else{
 		almacen->escribir(bytes,cantidad);
@@ -61,9 +63,10 @@ void AlmacenamientoBufferCache::escribir(const void* bytes,Referencia cantidad){
 void AlmacenamientoBufferCache::leer(void* bytes,Referencia cantidad){
 	if(posicion>=tamanio_metadata){
 		nro_bloque=(posicion-tamanio_metadata)/tamanio_bloque;
+		switchEstrategia();
 		buffer->leer(nro_bloque,(char*)bytes);
+		switchEstrategia();
 		nro_bloque++;
-
 	}else{
 		almacen->leer(bytes,cantidad);
 
@@ -103,3 +106,14 @@ void AlmacenamientoBufferCache::cerrar(){
 Almacenamiento*AlmacenamientoBufferCache::clonar(){
 	return almacen->clonar();
 }
+void AlmacenamientoBufferCache::switchEstrategia(){
+	if(estrategia!=NULL){
+		almacen->setEstrategia(estrategia);
+		estrategia->setAlmacenamiento(almacen);
+		estrategia=NULL;
+	}else{
+		setEstrategia(almacen->getEstrategia());
+		almacen->setEstrategia(NULL);
+		estrategia->setAlmacenamiento(this);
+	}
+};
