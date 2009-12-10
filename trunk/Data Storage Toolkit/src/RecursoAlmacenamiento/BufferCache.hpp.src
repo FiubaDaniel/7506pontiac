@@ -5,7 +5,10 @@
 #include "../Compuesto/Registro.h"
 #include "../Almacenamiento/Almacenamiento.h"
 
-#define CANT_BUFFERS 5
+//Buffers de 64 bytes
+#define TAM_BUFFER 64
+
+#define CANT_BUFFERS 50
 
 //Se definen las máscaras de la variable "estado" de cada buffer
 #define OCUPADO 1
@@ -46,7 +49,6 @@ class BufferCache{
 
                 Lista_buffers buffers;
                 Lista_libres buffers_libres;
-                unsigned tam_datos;
 
                 Buffer_header **delayed; //conjunto de buffers diferidos que hay que escribir en disco
                 unsigned cant_diferidos; //cantidad de buffers "delayed write" que se encontraron al principio de la free list
@@ -63,12 +65,11 @@ class BufferCache{
 
         public:
 
-                BufferCache(Almacenamiento *almacen, unsigned tam_datos){
+                BufferCache(Almacenamiento *almacen){
 
                         delayed = new Buffer_header*[CANT_BUFFERS];
                         cant_diferidos =0;
 
-                        this->tam_datos = tam_datos;
                         this->almacen = almacen;
 
                         Buffer_header *ptr_anterior;
@@ -80,7 +81,7 @@ class BufferCache{
 
                         buf->numero_bloque = -1;
                         buf->estado = 0;
-                        buf->datos = new char[this->tam_datos];
+                        buf->datos = new char[TAM_BUFFER];
                         buf->siguiente_buffer = NULL;
                         buf->anterior_buffer = (Buffer_header*) &buffers;
                         buf->siguiente_libre = NULL;
@@ -94,7 +95,7 @@ class BufferCache{
 
                                 buf->numero_bloque = -1;
                                 buf->estado = 0;
-                                buf->datos = new char[this->tam_datos];
+                                buf->datos = new char[TAM_BUFFER];
                                 buf->siguiente_buffer = NULL;
                                 buf->anterior_buffer = ptr_anterior;
                                 buf->siguiente_libre = NULL;
@@ -111,7 +112,7 @@ class BufferCache{
 
                         buf->numero_bloque = -1;
                         buf->estado = 0;
-                        buf->datos = new char[this->tam_datos];
+                        buf->datos = new char[TAM_BUFFER];
                         buf->siguiente_buffer = (Buffer_header*) &buffers;
                         buf->anterior_buffer = ptr_anterior;
                         buf->siguiente_libre = (Buffer_header*) &buffers_libres;
@@ -124,9 +125,9 @@ class BufferCache{
 
                 };
 
-                void leer(int nro_bloque, char* datos);
+                void leer(int nro_bloque, Registro *registro);
 
-                void escribir(int nro_bloque, char *datos);
+                void escribir(int nro_bloque, char *datos, unsigned tam_datos);
 
                 ~BufferCache(){
 
