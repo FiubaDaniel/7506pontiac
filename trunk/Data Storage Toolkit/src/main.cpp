@@ -19,7 +19,11 @@ int main(){
 	pruebaCompresion3();*/
     cout<<"Prueba4"<<endl;
     //pruebaEstragiaCompresionAlmacenamiento();
-    pruebaEstragiaCompresionAlmacenamiento1();
+    for(int i=0;i<100;i++){
+
+    	pruebaEstragiaCompresionAlmacenamiento1("archivo.dat");
+
+    }
 	//pruebaCompresion5();
     return 0;
 }
