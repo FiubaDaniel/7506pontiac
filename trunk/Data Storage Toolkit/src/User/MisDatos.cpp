@@ -511,6 +511,7 @@ void MisDatos::cerrarArchivo1(){
 		if(hay_que_comprimir){
 			Almacenamiento* almacen=recurso1->getEstrategia()->getAlmacenamiento();
 			string nombre_archivo=almacen->getNombre();
+			almacen->cerrar();
 			EstrategiaCompresion compresor;
 			compresor.setSalida(&salida_estadistica);
 			//compresor.compresion(almacen,tamanio_contendor);
@@ -570,6 +571,7 @@ void MisDatos::cerrarArchivo2(){
 		if(hay_que_comprimir){
 			Almacenamiento* almacen=recurso2->getEstrategia()->getAlmacenamiento();
 			string nombre_archivo=almacen->getNombre();
+			almacen->cerrar();
 			EstrategiaCompresion compresor;
 			compresor.setSalida(&salida_estadistica);
 			compresor.comprimir(nombre_archivo,tamanio_contendor);
