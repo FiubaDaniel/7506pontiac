@@ -65,43 +65,29 @@ bool EstrategiaCompresion::compresionArbol(BSharpTree* arbol,string archivo,unsi
 	while(arbol->siguienteAlmacenado(nodo)){
 
 		serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
-
 		nodo->serializate(&serializado);
 
 		if(not contenedor.agregar((unsigned char*)serializado.str().data(),tamanioSerializado)){
 
 			/*no pudo agregar,cierra el contenedor , graba y empieza uno nuevo */
 			contenedor.cerrar();
-
 			archivo_comprimido.write((char*)&cont,sizeof(cont));
-
-			//cout<<archivo_comprimido.tellp()<<endl;
-
 			archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
-
-			//cout<<archivo_comprimido.tellp()<<endl;
-
 			contenedor.setContinuacionCompresion(buffer,tamanio_buffer_comprimido);
-
 			contenedor.reiniciarBuffer();
-
 			contenedor.comprimirPrimeros((unsigned char*)serializado.str().data(),tamanioSerializado);
 
 			cont=1;
 
 		}else cont++;
-
 		delete nodo;
 	}
 
 	contenedor.cerrar();
-
 	archivo_comprimido.write((char*)&cont,sizeof(cont));
-	//cout<<archivo_comprimido.tellp()<<endl;
-
 	archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
-	//cout<<archivo_comprimido.tellp()<<endl;
 	archivo_comprimido.close();
+
 	if(salida!=NULL){
 		(*salida)<< dec<<"Termino de comprimir arbol"<<endl;
 	}
@@ -128,52 +114,34 @@ bool EstrategiaCompresion::compresionHash(string nombreIndice,unsigned tamanio_b
 	archivo_comprimido.open(nombreComprimido.c_str(),fstream::trunc|fstream::out|fstream::binary);
 
 	if(!archivo_indice.is_open()or!archivo_comprimido.is_open()){
-
 		archivo_comprimido.close();
-
 		archivo_indice.close();
-
 		return false;
 	}
 
 	archivo_indice.seekg(0);
-
 	archivo_comprimido.seekp(0);
-
 	archivo_comprimido.write((char*)&tamanio_buffer_comprimido,sizeof(tamanio_buffer_comprimido));
-
 	//Comienza compresion.
 	//Gurado primero.
 	if(salida!=NULL){
 		(*salida)<< dec<<"Comprimiendo hashin:"<<archivo_indice<<endl;
 	}
 	unsigned tamanio_sin_comprimir=tamanio_buffer_comprimido;
-
 	unsigned char sin_comprimir[tamanio_sin_comprimir];
-
 	archivo_indice.read((char*)sin_comprimir,tamanio_sin_comprimir);
-
 	contenedor.comprimirPrimeros(sin_comprimir,tamanio_sin_comprimir);
-
 	//Comprimo el resto
 	short cont = 1;
-
 	while(not archivo_indice.eof()){
 
 		archivo_indice.read((char*)sin_comprimir,tamanio_sin_comprimir);
-
 		if(not contenedor.agregar(sin_comprimir,tamanio_sin_comprimir)){
-
 			contenedor.cerrar();
-
 			archivo_comprimido.write((char*)&cont,sizeof(cont));
-
 			archivo_comprimido.write((char*)comprimido,sizeof(unsigned)*tamanio_buffer_comprimido);
-
 			contenedor.reiniciarBuffer();
-
 			contenedor.comprimirPrimeros(sin_comprimir,tamanio_sin_comprimir);
-
 			cont=1;
 
 		}else cont++;
@@ -192,15 +160,10 @@ bool EstrategiaCompresion::compresionHash(string nombreIndice,unsigned tamanio_b
 		(*salida)<< dec<<"Termino de comprimir hashing"<<endl;
 
 	}
-
 	archivo_comprimido.clear();
-
 	archivo_indice.clear();
-
 	archivo_comprimido.close();
-
 	archivo_indice.close();
-
 	return true;
 }
 
@@ -317,37 +280,27 @@ bool EstrategiaCompresion::descompresionArbol(BSharpTree*arbol,string archivo){
 	try{
 		descomprimido.clear();
 
-		while(archivo_comprimido.peek()!= EOF and not archivo_comprimido.eof()){
+		while(not archivo_comprimido.eof()){
 			/*recupero una tira de componentes serializados*/
 			short cont;
-
 			archivo_comprimido.read((char*)&cont,sizeof(cont));
-			//cout<<archivo_comprimido.tellg()<<endl;
-			archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_comprimido);
-			//cout<<archivo_comprimido.tellg()<<endl;
-			descomprimido.clear();
-
-			contenedor.setCaracteres(tamanio_serializado*cont);
-
-			contenedor.descomprimir(buffer,descomprimido,tamanio_comprimido);
-
-			while( not descomprimido.empty()){
-				/*escribo los componentes q recupere*/
-
-				//cout<<descomprimido.size()<<endl;;
-				serializado.str(descomprimido);//inicializo el buff con el string descomprimido
-
-				serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
-
-				arbol->escribir(serializado);
-
-				descomprimido.erase(0,tamanio_serializado);//elimino el primer registro/bloque del string
-
+			if(not archivo_comprimido.eof()){
+				archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_comprimido);
+				descomprimido.clear();
+				contenedor.setCaracteres(tamanio_serializado*cont);
+				contenedor.descomprimir(buffer,descomprimido,tamanio_comprimido);
+				while( not descomprimido.empty()){
+					/*escribo los componentes q recupere*/
+					serializado.str(descomprimido);//inicializo el buff con el string descomprimido
+					serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
+					arbol->escribir(serializado);
+					descomprimido.erase(0,tamanio_serializado);//elimino el primer registro/bloque del string
+				}
+				descomprimido.clear();
 			}
-			descomprimido.clear();
 		}
 	}catch(...){
-		cout<<"ERROR: DESERIALIZAR"<<endl;
+		throw IOSerializacionExcepcion("Arbol");
 	}
 	archivo_comprimido.close();
 
@@ -394,15 +347,9 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,unsigned tamanio_bu
 
 	/*comprimiendo*/
 	/*comprime el primer componente*/
-	if(salida!=NULL){
-		(*salida)<< dec<<"Comprimiendo almacenamiento:"<<archivoComprimido<<endl;
-	}
 	almacen->posicionarComponente(0);
-
 	almacen->leer(componente);
-
 	componente->serializar(serializado);
-
 	contenedor.comprimirPrimeros((unsigned char*)serializado.str().data(),tamanioSerializado);
 
 	short cont=1;//TODO sacar
@@ -417,16 +364,9 @@ void EstrategiaCompresion::compresion(Almacenamiento*almacen,unsigned tamanio_bu
 
 			/*no pudo agregar,cierra el contenedor , graba y empieza uno nuevo */
 			contenedor.cerrar();
-
-			cout<<tamanioSerializado<<endl;
-			cout<<cont<<endl;
-
 			archivo_comprimido.write((char*)&cont,sizeof(cont));
-
 			archivo_comprimido.write((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
-
 			contenedor.reiniciarBuffer();
-
 			contenedor.comprimirPrimeros((unsigned char*)serializado.str().data(),tamanioSerializado);
 
 			cont=1;
@@ -458,24 +398,15 @@ bool EstrategiaCompresion::descompresion(Almacenamiento*almacen){
 	string archivoComprimido=almacen->getNombre();
 
 	archivoComprimido+="_comprimido";
-
 	std::fstream archivo_comprimido;
-
 	std::stringbuf serializado;
-
 	archivo_comprimido.open(archivoComprimido.c_str(),fstream::in|fstream::binary);
-
-
 	if(not archivo_comprimido.is_open())
 		return false;
-
 	Componente* componente=almacen->getEstrategia()->getComponenteUsado()->clonar();
-
 	unsigned tamanio_comprimido;
-
 	/*recuperao tamanio del buffer */
 	archivo_comprimido.read((char*)&tamanio_comprimido,sizeof(tamanio_comprimido));
-
 	unsigned *buffer=new unsigned[tamanio_comprimido];
 
 	Compresor contenedor(buffer,tamanio_comprimido);
@@ -483,13 +414,9 @@ bool EstrategiaCompresion::descompresion(Almacenamiento*almacen){
 	/*recupero la metadata del almacenamiento*/
 
 	unsigned tamanio_meta;
-
 	archivo_comprimido.read((char*)&tamanio_meta,sizeof(tamanio_meta));
-
 	char* metadata=new char[tamanio_meta];
-
 	archivo_comprimido.read(metadata,tamanio_meta);
-
 	almacen->getEstrategia()->setMetadata(metadata);
 
 	/*Recupero los componentes*/
@@ -502,53 +429,30 @@ bool EstrategiaCompresion::descompresion(Almacenamiento*almacen){
 	descomprimido.clear();
 	short cont=0;
 	try{
-
-
-	while(archivo_comprimido.peek()!= EOF and not archivo_comprimido.eof()){
-		/*recupero una tira de componentes serializados*/
-
-
-		archivo_comprimido.read((char*)&cont,sizeof(cont));
-
-		archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_comprimido);
-
-		cout<<tamanio_comprimido<<endl;
-
-		//contenedor.setExtremos();
-		descomprimido.clear();
-
-		contenedor.setCaracteres(tamanio_serializado*cont);
-
-		contenedor.descomprimir(buffer,descomprimido,tamanio_comprimido);
-
-		cout<<cont<<endl;
-
-		cout<<descomprimido.size()<<endl;
-
-		while(not descomprimido.empty() ){
-			/*escribo los componentes q recupere*/
-
-			serializado.str(descomprimido);
-
-
-
-			serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
-
-			componente->deserializar(serializado);
-
-
-
-			almacen->escribir(componente);
-
-			descomprimido.erase(0,tamanio_serializado);
-
+		while(not archivo_comprimido.eof()){
+			/*recupero una tira de componentes serializados*/
+			archivo_comprimido.read((char*)&cont,sizeof(cont));
+			if(not archivo_comprimido.eof()){
+				archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_comprimido);
+				descomprimido.clear();
+				contenedor.setCaracteres(tamanio_serializado*cont);
+				contenedor.descomprimir(buffer,descomprimido,tamanio_comprimido);
+				cout<<cont<<endl;
+				while(not descomprimido.empty() ){
+					/*escribo los componentes q recupere*/
+					serializado.str(descomprimido);
+					serializado.pubseekpos(0,ios::out|ios::binary|ios::in);
+					componente->deserializar(serializado);
+					almacen->escribir(componente);
+					descomprimido.erase(0,tamanio_serializado);
+				}
+			}
 		}
-	}
 	}catch(IOSerializacionExcepcion e){
 		cout<<e.what()<<endl;
 		almacen->cerrar();
 		archivo_comprimido.close();
-		throw IOSerializacionExcepcion("ups");
+		throw IOSerializacionExcepcion("Almacenamiento");
 	}
 	archivo_comprimido.close();
 
