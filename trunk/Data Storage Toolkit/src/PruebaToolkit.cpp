@@ -161,7 +161,7 @@ int main() {
 
 	// ARCHIVO 2
 	// INICIALIZO EL ARCHIVO 2
-	misDatos.inicializarArchivo2("MiArchivo2.dat", true, DIFERIDO, 1, true, HASH, 64, true, 64);
+	misDatos.inicializarArchivo2("MiArchivo2.dat", true, DIFERIDO, 5, true, HASH, 64, true, 64);
 	
 	// INSERTO REGISTROS FIJOS
 	for(int i=0; i<CENTENAMAXREGISTROS*100; ++i){
