@@ -144,7 +144,7 @@ class BufferCache{
 
                 ~BufferCache(){
 
-                        this->salida_comportamiento.close();
+
 
                         //Punteros a buffers_headers
                         Buffer_header *ptr_buffer = buffers.primer_buffer;
@@ -181,6 +181,7 @@ class BufferCache{
                         }
 
                         delete [] delayed;
+                        this->salida_comportamiento.close();
 
                 };
 
