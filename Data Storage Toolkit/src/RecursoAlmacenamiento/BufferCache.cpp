@@ -3,6 +3,77 @@
 #include <string>
 
 
+
+void BufferCache :: mostrar_estado(Buffer_header *buffer)
+{
+        salida_comportamiento << "Buffer asociado con el bloque : " << buffer->numero_bloque << endl;
+
+        //Flags encedidos/apagados
+        salida_comportamiento << " PROCESO EN ESPERA  ||  LEYENDO_ESCRIBIENDO || DELAYED_WRITE || DATOS_VALIDOS || OCUPADO " << endl;
+
+        if ( buffer->estado & PROCESO_EN_ESPERA)
+        {
+                salida_comportamiento <<"          1";
+        }else
+                salida_comportamiento<<"           0";
+
+        if(buffer->estado & LEYENDO_ESCRIBIENDO)
+        {
+                salida_comportamiento<<"                               1";
+        }else{
+                salida_comportamiento<<"                               0";
+        }
+
+        if(buffer->estado & DELAYED_WRITE)
+        {
+                salida_comportamiento<<"                         1";
+        }else{
+                salida_comportamiento<<"                         0";
+        }
+
+        if(buffer->estado & DATOS_VALIDOS)
+        {
+                salida_comportamiento<<"                      1";
+        }else{
+                salida_comportamiento<<"                      0";
+        }
+        if(buffer->estado & OCUPADO)
+        {
+                salida_comportamiento<<"               1"<<endl<<endl;
+        }else{
+                salida_comportamiento<<"               0"<<endl<<endl;
+        }
+
+}
+
+void BufferCache :: mostrar_listas()
+{
+        Buffer_header *ptr_buffer = buffers.primer_buffer;
+
+        salida_comportamiento<< "\t \t ********** Lista de buffers *********"<<endl;
+
+        for(int i=0; i < CANT_BUFFERS; i++)
+        {
+                mostrar_estado(ptr_buffer);
+                ptr_buffer = (Buffer_header*) (ptr_buffer->siguiente_buffer);
+        }
+
+        salida_comportamiento<< "\t \t ********** Lista de buffers libres *********"<<endl;
+
+        ptr_buffer = buffers_libres.primer_buffer;
+        if(ptr_buffer)
+        {
+                //Si no esta vacia
+                while( ptr_buffer != ( (Buffer_header*) (&buffers_libres) ) )
+                {
+                        mostrar_estado(ptr_buffer);
+                        ptr_buffer = (Buffer_header*) ptr_buffer->siguiente_libre;
+                }
+        }
+
+}
+
+
 void BufferCache :: remover_buffer_libre(Buffer_header *buff_para_usar){
 
         if (buffers_libres.primer_buffer == buffers_libres.ultimo_buffer)
@@ -75,8 +146,6 @@ void BufferCache :: manejar_diferidos()
 
         for(int i=0; i < total_diferidos; i++)
         {
-
-
                 //Se escribe en disco un bloque o un registro segun corresponda
 
                 almacen->posicionarComponente( delayed[i]->numero_bloque);
@@ -99,7 +168,12 @@ void BufferCache :: manejar_diferidos()
                 //Se apaga su estado "delayed write"
                 (delayed[i]->estado) &= 0xfb ;// 1111 1011
 
+                salida_comportamiento << " %%  Estado posterior a escrituras en disco (se muestran los buffers que se escriben) %%" << endl;
+                mostrar_estado(delayed[i]);
+
         }
+
+        salida_comportamiento<< " -------------------------------------------------------------------------------------" <<endl;
 
         cant_diferidos = 0;
 }
@@ -140,7 +214,8 @@ void BufferCache :: liberar_buffer(Buffer_header *buff_bloqueado){
                 //se desbloquea el buffer
 
                 (buff_bloqueado->estado) &=  0xfe; //1111 1110
-
+                 salida_comportamiento << " %%  Estado posterior a la liberacion de un buffer %%" << endl;
+                mostrar_estado(buff_bloqueado);
         }
 }
 
@@ -244,6 +319,7 @@ bool BufferCache :: asignar_bloque(int nro_bloque, Buffer_header **buff_para_usa
 */
 void BufferCache :: leer(int nro_bloque, char *datos)
 {
+        cout << "Entra al leer del buffer " << endl;
         Buffer_header *buff;
 
         //se obtiene un buffer para el bloque pedido
@@ -253,6 +329,11 @@ void BufferCache :: leer(int nro_bloque, char *datos)
                 manejar_diferidos();
                 asignar_bloque(nro_bloque, &buff);
         }
+
+        /** Como ya se consigio el buffer a usar, se imprime, ANTES de usarlo, su contenido**/
+        salida_comportamiento << "        ---- Lectura en Buffer ---- " << endl;
+        salida_comportamiento << " %%  Estado previo a la lectura %%" << endl;
+        mostrar_estado(buff);
 
         if ( (buff->estado) & DATOS_VALIDOS )
         {
@@ -275,10 +356,15 @@ void BufferCache :: leer(int nro_bloque, char *datos)
                 manejar_diferidos();
 
         liberar_buffer(buff);
+
+        mostrar_listas();
+        salida_comportamiento << "  -----------------------------------------------------------------------------------"<<endl;
+        cout << "Sale del leer del buffer" << endl;
 }
 
 void BufferCache :: escribir(int nro_bloque, char *datos)
 {
+        cout << "Entra al escribir del buffer" << endl;
         Buffer_header *buff;
 
         //obtengo un buffer para el bloque pedido
@@ -290,14 +376,24 @@ void BufferCache :: escribir(int nro_bloque, char *datos)
                 asignar_bloque(nro_bloque, &buff);
         }
 
+        /**Una vez que se obtuvo el buffer para usarse, se procede a recordar el estado del buffer pool (en el archivo de texto)**/
+        salida_comportamiento << "        ---- Escritura en Buffer ---- " << endl;
+        salida_comportamiento << " %%  Estado previo a la escritura %%" << endl;
+        mostrar_estado(buff);
+
         memcpy(buff->datos, datos, tam_datos); //se escribe en el buffer, y se posterga la escritura al disco
         //Se enciende el estado delayed write
         (buff->estado) |= 0x04; //0000 0100
+
+        salida_comportamiento << " %%  Estados posterior a la escritura %%" << endl;
+        mostrar_estado(buff);
 
         if (! ( (buff->estado) & DATOS_VALIDOS ))
         {
                 //Se enciende el estado "datos validos"
                 (buff->estado) |= 0x02;//0000 0010
+
+                mostrar_estado(buff);
         }
 
         if(cant_diferidos)
@@ -307,5 +403,10 @@ void BufferCache :: escribir(int nro_bloque, char *datos)
         }
 
         liberar_buffer(buff);
+
+        mostrar_listas();
+        salida_comportamiento << "  -----------------------------------------------------------------------------------"<<endl;
+
+        cout << "Sale del escribir del buffer " << endl;
 }
 
