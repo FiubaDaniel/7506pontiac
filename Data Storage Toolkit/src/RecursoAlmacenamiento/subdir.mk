@@ -4,31 +4,27 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 O_SRCS += \
-../src/RecursoAlmacenamiento/EREscrituraDiferida.o \
-../src/RecursoAlmacenamiento/EREscrituraDirecta.o \
-../src/RecursoAlmacenamiento/ERUnAlmacenamiento.o \
-../src/RecursoAlmacenamiento/FabricaDeRecursosAlmacenamiento.o \
-../src/RecursoAlmacenamiento/Recurso.o 
+../src/RecursoAlmacenamiento/AlmacenamientoBufferCache.o 
 
 CPP_SRCS += \
+../src/RecursoAlmacenamiento/AlmacenamientoBufferCache.cpp \
 ../src/RecursoAlmacenamiento/BufferCache.cpp \
-../src/RecursoAlmacenamiento/EREscrituraDiferida.cpp \
 ../src/RecursoAlmacenamiento/EREscrituraDirecta.cpp \
 ../src/RecursoAlmacenamiento/ERUnAlmacenamiento.cpp \
 ../src/RecursoAlmacenamiento/FabricaDeRecursosAlmacenamiento.cpp \
 ../src/RecursoAlmacenamiento/Recurso.cpp 
 
 OBJS += \
+./src/RecursoAlmacenamiento/AlmacenamientoBufferCache.o \
 ./src/RecursoAlmacenamiento/BufferCache.o \
-./src/RecursoAlmacenamiento/EREscrituraDiferida.o \
 ./src/RecursoAlmacenamiento/EREscrituraDirecta.o \
 ./src/RecursoAlmacenamiento/ERUnAlmacenamiento.o \
 ./src/RecursoAlmacenamiento/FabricaDeRecursosAlmacenamiento.o \
 ./src/RecursoAlmacenamiento/Recurso.o 
 
 CPP_DEPS += \
+./src/RecursoAlmacenamiento/AlmacenamientoBufferCache.d \
 ./src/RecursoAlmacenamiento/BufferCache.d \
-./src/RecursoAlmacenamiento/EREscrituraDiferida.d \
 ./src/RecursoAlmacenamiento/EREscrituraDirecta.d \
 ./src/RecursoAlmacenamiento/ERUnAlmacenamiento.d \
 ./src/RecursoAlmacenamiento/FabricaDeRecursosAlmacenamiento.d \

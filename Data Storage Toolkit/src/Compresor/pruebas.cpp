@@ -194,7 +194,7 @@ int pruebaAlmacenamientoBufferCache(char nombre_archivo[] ){
 	estrategia.setClave(&clave);
 	estrategia.setComparador(&comparador);
 	Archivo archivo(&estrategia);
-	AlmacenamientoBufferCache cache(&archivo);
+	AlmacenamientoBufferCache cache(&archivo,5);
 	/*archivo original*/
 	cache.crear(nombre_archivo);
 	for(int i=0;i<5;i++){

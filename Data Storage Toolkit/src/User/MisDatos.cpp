@@ -111,10 +111,9 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 		if(tipoBuffer==DIRECTO){
 			BloqueMemoria bloqueMem(registro1);
 			EABloques * estrategiaBuffer=new EABloques(&bloqueMem,longitudBloque,0.8);
-			Buffer* buffer=new Buffer(estrategiaBuffer,longitudBuffer);
+			Buffer* buffer=new Buffer(estrategiaBuffer);
 			buffer->crear("buffer");
-			long nroElem=longitudBuffer/longitudBloque;
-			estrategiaRecurso=new EREscrituraDirecta(Indice,archivo,buffer,nroElem);
+			estrategiaRecurso=new EREscrituraDirecta(Indice,archivo,buffer,cant_buffers);
 		}else{
 			archivo->cerrar();
 			AlmacenamientoBufferCache* almacen_buffer=new AlmacenamientoBufferCache(archivo, cant_buffers);
@@ -219,10 +218,9 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 		if(tipoBuffer==DIRECTO){
 			RegistroMemoria regmem(registro2);
 			EARegistros* estrategiaBuffer=new EARegistros(&regmem);
-			Buffer* buffer=new Buffer(estrategiaBuffer,longitudBuffer);
+			Buffer* buffer=new Buffer(estrategiaBuffer);
 			buffer->crear("buffer");
-			long nroElem=longitudBuffer/regmem.tamanioSerializado();
-			estrategiaRecurso=new EREscrituraDirecta(Indice,archivo,buffer,nroElem);
+			estrategiaRecurso=new EREscrituraDirecta(Indice,archivo,buffer,cant_buffers);
 		}else{
 			archivo->cerrar();
 			AlmacenamientoBufferCache* almacen_buffer=new AlmacenamientoBufferCache(archivo, cant_buffers);

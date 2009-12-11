@@ -62,8 +62,8 @@ int invertirDecenaUnidad(int valor){
 char calcularChar(int valor){
 	return 35 + (valor%88);
 }
-int main() {
 
+int main() {
 	int* miLista = NULL;
 	MiRegistroVariable* miRegVariable = NULL;
 	MiRegistroFijo* miRegFijo = NULL;
@@ -74,9 +74,8 @@ int main() {
 
 	// ARCHIVO 1
 	// INICIALIZO EL ARCHIVO 1
-	//while(true){
-	misDatos.inicializarArchivo1("./datos/MiArchivo1.dat", 256, true, DIFERIDO, 1024, true, ARBOL, 128, true, 1024);
-	//misDatos.inicializarArchivo1("./datos/MiArchivo1.dat", 256, true, DIFERIDO, 1024, true, ARBOL, 128, true, 1024);
+	misDatos.inicializarArchivo1("MiArchivo1.dat", 256, true, DIFERIDO, 1024/256, true, ARBOL, 128, true, 1024);
+	
 	// INSERTO REGISTROS VARIABLES
 	for (int i=0; i<CENTENAMAXREGISTROS*100; ++i){
 		cantElementos = i % DELTA + MINIMO;
@@ -152,17 +151,17 @@ int main() {
 			cout << "*****ERROR CON CLAVE: " << Terminos::obtenerTermino(i) << " *****" << endl;
 		}
 
+
 	}
 
 	// CIERRO ARCHIVO 1
 	misDatos.cerrarArchivo1();
-	cout<<"Archivo1 Cerrado"<<endl;
-	//}
+	
+
 
 	// ARCHIVO 2
 	// INICIALIZO EL ARCHIVO 2
-/*
-	misDatos.inicializarArchivo2("MiArchivo2.dat", true, DIFERIDO, 64, true, HASH, 64, true, 64);
+	misDatos.inicializarArchivo2("MiArchivo2.dat", true, DIFERIDO, 1, true, HASH, 64, true, 64);
 	
 	// INSERTO REGISTROS FIJOS
 	for(int i=0; i<CENTENAMAXREGISTROS*100; ++i){
@@ -222,19 +221,18 @@ int main() {
 	//OBTENGO REGISTROS FIJOS
 	for (int i=0; i<MINBORRARFIJO; ++i){
 		try{
-			miRegFijo=NULL;
 			miRegFijo = misDatos.obtenerRegistroArchivo2(i, calcularChar(i));
+			mostrarRegistroFijo(miRegFijo);
+			delete miRegFijo;
 		}catch(ExcepcionMisDatos e){
 			cout << e.getMensaje() << endl;
 			cout << "*****ERROR CON CLAVE: " << i << " " << calcularChar(i) << " *****" << endl;
 		}
-		mostrarRegistroFijo(miRegFijo);
-		delete miRegFijo;
+
 	}
 
 	// CIERRO ARCHIVO 2
 	misDatos.cerrarArchivo2();
-*/
 
 	return 0;
 }

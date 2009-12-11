@@ -17,6 +17,13 @@ Buffer::Buffer(EstrategiaAlmacenamiento*estrategia,unsigned longitudBuffer){
 	this->estrategia->setAlmacenamiento(this);
 	}
 }
+Buffer::Buffer(EstrategiaAlmacenamiento*estrategia){
+	archivo=NULL;
+	if(estrategia){
+	this->estrategia=estrategia;
+	this->estrategia->setAlmacenamiento(this);
+	}
+}
 Buffer::~Buffer (){
 	if(archivo)
 		cerrar();

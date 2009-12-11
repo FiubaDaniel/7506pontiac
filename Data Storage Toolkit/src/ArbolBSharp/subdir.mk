@@ -3,18 +3,6 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
-O_SRCS += \
-../src/ArbolBSharp/BSharpTree.o \
-../src/ArbolBSharp/Clave.o \
-../src/ArbolBSharp/ComparadorPrueba.o \
-../src/ArbolBSharp/ComparadorRegistroFijo.o \
-../src/ArbolBSharp/ComparadorRegistroVariable.o \
-../src/ArbolBSharp/ElementoNodo.o \
-../src/ArbolBSharp/Nodo.o \
-../src/ArbolBSharp/NodoHoja.o \
-../src/ArbolBSharp/NodoIntermedio.o \
-../src/ArbolBSharp/TamanioInsuficienteException.o 
-
 CPP_SRCS += \
 ../src/ArbolBSharp/BSharpTree.cpp \
 ../src/ArbolBSharp/Clave.cpp \
