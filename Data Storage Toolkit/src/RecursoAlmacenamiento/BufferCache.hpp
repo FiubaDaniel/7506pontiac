@@ -159,6 +159,8 @@ class BufferCache{
                                 {
                                         //cant_diferidos empieza en cero
                                         delayed[cant_diferidos] = ptr_buffer;
+                                        cant_diferidos++;
+                                        ptr_buffer = (Buffer_header*) ptr_buffer->siguiente_buffer;
                                 }
 
                         }
@@ -186,3 +188,4 @@ class BufferCache{
 
 
 #endif
+
