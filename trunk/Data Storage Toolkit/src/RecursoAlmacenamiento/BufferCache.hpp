@@ -2,10 +2,11 @@
 #define _BUFFER_CACHE_HPP_
 
 #include <cstdlib>
+#include <fstream>
 #include "../Compuesto/Registro.h"
 #include "../Almacenamiento/Almacenamiento.h"
 
-#define CANT_BUFFERS 1
+#define CANT_BUFFERS 5
 
 //Se definen las máscaras de la variable "estado" de cada buffer
 #define OCUPADO 1
@@ -48,6 +49,7 @@ class BufferCache{
                 Lista_libres buffers_libres;
                 unsigned tam_datos;
 
+                ofstream salida_comportamiento;  //archivo de texto que permite leer el comportamiento del buffer cache
                 Buffer_header **delayed; //conjunto de buffers diferidos que hay que escribir en disco
                 unsigned cant_diferidos; //cantidad de buffers "delayed write" que se encontraron al principio de la free list
                 Almacenamiento *almacen; //para escribir/leer los datos hacia y desde el disco
@@ -61,12 +63,21 @@ class BufferCache{
                 void remover_primer_buffer(Buffer_header **buff_para_reemplazar);
                 void manejar_diferidos();
 
+                /*Muestra el estado de los flags de "buffer" , asi como tambien el numero de bloque al que esta asociado*/
+                void mostrar_estado(Buffer_header *buffer);
+
+                /*Muestra la lista de buffers y la de buffers libres*/
+                void mostrar_listas();
+
         public:
 
                 BufferCache(Almacenamiento *almacen, unsigned tam_datos){
 
                         delayed = new Buffer_header*[CANT_BUFFERS];
                         cant_diferidos =0;
+
+                        this->salida_comportamiento.open("buff_cache.txt");
+                        this->salida_comportamiento << "\t \t :::::::: Buffer Cache ::::::::: " << endl;
 
                         this->tam_datos = tam_datos;
                         this->almacen = almacen;
@@ -129,6 +140,8 @@ class BufferCache{
                 void escribir(int nro_bloque, char *datos);
 
                 ~BufferCache(){
+
+                        this->salida_comportamiento.close();
 
                         //Punteros a buffers_headers
                         Buffer_header *ptr_buffer = buffers.primer_buffer;
