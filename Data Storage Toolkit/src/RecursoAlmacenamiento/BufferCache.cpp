@@ -144,7 +144,7 @@ void BufferCache :: manejar_diferidos()
 {
         int total_diferidos = cant_diferidos;
 
-        for(int i=0; i < total_diferidos; i++)
+        for(int i=(total_diferidos-1) ; i >=0; i--)
         {
                 //Se escribe en disco un bloque o un registro segun corresponda
 
@@ -332,7 +332,7 @@ void BufferCache :: leer(int nro_bloque, char *datos)
 
         /** Como ya se consigio el buffer a usar, se imprime, ANTES de usarlo, su contenido**/
         salida_comportamiento << "        ---- Lectura en Buffer ---- " << endl;
-        salida_comportamiento << " %%  Estado previo a la lectura %%" << endl;
+        salida_comportamiento << " %%  Estado previo a la lectura (ya se obtuvo el buffer)%%" << endl;
         mostrar_estado(buff);
 
         if ( (buff->estado) & DATOS_VALIDOS )
@@ -378,14 +378,14 @@ void BufferCache :: escribir(int nro_bloque, char *datos)
 
         /**Una vez que se obtuvo el buffer para usarse, se procede a recordar el estado del buffer pool (en el archivo de texto)**/
         salida_comportamiento << "        ---- Escritura en Buffer ---- " << endl;
-        salida_comportamiento << " %%  Estado previo a la escritura %%" << endl;
+        salida_comportamiento << " %%  Estado previo a la escritura (ya se obtuvo el buffer)%%" << endl;
         mostrar_estado(buff);
 
         memcpy(buff->datos, datos, tam_datos); //se escribe en el buffer, y se posterga la escritura al disco
         //Se enciende el estado delayed write
         (buff->estado) |= 0x04; //0000 0100
 
-        salida_comportamiento << " %%  Estados posterior a la escritura %%" << endl;
+        salida_comportamiento << " %%  Estados posteriores a la escritura %%" << endl;
         mostrar_estado(buff);
 
         if (! ( (buff->estado) & DATOS_VALIDOS ))

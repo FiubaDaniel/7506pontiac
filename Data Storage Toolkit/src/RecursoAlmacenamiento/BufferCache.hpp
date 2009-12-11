@@ -76,7 +76,9 @@ class BufferCache{
                         delayed = new Buffer_header*[CANT_BUFFERS];
                         cant_diferidos =0;
 
-                        this->salida_comportamiento.open("buff_cache.txt");
+                        string nom_arch = almacen->getNombre();
+                        string nom_log = "buffer_cache_"+nom_arch+".txt";
+                        this->salida_comportamiento.open(nom_log.c_str());
                         this->salida_comportamiento << "\t \t :::::::: Buffer Cache ::::::::: " << endl;
 
                         this->tam_datos = tam_datos;
@@ -176,7 +178,6 @@ class BufferCache{
                         }
 
                         delete [] delayed;
-
 
                 };
 
