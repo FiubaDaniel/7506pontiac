@@ -9,6 +9,7 @@
 #define COMPRESOR_H_
 #include <iostream>
 #include <cmath>
+#include <map>
 #include <string>
 #include "bitFile.h"
 #include "TablaOrden1.h"
@@ -16,13 +17,9 @@
 #include "TablaOrden0.h"
 
 void imprimir(unsigned num);
-//#define UINT_MAX (~unsigned(0x0))
-
-#ifndef UNOS
-	#define UNOS (~unsigned(0x0))
-#endif
 
 class Compresor {
+	std::map<unsigned,unsigned> estadistica;
 	std::ostream* salida;
 	/*MANEJO DE UNDERFLOW Y OVERFLOW*/
 	static const char MAX_BITS=sizeof(unsigned)*8;
@@ -38,23 +35,33 @@ class Compresor {
 	unsigned caracteres;
 	char overflow();
 	char underflow();
-	//void emitir();
+	void actualizarEstadistica(std::list<unsigned> lista){
+		for(std::list<unsigned>::iterator it_list=lista.begin();it_list!=lista.end();it_list++){
+			std::map<unsigned,unsigned>::iterator it=estadistica.find(*it_list);
+			if(it!=estadistica.end()){
+				it->second++;
+			}else{
+				estadistica[*it_list]=1;
+			}
+		}
+	}
+
 	/************************MANEJO DE LA EMISIONES*****************************************************/
 	bitFile buffer;
 	/* Para el <techo> y <piso> actuales emite el codigo correspondiente al <contener>,
 	 * actualiza el nuevo <techo> y <piso>.y actualiza el contador <U> de  underflow
 	 */
-	void emitir_codigo();
+	void emitir_codigo(std::list<unsigned> *lista);
 	/* para el <techo> , <piso> y el contador <U> de underflow actuales,emite piso cerrando el codigo.
 	 * es decir underflow+piso+padding
 	 */
-	void cerrar_codigo();
+	void cerrar_codigo(std::list<unsigned> *lista);
 	/* dado el codido contenido en <contendor> y el contador <U> de undeflow,
 	 * deja el codigo en un estado tal que, la proxima emision sobreescribe a la emision
 	 * que cerro el codigo previamente.
 	 */
 	void abrir_codigo();
-    //TablaOrden0 tabla;
+	//TablaOrden0 tabla;
 	TablaOrden1 tabla;
 	//PPMC::TablaPPMC tabla;
 
@@ -113,6 +120,19 @@ public:
 	void setExtremos();
 	void setCaracteres(unsigned caracteres);
 	virtual ~Compresor();
+	void imprimirEstadistica(){
+		if(salida){
+			(*salida)<<"   cantidad     |    veces que se "<<endl;
+			(*salida)<<"bits emitidos   | emitio esa cantidad"<<endl;
+			unsigned total=0;
+			for(std::map<unsigned,unsigned>::iterator it=estadistica.begin();it!=estadistica.end();it++){
+				(*salida)<<it->first<<" \t \t  "<<it->second<<endl;
+				total+=it->second*it->first;
+			}
+			(*salida)<<"Total:"<<total<<"bits == "<<total/8<<" bytes "<<endl;
+		}
+		estadistica.clear();
+	}
 
 private:
 	/*-----------------Metodos privados de Descompresion------------------------------------------------------------*/

@@ -8,9 +8,10 @@ MisDatos::MisDatos(){
 	registro1=NULL;
 	registro2=NULL;
 	registro3=NULL;
+	this->salida_estadistica.open("estadistica_compresion.txt");
 }
 MisDatos::~MisDatos(){
-
+	this->salida_estadistica.close();
 }
 /*
  * Abre el archivo con el path correspondiente y lo deja listo para su uso. Si no existe, lo crea.
@@ -36,7 +37,6 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 	Almacenamiento* archivo=new Archivo(estrategiaBloques);
 	hay_que_comprimir=comprime;
 	tamanio_contendor=longitudContenedor/sizeof(unsigned);
-	compresor.setSalida(&cout);
 	bool existia=true;
 	if(comprime){
 
@@ -512,7 +512,7 @@ void MisDatos::cerrarArchivo1(){
 			Almacenamiento* almacen=recurso1->getEstrategia()->getAlmacenamiento();
 			string nombre_archivo=almacen->getNombre();
 			EstrategiaCompresion compresor;
-			compresor.setSalida(&cout);
+			compresor.setSalida(&salida_estadistica);
 			//compresor.compresion(almacen,tamanio_contendor);
 			compresor.compresionHash(nombre_archivo,tamanio_contendor);//todo sacar
 
@@ -571,7 +571,7 @@ void MisDatos::cerrarArchivo2(){
 			Almacenamiento* almacen=recurso2->getEstrategia()->getAlmacenamiento();
 			string nombre_archivo=almacen->getNombre();
 			EstrategiaCompresion compresor;
-			compresor.setSalida(&cout);
+			compresor.setSalida(&salida_estadistica);
 			compresor.compresion(almacen,tamanio_contendor);
 			remove(nombre_archivo.c_str());
 

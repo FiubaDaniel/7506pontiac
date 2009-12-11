@@ -127,10 +127,11 @@ bool EstrategiaCompresion::compresionHash(string nombreIndice,unsigned tamanio_b
 	archivo_comprimido.write((char*)&tamanio_buffer_comprimido,sizeof(tamanio_buffer_comprimido));
 	//Comienza compresion.
 	//Gurado primero.
-	if(salida!=NULL){
-		(*salida)<< dec<<"Comprimiendo hashing:"<<archivo_indice<<endl;
-	}
 	unsigned tamanio_sin_comprimir=tamanio_buffer_comprimido;
+	if(salida!=NULL){
+		(*salida)<<"Comprimiendo:"<<nombreIndice<<endl;
+		(*salida)<<"Tamanio de los componentes:"<<tamanio_sin_comprimir<<endl;
+	}
 	unsigned char sin_comprimir[tamanio_sin_comprimir];
 	archivo_indice.read((char*)sin_comprimir,tamanio_sin_comprimir);
 	contenedor.comprimirPrimeros(sin_comprimir,tamanio_sin_comprimir);
@@ -141,6 +142,12 @@ bool EstrategiaCompresion::compresionHash(string nombreIndice,unsigned tamanio_b
 		archivo_indice.read((char*)sin_comprimir,tamanio_sin_comprimir);
 		if(not contenedor.agregar(sin_comprimir,tamanio_sin_comprimir)){
 			contenedor.cerrar();
+			/*IMPRESION ESTADISICA*/
+			if(salida!=NULL){
+				(*salida)<<"Cantidad componentes: "<<cont<<endl;
+			}
+			contenedor.imprimirEstadistica();
+			/*FIN*/
 			archivo_comprimido.write((char*)&cont,sizeof(cont));
 			archivo_comprimido.write((char*)comprimido,sizeof(unsigned)*tamanio_buffer_comprimido);
 			contenedor.reiniciarBuffer();
@@ -151,18 +158,18 @@ bool EstrategiaCompresion::compresionHash(string nombreIndice,unsigned tamanio_b
 	}
 
 	contenedor.cerrar();
-
+	/*IMPRESION ESTADISICA*/
+	if(salida!=NULL){
+		(*salida)<<"Cantidad componentes: "<<cont<<endl;
+	}
+	contenedor.imprimirEstadistica();
+	/*FIN*/
 	archivo_comprimido.write((char*)&cont,sizeof(cont));
 
 	archivo_comprimido.write((char*)comprimido,sizeof(unsigned)*tamanio_buffer_comprimido);
 
 	delete[] comprimido;
 
-	if(salida!=NULL){
-
-		(*salida)<< dec<<"Termino de comprimir hashing"<<endl;
-
-	}
 	archivo_comprimido.clear();
 	archivo_indice.clear();
 	archivo_comprimido.close();
