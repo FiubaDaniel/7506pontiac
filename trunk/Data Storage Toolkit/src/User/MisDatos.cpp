@@ -60,13 +60,6 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 			throw ExcepcionMisDatos("Error en inicializarArchivo1:Longitud del bloque incorrecta");
 		}
 	}
-
-	if(tipoBuffer==DIFERIDO){
-		archivo->cerrar();
-		AlmacenamientoBufferCache* almacen_buffer=new AlmacenamientoBufferCache(archivo);
-		archivo=almacen_buffer;
-		archivo->abrir(path.c_str());
-	}
 	/*incializar indice*/
 	EstrategiaIndice* Indice=NULL;
 	if(tieneIndice){
@@ -123,6 +116,10 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 			long nroElem=longitudBuffer/longitudBloque;
 			estrategiaRecurso=new EREscrituraDirecta(Indice,archivo,buffer,nroElem);
 		}else{
+			archivo->cerrar();
+			AlmacenamientoBufferCache* almacen_buffer=new AlmacenamientoBufferCache(archivo);
+			archivo=almacen_buffer;
+			archivo->abrir(path.c_str());
 			estrategiaRecurso=new ERUnAlmacenamiento(Indice,archivo);
 		}
 	}else{
@@ -158,7 +155,7 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 	EARegistros * estrategiaregistro=new EARegistros(registro2);
 	estrategiaregistro->setComparador(comparador);
 	estrategiaregistro->setClave(&claveEstructural);
-	Archivo* archivo=new Archivo(estrategiaregistro);
+	Almacenamiento* archivo=new Archivo(estrategiaregistro);
 
 	hay_que_comprimir=comprime;
 	tamanio_contendor=longitudContenedor/sizeof(unsigned);
@@ -199,6 +196,7 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 			}
 
 		}
+
 		/*en caso de que existiera previamente verifica*/
 		if(existia){
 			if(Indice->tamanioBloque()!=longitudBloqueIndice){
@@ -224,8 +222,10 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 			long nroElem=longitudBuffer/regmem.tamanioSerializado();
 			estrategiaRecurso=new EREscrituraDirecta(Indice,archivo,buffer,nroElem);
 		}else{
-			/*EREscrituraDiferida *dif=new EREscrituraDiferida(Indice,archivo);
-			estrategiaRecurso=dif;*/
+			archivo->cerrar();
+			AlmacenamientoBufferCache* almacen_buffer=new AlmacenamientoBufferCache(archivo);
+			archivo=almacen_buffer;
+			archivo->abrir(path.c_str());
 			estrategiaRecurso=new ERUnAlmacenamiento(Indice,archivo);
 		}
 	}else{
@@ -233,10 +233,10 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 	};
 
 	recurso2=new Recurso(estrategiaRecurso);
-	string comprimido = path+"_Compresion";
+	string comprimido = path+"Compresion";
 	remove(comprimido.c_str());
 	if(ARBOL){
-		comprimido = path+"_arbolcomprimido";
+		comprimido = path+"_ArbolComprimido";
 		remove(comprimido.c_str());
 	}else{
 		comprimido = path+"_HashComprimido";
