@@ -7,7 +7,7 @@
 
 #include "AlmacenamientoBufferCache.h"
 
-AlmacenamientoBufferCache::AlmacenamientoBufferCache(Almacenamiento*archivo ){
+AlmacenamientoBufferCache::AlmacenamientoBufferCache(Almacenamiento*archivo, int cant_buffers ){
 	this->almacen=archivo;
 	this->estrategia=archivo->getEstrategia();
 	if(this->estrategia){
@@ -16,6 +16,7 @@ AlmacenamientoBufferCache::AlmacenamientoBufferCache(Almacenamiento*archivo ){
 	}
 	this->buffer=NULL;
 	this->nro_bloque=-1;
+	this->cant_buffers = cant_buffers;
 }
 AlmacenamientoBufferCache::~AlmacenamientoBufferCache() {
 	delete buffer;
@@ -28,7 +29,7 @@ bool AlmacenamientoBufferCache::abrir(const char* nombre){
 	if(estrategia){
 		this->tamanio_metadata=estrategia->getMetadata().size();
 		this->tamanio_bloque=estrategia->getTamanioComponenteUsado();
-		buffer=new BufferCache(almacen,this->tamanio_bloque);
+		buffer=new BufferCache(almacen,this->tamanio_bloque, cant_buffers);
 		return estrategia->abrir();
 	}
 	return true;
@@ -40,7 +41,7 @@ void AlmacenamientoBufferCache::crear(const char *nombre){
 		estrategia->setAlmacenamiento(this);
 		this->tamanio_metadata=estrategia->getMetadata().size();
 		this->tamanio_bloque=estrategia->getTamanioComponenteUsado();
-		buffer=new BufferCache(almacen,this->tamanio_bloque);
+		buffer=new BufferCache(almacen,this->tamanio_bloque, cant_buffers);
 		estrategia->crear();
 	}
 

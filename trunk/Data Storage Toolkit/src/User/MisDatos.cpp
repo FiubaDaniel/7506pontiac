@@ -19,7 +19,7 @@ MisDatos::~MisDatos(){
  * tipo y longitud de bloque indice (si es que tiene), que si no correspondieran, lanza una excepcion.
  * En caso de fallar la inicializacion, se lanza una ExcepcionMisDatos con el mensaje de error.
  */
-void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool tieneBuffer, TipoBuffer tipoBuffer, int longitudBuffer, bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice, bool comprime, int longitudContenedor) throw (ExcepcionMisDatos){
+void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool tieneBuffer, TipoBuffer tipoBuffer, int cant_buffers, bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice, bool comprime, int longitudContenedor) throw (ExcepcionMisDatos){
 
 	/*inicializo el archivo y la estrategia*/
 	AtributoFijo<char*> mistringid("miStringID",16);
@@ -117,7 +117,7 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 			estrategiaRecurso=new EREscrituraDirecta(Indice,archivo,buffer,nroElem);
 		}else{
 			archivo->cerrar();
-			AlmacenamientoBufferCache* almacen_buffer=new AlmacenamientoBufferCache(archivo);
+			AlmacenamientoBufferCache* almacen_buffer=new AlmacenamientoBufferCache(archivo, cant_buffers);
 			archivo=almacen_buffer;
 			archivo->abrir(path.c_str());
 			estrategiaRecurso=new ERUnAlmacenamiento(Indice,archivo);
@@ -142,7 +142,7 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
  * longitud de bloque indice (si es que tiene), que si no correspondieran, lanza una excepcion.
  * En caso de fallar la inicializacion, se lanza una ExcepcionMisDatos con el mensaje de error.
  */
-void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuffer tipoBuffer, int longitudBuffer, bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice, bool comprime, int longitudContenedor) throw (ExcepcionMisDatos){
+void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuffer tipoBuffer, int cant_buffers, bool tieneIndice, TipoIndice tipo, int longitudBloqueIndice, bool comprime, int longitudContenedor) throw (ExcepcionMisDatos){
 	/*creo una clave estructural*/
 	ComparadorClave* comparador = new ComparadorRegistroFijo();
 	AtributoFijo<int> miIntID("miIntID");
@@ -225,7 +225,7 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 			estrategiaRecurso=new EREscrituraDirecta(Indice,archivo,buffer,nroElem);
 		}else{
 			archivo->cerrar();
-			AlmacenamientoBufferCache* almacen_buffer=new AlmacenamientoBufferCache(archivo);
+			AlmacenamientoBufferCache* almacen_buffer=new AlmacenamientoBufferCache(archivo, cant_buffers);
 			archivo=almacen_buffer;
 			archivo->abrir(path.c_str());
 			estrategiaRecurso=new ERUnAlmacenamiento(Indice,archivo);
