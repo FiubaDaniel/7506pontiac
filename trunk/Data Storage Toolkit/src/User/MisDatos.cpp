@@ -41,7 +41,8 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 	if(comprime){
 
 		archivo->crear(path.c_str());
-		existia=compresor.descompresion(archivo);
+		existia=compresor.descompresionHash(archivo->getNombre());//todo sacar
+		//existia=compresor.descompresion(archivo);
 	}else if( not archivo->abrir(path.c_str())){
 		archivo->crear(path.c_str());
 		existia=false;
@@ -74,8 +75,9 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 			Indice = new EstrategiaBSharp(&claveEstructural);
 			if(comprime){
 				BSharpTree* arbol=dynamic_cast<EstrategiaBSharp*>(Indice)->obtenerArbol();
-				arbol->abrir(path,comparador,true);
-				if(not compresor.descompresionArbol(arbol,path)){
+				//arbol->abrir(path,comparador,true);
+				//if(not compresor.descompresionArbol(arbol,path)){
+				if(not compresor.descompresionHash(arbol->getNombreArchivo())){//Todo sacar
 					Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 					existia=false;
 				}
@@ -511,14 +513,16 @@ void MisDatos::cerrarArchivo1(){
 			string nombre_archivo=almacen->getNombre();
 			EstrategiaCompresion compresor;
 			compresor.setSalida(&cout);
-			compresor.compresion(almacen,tamanio_contendor);
+			//compresor.compresion(almacen,tamanio_contendor);
+			compresor.compresionHash(nombre_archivo,tamanio_contendor);//todo sacar
 
 			EstrategiaIndice *indice=recurso1->getEstrategiaRecurso()->getIndice();
 			EstrategiaBSharp *indice_arbol=dynamic_cast<EstrategiaBSharp*>(indice);
 			if(indice_arbol!=NULL){
 				/*todo comprimir arbol*/
 				BSharpTree* arbol=indice_arbol->obtenerArbol();
-				compresor.compresionArbol(arbol,nombre_archivo,tamanio_contendor);
+				compresor.compresionHash(arbol->getNombreArchivo(),tamanio_contendor);//todo sacar
+				//compresor.compresionArbol(arbol,nombre_archivo,tamanio_contendor);
 				recurso1->cerrar();
 				remove(nombre_archivo.c_str());
 				remove(arbol->getNombreArchivo().c_str());
