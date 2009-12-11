@@ -74,7 +74,7 @@ int main() {
 
 	// ARCHIVO 1
 	// INICIALIZO EL ARCHIVO 1
-	misDatos.inicializarArchivo1("MiArchivo1.dat", 256, true, DIFERIDO, 1024/256, true, ARBOL, 128, true, 1024);
+	misDatos.inicializarArchivo1("MiArchivo1.dat", 256, true, DIFERIDO, 1024/256, true, ARBOL, 128, false, 1024);
 	
 	// INSERTO REGISTROS VARIABLES
 	for (int i=0; i<CENTENAMAXREGISTROS*100; ++i){
@@ -161,7 +161,7 @@ int main() {
 
 	// ARCHIVO 2
 	// INICIALIZO EL ARCHIVO 2
-	misDatos.inicializarArchivo2("MiArchivo2.dat", true, DIFERIDO, 5, true, HASH, 64, true, 64);
+	misDatos.inicializarArchivo2("MiArchivo2.dat", true, DIFERIDO, 5, true, HASH, 64,false, 64);
 	
 	// INSERTO REGISTROS FIJOS
 	for(int i=0; i<CENTENAMAXREGISTROS*100; ++i){
