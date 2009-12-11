@@ -17,6 +17,7 @@ public:
 	Buffer();
 	Buffer(unsigned longitudBuffer);
 	Buffer(EstrategiaAlmacenamiento*estrategia,unsigned longitudBuffer);
+	Buffer(EstrategiaAlmacenamiento*estrategia);
 	~Buffer();
 	/*-------------------------------------------------------------------------*/
 	/*utilizado por la estrategiaAlmacenamiento*/

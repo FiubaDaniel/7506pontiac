@@ -3,14 +3,6 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
-O_SRCS += \
-../src/Compuesto/Bloque.o \
-../src/Compuesto/BloqueDisco.o \
-../src/Compuesto/BloqueMemoria.o \
-../src/Compuesto/Registro.o \
-../src/Compuesto/RegistroDisco.o \
-../src/Compuesto/RegistroMemoria.o 
-
 CPP_SRCS += \
 ../src/Compuesto/Bloque.cpp \
 ../src/Compuesto/BloqueDisco.cpp \
