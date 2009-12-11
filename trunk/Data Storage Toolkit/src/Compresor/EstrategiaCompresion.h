@@ -24,8 +24,8 @@ public:
 	bool descompresion(Almacenamiento*almacen);
 	bool compresionArbol(BSharpTree* arbol,string archivoComprimido,unsigned tamanio_buffer_comprimido);
 	bool descompresionArbol(BSharpTree*arbol,string archivoComprimido);
-	bool compresionHash(string nombreIndice,unsigned tamanio_buffer_comprimido);
-	bool descompresionHash(string nombreIndice);
+	bool comprimir(string nombreIndice,unsigned tamanio_buffer_comprimido);
+	bool descomprimir(string nombreIndice);
 	virtual ~EstrategiaCompresion();
 };
 #endif /* ESTRATEGIACOMPRESION_H_ */
