@@ -3,9 +3,6 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
-O_SRCS += \
-../src/RecursoAlmacenamiento/AlmacenamientoBufferCache.o 
-
 CPP_SRCS += \
 ../src/RecursoAlmacenamiento/AlmacenamientoBufferCache.cpp \
 ../src/RecursoAlmacenamiento/BufferCache.cpp \
