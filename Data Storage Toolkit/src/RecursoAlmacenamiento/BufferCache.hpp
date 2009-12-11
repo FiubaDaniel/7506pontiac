@@ -181,6 +181,7 @@ class BufferCache{
                         }
 
                         delete [] delayed;
+
                         this->salida_comportamiento.close();
 
                 };
