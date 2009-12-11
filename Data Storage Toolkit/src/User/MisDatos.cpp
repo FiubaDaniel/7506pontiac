@@ -40,10 +40,10 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 	bool existia=true;
 
 	if(comprime){
-		archivo->crear(path.c_str());
-		existia=compresor.descomprimir(archivo->getNombre());//todo sacar
-		//existia=compresor.descompresion(archivo);
-	}else if( not archivo->abrir(path.c_str())){
+		existia=compresor.descomprimir(path);
+
+	}
+	if( not archivo->abrir(path.c_str())){
 		archivo->crear(path.c_str());
 		existia=false;
 	}
@@ -81,10 +81,7 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 			Indice = new HashingExt();
 			if(comprime){
 				string nombre = path+"_cubos";
-				if(not compresor.descomprimir(nombre)){
-					Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
-					existia = false;
-				}
+				compresor.descomprimir(nombre);
 			}
 			if(!Indice->abrir(path,comparador)){
 				Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
@@ -161,9 +158,9 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 
 
 	if(comprime){
-		archivo->crear(path.c_str());
-		compresor.descomprimir(archivo->getNombre());
-	}else if( not archivo->abrir(path.c_str()))
+		compresor.descomprimir(path);
+	}
+	if( not archivo->abrir(path.c_str()))
 		archivo->crear(path.c_str());
 
 	/*incializar indice*/
@@ -186,10 +183,7 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 			Indice = new HashingExt();
 			if(comprime){
 				string nombre = path+"_cubos";
-				if(not compresor.descomprimir(nombre)){
-					Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
-					existia = false;
-				}
+				compresor.descomprimir(nombre);
 			}
 			if(!Indice->abrir(path,comparador)){
 				Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
@@ -509,14 +503,15 @@ void MisDatos::cerrarArchivo1(){
 	if(recurso1!=NULL){
 		EREscrituraDirecta* estrategiaDirecta = dynamic_cast<EREscrituraDirecta*>(recurso1->getEstrategia());
 		if(hay_que_comprimir){
+
 			Almacenamiento* almacen=recurso1->getEstrategia()->getAlmacenamiento();
 			string nombre_archivo=almacen->getNombre();
 			almacen->cerrar();
 			EstrategiaCompresion compresor;
 			compresor.setSalida(&salida_estadistica);
 			//compresor.compresion(almacen,tamanio_contendor);
-			compresor.comprimir(nombre_archivo,tamanio_contendor);//todo sacar
-
+			compresor.comprimir(nombre_archivo,tamanio_contendor);
+			recurso1->cerrar();
 			EstrategiaIndice *indice=recurso1->getEstrategiaRecurso()->getIndice();
 			EstrategiaBSharp *indice_arbol=dynamic_cast<EstrategiaBSharp*>(indice);
 			if(indice_arbol!=NULL){
@@ -524,17 +519,14 @@ void MisDatos::cerrarArchivo1(){
 				BSharpTree* arbol=indice_arbol->obtenerArbol();
 				compresor.comprimir(arbol->getNombreArchivo(),tamanio_contendor);//todo sacar
 				//compresor.compresionArbol(arbol,nombre_archivo,tamanio_contendor);
-				recurso1->cerrar();
 				remove(nombre_archivo.c_str());
 				remove(arbol->getNombreArchivo().c_str());
 			}
 			HashingExt* hash=dynamic_cast<HashingExt*>(indice);
 			if(hash){
 				/*todo comprimir hash*/
-				compresor.comprimir(nombre_archivo,tamanio_contendor);
-				recurso1->cerrar();
-				remove(nombre_archivo.c_str());
 				nombre_archivo+="_cubos";
+				compresor.comprimir(nombre_archivo,tamanio_contendor);
 				remove(nombre_archivo.c_str());
 			}
 
@@ -576,7 +568,7 @@ void MisDatos::cerrarArchivo2(){
 			compresor.setSalida(&salida_estadistica);
 			compresor.comprimir(nombre_archivo,tamanio_contendor);
 			remove(nombre_archivo.c_str());
-
+			recurso2->cerrar();
 			EstrategiaIndice *indice=recurso2->getEstrategiaRecurso()->getIndice();
 			EstrategiaBSharp* indice_arbol=dynamic_cast<EstrategiaBSharp*>(indice);
 			if(indice_arbol!=NULL){
@@ -588,13 +580,10 @@ void MisDatos::cerrarArchivo2(){
 			HashingExt* hash=dynamic_cast<HashingExt*>(indice);
 			if(hash){
 				/*todo comprimir hash*/
-				compresor.comprimir(nombre_archivo,tamanio_contendor);
 				nombre_archivo+="_cubos";
+				compresor.comprimir(nombre_archivo,tamanio_contendor);
 				remove(nombre_archivo.c_str());
-
 			}
-			recurso2->cerrar();
-
 		}else
 			recurso2->cerrar();
 
