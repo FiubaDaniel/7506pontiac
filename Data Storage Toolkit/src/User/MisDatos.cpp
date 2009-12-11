@@ -129,10 +129,10 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 		estrategiaRecurso=new ERUnAlmacenamiento(Indice,archivo);
 	};
 	recurso1=new Recurso(estrategiaRecurso);
-	string comprimido = path+"_comprimido";
+	string comprimido = path+"Comprimido";
 	remove(comprimido.c_str());
 	if(tipo==ARBOL){
-		comprimido = path+"_arbolcomprimido";
+		comprimido = path+"_ArbolComprimido";
 		remove(comprimido.c_str());
 	}else{
 		comprimido = path+"_HashComprimido";
