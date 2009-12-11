@@ -18,8 +18,9 @@ class AlmacenamientoBufferCache :public Almacenamiento {
 	Almacenamiento* almacen;
 	BufferCache* buffer;
 	void switchEstrategia();
+	int cant_buffers;
 public:
-	AlmacenamientoBufferCache(Almacenamiento*archivo);
+	AlmacenamientoBufferCache(Almacenamiento*archivo, int cant_buffers);
 	/*utilizado por la estrategiaAlmacenamiento*/
 	bool abrir(const char* nombre);
 	void crear(const char *nombre);

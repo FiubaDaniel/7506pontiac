@@ -6,8 +6,6 @@
 #include "../Compuesto/Registro.h"
 #include "../Almacenamiento/Almacenamiento.h"
 
-#define CANT_BUFFERS 5
-
 //Se definen las máscaras de la variable "estado" de cada buffer
 #define OCUPADO 1
 #define DATOS_VALIDOS 2
@@ -48,6 +46,7 @@ class BufferCache{
                 Lista_buffers buffers;
                 Lista_libres buffers_libres;
                 unsigned tam_datos;
+                int cant_buffers;
 
                 ofstream salida_comportamiento;  //archivo de texto que permite leer el comportamiento del buffer cache
                 Buffer_header **delayed; //conjunto de buffers diferidos que hay que escribir en disco
@@ -71,9 +70,10 @@ class BufferCache{
 
         public:
 
-                BufferCache(Almacenamiento *almacen, unsigned tam_datos){
+                BufferCache(Almacenamiento *almacen, unsigned tam_datos, int cant_buffers){
 
-                        delayed = new Buffer_header*[CANT_BUFFERS];
+                        this->cant_buffers = cant_buffers;
+                        delayed = new Buffer_header*[cant_buffers];
                         cant_diferidos =0;
 
                         string nom_arch = almacen->getNombre();
@@ -83,6 +83,7 @@ class BufferCache{
 
                         this->tam_datos = tam_datos;
                         this->almacen = almacen;
+
 
                         Buffer_header *ptr_anterior;
                         Buffer_header *ptr_anterior_libre;
@@ -101,7 +102,7 @@ class BufferCache{
 
                         ptr_anterior = ptr_anterior_libre = buf;
 
-                        for(int i=0; i < CANT_BUFFERS - 2 ; i++)
+                        for(int i=0; i < cant_buffers - 2 ; i++)
                         {
                                 buf = new Buffer_header;
 
@@ -152,7 +153,7 @@ class BufferCache{
 
                         /** Si quedaron buffers sin escribirse en disco "delayed write", escribirlos **/
 
-                        for(int j = 0; j < CANT_BUFFERS; j++)
+                        for(int j = 0; j < cant_buffers; j++)
                         {
                                 if( ptr_buffer->estado & DELAYED_WRITE )
                                 {
@@ -168,7 +169,7 @@ class BufferCache{
 
                         ptr_buffer = buffers.primer_buffer;
 
-                        for(int i=0; i < CANT_BUFFERS  ; i++)
+                        for(int i=0; i < cant_buffers  ; i++)
                         {
                                 delete [] ptr_buffer->datos;
                                 ptr_aux = (Buffer_header*) ptr_buffer->siguiente_buffer;

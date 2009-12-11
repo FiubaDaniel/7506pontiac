@@ -52,7 +52,7 @@ void BufferCache :: mostrar_listas()
 
         salida_comportamiento<< "\t \t ********** Lista de buffers *********"<<endl;
 
-        for(int i=0; i < CANT_BUFFERS; i++)
+        for(int i=0; i < cant_buffers; i++)
         {
                 mostrar_estado(ptr_buffer);
                 ptr_buffer = (Buffer_header*) (ptr_buffer->siguiente_buffer);
@@ -238,7 +238,7 @@ bool BufferCache :: asignar_bloque(int nro_bloque, Buffer_header **buff_para_usa
         {
                 //Se busca el bloque en la lista de buffers (hash queue en el original)
 
-                for(int i= 0; ( (i < CANT_BUFFERS) && (bloque_no_encontrado) ); i++)
+                for(int i= 0; ( (i < cant_buffers) && (bloque_no_encontrado) ); i++)
                 {
                         if ( (ptr_buff_recorrido->numero_bloque) == nro_bloque )
                         {
