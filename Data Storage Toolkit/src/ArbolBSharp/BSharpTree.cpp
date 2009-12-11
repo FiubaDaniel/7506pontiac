@@ -1034,26 +1034,25 @@ bool BSharpTree::siguienteAlmacenado(Nodo*& nodo){
 		archivoArbol.clear();// saca el flag de eof
 		return false;
 	}
-	//cout<<archivoArbol.tellg()<<endl;//todo sacar
 	char array2[tamanioNodo];
 	archivoArbol.read(array2,tamanioNodo);
+/*Todo sacar*/	if(archivoArbol.peek()==EOF){
+			archivoArbol.clear();// saca el flag de eof
+			return false;
+		}/*hasta aca*/
 	buffer.pubsetbuf(array2,tamanioNodo);
 	int nivel;
 	buffer.sgetn((char*)&nivel,sizeof(int));
 	if(nivel==0){
 		nodo =new  NodoHoja(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
-		//this->imprimirNodo(nodo);//todo sacar
+
 	}else{
 		nodo = new NodoIntermedio(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
-		//this->imprimirNodo(nodo);//todo sacar
 	}
 	return true;
 }
 
 void BSharpTree::escribir(std::stringbuf& buffer){
-	/*archivoArbol.write(buffer.str().data(),tamanioNodo);
-	delete Raiz;
-	this->recomponerRaiz();*/
 	std::stringbuf buf(ios_base :: in | ios_base :: out | ios_base :: binary);
 	buffer.pubseekpos(0,ios::out|ios::binary|ios::in);
 	int nivel;
@@ -1061,12 +1060,9 @@ void BSharpTree::escribir(std::stringbuf& buffer){
 	buffer.sgetn((char*)&nivel,sizeof(int));
 	if(nivel==0){
 		nodo =new  NodoHoja(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
-		//this->imprimirNodo(nodo);//todo sacar
 	}else{
 		nodo = new NodoIntermedio(&buffer,numeroDeElementosXnodo,comparador,claveEstructural);
-		//this->imprimirNodo(nodo);//todo sacar
 	}
-	//cout<<archivoArbol.tellp()<<endl;//todo sacar
 	char array[tamanioNodo];
 	buf.pubsetbuf(array,tamanioNodo);
 	buf.pubseekpos(0);
