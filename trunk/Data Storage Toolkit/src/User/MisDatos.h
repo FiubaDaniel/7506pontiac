@@ -48,6 +48,7 @@ enum TipoBuffer {DIRECTO, DIFERIDO};
 
 
 class MisDatos {
+	std::ofstream salida_estadistica;
 	Recurso*recurso1;
 	Recurso*recurso2;
 	Recurso*recurso3;
