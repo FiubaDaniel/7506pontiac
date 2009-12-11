@@ -148,6 +148,10 @@ void BufferCache :: manejar_diferidos()
         {
                 //Se escribe en disco un bloque o un registro segun corresponda
 
+                salida_comportamiento<<"$$$Se escribe en disco el contenido del buffer$$$$"<<endl;
+                //Se enciende el estado ESCRIBIENDO_LEYENDO (en disco)
+                (delayed[i]->estado) |= 0x08; // 0000 1000
+                mostrar_estado(delayed[i]);
                 almacen->posicionarComponente( delayed[i]->numero_bloque);
                 almacen->escribir(delayed[i]->datos,tam_datos);
 
@@ -166,9 +170,11 @@ void BufferCache :: manejar_diferidos()
                 }
 
                 //Se apaga su estado "delayed write"
-                (delayed[i]->estado) &= 0xfb ;// 1111 1011
+                (delayed[i]->estado) &= 0xfb ; // 1111 1011
+                //Se apaga su estado "Leyendo/escribiendo"
+                (delayed[i]->estado) &= 0xf7; //1111 0111
 
-                salida_comportamiento << " %%  Estado posterior a escrituras en disco (se muestran los buffers que se escriben) %%" << endl;
+                salida_comportamiento << " $$  Estado posterior a la escritura en disco $$" << endl;
                 mostrar_estado(delayed[i]);
 
         }
@@ -214,7 +220,7 @@ void BufferCache :: liberar_buffer(Buffer_header *buff_bloqueado){
                 //se desbloquea el buffer
 
                 (buff_bloqueado->estado) &=  0xfe; //1111 1110
-                 salida_comportamiento << " %%  Estado posterior a la liberacion de un buffer %%" << endl;
+                 salida_comportamiento << " %%  Estado posterior a la liberacion del buffer %%" << endl;
                 mostrar_estado(buff_bloqueado);
         }
 }
@@ -319,7 +325,6 @@ bool BufferCache :: asignar_bloque(int nro_bloque, Buffer_header **buff_para_usa
 */
 void BufferCache :: leer(int nro_bloque, char *datos)
 {
-        cout << "Entra al leer del buffer " << endl;
         Buffer_header *buff;
 
         //se obtiene un buffer para el bloque pedido
@@ -344,10 +349,20 @@ void BufferCache :: leer(int nro_bloque, char *datos)
                 //Hay que leer los datos (registro o bloque) desde el disco (segun el nro_bloque) y ponerlos en buff->datos
 
                 //ESCRIBIR EN EL BUFFER Y EN EL REGISTRO
+                salida_comportamiento<<"$$$Se lee desde disco hacia un buffer$$$$"<<endl;
+                //Se enciende el estado ESCRIBIENDO_LEYENDO (desde disco)
+                (buff->estado) |= 0x08; // 0000 1000
+                mostrar_estado(buff);
 
                 almacen->posicionarComponente(nro_bloque);// nro_bloque==nro_buffer
                 almacen->leer(buff->datos,tam_datos);//Se escribe en el buffer para que futuros accesos den "hit"
                 memcpy(datos, buff->datos, tam_datos);
+
+                salida_comportamiento<<"$$ Se termino de leer de disco$$" << endl;
+                //Se apaga su estado "Leyendo/escribiendo"
+                (buff->estado) &= 0xf7; //1111 0111
+                mostrar_estado(buff);
+
                 //Se enciende el estado: "datos validos"
                 (buff->estado) |= 0x02;//0000 0010
         }
@@ -359,12 +374,10 @@ void BufferCache :: leer(int nro_bloque, char *datos)
 
         mostrar_listas();
         salida_comportamiento << "  -----------------------------------------------------------------------------------"<<endl;
-        cout << "Sale del leer del buffer" << endl;
 }
 
 void BufferCache :: escribir(int nro_bloque, char *datos)
 {
-        cout << "Entra al escribir del buffer" << endl;
         Buffer_header *buff;
 
         //obtengo un buffer para el bloque pedido
@@ -407,6 +420,5 @@ void BufferCache :: escribir(int nro_bloque, char *datos)
         mostrar_listas();
         salida_comportamiento << "  -----------------------------------------------------------------------------------"<<endl;
 
-        cout << "Sale del escribir del buffer " << endl;
 }
 
