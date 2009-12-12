@@ -66,14 +66,10 @@ void MisDatos::inicializarArchivo1(std::string path, int longitudBloque, bool ti
 		if(tipo==ARBOL){
 			Indice = new EstrategiaBSharp(&claveEstructural);
 			if(comprime){
-				BSharpTree* arbol=dynamic_cast<EstrategiaBSharp*>(Indice)->obtenerArbol();
-				//arbol->abrir(path,comparador,true);
-				//if(not compresor.descompresionArbol(arbol,path)){
-				if(not compresor.descomprimir(arbol->getNombreArchivo())){//Todo sacar
-					Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
-					existia=false;
-				}
-			}else if(!Indice->abrir(path,comparador)){
+				string  nombre=path+"_Arbol";
+				compresor.descomprimir(nombre);
+			}
+			if(!Indice->abrir(path,comparador)){
 				Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 				existia = false;
 			}
@@ -170,12 +166,10 @@ void MisDatos::inicializarArchivo2(std::string path, bool tieneBuffer,  TipoBuff
 		if(tipo==ARBOL){
 			Indice = new EstrategiaBSharp(&claveEstructural);
 			if(comprime){
-				BSharpTree* arbol=dynamic_cast<EstrategiaBSharp*>(Indice)->obtenerArbol();
-				if(not compresor.descomprimir(arbol->getNombreArchivo())){
-					Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
-					existia=false;
-				}
-			}else if(!Indice->abrir(path,comparador)){
+				string  nombre=path+"_Arbol";
+				compresor.descomprimir(nombre);
+			}
+			if(!Indice->abrir(path,comparador)){
 				Indice->crear(path,longitudBloqueIndice,&claveEstructural,comparador);
 				existia = false;
 			}
