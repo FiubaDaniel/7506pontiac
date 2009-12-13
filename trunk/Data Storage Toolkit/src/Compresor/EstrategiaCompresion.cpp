@@ -110,14 +110,12 @@ bool EstrategiaCompresion::comprimir(string nombreIndice,unsigned tamanio_buffer
 
 	archivo_indice.open(nombreIndice.c_str(),fstream::in|fstream::binary);//Todo sacar
 
-	archivo_comprimido.open(nombreComprimido.c_str(),fstream::trunc|fstream::out|fstream::binary);
-
-	if(!archivo_indice.is_open()or!archivo_comprimido.is_open()){
-		archivo_comprimido.close();
+	if(!archivo_indice.is_open()){
 		archivo_indice.close();
 		return false;
 	}
 
+	archivo_comprimido.open(nombreComprimido.c_str(),fstream::trunc|fstream::out|fstream::binary);
 	archivo_indice.seekg(0);
 	archivo_comprimido.seekp(0);
 	archivo_comprimido.write((char*)&tamanio_buffer_comprimido,sizeof(tamanio_buffer_comprimido));
@@ -185,15 +183,14 @@ bool EstrategiaCompresion::descomprimir(string nombreIndice){
 	string nombreComprimido = nombreIndice+"Comprimido";
 	//Todo esta archivo_indice.open(nombreHash.c_str(),fstream::trunc|fstream::out|fstream::binary);
 
-	archivo_indice.open(nombreIndice.c_str(),fstream::trunc|fstream::out|fstream::binary);
+
 	archivo_comprimido.open(nombreComprimido.c_str(),fstream::in|fstream::binary);
 
-	if(!archivo_indice.is_open()or!archivo_comprimido.is_open()){
+	if(!archivo_comprimido.is_open()){
 		archivo_comprimido.close();
-		archivo_indice.close();
 		return false;
 	}
-
+	archivo_indice.open(nombreIndice.c_str(),fstream::trunc|fstream::out|fstream::binary);
 	archivo_indice.seekp(0);
 	archivo_comprimido.seekg(0);
 

@@ -7,6 +7,7 @@
 #include "User/MisDatos.h"
 #include "Terminos.h"
 
+
 #define DELTA 4
 #define MINIMO 1
 #define CENTENAMAXREGISTROS 1
@@ -14,6 +15,7 @@
 #define MINBORRARFIJO 20
 #define CANTMODIFICARVARIABLE 5
 #define CANTMODIFICARFIJO 10
+
 
 using namespace std;
 
@@ -51,7 +53,7 @@ int invertirDecenaUnidad(int valor){
 	int centena = 0;
 	int decena = 0;
 	int unidad = 0;
-	
+
 	centena = (valor/100)%10;
 	decena = valor%10;
 	unidad = (valor/10)%10;
@@ -75,12 +77,12 @@ int main() {
 	// ARCHIVO 1
 	// INICIALIZO EL ARCHIVO 1
 	misDatos.inicializarArchivo1("MiArchivo1.dat", 256, true, DIFERIDO, 5, true, ARBOL, 128, true, 1024);
-	
+
 	// INSERTO REGISTROS VARIABLES
 	for (int i=0; i<CENTENAMAXREGISTROS*100; ++i){
 		cantElementos = i % DELTA + MINIMO;
 		nroTermino = invertirDecenaUnidad(i);
-		
+
 		miLista = new int[cantElementos];
 		for (int j=0; j<cantElementos; ++j){
 			miLista[j] = j;
@@ -96,13 +98,13 @@ int main() {
 			cout << e.getMensaje() << endl;
 			cout << "*****ERROR CON CLAVE: " << Terminos::obtenerTermino(nroTermino) << " *****" << endl;
 		}
-		
+
 		mostrarArchivo1(misDatos);
-		
+
 		delete(miRegVariable);
 		delete(miLista);
 	}
-	
+
 	// BORRO REGISTROS VARIABLES
 	for (int i=MINBORRARVARIABLE; i<CENTENAMAXREGISTROS*100; ++i){
 		try{
@@ -114,7 +116,7 @@ int main() {
 
 		mostrarArchivo1(misDatos);
 	}
-	
+
 	// MODIFICO REGISTROS VARIABLES
 	cantElementos = 10;
 	for (int i=0; i<CANTMODIFICARVARIABLE; ++i){
@@ -156,17 +158,17 @@ int main() {
 
 	// CIERRO ARCHIVO 1
 	misDatos.cerrarArchivo1();
-	
+
 
 
 	// ARCHIVO 2
 	// INICIALIZO EL ARCHIVO 2
 	misDatos.inicializarArchivo2("MiArchivo2.dat", true, DIFERIDO, 5, true, HASH, 64,true, 64);
-	
+
 	// INSERTO REGISTROS FIJOS
 	for(int i=0; i<CENTENAMAXREGISTROS*100; ++i){
 		claveRegFijo = invertirDecenaUnidad(i);
-		
+
 		miRegFijo = new MiRegistroFijo(claveRegFijo, calcularChar(claveRegFijo), i);
 
 		cout << endl;
@@ -179,9 +181,9 @@ int main() {
 			cout << e.getMensaje() << endl;
 			cout << "*****ERROR CON CLAVE: " << claveRegFijo << " " << calcularChar(claveRegFijo) << " *****" << endl;
 		}
-		
+
 		mostrarArchivo2(misDatos);
-		
+
 		delete(miRegFijo);
 	}
 
@@ -223,6 +225,7 @@ int main() {
 		try{
 			miRegFijo = misDatos.obtenerRegistroArchivo2(i, calcularChar(i));
 			mostrarRegistroFijo(miRegFijo);
+			//cout<<"Problem"<<endl;
 			delete miRegFijo;
 		}catch(ExcepcionMisDatos e){
 			cout << e.getMensaje() << endl;
@@ -233,6 +236,6 @@ int main() {
 
 	// CIERRO ARCHIVO 2
 	misDatos.cerrarArchivo2();
-
+	cout<<flush;
 	return 0;
 }

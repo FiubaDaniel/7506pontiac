@@ -256,10 +256,12 @@ void BSharpTree::reacomodarArbol(NodoHoja*& hojaIzq,NodoHoja*& hojaDer,NodoInter
 	delete Raiz;
 	nuevaRaiz->agregarElemento(hojaDer->getListaElementos()->front());
 	archivoArbol.seekp(0,fstream::end);
-	Referencia refIzq  = (Referencia)archivoArbol.tellp();
+	Referencia refIzq  = archivoArbol.tellp();
+	//Referencia refIzq  = (Referencia)archivoArbol.tellp();
 	nuevaRaiz->setRefereciaIzq(refIzq);
 	grabarUnitario(hojaIzq,refIzq);
-	Referencia refDer  = (Referencia)archivoArbol.tellp();
+	//Referencia refDer  = (Referencia)archivoArbol.tellp();
+	Referencia refDer  = archivoArbol.tellp();
 	nuevaRaiz->getListaElementos()->front()->setReferencia(refDer);
 	hojaIzq->setReferenciaSiguiente(refDer);
 	grabado(hojaIzq,hojaDer,nuevaRaiz,refIzq,refDer,posicionRaiz);
@@ -735,23 +737,27 @@ void BSharpTree::eliminarHoja (Nodo* nodo,std::list<Referencia>&listaDePadres,Re
 		this->nuevoEspacioLibre(refHijo);
 	}
 	Nodo* padreE = this->obtenerNodoPorPosiciones(listaDePadres.front());
+
 	NodoIntermedio* padre = dynamic_cast<NodoIntermedio*>(padreE);
 	bool vacio = true;
-	Nodo* nodoAux = this->obtenerNodoPorPosiciones(padre->getReferenciaIzq());
-	if(nodoAux->getEspacioLibre()!=2){
-		vacio=false;
-	}
-	delete nodoAux;
-	std::list<ElementoNodo*>::iterator itPadre = padre->getListaElementos()->begin();
-	while(itPadre != padre->getListaElementos()->end()&&vacio){
-		ElementoNodo* elemPadre = *itPadre;
-		nodoAux = this->obtenerNodoPorPosiciones(elemPadre->getReferencia());
-		if(nodoAux->getCatidadMaximaDeElementos()!=nodoAux->getEspacioLibre()){
+	//TODO if != NULL
+	//if(padre!=NULL){
+		Nodo* nodoAux = this->obtenerNodoPorPosiciones(padre->getReferenciaIzq());
+		if(nodoAux->getEspacioLibre()!=2){
 			vacio=false;
 		}
 		delete nodoAux;
-		++itPadre;
-	}
+		std::list<ElementoNodo*>::iterator itPadre = padre->getListaElementos()->begin();
+		while(itPadre != padre->getListaElementos()->end() && vacio){
+			ElementoNodo* elemPadre = *itPadre;
+			nodoAux = this->obtenerNodoPorPosiciones(elemPadre->getReferencia());
+			if(nodoAux->getCatidadMaximaDeElementos()!=nodoAux->getEspacioLibre()){
+				vacio=false;
+			}
+			delete nodoAux;
+			++itPadre;
+		}
+	//}
 	if(vacio){
 		while(!padre->getListaElementos()->empty()){
 			padre->getListaElementos()->pop_front();
@@ -945,9 +951,16 @@ Nodo* BSharpTree::obtenerNodoPorPosiciones(Referencia posInicial){
 
 	buffer.pubseekpos(0);
 	Nodo* nodo;
+	if(posInicial<0){
+		return NULL;
+	}
 	archivoArbol.seekg(posInicial);
 	char array2[tamanioNodo];
 	archivoArbol.read(array2,tamanioNodo);
+	if(archivoArbol.eof() or archivoArbol.bad() ){
+		archivoArbol.clear();
+		return NULL;
+	}
 	buffer.pubsetbuf(array2,tamanioNodo);
 	int nivel;
 	buffer.sgetn((char*)&nivel,sizeof(int));
@@ -966,7 +979,8 @@ void BSharpTree::imprimir(){
 }
 
 void BSharpTree::imprimirIterativo(Nodo* nodoE){
-
+	if(nodoE==NULL)
+		return;
 	if(nodoE->getEspacioLibre()!=nodoE->getCatidadMaximaDeElementos()){
 		cout<<" "<<endl;
 		if(nodoE->getNumeroNivel()!=0){
@@ -989,18 +1003,23 @@ void BSharpTree::imprimirIterativo(Nodo* nodoE){
 			}
 			cout<<" "<<endl;
 			Nodo* nodoSiguiente = obtenerNodoPorPosiciones(nodo->getReferenciaIzq());
-			imprimirIterativo(nodoSiguiente);
-			delete nodoSiguiente;
-			it = nodo->getListaElementos()->begin();
-			while(it!=nodo->getListaElementos()->end()){
-				ElementoNodo* elem = *it;
-				nodoSiguiente = obtenerNodoPorPosiciones(elem->getReferencia());
+			if(nodoSiguiente != NULL ){
 				imprimirIterativo(nodoSiguiente);
 				delete nodoSiguiente;
-				++it;
+				it = nodo->getListaElementos()->begin();
+				while(it!=nodo->getListaElementos()->end()){
+					ElementoNodo* elem = *it;
+					nodoSiguiente = obtenerNodoPorPosiciones(elem->getReferencia());
+					if(nodoSiguiente!=NULL){
+						imprimirIterativo(nodoSiguiente);
+						delete nodoSiguiente;
+					}
+					++it;
+				}
 			}
 		}else{
 			NodoHoja* nodo = dynamic_cast<NodoHoja*>(nodoE);
+
 			cout <<"Nodo Hoja ";
 			cout <<"Nivel: " << nodo->getNumeroNivel()<<" ";
 			cout <<"Referencia Siguente: " << nodo->getReferenciaSiguiente()<<endl;;
@@ -1036,10 +1055,10 @@ bool BSharpTree::siguienteAlmacenado(Nodo*& nodo){
 	}
 	char array2[tamanioNodo];
 	archivoArbol.read(array2,tamanioNodo);
-/*Todo sacar*/	if(archivoArbol.peek()==EOF){
-			archivoArbol.clear();// saca el flag de eof
-			return false;
-		}/*hasta aca*/
+	/*Todo sacar*/	if(archivoArbol.peek()==EOF){
+		archivoArbol.clear();// saca el flag de eof
+		return false;
+	}/*hasta aca*/
 	buffer.pubsetbuf(array2,tamanioNodo);
 	int nivel;
 	buffer.sgetn((char*)&nivel,sizeof(int));

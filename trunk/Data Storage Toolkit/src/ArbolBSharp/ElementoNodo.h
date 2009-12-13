@@ -9,7 +9,7 @@
 #define ELEMENTONODOHOJA_H_
 #include "Clave.h"
 
-
+typedef int Referencia;
 class ElementoNodo{
 public:
 	/*
