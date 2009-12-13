@@ -3,6 +3,14 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
+O_SRCS += \
+../src/Compresor/Compresor.o \
+../src/Compresor/EstrategiaCompresion.o \
+../src/Compresor/TablaOrden1.o \
+../src/Compresor/TablaPPMC.o \
+../src/Compresor/bitFile.o \
+../src/Compresor/pruebas.o 
+
 CPP_SRCS += \
 ../src/Compresor/Compresor.cpp \
 ../src/Compresor/EstrategiaCompresion.cpp \
