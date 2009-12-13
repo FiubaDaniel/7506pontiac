@@ -4,10 +4,11 @@ ERUnAlmacenamiento::ERUnAlmacenamiento(EstrategiaIndice*indice,Almacenamiento*ar
 	almacen=archivo;
 	almacen->getEstrategia()->setColaCambios(&colaCambios);
 	this->indice=indice;
-	clave=almacen->getEstrategia()->getClave();
+	clave=almacen->getEstrategia()->getClave()->clonarce();
 }
 
 ERUnAlmacenamiento::~ERUnAlmacenamiento(){
+	delete clave;
 }
 
 bool ERUnAlmacenamiento::insertar(Registro* registro){

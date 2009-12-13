@@ -9,12 +9,12 @@
 #define EAREGISTROS_H_
 #include <sstream>
 #include "EstrategiaAlmacenamiento.h"
-
+#include <iostream>
 #include "../ArbolBSharp/Clave.h"
 #include "../ArbolBSharp/ComparadorClave.h"
 #include "../Compuesto/Registro.h"
 #include "Almacenamiento.h"
-
+using namespace  std;
 class EARegistros: public EstrategiaAlmacenamiento {
 	Registro*registro;
 	Referencia nroRegistro;
@@ -23,8 +23,8 @@ class EARegistros: public EstrategiaAlmacenamiento {
 	char* registroSerializado;
 	int comparar(Registro*reg1,Registro*reg2);
 	/*escribe el registro en la posicion.*/
-	void escribir(Registro*registro);
-	bool leer(Registro*registro);
+	void escribirRegistro(Registro*registro);
+	bool leerRegistro(Registro*registro);
 public:
 	EARegistros(Registro*registro);
 	virtual ~EARegistros();
