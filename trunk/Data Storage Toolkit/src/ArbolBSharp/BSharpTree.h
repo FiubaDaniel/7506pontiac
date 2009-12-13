@@ -159,7 +159,8 @@ private:
 
 	void reacomodarArbol(NodoHoja*& hojaIzq,NodoHoja*& hojaDer,NodoIntermedio*&nuevaRaiz);
 
-	unsigned int numeroDeElementosXnodo,posicionRaiz,cantidadMinimaDeElementos;
+	unsigned int numeroDeElementosXnodo,cantidadMinimaDeElementos;
+	Referencia posicionRaiz;
 
 	unsigned int tamanioNodo;
 
@@ -171,6 +172,7 @@ private:
 	Nodo* Raiz;
 	NodoHoja* ultimoNodo;
 	Clave * claveEstructural;
+	Referencia posicionLibre;
 };
 
 #endif /* BSHARPTREE_H_ */
