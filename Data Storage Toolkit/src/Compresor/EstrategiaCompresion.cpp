@@ -123,7 +123,9 @@ bool EstrategiaCompresion::comprimir(string nombreIndice,unsigned tamanio_buffer
 	//Gurado primero.
 	unsigned tamanio_sin_comprimir=tamanio_buffer_comprimido;
 	if(salida!=NULL){
-		(*salida)<<"Comprimiendo:"<<nombreIndice<<endl;
+		(*salida)<<"************************************************************"<<endl;
+		(*salida)<<" \t "<<nombreIndice<<endl;
+		(*salida)<<"************************************************************"<<endl;
 		(*salida)<<"Tamanio de los componentes:"<<tamanio_sin_comprimir<<endl;
 	}
 	unsigned char sin_comprimir[tamanio_sin_comprimir];
@@ -207,7 +209,7 @@ bool EstrategiaCompresion::descomprimir(string nombreIndice){
 
 	//Comienzo a descomprimir
 
-	while(archivo_comprimido.peek()!= EOF and not archivo_comprimido.eof()){
+	while( not archivo_comprimido.eof()){
 
 		short cont;
 
@@ -224,6 +226,22 @@ bool EstrategiaCompresion::descomprimir(string nombreIndice){
 		descomprimido.clear();
 	}
 
+	if(archivo_comprimido.gcount()>0){
+		short cont;
+
+		archivo_comprimido.read((char*)&cont,sizeof(cont));
+
+		archivo_comprimido.read((char*)buffer,sizeof(unsigned)*tamanio_buffer_comprimido);
+
+		contenedor.setCaracteres(tamanio_sin_comprimir*cont);
+
+		contenedor.descomprimir(buffer,descomprimido,tamanio_buffer_comprimido);
+
+		archivo_indice.write(descomprimido.data(),descomprimido.size());
+
+		descomprimido.clear();
+
+	}
 
 	delete[] buffer;
 	archivo_comprimido.clear();// saca el flag de eof
