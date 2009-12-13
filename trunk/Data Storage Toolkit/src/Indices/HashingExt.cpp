@@ -502,7 +502,7 @@ bool HashingExt::buscar_clave(Clave *clave, Referencia *referencia, unsigned rec
 
                                                         for( int v = 0; v  < ( (this->tam_tabla) /2 ) ; v++)
                                                         {
-                                                                if ( referencias_a_cubos[v] == referencias_a_cubos[(this->tam_tabla)/2 + v])
+                                                                if ( referencias_a_cubos[v] != referencias_a_cubos[(this->tam_tabla)/2 + v])
                                                                         mitades_iguales = false;
                                                         }
 
